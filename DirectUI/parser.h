@@ -1,12 +1,28 @@
 #pragma once
-
 #include "types.h"
 
 namespace DirectUI
 {
+	enum _DUI_PARSE_STATE
+	{
+
+	};
+
+	typedef _DUI_PARSE_STATE DUI_PARSE_STATE;
+
 	struct IXmlReader
 	{
 		// ??
+	};
+
+	struct LINEINFO
+	{
+
+	};
+
+	struct XMLParserCond
+	{
+
 	};
 
 	class Schema 
@@ -185,9 +201,23 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 */
 	};
 
-	typedef Value * (WINAPI *GetSheetCallback)(unsigned short const *, void *);
+	typedef class Value * (WINAPI *GetSheetCallback)(unsigned short const *, void *);
 	typedef void (WINAPI *ParseErrorCallback)(unsigned short const *, unsigned short const *, int, void *);
 	typedef bool (WINAPI *UnknownAttrCallback)(unsigned short const *, void *);
+
+	namespace ParserTools
+	{
+		class ExprNode
+		{
+		public:
+
+		};
+
+		class ValueParser
+		{
+		public:
+		};
+	}
 
 	class UILIB_API DUIXmlParser
 	{
@@ -203,7 +233,7 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		
 		*/
 		static long WINAPI Create(_Inout_ DUIXmlParser** pXmlParser, _In_opt_ GetSheetCallback, _In_opt_ void *sheetParam, _In_opt_ ParseErrorCallback, _In_opt_ void *parseErrorParam);
-		long CreateElement(unsigned short const *, Element *, Element *, unsigned long *, Element **out);
+		long CreateElement(unsigned short const *,class Element *, class Element *, unsigned long *, class Element **out);
 		
 		void Destroy();
 		void EnableDesignMode();
@@ -214,8 +244,8 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		long GetSheet(const String, Value **);
 		void * GetSheetContext();
 		
-		long LookupElement(IXmlReader *, const String, HINSTANCE, IClassInfo **);
-		long LookupElement(LINEINFO, const String, HINSTANCE, IClassInfo**);
+		long LookupElement(IXmlReader *, const String, HINSTANCE,class IClassInfo **);
+		long LookupElement(LINEINFO, const String, HINSTANCE, class IClassInfo**);
 
 		void SetDefaultHInstance(HINSTANCE);
 		
@@ -259,14 +289,14 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		long CreateXmlReaderFromHGLOBAL(void *, IXmlReader **);
 		long CreateXmlReaderInputWithEncodingName(IStream *, const String, IUnknown **);
 		long GetParserCommon(DUIXmlParser **);
-		long GetPropValPairInfo(IXmlReader *, IClassInfo *, const String, const String, PropertyInfo **, Value **);
+		long GetPropValPairInfo(IXmlReader *, IClassInfo *, const String, const String,class PropertyInfo **, Value **);
 		long GetPropValPairInfo(LINEINFO, IClassInfo *, const String, const String, const PropertyInfo **, Value **);
 		long GetValueParser(ParserTools::ValueParser **);
 		static long GetXmlLiteDll(HINSTANCE*);
 		long Initialize();
 		long InitializeParserFromXmlLiteReader(IXmlReader *);
 		static bool IsThemeClassName(const ParserTools::ExprNode *);
-		long MapPropertyEnumValue(const EnumMap *, const String, int *);
+		long MapPropertyEnumValue(const class EnumMap *, const String, int *);
 		long MapPropertyNameToPropertyInfo(LINEINFO, IClassInfo *, const String, const PropertyInfo **);
 		long ParseARGBColor(const ParserTools::ExprNode*, unsigned long *);
 		long ParseArgs(const ParserTools::ExprNode*, ParsedArg *, unsigned int, const char *);
@@ -335,6 +365,6 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		static FunctionDefinition<Value *> const * s_fdString;
 	
 	private:
-		void SetParseState(_DUI_PARSE_STATE);
+		void SetParseState(DUI_PARSE_STATE);
 	};
 }

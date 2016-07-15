@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "DirectUI.h"
 
 namespace DirectUI
 {
@@ -11,13 +11,13 @@ namespace DirectUI
 		//1
 		virtual void OnListenerDetach(Element *) = 0;
 		//2
-		virtual bool OnPropertyChanging(PropertyInfo const *, int, Value *, Value *) = 0;
+		virtual bool OnPropertyChanging(class PropertyInfo const *, int, Value *, Value *) = 0;
 		//3
-		virtual void OnListenedPropertyChanged(Element *, PropertyInfo const *, int, Value *, Value *) = 0;
+		virtual void OnListenedPropertyChanged(Element *, class PropertyInfo const *, int, Value *, Value *) = 0;
 		//4
-		virtual void OnListenedEvent(Element *, Event *) = 0;
+		virtual void OnListenedEvent(Element *,class Event *) = 0;
 		//5
-		virtual void OnListenedInput(Element *, InputEvent *) = 0;
+		virtual void OnListenedInput(Element *, class InputEvent *) = 0;
 	};
 
 	struct IClassInfo
@@ -45,10 +45,6 @@ namespace DirectUI
 
 	};
 	class IXElementCP
-	{
-
-	};
-	struct IXmlReader
 	{
 
 	};

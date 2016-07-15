@@ -155,21 +155,29 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="DirectUI.h" />
     <ClInclude Include="Element.h" />
+    <ClInclude Include="ElementWithHWND.h" />
     <ClInclude Include="event.h" />
     <ClInclude Include="host.h" />
+    <ClInclude Include="HWNDElement.h" />
+    <ClInclude Include="HWNDHost.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="layout.h" />
     <ClInclude Include="misc.h" />
+    <ClInclude Include="Movie.h" />
+    <ClInclude Include="NativeHWNDHost.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="provider.h" />
     <ClInclude Include="types.h" />
+    <ClInclude Include="Value.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DirectUI.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="host.cpp" />
+    <ClCompile Include="NativeHWNDHost.cpp" />
     <ClCompile Include="parser.cpp" />
   </ItemGroup>
   <ItemGroup>

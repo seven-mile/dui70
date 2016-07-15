@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Button.h"
+#include "types.h"
 
 namespace DirectUI
 {
@@ -140,8 +140,8 @@ namespace DirectUI
 		HWNDElementAccessible();
 		virtual ~HWNDElementAccessible();
 
-		long Initialize(HWNDElement *);
-		static HRESULT WINAPI Create(HWNDElement *, DuiAccessible **);
+		long Initialize(class HWNDElement *);
+		static HRESULT WINAPI Create(class HWNDElement *, class DuiAccessible **);
 
 		virtual HRESULT Disconnect();
 		virtual HRESULT WINAPI get_accParent(IDispatch **);

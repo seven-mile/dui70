@@ -1,6 +1,24 @@
 #pragma once
-#include "types.h"
+#include <Windows.h>
 
+#include "types.h"
+#include "Value.h"
+#include "Interfaces.h"
+#include "Primitives.h"
+#include "element.h"
+#include "Button.h"
+#include "base.h"
+#include "event.h"
+#include "layout.h"
+#include "host.h"
+#include "accessibility.h"
+#include "AutoObjects.h"
+#include "provider.h"
+#include "parser.h"
+#include "Movie.h"
+#include "ElementWithHWND.h"
+#include "HWNDElement.h"
+#include "NativeHWNDHost.h"
 
 namespace DirectUI
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "DirectUI.h"
 #include "parser.h"		// can't forward declare Schema::Pattern
 
 namespace DirectUI
@@ -14,8 +14,8 @@ namespace DirectUI
 		virtual unsigned long AddRef();
 		virtual long AdviseEventAdded(int, SAFEARRAY *);
 		virtual long AdviseEventRemoved(int, SAFEARRAY *);
-		static long Create(Element *, InvokeHelper *, ElementProvider **out);
-		long DoInvokeArgs(int, ProviderProxy * (__cdecl*)(Element *), char *);
+		static long Create(Element *, class  InvokeHelper *, ElementProvider **out);
+		long DoInvokeArgs(int, class ProviderProxy * (__cdecl*)(Element *), char *);
 		virtual volatile const Element * GetElement();
 		const Element* GetElementKey();
 
@@ -26,7 +26,7 @@ namespace DirectUI
 		virtual ProviderProxy* (*GetProxyCreator())(Element *);
 
 		virtual long GetRuntimeId(SAFEARRAY **);
-		virtual long Navigate(NavigateDirection, IRawElementProviderFragment **);
+		virtual long Navigate(class NavigateDirection, IRawElementProviderFragment **);
 
 		virtual long QueryInterface(const GUID&, void **);
 		virtual unsigned long Release();
@@ -38,7 +38,7 @@ namespace DirectUI
 		virtual long get_BoundingRectangle(UiaRect *);
 		virtual long get_FragmentRoot(IRawElementProviderFragmentRoot **);
 		virtual long get_HostRawElementProvider(IRawElementProviderSimple **);
-		virtual long get_ProviderOptions(ProviderOptions *);
+		virtual long get_ProviderOptions(class ProviderOptions *);
 
 	protected:
 		virtual long Init(Element *, InvokeHelper *);
@@ -111,8 +111,8 @@ namespace DirectUI
 
 		static long Create(XResourceProvider **pOut);
 		static long Create(HINSTANCE, unsigned short const *, unsigned short const *, unsigned short const *, XResourceProvider **pOut );
-		virtual long CreateDUICP(HWNDElement *, HWND, HWND, Element **, DUIXmlParser **);		
-		virtual long CreateParserCP(DUIXmlParser **pOut);
+		virtual long CreateDUICP(HWNDElement *, HWND, HWND, Element **, class DUIXmlParser **);
+		virtual long CreateParserCP(class DUIXmlParser **pOut);
 
 		virtual void DestroyCP();
 		long Initialize(HINSTANCE h, const unsigned short* s1, const unsigned short*s2, const unsigned short*s3);

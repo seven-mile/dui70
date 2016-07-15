@@ -3,8 +3,7 @@
 
 namespace DirectUI
 {
-	typedef unsigned short Char;
-	typedef unsigned short* String;
+	
 	struct Fill
 	{
 
@@ -20,15 +19,6 @@ namespace DirectUI
 
 	};
 
-	struct LINEINFO
-	{
-
-	};
-
-	struct XMLParserCond
-	{
-
-	};
 
 	struct EnumMap
 	{

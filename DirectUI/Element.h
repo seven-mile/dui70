@@ -28,23 +28,23 @@ namespace DirectUI
 		//2
 		virtual bool IsContentProtected();
 
-		static long UnRegister(IClassInfo **);
+		static long UnRegister(struct IClassInfo **);
 
 		//3
-		const unsigned __int16 *GetContentStringAsDisplayed(Value **);
+		const unsigned __int16 *GetContentStringAsDisplayed(class Value **);
 
 		//4
-		virtual bool OnPropertyChanging(PropertyInfo const *, int, Value *, Value *);
+		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value *, class Value *);
 		//5
-		virtual bool OnPropertyChanging(PropertyInfo *, int, Value *, Value *);
+		virtual bool OnPropertyChanging(class PropertyInfo*, int, class Value *, class Value *);
 		//6
-		virtual void OnPropertyChanged(PropertyInfo const *, int, Value *, Value *);
+		virtual void OnPropertyChanged(const class PropertyInfo *, int, class Value *, class Value *);
 		//7
-		virtual void OnPropertyChanged(PropertyInfo *, int, Value *, Value *);
+		virtual void OnPropertyChanged(class PropertyInfo *, int, Value *, Value *);
 		//8
 		virtual void OnGroupChanged(int, bool);
 		//9
-		virtual void OnInput(InputEvent *);
+		virtual void OnInput(class InputEvent *);
 		//10
 		virtual void OnKeyFocusMoved(Element *, Element *);
 		//11
@@ -52,25 +52,25 @@ namespace DirectUI
 		//12
 		virtual void OnDestroy();
 		//13
-		virtual void OnEvent(Event *);
+		virtual void OnEvent(class Event *);
 		//14
 		virtual void Paint(HDC, RECT const *, RECT const *, RECT *, RECT *);
 
 		//15
-		virtual SIZE GetContentSize(LPSIZE psizl, int, Surface *);
+		virtual SIZE GetContentSize(LPSIZE psizl, int, class Surface *);
 
 		long Add(Element *);
 		long Add(Element *, int(__cdecl*)(const void *, const void *));
 		//16
 		virtual long Add(Element **, unsigned int);
 
-		long AddListener(IElementListener *);
+		long AddListener(class IElementListener *);
 
 		unsigned long AddRef();
 		static UID AnimationChange();
 
-		void BroadcastEvent(Event *);
-		void Detach(DeferCycle *);
+		void BroadcastEvent(class Event *);
+		void Detach(class DeferCycle *);
 
 		//17
 		virtual long Insert(Element **, unsigned int, unsigned int);
@@ -261,7 +261,7 @@ namespace DirectUI
 		unsigned long Release();
 		long Remove(Element *);
 		long RemoveAll();
-		void RemoveListener(IElementListener *);
+		void RemoveListener(class IElementListener *);
 		long RemoveLocalValue( const PropertyInfo* (WINAPI*)(void));
 		long RemoveLocalValue(PropertyInfo const *);
 
@@ -314,7 +314,7 @@ namespace DirectUI
 		long SetForegroundStdColor(int);
 		long SetHeight(int);
 		long SetID(unsigned short const *);
-		long SetLayout(Layout *);
+		long SetLayout(class Layout *);
 		long SetLayoutPos(int);
 		long SetMargin(int, int, int, int);
 		long SetMinSize(int, int);
@@ -342,7 +342,7 @@ namespace DirectUI
 		DeferCycle * TestDeferObject();
 		bool UiaEvents();
 		void UpdateLayout();
-		static void _AddDependency(Element *, PropertyInfo const *, int, DepRecs *, DeferCycle *, long *);
+		static void _AddDependency(Element *, PropertyInfo const *, int, class DepRecs *, DeferCycle *, long *);
 		void _ClearNeedsLayout();
 		static long _DisplayNodeCallback(struct HGADGET__ *, void *, struct EventMsg *);
 		void _EndOptimizedLayoutQ();
@@ -416,14 +416,14 @@ namespace DirectUI
 		bool TrySparsePattern(LPPOINT, const RECT&);
 		void _BroadcastEventWorker(Event *);
 		int _CachedValueIsEqual(const PropertyInfo *, Element *);
-		void _GetBuriedSheetDependencies(const PropertyInfo *, Element *, DepRecs *, DeferCycle *, long *);
+		void _GetBuriedSheetDependencies(const PropertyInfo *, Element *, class DepRecs *, DeferCycle *, long *);
 		void _UpdatePropertyInCache(const PropertyInfo *);
 		static void _VoidPCNotifyTree(int, DeferCycle *);
 		static IClassInfo *s_pClassInfo;
 
 		void _FlushDS(DeferCycle *);
 		Value * _GetComputedValue(PropertyInfo const *, UpdateCache *);
-		long _GetDependencies(PropertyInfo const *, int, DepRecs *, int, Value *, DeferCycle *);
+		long _GetDependencies(PropertyInfo const *, int, class DepRecs *, int, Value *, DeferCycle *);
 		Value * _GetLocalValue(PropertyInfo const *);
 		Value * _GetLocalValueFromVM(PropertyInfo const *);
 		Value * _GetSpecifiedValue(PropertyInfo const *, UpdateCache *);
@@ -432,123 +432,5 @@ namespace DirectUI
 		long _PostSourceChange();
 		long _PreSourceChange( const PropertyInfo* (WINAPI*)(void), int, Value *, Value *);
 		long _PreSourceChange(PropertyInfo const *, int, Value *, Value *);
-	};
-
-	
-
-	class UILIB_API ElementWithHWND : public Element
-	{
-	public:
-		ElementWithHWND(const ElementWithHWND &);
-		ElementWithHWND();
-		virtual ~ElementWithHWND();
-		ElementWithHWND& operator=(const ElementWithHWND &);
-
-		static long Create(Element *, unsigned long *, Element **);
-		static IClassInfo * GetClassInfoPtr();
-		virtual IClassInfo * GetClassInfoW();
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo *);
-
-	private:
-		static IClassInfo *s_pClassInfo;
-	};
-
-	class UILIB_API HWNDElement : public ElementWithHWND
-	{
-	public:
-		HWNDElement(const HWNDElement &);
-		HWNDElement();
-		virtual ~HWNDElement();
-		HWNDElement& operator=(const HWNDElement &);
-
-		//0
-		virtual void OnPropertyChanged(const PropertyInfo *, int, Value *, Value *);
-		//1
-		virtual void OnGroupChanged(int, bool);
-		//2
-		virtual void OnInput(InputEvent *);
-		//3
-		virtual void OnDestroy();
-		//4
-		virtual void OnEvent(Event *);
-		//5
-		virtual void UpdateTooltip(Element *);
-
-		//6
-		virtual void ActivateTooltip(Element *, unsigned long);
-		//7
-		virtual void RemoveTooltip(Element *);
-
-		//8
-		virtual IClassInfo * GetClassInfoW();
-		//9
-		virtual long GetAccessibleImpl(IAccessible **);
-
-
-		//HWNDElement ÐÂÔöº¯Êý
-		//10
-		virtual HWND GetHWND();
-
-		//11
-		virtual void OnThemeChanged(ThemeChangedEvent *);
-
-		//12
-		virtual void OnNoChildWithShortcutFound(KeyboardEvent *);
-
-		//13
-		virtual void OnGetDlgCode(LPMSG, LRESULT *);
-		//14
-		virtual void OnWmThemeChanged(WPARAM wParam, LPARAM lParam);
-		//15
-		virtual void OnCompositionChanged();
-
-		//16
-		virtual bool CanSetFocus();
-
-		static class UID CompositionChange();
-		static HRESULT WINAPI Create(HWND, bool, unsigned int, Element *, unsigned long *, Element **pOut);
-		//17
-		virtual long CreateStyleParser(DUIXmlParser **);
-		void DelayActivateTooltip();
-		Element * ElementFromPoint(LPPOINT);
-		static bool FindShortcut(unsigned short, Element *, Element **, int *, int *, int);
-		void FlushWorkingSet();
-		static IClassInfo * GetClassInfoPtr();
-
-		static HWNDElement * GetFocusedHWNDElement();
-
-		static Element * GetKeyFocusedElement();
-		unsigned short GetUIState();
-		bool GetWrapKeyboardNavigate();
-		long Initialize(HWND, bool, unsigned int, Element *, unsigned long *);
-		bool IsFirstElement(Element *);
-		bool IsLastElement(Element *);
-
-
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo *);
-
-		void SetFocus(bool);
-		void SetParentSizeControl(bool);
-		void SetScreenCenter(bool);
-		long SetWrapKeyboardNavigate(bool);
-		bool ShowAccel(void);
-		bool ShowFocus(void);
-		void ShowUIState(bool, bool);
-		static class UID ThemeChange();
-
-		void ToggleUIState(bool, bool);
-		static const PropertyInfo* WINAPI WrapKeyboardNavigateProp();
-
-		static __int64 StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
-		//18
-		virtual LRESULT WndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-	protected:
-		static bool FindShortcutRecursive(unsigned short, Element *, Element **, int *, int *, int);
-
-	private:
-		static IClassInfo * s_pClassInfo;
 	};
 }

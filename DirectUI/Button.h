@@ -32,8 +32,8 @@ namespace DirectUI
 		static IClassInfo* GetClassInfoPtr();
 		bool GetPressed();
 
-		virtual bool OnLostDialogFocus(DialogElement *);
-		virtual bool OnReceivedDialogFocus(DialogElement *);
+		virtual bool OnLostDialogFocus(class DialogElement *);
+		virtual bool OnReceivedDialogFocus(class DialogElement *);
 
 		static long Register();
 		long SetCaptured(bool);

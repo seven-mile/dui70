@@ -1,0 +1,629 @@
+﻿<duixml>
+<stylesheets>
+<style resid="SXStyles">
+<SXWizard
+padding           = "rect(24rp,0rp,24rp,20rp)"
+layoutpos         = "client"
+accessible        = "true"
+width             = "800rp"
+height            = "492rp"
+/>
+<if class="WizardButton">
+<PushButton
+background        = "themeable(rgb(  0, 121, 214), dfc(4, 0x0010))"
+foreground        = "themeable(rgb(255, 255, 255), buttontext)"
+font              = "resstr(312)"
+contentalign      = "middlecenter"
+accessible        = "true"
+accrole           = "pushbutton"
+margin            = "rect(8rp,0rp,0rp,0rp)"
+padding           = "rect(0rp,0rp,0rp,0rp)"
+minsize           = "size(216rp,48rp)"
+/>
+<if keyfocused="true">
+<PushButton
+background      = "themeable(rgb(  0, 150, 250), dfc(4, 0x0010 | 0x1000))"
+foreground      = "themeable(rgb(255, 255, 255), buttontext)"
+contentalign    = "middlecenter | focusrect"
+bordercolor     = "rgb(255, 255, 255)"
+borderthickness = "rect(1rp,1rp,1rp,1rp)"
+/>
+</if>
+<if selected="true">
+<PushButton
+background      = "themeable(rgb(  0, 150, 250), dfc(4, 0x0010 | 0x1000))"
+foreground      = "themeable(rgb(255, 255, 255), buttontext)"
+contentalign    = "middlecenter | focusrect"
+/>
+</if>
+<if mousefocused="true">
+<PushButton
+background      = "themeable(rgb(  0, 150, 250), dfc(4, 0x0010 | 0x1000))"
+foreground      = "themeable(rgb(255, 255, 255), buttontext)"
+/>
+</if>
+<if captured="true">
+<PushButton
+background      = "themeable(rgb(  0, 150, 250), dfc(4, 0x0010 | 0x1000))"
+foreground      = "themeable(rgb(255, 255, 255), buttontext)"
+/>
+</if>
+<if pressed="true">
+<PushButton
+background      = "themeable(rgb(255, 255, 255), dfc(4, 0x0010 | 0x1000 | 0x0200))"
+foreground      = "themeable(rgb(  0, 121, 214), buttontext)"
+/>
+</if>
+<if enabled="false">
+<PushButton
+background      = "themeable(rgb(  0,   0,   0), dfc(4, 0x0010 | 0x0100))"
+foreground      = "themeable(rgb(122, 122, 122), buttontext)"
+/>
+</if>
+</if>
+<if class="WizardButtonBar">
+<element
+padding         = "rect(0rp,26rp,0rp,0rp)"
+/>
+</if>
+<if class="WizardLogoBar">
+<element
+padding         = "rect(0rp,12rp,0rp,0rp)"
+/>
+</if>
+<if class="WizardLogo">
+</if>
+<if class="WizardLink">
+<button
+font            = "resstr(302)"
+foreground      = "themeable(rgb(102, 102, 102), gtc(TextStyle, 6, 1, 3803))"
+cursor          = "hand"
+accessible      = "true"
+accrole         = "link"
+/>
+<if keyfocused="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+<if selected="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+</if>
+<if class="WizardPageTitle">
+<element
+foreground      = "themeable(rgb(  0, 120, 215), windowtext)"
+font            = "resstr(300)"
+padding         = "rect(0rp,23rp,0rp,0rp)"
+contentalign    = "wrapleft"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="WizardPageSubTitle">
+<element
+foreground      = "themeable(rgb(  0,   0,   0), windowtext)"
+font            = "resstr(301)"
+padding         = "rect(0rp,11rp,0rp,0rp)"
+contentalign    = "wrapleft"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="WizardPageContainer">
+<element
+foreground      = "themeable(rgb(102, 102, 102), windowtext)"
+font            = "resstr(303)"
+contentalign    = "wrapleft"
+/>
+</if>
+<if class="WizardPageContent">
+<element
+foreground      = "themeable(rgb(102, 102, 102), windowtext)"
+font            = "resstr(304)"
+contentalign    = "wrapleft"
+/>
+</if>
+<if class="AdvertisePageTitle">
+<element
+padding         = "rect(31rp,40rp,31rp,40rp)"
+contentalign    = "wrapleft"
+font            = "resstr(305)"
+foreground      = "themeable(rgb(255, 255, 255), windowtext)"
+background      = "argb(0,0,0,0)"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="AdvertisePageContent">
+<element
+font            = "resstr(306)"
+foreground      = "themeable(rgb( 51,  51,  51), windowtext)"
+contentalign    = "wrapleft"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="AdvertisePage2Title">
+<element
+padding         = "rect(0rp,20rp,0rp,0rp)"
+contentalign    = "wrapleft"
+font            = "resstr(307)"
+foreground      = "themeable(rgb(  0, 120, 215), windowtext)"
+background      = "argb(0,0,0,0)"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="AdvertisePage2Content">
+<element
+font            = "resstr(308)"
+foreground      = "themeable(rgb( 51,  51,  51), windowtext)"
+contentalign    = "wrapleft"
+accessible      = "true"
+accrole         = "StaticText"
+/>
+</if>
+<if class="PageLink">
+<button
+font            = "resstr(309)"
+foreground      = "gtc(TextStyle, 6, 1, 3803)"
+cursor          = "hand"
+accessible      = "true"
+accrole         = "link"
+/>
+<if keyfocused="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+<if selected="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+</if>
+<if class="EulaWarningText">
+<element
+foreground      = "themeable(rgb(102, 102, 102), windowtext)"
+font            = "resstr(310)"
+contentalign    = "wrapleft"
+/>
+</if>
+<if class="EulaMoreInfoLink">
+<button
+font            = "resstr(311)"
+foreground      = "gtc(TextStyle, 6, 1, 3803)"
+cursor          = "hand"
+accessible      = "true"
+accrole         = "link"
+/>
+<if keyfocused="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+<if selected="true">
+<button
+contentalign  = "focusrect"
+/>
+</if>
+</if>
+<ScrollViewer
+padding           = "rect(0rp,0rp,0rp,0rp)"
+/>
+<if class="ScrollViewer">
+<CCHScrollBar
+layoutpos       = "ninebottom"
+accessible      = "true"
+/>
+<CCVScrollBar
+layoutpos       = "nineright"
+accessible      = "true"
+/>
+<viewer
+layoutpos       = "nineclient"
+/>
+</if>
+</style>
+</stylesheets>
+<SXWizard
+resid="WizardMain"
+sheet="SXStyles"
+id="Atom(SXWizard)"
+layout="BorderLayout()"
+>
+<element
+id="Atom(SXTitle)"
+class="WizardPageTitle"
+layoutpos="top"
+/>
+<element
+id="Atom(SXSubTitle)"
+class="WizardPageSubTitle"
+layoutpos="top"
+/>
+<element
+id="Atom(SXWizardLogoBar)"
+layout="BorderLayout()"
+layoutpos="bottom"
+class="WizardLogoBar"
+>
+<element
+id="Atom(SXWizardMicrosoftLogo)"
+class="WizardLogo"
+layoutpos="left"
+contentalign="bottomleft"
+/>
+<element
+layout="BorderLayout()"
+layoutpos="left"
+padding="rect(0rp,0rp,0rp,12rp)"
+margin="rect(12rp,0rp,0rp,0rp)"
+>
+<button
+id="Atom(SXWizardSupportLink)"
+class="WizardLink"
+/>
+</element>
+<element
+layout="BorderLayout()"
+layoutpos="left"
+padding="rect(0rp,0rp,0rp,12rp)"
+margin="rect(24rp,0rp,0rp,0rp)"
+>
+<button
+id="Atom(SXWizardLegalLink)"
+class="WizardLink"
+/>
+</element>
+<element
+id="Atom(SXWizardWindowsLogo)"
+class="WizardLogo"
+layoutpos="none"
+contentalign="bottomright"
+/>
+</element>
+<element
+id="Atom(SXWizardButtonBar)"
+layout="BorderLayout()"
+layoutpos="bottom"
+contentalign="middleright"
+class="WizardButtonBar"
+>
+<CCPushButton
+id="Atom(SXWizardDefaultButton)"
+sheet="common"
+font="resstr(313)"
+active="mouse | keyboard"
+accessible="true"
+accrole="pushbutton"
+minsize="size(218rp,44rp)"
+layoutpos="right"
+margin="rect(6rp,0rp,0rp,0rp)"
+/>
+<CCPushButton
+id="Atom(SXWizardAlternateButton)"
+sheet="common"
+font="resstr(314)"
+active="mouse | keyboard"
+accessible="true"
+accrole="pushbutton"
+minsize="size(218rp,44rp)"
+layoutpos="right"
+margin="rect(6rp,0rp,0rp,0rp)"
+/>
+</element>
+<element
+id="Atom(SXWizardPageContainer)"
+layoutpos="client"
+layout="BorderLayout()"
+class="WizardPageContainer"
+>
+</element>
+</SXWizard>
+<SXPage
+resid="ProgressPage"
+id="Atom(ProgressPage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+padding="rect(0rp,9rp,0rp,0rp)"
+>
+<CCProgressBar
+id="atom(Progress)"
+layoutpos="top"
+height="15rp"
+winstyle="8"
+accessible="true"
+accrole="Animation"
+/>
+<element
+id="Atom(ProgressText)"
+class="WizardPageContent"
+layoutpos="top"
+accessible="true"
+accrole="StaticText"
+/>
+</SXPage>
+<SXPage
+resid="EulaPage"
+id="Atom(EulaPage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+padding="rect(0rp,9rp,0rp,0rp)"
+>
+<element
+layout="flowlayout(1,2,0,2)"
+layoutpos="bottom"
+margin="rect(0rp,5rp,0rp,0rp)"
+>
+<element
+id="Atom(WarningText)"
+class="EulaWarningText"
+/>
+<button
+id="Atom(MoreInfoLink)"
+class="EulaMoreInfoLink"
+/>
+</element>
+<SXEdit
+id="Atom(EulaContainer)"
+class="WizardPageContent"
+active="mouse | keyboard"
+accessible="true"
+accrole="text"
+accname="EulaContainer"
+layoutpos="client"
+multiline="true"
+/>
+</SXPage>
+<SXPage
+resid="ReportPage"
+id="Atom(ReportPage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+padding="rect(0rp,9rp,0rp,0rp)"
+>
+<ScrollViewer
+resid="ReportScrollView"
+id="atom(ReportScrollView)"
+layoutpos="client"
+YScrollable="true"
+XScrollable="false"
+YBarVisibility="AsNeeded"
+XBarVisibility="never"
+>
+<element
+id="Atom(ReportContainer)"
+layout="BorderLayout()"
+layoutpos="client"
+/>
+</ScrollViewer>
+<element
+layout="flowlayout(1,2,0,2)"
+layoutpos="bottom"
+>
+<button
+id="Atom(PageReportLink)"
+class="PageLink"
+/>
+</element>
+</SXPage>
+<SXPage
+resid="MessagePage"
+id="Atom(MessagePage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+>
+<element
+id="Atom(MessageText)"
+class="WizardPageContent"
+layoutpos="top"
+/>
+</SXPage>
+<SXPage
+resid="DiskSpacePage"
+id="Atom(DiskSpacePage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+>
+<element
+layout="flowlayout(1,0,0,0)"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,10rp)"
+>
+<button
+id="Atom(CleanMgrLink)"
+class="PageLink"
+layoutpos="top"
+/>
+</element>
+<element
+layout="flowlayout(1,0,0,0)"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,5rp)"
+>
+<button
+id="Atom(ExternalDriveLink)"
+class="PageLink"
+layoutpos="top"
+/>
+</element>
+<element
+layout="flowlayout(1,0,0,0)"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,3rp)"
+>
+<combobox
+id="Atom(DriveList)"
+layoutpos="top"
+accessible="true"
+accrole="combobox"
+accname="combobox"
+accdefaction="click"
+visible="false"
+minsize="size(275rp,0rp)"
+/>
+</element>
+<element
+id="Atom(WarningText)"
+class="WizardPageContent"
+layoutpos="top"
+visible="false"
+margin="rect(0rp,0rp,0rp,10rp)"
+/>
+<element
+id="Atom(BlockReasonText)"
+class="WizardPageContent"
+layoutpos="top"
+visible="false"
+/>
+</SXPage>
+<SXPage
+resid="AdvertisePage"
+id="Atom(AdvertisePage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+>
+<element
+layout="BorderLayout()"
+layoutpos="left"
+minsize="size(284rp,284rp)"
+>
+<element
+layout="flowlayout(1,2,0,2)"
+layoutpos="absolute"
+x="0"
+y="0"
+width="284rp"
+height="284rp"
+>
+<element
+id="Atom(AdvertiseTitleLogo)"
+layoutpos="absolute"
+x="0"
+y="0"
+width="284rp"
+height="284rp"
+/>
+<element
+id="Atom(AdvertiseTitleText)"
+class="AdvertisePageTitle"
+layoutpos="client"
+/>
+</element>
+</element>
+<element
+layout="BorderLayout()"
+layoutpos="client"
+>
+<element
+layout="flowlayout(1,2,0,2)"
+layoutpos="client"
+padding="rect(40rp,0rp,0rp,0rp)"
+>
+<element
+id="Atom(AdvertiseText)"
+class="AdvertisePageContent"
+/>
+<button
+id="Atom(AdvertiseLink)"
+class="PageLink"
+/>
+</element>
+</element>
+</SXPage>
+<SXPage
+resid="AdvertisePage2"
+id="Atom(AdvertisePage2)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+>
+<element
+layout="BorderLayout()"
+layoutpos="left"
+minsize="size(328rp,284rp)"
+>
+<element
+layout="flowlayout(1,0,0,2)"
+layoutpos="left"
+width="328rp"
+>
+<element
+id="Atom(AdvertiseTitleLogo)"
+layoutpos="top"
+padding="rect(24rp,14rp,0rp,0rp)"
+/>
+<element
+id="Atom(AdvertiseTitleText)"
+class="AdvertisePage2Title"
+layoutpos="client"
+padding="rect(18rp,18rp,0rp,0rp)"
+width="310rp"
+/>
+</element>
+</element>
+<element
+layout="BorderLayout()"
+layoutpos="client"
+>
+<element
+layout="flowlayout(1,0,0,2)"
+layoutpos="client"
+padding="rect(48rp,90rp,0rp,0rp)"
+>
+<element
+id="Atom(AdvertiseText)"
+class="AdvertisePage2Content"
+padding="rect(0rp,0rp,0rp,20rp)"
+/>
+<button
+id="Atom(AdvertiseLink)"
+class="PageLink"
+/>
+</element>
+</element>
+</SXPage>
+<SXPage
+resid="ActivationPage"
+id="Atom(ActivationPage)"
+layout="BorderLayout()"
+layoutpos="client"
+sheet="SXStyles"
+padding="rect(0rp,9rp,0rp,0rp)"
+>
+<element
+layout="flowlayout(1,0,0,0)"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,10rp)"
+>
+<button
+id="Atom(ActivateNowLink)"
+class="PageLink"
+layoutpos="top"
+/>
+</element>
+<element
+id="Atom(AdditionalText)"
+class="WizardPageContent"
+layoutpos="top"
+/>
+<CCProgressBar
+id="atom(Progress)"
+layoutpos="top"
+height="15rp"
+winstyle="8"
+accessible="true"
+accrole="Animation"
+/>
+</SXPage>
+</duixml>

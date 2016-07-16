@@ -2,27 +2,26 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	class UILIB_API CCProgressBar :public CCBase
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
+		CCProgressBar(CCProgressBar const &);
+		CCProgressBar(void);
+		virtual ~CCProgressBar(void);
+		CCProgressBar & operator=(CCProgressBar const &);
 
-		virtual ~CCAVI(void);
 		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		
+		long Initialize(unsigned int, Element *, unsigned long *);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+		virtual void OnInput(InputEvent *);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
 	};
 }

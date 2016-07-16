@@ -2,27 +2,26 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	class UILIB_API Clipper : public Expandable
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
+		Clipper(Clipper const &);
+		Clipper(void);
+		virtual ~Clipper(void);
+		Clipper & operator=(Clipper const &);
 
-		virtual ~CCAVI(void);
-		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		
+		long Initialize(Element *, unsigned long *);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+		virtual void _SelfLayoutDoLayout(int, int);
+		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface *);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
 	};
 }

@@ -25,7 +25,7 @@ namespace DirectUI
 
 		//∏∏¿‡∏∏∫Ø ˝÷ÿ‘ÿ
 		virtual void OnPropertyChanged(PropertyInfo const *, int, Value *, Value *);
-		virtual HWND * CreateHWND(HWND *);
+		virtual HWND CreateHWND(HWND);
 		virtual long DefaultAction(void);
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual SIZE GetContentSize(int, int, Surface *);
@@ -41,7 +41,7 @@ namespace DirectUI
 
 	protected:
 		//4
-		virtual void PostCreate(HWND *);
+		virtual void PostCreate(HWND);
 	private:
 		static IClassInfo * s_pClassInfo;
 	};

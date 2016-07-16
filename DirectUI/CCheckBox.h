@@ -2,27 +2,25 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	class UILIB_API CCCheckBox :public CCBaseCheckRadioButton
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
+		CCCheckBox(const CCCheckBox &);
+		CCCheckBox(unsigned long);
+		CCCheckBox & operator=(const CCCheckBox &);
+		virtual ~CCCheckBox(void);
 
-		virtual ~CCAVI(void);
 		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
-		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		static IClassInfo * __stdcall GetClassInfoPtr(void);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+		virtual void OnInput(InputEvent *);
+		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
 	};
 }

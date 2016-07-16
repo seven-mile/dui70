@@ -73,7 +73,7 @@ namespace DirectUI
 
 		long Initialize(Element*, IXProviderCP*);
 		static long Create(Element*, IXProviderCP*, XProvider**);
-		virtual long CreateDUI(IXElementCP*, HWND*);
+		virtual long CreateDUI(IXElementCP*, HWND);
 		long CreateParser(DUIXmlParser**);
 
 		virtual int FindElementWithShortcutAndDoDefaultAction(unsigned short, int);

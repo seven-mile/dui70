@@ -2,27 +2,24 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	//此类虚函数全部来自父
+	class UILIB_API CCHScrollBar : public CCBaseScrollBar
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
-
-		virtual ~CCAVI(void);
+		CCHScrollBar(const CCHScrollBar &);
+		CCHScrollBar(void);
+		CCHScrollBar & operator=(const CCHScrollBar &);
+		virtual ~CCHScrollBar(void);
 		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+		virtual SIZE GetContentSize(int, int, Surface *);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
 	};
 }

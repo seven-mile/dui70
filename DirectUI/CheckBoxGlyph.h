@@ -2,27 +2,28 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	class UILIB_API CheckBoxGlyph : public Button
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
+		CheckBoxGlyph(CheckBoxGlyph const &);
+		CheckBoxGlyph(void);
+		virtual ~CheckBoxGlyph(void);
+		CheckBoxGlyph & operator=(CheckBoxGlyph const &);
 
-		virtual ~CCAVI(void);
 		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		
+		long Initialize(unsigned int, Element *, unsigned long *);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+		virtual bool OnLostDialogFocus(DialogElement *);
+		virtual bool OnReceivedDialogFocus(DialogElement *);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
+
 	};
 }

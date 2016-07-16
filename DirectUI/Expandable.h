@@ -2,27 +2,27 @@
 
 namespace DirectUI
 {
-	class UILIB_API CCAVI :public CCBase
+	class UILIB_API Expandable :public Element
 	{
 	public:
-		CCAVI(const CCAVI &);
-		CCAVI(void);
-		CCAVI & operator=(const CCAVI &);
+		Expandable(Expandable const &);
+		Expandable(void);
+		virtual ~Expandable(void);
+		Expandable & operator=(Expandable const &);
 
-		virtual ~CCAVI(void);
-		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
+		static const PropertyInfo* __stdcall ExpandedProp(void);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		
+		bool GetExpanded(void);
+		long SetExpanded(bool);
 
-		void Play(HWND);
-		void Stop(void);
 		virtual IClassInfo * GetClassInfoW(void);
-	protected:
-		virtual void PostCreate(HWND);
+
 	private:
 		static IClassInfo * s_pClassInfo;
-		void OpenAnimation(HWND);
+
 	};
 }

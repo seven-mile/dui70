@@ -86,15 +86,15 @@ namespace DirectUI
 		//5
 		virtual int GetLine() = 0;
 		//6
-		virtual __int32 SetPosition(int) = 0;
+		virtual long SetPosition(int) = 0;
 		//7
-		virtual __int32 SetMaximum(int) = 0;
+		virtual long SetMaximum(int) = 0;
 		//8
-		virtual __int32 SetMinimum(int) = 0;
+		virtual long SetMinimum(int) = 0;
 		//9
-		virtual __int32 SetPage(int) = 0;
+		virtual long SetPage(int) = 0;
 		//10
-		virtual __int32 SetLine(int) = 0;
+		virtual long SetLine(int) = 0;
 		//11
 		virtual bool CanSetFocus() = 0;
 		//12

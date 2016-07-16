@@ -120,6 +120,63 @@
     <ClInclude Include="CBase.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
+    <ClInclude Include="CBaseCheckRadioButton.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CBaseScrollBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CHScrollBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CCheckBox.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CCommandLink.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CPushButton.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CListBox.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CListView.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CProgressBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CRadioButton.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CCSysLink.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CTrackBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CTreeView.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CVScrollBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CallstackTracker.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBoxGlyph.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Combobox.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Clipper.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Expandable.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectUI.def">

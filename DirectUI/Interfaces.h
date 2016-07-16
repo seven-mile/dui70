@@ -1,5 +1,4 @@
 #pragma once
-#include "DirectUI.h"
 
 namespace DirectUI
 {

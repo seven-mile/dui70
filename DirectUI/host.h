@@ -1,8 +1,5 @@
 #pragma once
 
-#include "types.h"
-//#include "Element.h"
-
 namespace DirectUI
 {
 	class XHost

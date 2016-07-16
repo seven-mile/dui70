@@ -1,11 +1,7 @@
 #pragma once
-#include "types.h"
 
 namespace DirectUI
 {
-	typedef unsigned short UChar;
-	typedef UChar* UString;
-	typedef const UString UCString;
     // exported for int
     template<typename>
     class SafeArrayAccessor 

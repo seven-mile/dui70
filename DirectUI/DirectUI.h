@@ -1,26 +1,50 @@
 #pragma once
 #include <Windows.h>
+#include <oleacc.h>
+#include <objbase.h>
+#include <initguid.h>
+#include <oleacc.h>
+#include <Commctrl.h>
+
+#if	defined(DIRECTUI_EXPORTS)
+#define UILIB_API __declspec(dllexport)
+#else
+#define UILIB_API 
+#endif
 
 #include "types.h"
+#include "misc.h"
 #include "Value.h"
+
+#include "AutoLock.h"
+#include "AutoThread.h"
+#include "AutoVariant.h"
 #include "Interfaces.h"
 #include "Primitives.h"
 #include "element.h"
+
+#include "Browser.h"
+#include "Bind.h"
 #include "AnimationStrip.h"
 #include "Button.h"
 #include "base.h"
 #include "AccessibleButton.h"
+#include "AutoButton.h"
 #include "event.h"
 #include "layout.h"
+#include "BorderLayout.h"
 #include "host.h"
 #include "accessibility.h"
-#include "AutoObjects.h"
-#include "provider.h"
 #include "parser.h"
+#include "provider.h"
+
 #include "Movie.h"
 #include "ElementWithHWND.h"
 #include "HWNDElement.h"
 #include "NativeHWNDHost.h"
+#include "HWNDHost.h"
+#include "CBase.h"
+#include "CAVI.h"
 
 namespace DirectUI
 {

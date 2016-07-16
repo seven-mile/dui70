@@ -1,5 +1,4 @@
 #pragma once
-#include "types.h"
 
 namespace DirectUI
 {
@@ -8,14 +7,16 @@ namespace DirectUI
 	public:
 		ElementWithHWND(const ElementWithHWND &);
 		ElementWithHWND();
-		virtual ~ElementWithHWND();
 		ElementWithHWND& operator=(const ElementWithHWND &);
+
+		virtual ~ElementWithHWND();
 
 		static long Create(Element*, unsigned long*, Element**);
 		static IClassInfo* GetClassInfoPtr();
-		virtual IClassInfo* GetClassInfoW();
 		static long Register();
 		static void SetClassInfoPtr(IClassInfo*);
+
+		virtual IClassInfo* GetClassInfoW();
 
 	private:
 		static IClassInfo*s_pClassInfo;

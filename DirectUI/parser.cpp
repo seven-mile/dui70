@@ -1,5 +1,5 @@
-#include "parser.h"
 #include "DirectUI.h"
+
 namespace DirectUI
 {
 	DUIXmlParser::DUIXmlParser(const DUIXmlParser &)

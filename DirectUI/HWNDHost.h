@@ -1,5 +1,4 @@
 #pragma once
-#include "types.h"
 
 namespace DirectUI
 {
@@ -8,66 +7,67 @@ namespace DirectUI
 	public:
 		HWNDHost(const HWNDHost &);
 		HWNDHost();
-		virtual ~HWNDHost();
 		HWNDHost& operator=(const HWNDHost &);
+		
+		virtual ~HWNDHost();
 
 		long Initialize(unsigned int, unsigned int, Element*, unsigned long*);
-		static long Create(unsigned int, unsigned int, Element*, unsigned long*, Element**pOut);
-		static long Create(Element*, unsigned long*, Element**pOut);
 		void Detach();
-
-		static const PropertyInfo* BackgroundOwnerIDProp();
-		virtual long GetAccessibleImpl(IAccessible**);
 		unsigned short GetBackgroundOwnerID();
-		static IClassInfo* GetClassInfoPtr();
-		virtual IClassInfo* GetClassInfoW();
-		long GetClientAccessibleImpl(IAccessible**);
-		virtual HWND GetHWND();
 		HWND GetHWNDParent();
-		virtual bool GetKeyFocused();
 		bool GetOptimizeMove();
 		bool GetTransparent();
-
-		virtual unsigned int MessageCallback(LPGMSG);
-		virtual int OnAdjustWindowSize(int, int, unsigned int);
-
-		virtual bool OnCtrlThemeChanged(UINT, WPARAM wParam, LPARAM lParam, LRESULT*);
-		virtual bool OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
-		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
-		virtual void OnDestroy();
-		virtual void OnEvent(Event*);
-		virtual void OnInput(InputEvent*);
-		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
-		virtual bool OnSinkThemeChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
-		virtual bool OnSysChar(unsigned short);
-
-		virtual void OnWindowStyleChanged(WPARAM, STYLESTRUCT const*);
-		virtual void Paint(HDC, LPCRECT, LPCRECT, LPRECT, LPRECT);
+		long GetClientAccessibleImpl(IAccessible**);
 		long SetBackgroundOwnerID(UCString);
-		virtual void SetKeyFocus();
 		long SetOptimizeMove(bool);
 		long SetTransparent(bool);
-		virtual void SetWindowDirection(HWND);
 
+		static long Create(unsigned int, unsigned int, Element*, unsigned long*, Element**pOut);
+		static long Create(Element*, unsigned long*, Element**pOut);
+		static const PropertyInfo* BackgroundOwnerIDProp();
+		static IClassInfo* GetClassInfoPtr();
 		static const PropertyInfo* OptimizeMoveProp();
 		static long Register();
 		static void SetClassInfoPtr(IClassInfo*);
 		static const PropertyInfo* ThemeChangedProp();
 		static const PropertyInfo* TransparentProp();
 
+		//父类重载
+		virtual IClassInfo* GetClassInfoW();
+		virtual long GetAccessibleImpl(IAccessible**);
+		virtual bool GetKeyFocused();
+		virtual unsigned int MessageCallback(LPGMSG);
+		virtual void OnDestroy();
+		virtual void OnEvent(Event*);
+		virtual void OnInput(InputEvent*);
+		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
+
+		virtual void Paint(HDC, LPCRECT, LPCRECT, LPRECT, LPRECT);
+		virtual void SetKeyFocus();
+		virtual void SetWindowDirection(HWND);
+		//
+
+		//1
+		virtual HWND GetHWND();
+		//2
+		virtual bool OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
+		//3
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
+		//4
+		virtual bool OnSysChar(UChar);
+		//5
+		virtual bool OnSinkThemeChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
+		//6
+		virtual bool OnCtrlThemeChanged(UINT, WPARAM wParam, LPARAM lParam, LRESULT*);
+		//7
+		virtual void OnWindowStyleChanged(WPARAM, const STYLESTRUCT *);
+		//8
+		virtual int OnAdjustWindowSize(int, int, unsigned int);
+
 	protected:
 		static void AttachCtrlSubclassProc(HWND);
-		HWND CreateAccNameLabel(HWND);
-		virtual HWND CreateHWND(HWND);
 		static __int64 CtrlSubclassProc(HWND, unsigned int, unsigned __int64, __int64);
-		virtual bool EraseBkgnd(HDC, LRESULT*);
-		Element* GetBackgroundOwner();
-		HFONT GetFont();
-		bool GetStaticColor(HDC, HBRUSH*);
-		int GetThemeChanged();
-		bool IsMoveDeferred();
-		virtual void OnHosted(Element*);
-		virtual void OnUnHosted(Element*);
+
 		void PrintRTLControl(HDC, HDC, const RECT&);
 		long SetThemeChanged(int);
 		void SyncBackground();
@@ -80,10 +80,28 @@ namespace DirectUI
 		void SyncText();
 		void SyncVisible();
 		int VerifyParentage();
+		HWND CreateAccNameLabel(HWND);
+		Element* GetBackgroundOwner();
+		HFONT GetFont();
+		bool GetStaticColor(HDC, HBRUSH*);
+		int GetThemeChanged();
+		bool IsMoveDeferred();
+		//父类重载
+		virtual void OnHosted(Element*);
+		virtual void OnUnHosted(Element*);
+		//
+
+		//9
+		virtual HWND CreateHWND(HWND);
+		//10
+		virtual bool EraseBkgnd(HDC, LRESULT*);
 
 	private:
 		static unsigned int const (*g_rgMouseMap)[3];
 		static IClassInfo* s_pClassInfo;
+		static int _CtrlWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
+		static int _SinkWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
+
 		void ApplySinkRegion(const LPRECT, bool);
 		long GetAccessibleImpl(IAccessible**, bool);
 		void GetSinkRect(const LPRECT, LPRECT);
@@ -91,7 +109,5 @@ namespace DirectUI
 		void SyncColorsAndFonts();
 		void UnvirtualizePosition();
 		void _DeleteCtrlWnd();
-		static int _CtrlWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
-		static int _SinkWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
 	};
 }

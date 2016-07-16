@@ -1,7 +1,5 @@
 #pragma once
 
-#include "types.h"
-
 namespace DirectUI
 {
     class DuiAccessible : public IAccIdentity, public IAccessible, public IEnumVARIANT, public IOleWindow, public IServiceProvider

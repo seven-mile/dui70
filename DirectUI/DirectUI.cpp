@@ -94,21 +94,21 @@ namespace DirectUI
 		return 0;
 	}
 
-
-	UILIB_API ATOM WINAPI StrToID(LPCWSTR resId)
+	UILIB_API ATOM WINAPI StrToID(UCString resId)
 	{
 		return 0;
 	}
 
-
-	UILIB_API int WINAPI UnicodeToMultiByte(LPCWSTR lpWideCharStr, int cchWideChar, int unk)
+	UILIB_API int WINAPI UnicodeToMultiByte(UCString lpWideCharStr, int cchWideChar, int unk)
 	{
-		return 0;
+		return int();
 	}
+
 	UILIB_API int WINAPI MultiByteToUnicode(LPCSTR lpMultiByteStr, int cbMultiByte, int unk)
 	{
-		return 0;
+		return int();
 	}
+	
 
 	UILIB_API BOOL WINAPI IsAnimationsEnabled()
 	{
@@ -119,6 +119,10 @@ namespace DirectUI
 		return 0;
 	}
 	UILIB_API BOOL WINAPI IsUIAutomationProviderEnabled()
+	{
+		return 0;
+	}
+	UILIB_API int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF color)
 	{
 		return 0;
 	}

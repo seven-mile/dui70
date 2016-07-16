@@ -1,32 +1,42 @@
 #pragma once
 
-#include "types.h"
-
 namespace DirectUI
 {
-	class Layout
+	class UILIB_API Layout
 	{
 	public:
-		Layout(Layout const &);
+		Layout(const Layout &);
 		Layout();
-		virtual ~Layout();
-		Layout & operator=(Layout const &);
+		Layout & operator=(const Layout &);
 
-		virtual void Attach(Element*);
 		static HRESULT WINAPI Create(Layout**);
+		static void WINAPI UpdateLayoutRect(Element*, int, int, Element*, int, int, int, int);
+
 		void Destroy();
-		virtual void Detach(Element*);
-		virtual void DoLayout(Element*, int, int);
-		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
 		Element* GetChildFromLayoutIndex(Element*, int, DynamicArray<Element*, 0>*);
 		unsigned int GetLayoutChildCount(Element*);
 		int GetLayoutIndexFromChild(Element*, Element*);
 		void Initialize();
-		virtual void OnAdd(Element*, Element**, unsigned int);
-		virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-		virtual void OnRemove(Element*, Element**, unsigned int);
+		//0
+		virtual void DoLayout(Element*, int, int);
+
+		//1
 		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
-		static void WINAPI UpdateLayoutRect(Element*, int, int, Element*, int, int, int, int);
+		//2
+		virtual void OnAdd(Element*, Element**, unsigned int);
+		//3
+		virtual void OnRemove(Element*, Element**, unsigned int);
+		//4
+		virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+
+		//5
+		virtual void Attach(Element*);
+		//6
+		virtual void Detach(Element*);
+		//7
+		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
+		//8
+		virtual ~Layout();
 	protected:
 		void ClearCacheDirty();
 		bool IsCacheDirty();

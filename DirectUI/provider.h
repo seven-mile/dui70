@@ -1,8 +1,5 @@
 #pragma once
 
-#include "DirectUI.h"
-#include "parser.h"		// can't forward declare Schema::Pattern
-
 namespace DirectUI
 {
 	class ElementProvider

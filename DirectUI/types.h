@@ -1,22 +1,12 @@
 #pragma once
-#include <oleacc.h>
-#include <objbase.h>
-#include <initguid.h>
-#include <oleacc.h>
-
-#if	defined(DIRECTUI_EXPORTS)
-#define UILIB_API __declspec(dllexport)
-#else
-#define UILIB_API 
-#endif
-
-#include "misc.h"
 
 
 //forward declares
 namespace DirectUI
 {
-	
+	typedef unsigned short UChar;
+	typedef UChar* UString;
+	typedef const unsigned short* UCString;
 
 	typedef struct tagGMSG
 	{

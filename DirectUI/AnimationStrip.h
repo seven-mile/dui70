@@ -47,6 +47,6 @@ namespace DirectUI
 		long Start();
 		void Stop();
 		void UnloadCommonControlExports();
-
+		static IClassInfo* s_pClassInfo;
 	};
 }

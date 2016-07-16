@@ -1,5 +1,4 @@
 #pragma once
-#include "types.h"
 
 namespace DirectUI
 {
@@ -201,9 +200,9 @@ private: static struct DirectUI::Schema::const PropertyInfo* const DirectUI::Sch
 */
 	};
 
-	typedef class Value* (WINAPI*GetSheetCallback)(UCString, void*);
-	typedef void (WINAPI*ParseErrorCallback)(UCString, UCString, int, void*);
-	typedef bool (WINAPI*UnknownAttrCallback)(UCString, void*);
+	typedef Value* (WINAPI* GetSheetCallback)(UCString, void*);
+	typedef void ( WINAPI* ParseErrorCallback)(UCString, UCString, int, void*);
+	typedef bool ( WINAPI* UnknownAttrCallback)(UCString, void*);
 
 	namespace ParserTools
 	{

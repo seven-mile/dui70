@@ -19,6 +19,12 @@
     <Filter Include="头文件\DirectUI\accessibility">
       <UniqueIdentifier>{57f62be9-b740-44aa-98ee-dea7bc4a9990}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\DirectUI\AutoObjects">
+      <UniqueIdentifier>{6d1b61bf-ba04-4275-ad8d-1ba1bc865aee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\DirectUI\Layout">
+      <UniqueIdentifier>{d8f4322e-6b5e-4c36-a495-3eb52c04f3d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectUI.h">
@@ -30,9 +36,6 @@
     <ClInclude Include="types.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
-    <ClInclude Include="accessibility.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
     <ClInclude Include="base.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
@@ -40,9 +43,6 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="host.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="layout.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="misc.h">
@@ -58,9 +58,6 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="Interfaces.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="AutoObjects.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="Primitives.h">
@@ -88,6 +85,39 @@
       <Filter>头文件\DirectUI\accessibility</Filter>
     </ClInclude>
     <ClInclude Include="AnimationStrip.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoButton.h">
+      <Filter>头文件\DirectUI\AutoObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoLock.h">
+      <Filter>头文件\DirectUI\AutoObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoThread.h">
+      <Filter>头文件\DirectUI\AutoObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoVariant.h">
+      <Filter>头文件\DirectUI\AutoObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bind.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="layout.h">
+      <Filter>头文件\DirectUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="BorderLayout.h">
+      <Filter>头文件\DirectUI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="accessibility.h">
+      <Filter>头文件\DirectUI\accessibility</Filter>
+    </ClInclude>
+    <ClInclude Include="Browser.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CAVI.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CBase.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
   </ItemGroup>

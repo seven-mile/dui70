@@ -36,7 +36,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	const unsigned __int16* Element::GetContentStringAsDisplayed(Value**)
+	UCString Element::GetContentStringAsDisplayed(Value**)
 	{
 		return nullptr;
 	}
@@ -136,6 +136,10 @@ namespace DirectUI
 	{
 		return 0;
 	}
+	void Element::_SelfLayoutDoLayout(int, int)
+	{
+	}
+
 	SIZE Element::_SelfLayoutUpdateDesiredSize(int, int, Surface*)
 	{
 		return SIZE();
@@ -176,35 +180,35 @@ namespace DirectUI
 	{
 		return false;
 	}
-	const unsigned short* Element::GetAccDefAction(Value**)
+	UCString Element::GetAccDefAction(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccDesc(Value**)
+	UCString Element::GetAccDesc(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccHelp(Value**)
+	UCString Element::GetAccHelp(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccItemStatus(Value**)
+	UCString Element::GetAccItemStatus(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccItemType(Value**)
+	UCString Element::GetAccItemType(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccName(Value**)
+	UCString Element::GetAccName(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccNameAsDisplayed(Value**)
+	UCString Element::GetAccNameAsDisplayed(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short* Element::GetAccValue(Value**)
+	UCString Element::GetAccValue(Value**)
 	{
 		return nullptr;
 	}

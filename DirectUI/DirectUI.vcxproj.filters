@@ -16,6 +16,9 @@
     <Filter Include="头文件\DirectUI">
       <UniqueIdentifier>{2325fd54-9b8c-4123-8914-7457932208d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\DirectUI\accessibility">
+      <UniqueIdentifier>{57f62be9-b740-44aa-98ee-dea7bc4a9990}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectUI.h">
@@ -79,6 +82,12 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="Value.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AccessibleButton.h">
+      <Filter>头文件\DirectUI\accessibility</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationStrip.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
   </ItemGroup>

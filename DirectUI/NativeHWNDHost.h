@@ -28,13 +28,13 @@ namespace DirectUI
 		void Host(class Element*);
 
 		HRESULT Initialize(UCString lpClassName, UCString lpWindowName, HWND hWndParent, HICON hIcon, int x, int y, int nWidth, int nHeight, int dwExStyle, int dwStyle, HINSTANCE, UINT);
-		HRESULT Initialize(const unsigned short*, HWND, HICON, int, int, int, int, int, int, UINT);
+		HRESULT Initialize(UCString, HWND, HICON, int, int, int, int, int, int, UINT);
 
 		virtual HRESULT OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
 
 		int RestoreFocus();
 		void SaveFocus();
-		void SetDefaultFocusID(const unsigned short*);
+		void SetDefaultFocusID(UCString);
 		void ShowWindow(int);
 
 	private:

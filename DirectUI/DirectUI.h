@@ -6,8 +6,10 @@
 #include "Interfaces.h"
 #include "Primitives.h"
 #include "element.h"
+#include "AnimationStrip.h"
 #include "Button.h"
 #include "base.h"
+#include "AccessibleButton.h"
 #include "event.h"
 #include "layout.h"
 #include "host.h"
@@ -29,7 +31,7 @@ namespace DirectUI
 
 	UILIB_API int WINAPI CreateDUIWrapper(Element*,class XProvider**);
 	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider**);
-	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE,const unsigned short*, const unsigned short*, const unsigned short*, class XResourceProvider**);
+	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE,UCString, UCString, UCString, class XResourceProvider**);
 
 	UILIB_API int WINAPI GetScreenDPI();
 
@@ -47,13 +49,15 @@ namespace DirectUI
 	UILIB_API int WINAPI StopMessagePump();
 
 
-	UILIB_API ATOM WINAPI StrToID(LPCWSTR resId);
+	UILIB_API ATOM WINAPI StrToID(UCString resId);
 
 
-	UILIB_API int WINAPI UnicodeToMultiByte(LPCWSTR lpWideCharStr, int cchWideChar, int unk);
+	UILIB_API int WINAPI UnicodeToMultiByte(UCString lpWideCharStr, int cchWideChar, int unk);
 	UILIB_API int WINAPI MultiByteToUnicode(LPCSTR lpMultiByteStr, int cbMultiByte, int unk);
 
 	UILIB_API BOOL WINAPI IsAnimationsEnabled();
 	UILIB_API int WINAPI IsPalette(HWND hWnd);
 	UILIB_API BOOL WINAPI IsUIAutomationProviderEnabled();
+
+	UILIB_API int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF color);
 }

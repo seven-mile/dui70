@@ -56,7 +56,7 @@ namespace DirectUI
 	{
 		return E_NOTIMPL;
 	}
-	HRESULT NativeHWNDHost::Initialize(const unsigned short*, HWND, HICON, int, int, int, int, int, int, UINT)
+	HRESULT NativeHWNDHost::Initialize(UCString, HWND, HICON, int, int, int, int, int, int, UINT)
 	{
 		return E_NOTIMPL;
 	}
@@ -71,7 +71,7 @@ namespace DirectUI
 	void NativeHWNDHost::SaveFocus()
 	{
 	}
-	void NativeHWNDHost::SetDefaultFocusID(const unsigned short*)
+	void NativeHWNDHost::SetDefaultFocusID(UCString)
 	{
 	}
 	void NativeHWNDHost::ShowWindow(int)

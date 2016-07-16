@@ -115,7 +115,7 @@ namespace DirectUI
 		virtual long CreateParserCP(class DUIXmlParser**pOut);
 
 		virtual void DestroyCP();
-		long Initialize(HINSTANCE h, const unsigned short* s1, const unsigned short*s2, const unsigned short*s3);
+		long Initialize(HINSTANCE h, UCString s1, UCString s2, UCString s3);
 
 	};
 }

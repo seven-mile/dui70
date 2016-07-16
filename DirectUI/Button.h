@@ -17,6 +17,7 @@ namespace DirectUI
 
 		static UID Click();
 		static UID Context();
+		//Element类函数重写
 		//0
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
 		//1
@@ -31,8 +32,10 @@ namespace DirectUI
 		bool GetCaptured();
 		static IClassInfo* GetClassInfoPtr();
 		bool GetPressed();
-
+		//Button 新增虚函数
+		//0
 		virtual bool OnLostDialogFocus(class DialogElement*);
+		//1
 		virtual bool OnReceivedDialogFocus(class DialogElement*);
 
 		static long Register();

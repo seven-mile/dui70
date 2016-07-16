@@ -153,6 +153,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="accessibility.h" />
+    <ClInclude Include="AccessibleButton.h" />
+    <ClInclude Include="AnimationStrip.h" />
     <ClInclude Include="AutoObjects.h" />
     <ClInclude Include="base.h" />
     <ClInclude Include="Button.h" />

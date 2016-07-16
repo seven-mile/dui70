@@ -21,15 +21,15 @@ namespace DirectUI
 	}
 
 	// These might be wrong, disassemble and check if it is DirectUI::XProvider* or DirectUI::XProvider**
-	UILIB_API int WINAPI CreateDUIWrapper(Element*, class XProvider*)
+	UILIB_API int WINAPI CreateDUIWrapper(Element*, class XProvider**)
 	{
 		return 0;
 	}
-	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider*)
+	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider**)
 	{
 		return 0;
 	}
-	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE, unsigned short*, unsigned short*, unsigned short*, class XResourceProvider*)
+	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE, UCString, UCString, UCString, class XResourceProvider**)
 	{
 		return 0;
 	}

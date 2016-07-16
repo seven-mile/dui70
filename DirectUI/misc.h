@@ -4,8 +4,8 @@
 namespace DirectUI
 {
 	typedef unsigned short UChar;
-	typedef unsigned short* UString;
-	typedef const unsigned short* UCString;
+	typedef UChar* UString;
+	typedef const UString UCString;
     // exported for int
     template<typename>
     class SafeArrayAccessor 

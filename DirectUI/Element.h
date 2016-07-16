@@ -31,7 +31,7 @@ namespace DirectUI
 		static long UnRegister(struct IClassInfo**);
 
 		//3
-		const unsigned __int16*GetContentStringAsDisplayed(class Value**);
+		virtual UCString GetContentStringAsDisplayed(class Value**);
 
 		//4
 		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value*, class Value*);
@@ -93,6 +93,7 @@ namespace DirectUI
 		virtual long WINAPI QueryInterface(GUID const &, void**);
 
 		//24
+		virtual void _SelfLayoutDoLayout(int, int);
 
 		//25
 		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
@@ -109,14 +110,14 @@ namespace DirectUI
 		void FireEvent(struct Event*, bool, bool);
 
 		bool GetAbsorbsShortcut();
-		const unsigned short* GetAccDefAction(Value**);
-		const unsigned short* GetAccDesc(Value**);
-		const unsigned short* GetAccHelp(Value**);
-		const unsigned short* GetAccItemStatus(Value**);
-		const unsigned short* GetAccItemType(Value**);
-		const unsigned short* GetAccName(Value**);
-		const unsigned short* GetAccNameAsDisplayed(Value**);
-		const unsigned short* GetAccValue(Value**);
+		UCString GetAccDefAction(Value**);
+		UCString GetAccDesc(Value**);
+		UCString GetAccHelp(Value**);
+		UCString GetAccItemStatus(Value**);
+		UCString GetAccItemType(Value**);
+		UCString GetAccName(Value**);
+		UCString GetAccNameAsDisplayed(Value**);
+		UCString GetAccValue(Value**);
 
 		int GetAccRole();
 		int GetAccState();
@@ -198,7 +199,7 @@ namespace DirectUI
 		int GetShadowIntensity();
 		StyleSheet* GetSheet();
 		int GetShortcut();
-		unsigned short GetShortcutChar();
+		UChar GetShortcutChar();
 		int GetTextGlowSize();
 		bool GetTooltip();
 		int GetTooltipMaxWidth();
@@ -373,7 +374,7 @@ namespace DirectUI
 		virtual bool GetKeyFocused();
 
 		//32
-		virtual IClassInfo*GetClassInfoW();
+		virtual IClassInfo* GetClassInfoW();
 		//33
 		virtual long GetAccessibleImpl(IAccessible**);
 
@@ -400,7 +401,6 @@ namespace DirectUI
 		void _OnFontPropChanged(Value*);
 		long _RemoveLocalValue( const PropertyInfo* (WINAPI*)(void), bool);
 		long _RemoveLocalValue(const PropertyInfo*, bool);
-		//virtual void _SelfLayoutDoLayout(int, int);
 		long _SetValue( const PropertyInfo* (WINAPI*)(void), int, Value*, bool);
 		long _SetValue(const PropertyInfo*, int, Value*, bool);
 

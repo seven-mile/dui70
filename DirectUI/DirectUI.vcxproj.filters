@@ -177,6 +177,12 @@
     <ClInclude Include="Expandable.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
+    <ClInclude Include="DialogElement.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="DuiNavigate.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectUI.def">
@@ -206,6 +212,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Base.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="accessibility.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

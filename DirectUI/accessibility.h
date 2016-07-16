@@ -2,7 +2,12 @@
 
 namespace DirectUI
 {
-    class DuiAccessible : public IAccIdentity, public IAccessible, public IEnumVARIANT, public IOleWindow, public IServiceProvider
+    class UILIB_API DuiAccessible
+		: public IAccessible
+		, public IEnumVARIANT
+		, public IOleWindow
+		, public IAccIdentity
+		, public IServiceProvider
     {
 	public:
 		DuiAccessible();

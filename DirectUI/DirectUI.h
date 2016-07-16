@@ -22,7 +22,6 @@
 #include "Interfaces.h"
 #include "Primitives.h"
 #include "element.h"
-
 #include "Browser.h"
 #include "Bind.h"
 #include "AnimationStrip.h"
@@ -37,10 +36,10 @@
 #include "accessibility.h"
 #include "parser.h"
 #include "provider.h"
-
 #include "Movie.h"
 #include "ElementWithHWND.h"
 #include "HWNDElement.h"
+#include "DialogElement.h"
 #include "NativeHWNDHost.h"
 #include "HWNDHost.h"
 #include "CBase.h"
@@ -64,6 +63,7 @@
 #include "Expandable.h"
 #include "Clipper.h"
 #include "Combobox.h"
+#include "DuiNavigate.h"
 
 namespace DirectUI
 {

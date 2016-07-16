@@ -21,7 +21,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	InitProcessPriv(8, NULL, 1, true);
 	InitThread(2);
-
+	DuiNavigate;
 	RegisterAllControls();
 	DUIXmlParser* pParser;
 

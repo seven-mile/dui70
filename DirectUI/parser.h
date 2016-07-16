@@ -366,4 +366,24 @@ private: static struct DirectUI::Schema::const PropertyInfo* const DirectUI::Sch
 	private:
 		void SetParseState(DUI_PARSE_STATE);
 	};
+
+	class UILIB_API DUIFactory
+	{
+	public:
+		DUIFactory(HWND);
+		~DUIFactory(void);
+		DUIFactory & operator=(DUIFactory const &);
+		long CreateParser(void);
+		DUIXmlParser * DetachParser(void);
+		DUIXmlParser * GetParser(void);
+		long LoadFromBuffer(UCString, unsigned int, UCString, Element *, unsigned long *, Element * *);
+		long LoadFromFile(UCString, UCString, Element *, unsigned long *, Element * *);
+		long LoadFromResource(HINSTANCE, UCString, UCString, Element *, unsigned long *, Element * *, UCString);
+		void __cdecl SetError(UCString, ...);
+
+	private:
+		static void __stdcall s_XMLParseError(UCString, UCString, int, void *);
+		void ClearParser(void);
+	};
+
 }

@@ -184,7 +184,9 @@
     <ClInclude Include="CTrackBar.h" />
     <ClInclude Include="CTreeView.h" />
     <ClInclude Include="CVScrollBar.h" />
+    <ClInclude Include="DialogElement.h" />
     <ClInclude Include="DirectUI.h" />
+    <ClInclude Include="DuiNavigate.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="ElementWithHWND.h" />
     <ClInclude Include="event.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Value.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="accessibility.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="DirectUI.cpp" />

@@ -19,10 +19,10 @@ namespace DirectUI
 		void*unk3;
     };
 
-	class CritSecLock
+	class UILIB_API CritSecLock
 	{
 	public:
-		CritSecLock(RTL_CRITICAL_SECTION*);
+		CritSecLock(CRITICAL_SECTION*);
 		~CritSecLock();
 		CritSecLock & operator=(CritSecLock const &);
 		void Unlock();
@@ -51,4 +51,35 @@ namespace DirectUI
 	{
 	public:
 	};
+
+	class Surface
+	{
+	public:
+
+		enum EType
+		{
+
+		};
+
+		Surface(Surface const &);
+		Surface(void);
+		virtual ~Surface(void);
+		Surface & operator=(Surface const &);
+
+		static enum EType __stdcall GetSurfaceType(unsigned int);
+		static unsigned int __stdcall GetSurfaceType(enum EType);
+	};
+
+	class UILIB_API DCSurface
+	{
+	public:
+		DCSurface(DCSurface const &);
+		DCSurface(HDC);
+		virtual ~DCSurface(void);
+		DCSurface & operator=(DCSurface const &);
+
+		HDC GetHDC(void);
+		virtual Surface::EType GetType(void) const;
+	};
+
 }

@@ -47,7 +47,7 @@ public: static int DirectUI::Schema::ClassNameProperty
 public: static int DirectUI::Schema::ClickablePointProperty
 public: static int DirectUI::Schema::ComboBoxControlType
 public: static int DirectUI::Schema::ControlTypeProperty
-public: static long __cdecl DirectUI::Schema::CreatePatternProvider(enum DirectUI::Schema::Pattern,class DirectUI::ElementProvider * __ptr64,struct IUnknown * __ptr64 * __ptr64)
+public: static long __cdecl DirectUI::Schema::CreatePatternProvider(enum DirectUI::Schema::Pattern,class DirectUI::ElementProvider* __ptr64,struct IUnknown* __ptr64* __ptr64)
 public: static int DirectUI::Schema::CultureProperty
 public: static int DirectUI::Schema::CustomControlType
 public: static int DirectUI::Schema::DataGridControlType
@@ -85,7 +85,7 @@ public: static int DirectUI::Schema::IsEnabledProperty
 public: static int DirectUI::Schema::IsKeyboardFocusableProperty
 public: static int DirectUI::Schema::IsOffscreen
 public: static int DirectUI::Schema::IsPasswordProperty
-protected: long __cdecl DirectUI::ElementProxy::IsPatternSupported(enum DirectUI::Schema::Pattern,bool * __ptr64) __ptr64
+protected: long __cdecl DirectUI::ElementProxy::IsPatternSupported(enum DirectUI::Schema::Pattern,bool* __ptr64) __ptr64
 public: static int DirectUI::Schema::ItemContainerPattern
 public: static int DirectUI::Schema::ItemStatusProperty
 public: static int DirectUI::Schema::ItemTypeProperty
@@ -94,7 +94,7 @@ public: static int DirectUI::Schema::LayoutInvalidatedEvent
 public: static int DirectUI::Schema::ListControlType
 public: static int DirectUI::Schema::ListItemControlType
 public: static int DirectUI::Schema::LocalizedControlTypeProperty
-public: static int __cdecl DirectUI::Schema::LookupAccessibleRole(int,bool * __ptr64)
+public: static int __cdecl DirectUI::Schema::LookupAccessibleRole(int,bool* __ptr64)
 private: static long __cdecl DirectUI::Schema::LookupControlInfos(void)
 private: static long __cdecl DirectUI::Schema::LookupEventInfos(void)
 private: static long __cdecl DirectUI::Schema::LookupPatternInfos(void)
@@ -111,7 +111,7 @@ public: static int DirectUI::Schema::NullControlType
 public: static int DirectUI::Schema::Orientation
 public: static int DirectUI::Schema::PaneControlType
 public: static enum DirectUI::Schema::Pattern __cdecl DirectUI::Schema::PatternFromPatternId(int)
-public: static bool (__cdecl*__cdecl DirectUI::Schema::PfnIsSupportedFromPattern(enum DirectUI::Schema::Pattern))(class DirectUI::Element * __ptr64)
+public: static bool (__cdecl*__cdecl DirectUI::Schema::PfnIsSupportedFromPattern(enum DirectUI::Schema::Pattern))(class DirectUI::Element* __ptr64)
 public: static int DirectUI::Schema::ProcessIdProperty
 public: static int DirectUI::Schema::ProgressBarControlType
 public: static int DirectUI::Schema::RadioButtonControlType
@@ -174,12 +174,12 @@ public: void __cdecl DirectUI::ElementProvider::TossPatternProvider(enum DirectU
 public: static int DirectUI::Schema::TransformPattern
 public: static int DirectUI::Schema::TreeControlType
 public: static int DirectUI::Schema::TreeItemControlType
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaHostProviderFromHwnd)(struct HWND__ * __ptr64,struct IRawElementProviderSimple * __ptr64 * __ptr64)
-public: static int (__cdecl* __ptr64 DirectUI::Schema::UiaLookupId)(enum AutomationIdentifierType,struct _GUID const * __ptr64)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationEvent)(struct IRawElementProviderSimple * __ptr64,int)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationPropertyChangedEvent)(struct IRawElementProviderSimple * __ptr64,int,struct tagVARIANT,struct tagVARIANT)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseStructureChangedEvent)(struct IRawElementProviderSimple * __ptr64,enum StructureChangeType,int * __ptr64,int)
-public: static __int64 (__cdecl* __ptr64 DirectUI::Schema::UiaReturnRawElementProvider)(struct HWND__ * __ptr64,unsigned __int64,__int64,struct IRawElementProviderSimple * __ptr64)
+public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaHostProviderFromHwnd)(struct HWND__* __ptr64,struct IRawElementProviderSimple* __ptr64* __ptr64)
+public: static int (__cdecl* __ptr64 DirectUI::Schema::UiaLookupId)(enum AutomationIdentifierType,struct _GUID const* __ptr64)
+public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationEvent)(struct IRawElementProviderSimple* __ptr64,int)
+public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationPropertyChangedEvent)(struct IRawElementProviderSimple* __ptr64,int,struct tagVARIANT,struct tagVARIANT)
+public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseStructureChangedEvent)(struct IRawElementProviderSimple* __ptr64,enum StructureChangeType,int* __ptr64,int)
+public: static __int64 (__cdecl* __ptr64 DirectUI::Schema::UiaReturnRawElementProvider)(struct HWND__* __ptr64,unsigned __int64,__int64,struct IRawElementProviderSimple* __ptr64)
 public: static int DirectUI::Schema::ValuePattern
 public: static int DirectUI::Schema::Value_IsReadOnly_Property
 public: static int DirectUI::Schema::Value_Value_Property
@@ -190,20 +190,20 @@ public: static int DirectUI::Schema::WindowControlType
 public: static int DirectUI::Schema::WindowPattern
 public: static int DirectUI::Schema::WindowWindowClosedEvent
 public: static int DirectUI::Schema::WindowWindowOpenedEvent
-private: static struct DirectUI::Schema::RoleMap const * const DirectUI::Schema::_roleMapping
-private: static struct DirectUI::Schema::ControlInfo const * const DirectUI::Schema::g_controlInfoTable
-private: static struct DirectUI::Schema::EventInfo const * const DirectUI::Schema::g_eventInfoTable
-private: static struct DirectUI::Schema::EventMap const * const DirectUI::Schema::g_eventMapping
+private: static struct DirectUI::Schema::RoleMap const* const DirectUI::Schema::_roleMapping
+private: static struct DirectUI::Schema::ControlInfo const* const DirectUI::Schema::g_controlInfoTable
+private: static struct DirectUI::Schema::EventInfo const* const DirectUI::Schema::g_eventInfoTable
+private: static struct DirectUI::Schema::EventMap const* const DirectUI::Schema::g_eventMapping
 private: static bool DirectUI::Schema::g_fInited
-private: static struct DirectUI::Schema::PatternInfo const * const DirectUI::Schema::g_patternInfoTable
-private: static struct DirectUI::Schema::PatternMap const * const DirectUI::Schema::g_patternMapping
-private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Schema::g_propertyInfoTable
+private: static struct DirectUI::Schema::PatternInfo const* const DirectUI::Schema::g_patternInfoTable
+private: static struct DirectUI::Schema::PatternMap const* const DirectUI::Schema::g_patternMapping
+private: static struct DirectUI::Schema::const PropertyInfo* const DirectUI::Schema::g_propertyInfoTable
 */
 	};
 
-	typedef class Value * (WINAPI *GetSheetCallback)(unsigned short const *, void *);
-	typedef void (WINAPI *ParseErrorCallback)(unsigned short const *, unsigned short const *, int, void *);
-	typedef bool (WINAPI *UnknownAttrCallback)(unsigned short const *, void *);
+	typedef class Value* (WINAPI*GetSheetCallback)(UCString, void*);
+	typedef void (WINAPI*ParseErrorCallback)(UCString, UCString, int, void*);
+	typedef bool (WINAPI*UnknownAttrCallback)(UCString, void*);
 
 	namespace ParserTools
 	{
@@ -232,8 +232,8 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		/*
 		
 		*/
-		static long WINAPI Create(_Inout_ DUIXmlParser** pXmlParser, _In_opt_ GetSheetCallback, _In_opt_ void *sheetParam, _In_opt_ ParseErrorCallback, _In_opt_ void *parseErrorParam);
-		long CreateElement(unsigned short const *,class Element *, class Element *, unsigned long *, class Element **out);
+		static long WINAPI Create(_Inout_ DUIXmlParser** pXmlParser, _In_opt_ GetSheetCallback, _In_opt_ void*sheetParam, _In_opt_ ParseErrorCallback, _In_opt_ void*parseErrorParam);
+		long CreateElement(UCString,class Element*, class Element*, unsigned long*, class Element**out);
 		
 		void Destroy();
 		void EnableDesignMode();
@@ -241,28 +241,28 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		HINSTANCE GetHInstance();
 			
 		HINSTANCE GetResourceHInstance();
-		long GetSheet(const String, Value **);
-		void * GetSheetContext();
+		long GetSheet(UCString, Value**);
+		void* GetSheetContext();
 		
-		long LookupElement(IXmlReader *, const String, HINSTANCE,class IClassInfo **);
-		long LookupElement(LINEINFO, const String, HINSTANCE, class IClassInfo**);
+		long LookupElement(IXmlReader*, UCString, HINSTANCE,class IClassInfo**);
+		long LookupElement(LINEINFO, UCString, HINSTANCE, class IClassInfo**);
 
 		void SetDefaultHInstance(HINSTANCE);
 		
 		void SetGetSheetCallback(GetSheetCallback);
-		void SetParseErrorCallback(ParseErrorCallback, void *);
-		void SetUnknownAttrCallback(bool (__cdecl*)(const String, void *), void *);
+		void SetParseErrorCallback(ParseErrorCallback, void*);
+		void SetUnknownAttrCallback(bool (__cdecl*)(UCString, void*), void*);
 
-		long SetPreprocessedXML(const String, HINSTANCE, HINSTANCE);
+		long SetPreprocessedXML(UCString, HINSTANCE, HINSTANCE);
 		void SetUnavailableIcon(HICON);
 
-		HRESULT SetXML(unsigned short const * szXML, HINSTANCE hModule, HINSTANCE/*0x10000000 作用未知*/);
+		HRESULT SetXML(UCString szXML, HINSTANCE hModule, HINSTANCE/*0x10000000 作用未知*/);
 
 		//其资源必须在"UIFILE"类型中
 		HRESULT SetXMLFromResource(UINT uID, HINSTANCE hModule, HINSTANCE/*0x10000000 作用未知*/);
-		HRESULT SetXMLFromResource(unsigned short const * szID, HINSTANCE hModule, HINSTANCE/*0x10000000 作用未知*/);
+		HRESULT SetXMLFromResource(UCString szID, HINSTANCE hModule, HINSTANCE/*0x10000000 作用未知*/);
 
-		long UpdateSheets(Element *);
+		long UpdateSheets(Element*);
 		void _DestroyTables();
 		long _InitializeTables();
 
@@ -280,89 +280,89 @@ private: static struct DirectUI::Schema::PropertyInfo const * const DirectUI::Sc
 		
 	protected:
 		long _EnterOnCurrentThread();
-		LINEINFO _GetLineInfo(IXmlReader *);
+		LINEINFO _GetLineInfo(IXmlReader*);
 
-		long AddRulesToStyleSheet(IXmlReader *, StyleSheet *, const String, DynamicArray<XMLParserCond, 0> *, DynamicArray<String, 0> *);
-		long CreateLayout(const ParserTools::ExprNode *, long (__cdecl*)(int, int *, Value **));
-		long CreateStyleSheet(IXmlReader *, const String, StyleSheet **);
-		long CreateXmlReader(IXmlReader **);
-		long CreateXmlReaderFromHGLOBAL(void *, IXmlReader **);
-		long CreateXmlReaderInputWithEncodingName(IStream *, const String, IUnknown **);
-		long GetParserCommon(DUIXmlParser **);
-		long GetPropValPairInfo(IXmlReader *, IClassInfo *, const String, const String,class PropertyInfo **, Value **);
-		long GetPropValPairInfo(LINEINFO, IClassInfo *, const String, const String, const PropertyInfo **, Value **);
-		long GetValueParser(ParserTools::ValueParser **);
+		long AddRulesToStyleSheet(IXmlReader*, StyleSheet*, UCString, DynamicArray<XMLParserCond, 0>*, DynamicArray<UString, 0>*);
+		long CreateLayout(const ParserTools::ExprNode*, long (__cdecl*)(int, int*, Value**));
+		long CreateStyleSheet(IXmlReader*, UCString, StyleSheet**);
+		long CreateXmlReader(IXmlReader**);
+		long CreateXmlReaderFromHGLOBAL(void*, IXmlReader**);
+		long CreateXmlReaderInputWithEncodingName(IStream*, UCString, IUnknown**);
+		long GetParserCommon(DUIXmlParser**);
+		long GetPropValPairInfo(IXmlReader*, IClassInfo*, UCString, UCString,class PropertyInfo**, Value**);
+		long GetPropValPairInfo(LINEINFO, IClassInfo*, UCString, UCString, const PropertyInfo**, Value**);
+		long GetValueParser(ParserTools::ValueParser**);
 		static long GetXmlLiteDll(HINSTANCE*);
 		long Initialize();
-		long InitializeParserFromXmlLiteReader(IXmlReader *);
-		static bool IsThemeClassName(const ParserTools::ExprNode *);
-		long MapPropertyEnumValue(const class EnumMap *, const String, int *);
-		long MapPropertyNameToPropertyInfo(LINEINFO, IClassInfo *, const String, const PropertyInfo **);
-		long ParseARGBColor(const ParserTools::ExprNode*, unsigned long *);
-		long ParseArgs(const ParserTools::ExprNode*, ParsedArg *, unsigned int, const char *);
-		long ParseAtomValue(const ParserTools::ExprNode*, Value **);
-		long ParseBoolValue(const ParserTools::ExprNode*, Value **);
-		long ParseColor(const ParserTools::ExprNode*, unsigned long *);
-		long ParseDFCFill(const ParserTools::ExprNode*, Value **);
-		long ParseDTBFill(const ParserTools::ExprNode*, Value **);
-		long ParseFillValue(const ParserTools::ExprNode*, Value **);
-		long ParseFunction(const String, const ParserTools::ExprNode*, ParsedArg *, unsigned int, const char *);
-		long ParseGTCColor(const ParserTools::ExprNode*, unsigned long *);
-		long ParseGTFStr(const ParserTools::ExprNode*, Value **);
+		long InitializeParserFromXmlLiteReader(IXmlReader*);
+		static bool IsThemeClassName(const ParserTools::ExprNode*);
+		long MapPropertyEnumValue(const class EnumMap*, UCString, int*);
+		long MapPropertyNameToPropertyInfo(LINEINFO, IClassInfo*, UCString, const PropertyInfo**);
+		long ParseARGBColor(const ParserTools::ExprNode*, unsigned long*);
+		long ParseArgs(const ParserTools::ExprNode*, ParsedArg*, unsigned int, const char*);
+		long ParseAtomValue(const ParserTools::ExprNode*, Value**);
+		long ParseBoolValue(const ParserTools::ExprNode*, Value**);
+		long ParseColor(const ParserTools::ExprNode*, unsigned long*);
+		long ParseDFCFill(const ParserTools::ExprNode*, Value**);
+		long ParseDTBFill(const ParserTools::ExprNode*, Value**);
+		long ParseFillValue(const ParserTools::ExprNode*, Value**);
+		long ParseFunction(UCString, const ParserTools::ExprNode*, ParsedArg*, unsigned int, const char*);
+		long ParseGTCColor(const ParserTools::ExprNode*, unsigned long*);
+		long ParseGTFStr(const ParserTools::ExprNode*, Value**);
 		long ParseGTMarRect(const ParserTools::ExprNode*, LPRECT);
-		long ParseGTMetInt(const ParserTools::ExprNode*, int *);
-		long ParseGradientFill(const ParserTools::ExprNode*, Value **);
-		long ParseGraphicGraphic(const ParserTools::ExprNode*, Value **);
-		long ParseGraphicHelper(bool,const ParserTools::ExprNode*, Value **);
-		long ParseGraphicValue(const ParserTools::ExprNode*, Value **);
-		long ParseIconGraphic(const ParserTools::ExprNode*, Value **);
-		long ParseImageGraphic(const ParserTools::ExprNode*, Value **);
-		long ParseIntValue(const ParserTools::ExprNode*, Value **);
+		long ParseGTMetInt(const ParserTools::ExprNode*, int*);
+		long ParseGradientFill(const ParserTools::ExprNode*, Value**);
+		long ParseGraphicGraphic(const ParserTools::ExprNode*, Value**);
+		long ParseGraphicHelper(bool,const ParserTools::ExprNode*, Value**);
+		long ParseGraphicValue(const ParserTools::ExprNode*, Value**);
+		long ParseIconGraphic(const ParserTools::ExprNode*, Value**);
+		long ParseImageGraphic(const ParserTools::ExprNode*, Value**);
+		long ParseIntValue(const ParserTools::ExprNode*, Value**);
 		long ParseLayoutValue(const ParserTools::ExprNode*);
 		long ParseLibrary(const ParserTools::ExprNode*, HINSTANCE*);
-		long ParseLiteral(const ParserTools::ExprNode*, const String*);
-		long ParseLiteralColor(const String, unsigned long *);
-		long ParseLiteralColorInt(const String, int *);
-		long ParseLiteralNumber(const String, int *);
-		long ParseMagnitude(const String, int *);
-		long ParseNumber(const ParserTools::ExprNode*, int *);
-		long ParsePointValue(const ParserTools::ExprNode*, Value **);
-		long ParseQuotedString(const ParserTools::ExprNode*, const String*);
-		long ParseRGBColor(const ParserTools::ExprNode*, unsigned long *);
+		long ParseLiteral(const ParserTools::ExprNode*, UCString*);
+		long ParseLiteralColor(UCString, unsigned long*);
+		long ParseLiteralColorInt(UCString, int*);
+		long ParseLiteralNumber(UCString, int*);
+		long ParseMagnitude(UCString, int*);
+		long ParseNumber(const ParserTools::ExprNode*, int*);
+		long ParsePointValue(const ParserTools::ExprNode*, Value**);
+		long ParseQuotedString(const ParserTools::ExprNode*, UCString*);
+		long ParseRGBColor(const ParserTools::ExprNode*, unsigned long*);
 		long ParseRect(const ParserTools::ExprNode*, LPRECT);
 		long ParseRectRect(const ParserTools::ExprNode*, LPRECT);
-		long ParseRectValue(const ParserTools::ExprNode*, Value **);
-		long ParseResStr(const ParserTools::ExprNode*, Value **);
-		long ParseResid(const ParserTools::ExprNode*, const String*);
-		long ParseSGraphicGraphic(const ParserTools::ExprNode*, Value **);
-		long ParseSGraphicHelper(bool,const ParserTools::ExprNode*, Value **);
-		long ParseSizeValue(const ParserTools::ExprNode*, Value **);
-		long ParseStringValue(const ParserTools::ExprNode*, Value **);
-		long ParseStyleSheets(IXmlReader *);
-		long ParseSysMetricInt(const ParserTools::ExprNode*, int *);
-		long ParseSysMetricStr(const ParserTools::ExprNode*, Value **);
-		long ParseTheme(const ParserTools::ExprNode*, void **);
+		long ParseRectValue(const ParserTools::ExprNode*, Value**);
+		long ParseResStr(const ParserTools::ExprNode*, Value**);
+		long ParseResid(const ParserTools::ExprNode*, UCString*);
+		long ParseSGraphicGraphic(const ParserTools::ExprNode*, Value**);
+		long ParseSGraphicHelper(bool,const ParserTools::ExprNode*, Value**);
+		long ParseSizeValue(const ParserTools::ExprNode*, Value**);
+		long ParseStringValue(const ParserTools::ExprNode*, Value**);
+		long ParseStyleSheets(IXmlReader*);
+		long ParseSysMetricInt(const ParserTools::ExprNode*, int*);
+		long ParseSysMetricStr(const ParserTools::ExprNode*, Value**);
+		long ParseTheme(const ParserTools::ExprNode*, void**);
 		static int QuerySysMetric(int);
-		static const String QuerySysMetricStr(int, String, unsigned int);
-		void ReturnValueParser(ParserTools::ValueParser *);
-		void SendParseError(const String, const String, int, int, long);
-		void SendParseError(const String, const String, IXmlReader *, long);
+		static UCString QuerySysMetricStr(int, UString, unsigned int);
+		void ReturnValueParser(ParserTools::ValueParser*);
+		void SendParseError(UCString, UCString, int, int, long);
+		void SendParseError(UCString, UCString, IXmlReader*, long);
 		void _LeaveOnCurrentThread();
 
-		long _RecordElementLayout(IXmlReader *, const String);
-		long _RecordElementStyleSheet(const String, bool);
-		long _RecordElementTrees(IXmlReader *);
-		long _RecordElementWithChildren(IXmlReader *, bool, String*);
-		long _RecordInstantiateElement(IXmlReader *, String*);
-		long _RecordSetElementProperties(IXmlReader *);
-		long _RecordSetValue(IXmlReader *, const String, const String);
+		long _RecordElementLayout(IXmlReader*, UCString);
+		long _RecordElementStyleSheet(UCString, bool);
+		long _RecordElementTrees(IXmlReader*);
+		long _RecordElementWithChildren(IXmlReader*, bool, UString*);
+		long _RecordInstantiateElement(IXmlReader*, UString*);
+		long _RecordSetElementProperties(IXmlReader*);
+		long _RecordSetValue(IXmlReader*, UCString, UCString);
 
-		static FunctionDefinition<unsigned long> const * const s_fdClr;
-		static FunctionDefinition<Value *> const * const s_fdFill;
-		static FunctionDefinition<Value *> const * const s_fdGraphic;
-		static FunctionDefinition<int> const * const s_fdInt;
-		static FunctionDefinition<RECT> const * const s_fdRect;
-		static FunctionDefinition<Value *> const * s_fdString;
+		static FunctionDefinition<unsigned long> const* const s_fdClr;
+		static FunctionDefinition<Value*> const* const s_fdFill;
+		static FunctionDefinition<Value*> const* const s_fdGraphic;
+		static FunctionDefinition<int> const* const s_fdInt;
+		static FunctionDefinition<RECT> const* const s_fdRect;
+		static FunctionDefinition<Value*> const* s_fdString;
 	
 	private:
 		void SetParseState(DUI_PARSE_STATE);

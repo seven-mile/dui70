@@ -3,9 +3,9 @@
 
 namespace DirectUI
 {
-	typedef unsigned short Char;
-	typedef unsigned short* String;
-
+	typedef unsigned short UChar;
+	typedef unsigned short* UString;
+	typedef const unsigned short* UCString;
     // exported for int
     template<typename>
     class SafeArrayAccessor 
@@ -14,13 +14,13 @@ namespace DirectUI
         SafeArrayAccessor();
         ~SafeArrayAccessor();
         operator typename*();
-        long Access(SAFEARRAY  *, unsigned short);
+        long Access(SAFEARRAY *, UChar);
         int Count();
            
 	private:
-		void *unk1;
-		void *unk2;
-		void *unk3;
+		void*unk1;
+		void*unk2;
+		void*unk3;
     };
 
 	class CritSecLock

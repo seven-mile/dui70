@@ -11,13 +11,13 @@ namespace DirectUI
 		virtual ~ElementWithHWND();
 		ElementWithHWND& operator=(const ElementWithHWND &);
 
-		static long Create(Element *, unsigned long *, Element **);
-		static IClassInfo * GetClassInfoPtr();
-		virtual IClassInfo * GetClassInfoW();
+		static long Create(Element*, unsigned long*, Element**);
+		static IClassInfo* GetClassInfoPtr();
+		virtual IClassInfo* GetClassInfoW();
 		static long Register();
-		static void SetClassInfoPtr(IClassInfo *);
+		static void SetClassInfoPtr(IClassInfo*);
 
 	private:
-		static IClassInfo *s_pClassInfo;
+		static IClassInfo*s_pClassInfo;
 	};
 }

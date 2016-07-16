@@ -14,17 +14,17 @@ namespace DirectUI
 	Button & Button::operator=(const Button &)
 	{
 		// TODO: 在此处插入 return 语句
-		return *this;
+		return*this;
 	}
-	long Button::Initialize(unsigned int, Element *, unsigned long *)
+	long Button::Initialize(unsigned int, Element*, unsigned long*)
 	{
 		return 0;
 	}
-	long Button::Create(unsigned int, Element *, unsigned long *, Element **)
+	long Button::Create(unsigned int, Element*, unsigned long*, Element**)
 	{
 		return 0;
 	}
-	long Button::Create(Element *, unsigned long *, Element **)
+	long Button::Create(Element*, unsigned long*, Element**)
 	{
 		return 0;
 	}
@@ -36,13 +36,13 @@ namespace DirectUI
 	{
 		return UID();
 	}
-	void Button::OnPropertyChanged(const PropertyInfo *, int, Value *, Value *)
+	void Button::OnPropertyChanged(const PropertyInfo*, int, Value*, Value*)
 	{
 	}
-	void Button::OnInput(InputEvent *)
+	void Button::OnInput(InputEvent*)
 	{
 	}
-	IClassInfo * Button::GetClassInfoW()
+	IClassInfo* Button::GetClassInfoW()
 	{
 		return nullptr;
 	}
@@ -54,7 +54,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	IClassInfo * Button::GetClassInfoPtr()
+	IClassInfo* Button::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
@@ -62,11 +62,11 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool Button::OnLostDialogFocus(DialogElement *)
+	bool Button::OnLostDialogFocus(DialogElement*)
 	{
 		return false;
 	}
-	bool Button::OnReceivedDialogFocus(DialogElement *)
+	bool Button::OnReceivedDialogFocus(DialogElement*)
 	{
 		return false;
 	}
@@ -78,18 +78,18 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void Button::SetClassInfoPtr(IClassInfo *)
+	void Button::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 	long Button::SetPressed(bool)
 	{
 		return 0;
 	}
-	const PropertyInfo * Button::CapturedProp()
+	const PropertyInfo* Button::CapturedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Button::PressedProp()
+	const PropertyInfo* Button::PressedProp()
 	{
 		return nullptr;
 	}

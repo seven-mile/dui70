@@ -20,62 +20,62 @@ namespace DirectUI
 
 		Element& operator=(const Element &);
 
-		long Initialize(unsigned int, Element *, unsigned long *);
-		static long Create(unsigned int, Element *parent, unsigned long *, Element **out);
+		long Initialize(unsigned int, Element*, unsigned long*);
+		static long Create(unsigned int, Element*parent, unsigned long*, Element**out);
 		//1
 		virtual bool IsRTLReading();
 
 		//2
 		virtual bool IsContentProtected();
 
-		static long UnRegister(struct IClassInfo **);
+		static long UnRegister(struct IClassInfo**);
 
 		//3
-		const unsigned __int16 *GetContentStringAsDisplayed(class Value **);
+		const unsigned __int16*GetContentStringAsDisplayed(class Value**);
 
 		//4
-		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value *, class Value *);
+		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value*, class Value*);
 		//5
-		virtual bool OnPropertyChanging(class PropertyInfo*, int, class Value *, class Value *);
+		virtual bool OnPropertyChanging(class PropertyInfo*, int, class Value*, class Value*);
 		//6
-		virtual void OnPropertyChanged(const class PropertyInfo *, int, class Value *, class Value *);
+		virtual void OnPropertyChanged(const class PropertyInfo*, int, class Value*, class Value*);
 		//7
-		virtual void OnPropertyChanged(class PropertyInfo *, int, Value *, Value *);
+		virtual void OnPropertyChanged(class PropertyInfo*, int, Value*, Value*);
 		//8
 		virtual void OnGroupChanged(int, bool);
 		//9
-		virtual void OnInput(class InputEvent *);
+		virtual void OnInput(class InputEvent*);
 		//10
-		virtual void OnKeyFocusMoved(Element *, Element *);
+		virtual void OnKeyFocusMoved(Element*, Element*);
 		//11
-		virtual void OnMouseFocusMoved(Element *, Element *);
+		virtual void OnMouseFocusMoved(Element*, Element*);
 		//12
 		virtual void OnDestroy();
 		//13
-		virtual void OnEvent(class Event *);
+		virtual void OnEvent(class Event*);
 		//14
-		virtual void Paint(HDC, RECT const *, RECT const *, RECT *, RECT *);
+		virtual void Paint(HDC, RECT const*, RECT const*, RECT*, RECT*);
 
 		//15
-		virtual SIZE GetContentSize(LPSIZE psizl, int, class Surface *);
+		virtual SIZE GetContentSize(LPSIZE psizl, int, class Surface*);
 
-		long Add(Element *);
-		long Add(Element *, int(__cdecl*)(const void *, const void *));
+		long Add(Element*);
+		long Add(Element*, int(__cdecl*)(const void*, const void*));
 		//16
-		virtual long Add(Element **, unsigned int);
+		virtual long Add(Element**, unsigned int);
 
-		long AddListener(class IElementListener *);
+		long AddListener(class IElementListener*);
 
 		unsigned long AddRef();
 		static UID AnimationChange();
 
-		void BroadcastEvent(class Event *);
-		void Detach(class DeferCycle *);
+		void BroadcastEvent(class Event*);
+		void Detach(class DeferCycle*);
 
 		//17
-		virtual long Insert(Element **, unsigned int, unsigned int);
+		virtual long Insert(Element**, unsigned int, unsigned int);
 		//18
-		virtual long Remove(Element **, unsigned int);
+		virtual long Remove(Element**, unsigned int);
 
 		//19
 		virtual Element* GetAdjacent(Element*, int, const struct NavReference*, unsigned __int32);
@@ -87,15 +87,15 @@ namespace DirectUI
 		virtual void SetKeyFocus(void);
 
 		//22
-		virtual unsigned int MessageCallback(GMSG *);
+		virtual unsigned int MessageCallback(GMSG*);
 
 		//23
-		virtual long WINAPI QueryInterface(GUID const &, void **);
+		virtual long WINAPI QueryInterface(GUID const &, void**);
 
 		//24
 
 		//25
-		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface *);
+		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
 
 
 		long Destroy(bool);
@@ -109,14 +109,14 @@ namespace DirectUI
 		void FireEvent(struct Event*, bool, bool);
 
 		bool GetAbsorbsShortcut();
-		const unsigned short* GetAccDefAction(Value **);
-		const unsigned short* GetAccDesc(Value **);
-		const unsigned short* GetAccHelp(Value **);
-		const unsigned short* GetAccItemStatus(Value **);
-		const unsigned short* GetAccItemType(Value **);
-		const unsigned short* GetAccName(Value **);
-		const unsigned short* GetAccNameAsDisplayed(Value **);
-		const unsigned short* GetAccValue(Value **);
+		const unsigned short* GetAccDefAction(Value**);
+		const unsigned short* GetAccDesc(Value**);
+		const unsigned short* GetAccHelp(Value**);
+		const unsigned short* GetAccItemStatus(Value**);
+		const unsigned short* GetAccItemType(Value**);
+		const unsigned short* GetAccName(Value**);
+		const unsigned short* GetAccNameAsDisplayed(Value**);
+		const unsigned short* GetAccValue(Value**);
 
 		int GetAccRole();
 		int GetAccState();
@@ -204,8 +204,8 @@ namespace DirectUI
 		int GetTooltipMaxWidth();
 		Element* GetTopLevel();
 		float GetTreeAlphaLevel();
-		Value* GetValue( const PropertyInfo* (WINAPI*)(void), int, UpdateCache *);
-		Value * GetValue(PropertyInfo const *, int, UpdateCache *);
+		Value* GetValue( const PropertyInfo* (WINAPI*)(void), int, UpdateCache*);
+		Value* GetValue(const PropertyInfo*, int, UpdateCache*);
 		bool GetVisible();
 		int GetWidth();
 		bool GetWindowActive();
@@ -222,7 +222,7 @@ namespace DirectUI
 		static void InitDefaultFontSize();
 		static UID KeyboardNavigate();
 
-		long Insert(Element *, unsigned int);
+		long Insert(Element*, unsigned int);
 		
 		void InvokeAnimation(int, unsigned int);
 		void InvokeAnimation(unsigned int, unsigned int, float, float, bool);
@@ -230,17 +230,17 @@ namespace DirectUI
 		
 		bool IsDefaultCAlign();
 		bool IsDefaultCursor();
-		bool IsDescendent(Element *);
+		bool IsDescendent(Element*);
 		bool IsDestroyed();
 		bool IsHosted();
 		bool IsRTL();
 		
 		int IsRoot();
 		bool IsSelfLayout();
-		bool IsValidAccessor(PropertyInfo const *, int, bool);
-		static bool IsValidValue(PropertyInfo const *, Value *);
+		bool IsValidAccessor(const PropertyInfo*, int, bool);
+		static bool IsValidValue(const PropertyInfo*, Value*);
 		bool IsWordWrap();
-		void MapElementPoint(Element *, POINT const *, LPPOINT);
+		void MapElementPoint(Element*, POINT const*, LPPOINT);
 		static const PropertyInfo* WINAPI MarginProp();
 
 		void MarkNeedsDSUpdate();
@@ -249,32 +249,32 @@ namespace DirectUI
 		
 		
 
-		void PaintBackground(HDC, Value *, RECT const &, RECT const &, RECT const &, RECT const &);
-		void PaintBorder(HDC, Value *, RECT *, RECT const &);
-		void PaintContent(HDC, RECT const *);
-		void PaintFocusRect(HDC, RECT const *, RECT const *);
-		void PaintStringContent(HDC, RECT const *, Value *, int);
+		void PaintBackground(HDC, Value*, RECT const &, RECT const &, RECT const &, RECT const &);
+		void PaintBorder(HDC, Value*, RECT*, RECT const &);
+		void PaintContent(HDC, RECT const*);
+		void PaintFocusRect(HDC, RECT const*, RECT const*);
+		void PaintStringContent(HDC, RECT const*, Value*, int);
 
-		void PostEvent(Event *);
+		void PostEvent(Event*);
 		long QueueDefaultAction();
 		static long Register();
 		unsigned long Release();
-		long Remove(Element *);
+		long Remove(Element*);
 		long RemoveAll();
-		void RemoveListener(class IElementListener *);
+		void RemoveListener(class IElementListener*);
 		long RemoveLocalValue( const PropertyInfo* (WINAPI*)(void));
-		long RemoveLocalValue(PropertyInfo const *);
+		long RemoveLocalValue(const PropertyInfo*);
 
 		long SetAbsorbsShortcut(bool);
-		long SetAccDefAction(unsigned short const *);
-		long SetAccDesc(unsigned short const *);
-		long SetAccHelp(unsigned short const *);
-		long SetAccItemStatus(unsigned short const *);
-		long SetAccItemType(unsigned short const *);
-		long SetAccName(unsigned short const *);
+		long SetAccDefAction(UCString);
+		long SetAccDesc(UCString);
+		long SetAccHelp(UCString);
+		long SetAccItemStatus(UCString);
+		long SetAccItemType(UCString);
+		long SetAccName(UCString);
 		long SetAccRole(int);
 		long SetAccState(int);
-		long SetAccValue(unsigned short const *);
+		long SetAccValue(UCString);
 		long SetAccessible(bool);
 		long SetActive(int);
 		long SetAlpha(int);
@@ -283,27 +283,27 @@ namespace DirectUI
 		long SetBackgroundColor(unsigned long);
 		long SetBackgroundColor(unsigned long, unsigned long, unsigned char);
 		long SetBackgroundColor(unsigned long, unsigned long, unsigned long, unsigned char);
-		long SetBackgroundColor(unsigned short const *, int, int);
+		long SetBackgroundColor(UCString, int, int);
 		long SetBackgroundStdColor(int);
 		long SetBorderColor(unsigned long);
 		long SetBorderGradientColor(unsigned long, unsigned long, unsigned char);
 		long SetBorderStdColor(int);
 		long SetBorderStyle(int);
 		long SetBorderThickness(int, int, int, int);
-		long SetClass(unsigned short const *);
-		static void SetClassInfoPtr(IClassInfo *);
+		long SetClass(UCString);
+		static void SetClassInfoPtr(IClassInfo*);
 		long SetCompositedText(bool);
 		long SetContentAlign(int);
-		long SetContentGraphic(unsigned short const *, unsigned char, unsigned int);
-		long SetContentGraphic(unsigned short const *, unsigned short, unsigned short);
-		long SetContentString(unsigned short const *);
-		long SetCursor(unsigned short const *);
+		long SetContentGraphic(UCString, unsigned char, unsigned int);
+		long SetContentGraphic(UCString, unsigned short, unsigned short);
+		long SetContentString(UCString);
+		long SetCursor(UCString);
 		long SetCursorHandle(HICON);
 		long SetDirection(int);
 		long SetEnabled(bool);
-		long SetEncodedContentString(unsigned short const *);
-		long SetFont(unsigned short const *);
-		long SetFontFace(unsigned short const *);
+		long SetEncodedContentString(UCString);
+		long SetFont(UCString);
+		long SetFontFace(UCString);
 		long SetFontQuality(int);
 		long SetFontSize(int);
 		long SetFontStyle(int);
@@ -313,8 +313,8 @@ namespace DirectUI
 		long SetForegroundColor(unsigned long, unsigned long, unsigned long, unsigned char);
 		long SetForegroundStdColor(int);
 		long SetHeight(int);
-		long SetID(unsigned short const *);
-		long SetLayout(class Layout *);
+		long SetID(UCString);
+		long SetLayout(class Layout*);
 		long SetLayoutPos(int);
 		long SetMargin(int, int, int, int);
 		long SetMinSize(int, int);
@@ -322,87 +322,87 @@ namespace DirectUI
 		long SetPadding(int, int, int, int);
 		long SetSelected(bool);
 		long SetShadowIntensity(int);
-		long SetSheet(StyleSheet *);
+		long SetSheet(StyleSheet*);
 		long SetShortcut(int);
 		long SetStdCursor(int);
 		long SetTextGlowSize(int);
 		long SetTooltip(bool);
 		long SetTooltipMaxWidth(int);
-		long SetValue( const PropertyInfo* (WINAPI*)(void), int, Value *);
-		long SetValue(PropertyInfo const *, int, Value *);
+		long SetValue( const PropertyInfo* (WINAPI*)(void), int, Value*);
+		long SetValue(const PropertyInfo*, int, Value*);
 		long SetVisible(bool);
 		long SetWidth(int);
 		long SetWindowActive(bool);
 		long SetX(int);
 		long SetY(int);
 
-		long SortChildren(int (WINAPI*)(void const *, void const *));
-		void StartDefer(unsigned long *);
+		long SortChildren(int (WINAPI*)(void const*, void const*));
+		void StartDefer(unsigned long*);
 		void StopAnimation(unsigned int);
-		DeferCycle * TestDeferObject();
+		DeferCycle* TestDeferObject();
 		bool UiaEvents();
 		void UpdateLayout();
-		static void _AddDependency(Element *, PropertyInfo const *, int, class DepRecs *, DeferCycle *, long *);
+		static void _AddDependency(Element*, const PropertyInfo*, int, class DepRecs*, DeferCycle*, long*);
 		void _ClearNeedsLayout();
-		static long _DisplayNodeCallback(struct HGADGET__ *, void *, struct EventMsg *);
+		static long _DisplayNodeCallback(struct HGADGET__*, void*, struct EventMsg*);
 		void _EndOptimizedLayoutQ();
 		int _GetChangesUpdatePass();
 		unsigned int _GetNeedsLayout();
-		static int _MarkElementForDS(Element *);
-		static int _MarkElementForLayout(Element *, unsigned int);
-		static bool _SetGroupChanges(Element *, int, DeferCycle *);
+		static int _MarkElementForDS(Element*);
+		static int _MarkElementForLayout(Element*, unsigned int);
+		static bool _SetGroupChanges(Element*, int, DeferCycle*);
 		int _SetNeedsLayout(unsigned int);
 		void _StartOptimizedLayoutQ(void);
-		static void _TransferGroupFlags(Element *, int);
-		struct tagSIZE _UpdateDesiredSize(int, int, Surface *);
+		static void _TransferGroupFlags(Element*, int);
+		struct tagSIZE _UpdateDesiredSize(int, int, Surface*);
 		void _UpdateLayoutPosition(int, int);
 		void _UpdateLayoutSize(int, int);
 
 	protected:
 		//26
-		virtual void OnHosted(Element *);
+		virtual void OnHosted(Element*);
 		//27
-		virtual void OnUnHosted(Element *);
+		virtual void OnUnHosted(Element*);
 		//28
-		virtual void UpdateTooltip(Element *);
+		virtual void UpdateTooltip(Element*);
 		//29
-		virtual void ActivateTooltip(Element *, unsigned long);
+		virtual void ActivateTooltip(Element*, unsigned long);
 		//30
-		virtual void RemoveTooltip(Element *);
+		virtual void RemoveTooltip(Element*);
 		//31
 		virtual bool GetKeyFocused();
 
 		//32
-		virtual IClassInfo *GetClassInfoW();
+		virtual IClassInfo*GetClassInfoW();
 		//33
-		virtual long GetAccessibleImpl(IAccessible **);
+		virtual long GetAccessibleImpl(IAccessible**);
 
 		//34
 		virtual long DefaultAction();
 
 		//35
-		virtual HRESULT WINAPI GetElementProviderImpl(class ElementProvider * *);
+		virtual HRESULT WINAPI GetElementProviderImpl(class ElementProvider**);
 
 		//36
 		virtual void HandleUiaDestroyListener();
 		//37
-		virtual void HandleUiaPropertyListener(PropertyInfo const *, int, Value *, Value *);
+		virtual void HandleUiaPropertyListener(const PropertyInfo*, int, Value*, Value*);
 		//38
-		virtual void HandleUiaPropertyChangingListener(PropertyInfo const *);
+		virtual void HandleUiaPropertyChangingListener(const PropertyInfo*);
 		//39
-		virtual void HandleUiaEventListener(Event *);
+		virtual void HandleUiaEventListener(Event*);
 
 
 		void MarkHosted();
 		void MarkSelfLayout();
-		static void _FlushLayout(Element *, DeferCycle *);
-		static void _InvalidateCachedDSConstraints(Element *);
-		void _OnFontPropChanged(Value *);
+		static void _FlushLayout(Element*, DeferCycle*);
+		static void _InvalidateCachedDSConstraints(Element*);
+		void _OnFontPropChanged(Value*);
 		long _RemoveLocalValue( const PropertyInfo* (WINAPI*)(void), bool);
-		long _RemoveLocalValue(PropertyInfo const *, bool);
+		long _RemoveLocalValue(const PropertyInfo*, bool);
 		//virtual void _SelfLayoutDoLayout(int, int);
-		long _SetValue( const PropertyInfo* (WINAPI*)(void), int, Value *, bool);
-		long _SetValue(PropertyInfo const *, int, Value *, bool);
+		long _SetValue( const PropertyInfo* (WINAPI*)(void), int, Value*, bool);
+		long _SetValue(const PropertyInfo*, int, Value*, bool);
 
 	private:
 		Element* FindDescendentWorker(unsigned short);
@@ -410,27 +410,27 @@ namespace DirectUI
 		void _SyncRedrawStyle();
 		void _SyncVisible();
 		bool IsPointValid(double, double);
-		unsigned short * RemoveShortcutFromName(const String);
+		unsigned short* RemoveShortcutFromName(UCString);
 		bool TryLinePattern(LPPOINT, const RECT&);
 		bool TryPattern(double, double, LPPOINT, const RECT&);
 		bool TrySparsePattern(LPPOINT, const RECT&);
-		void _BroadcastEventWorker(Event *);
-		int _CachedValueIsEqual(const PropertyInfo *, Element *);
-		void _GetBuriedSheetDependencies(const PropertyInfo *, Element *, class DepRecs *, DeferCycle *, long *);
-		void _UpdatePropertyInCache(const PropertyInfo *);
-		static void _VoidPCNotifyTree(int, DeferCycle *);
-		static IClassInfo *s_pClassInfo;
+		void _BroadcastEventWorker(Event*);
+		int _CachedValueIsEqual(const PropertyInfo*, Element*);
+		void _GetBuriedSheetDependencies(const PropertyInfo*, Element*, class DepRecs*, DeferCycle*, long*);
+		void _UpdatePropertyInCache(const PropertyInfo*);
+		static void _VoidPCNotifyTree(int, DeferCycle*);
+		static IClassInfo*s_pClassInfo;
 
-		void _FlushDS(DeferCycle *);
-		Value * _GetComputedValue(PropertyInfo const *, UpdateCache *);
-		long _GetDependencies(PropertyInfo const *, int, class DepRecs *, int, Value *, DeferCycle *);
-		Value * _GetLocalValue(PropertyInfo const *);
-		Value * _GetLocalValueFromVM(PropertyInfo const *);
-		Value * _GetSpecifiedValue(PropertyInfo const *, UpdateCache *);
-		Value * _GetSpecifiedValueIgnoreCache(PropertyInfo const *);
+		void _FlushDS(DeferCycle*);
+		Value* _GetComputedValue(const PropertyInfo*, UpdateCache*);
+		long _GetDependencies(const PropertyInfo*, int, class DepRecs*, int, Value*, DeferCycle*);
+		Value* _GetLocalValue(const PropertyInfo*);
+		Value* _GetLocalValueFromVM(const PropertyInfo*);
+		Value* _GetSpecifiedValue(const PropertyInfo*, UpdateCache*);
+		Value* _GetSpecifiedValueIgnoreCache(const PropertyInfo*);
 		void _InheritProperties();
 		long _PostSourceChange();
-		long _PreSourceChange( const PropertyInfo* (WINAPI*)(void), int, Value *, Value *);
-		long _PreSourceChange(PropertyInfo const *, int, Value *, Value *);
+		long _PreSourceChange( const PropertyInfo* (WINAPI*)(void), int, Value*, Value*);
+		long _PreSourceChange(const PropertyInfo*, int, Value*, Value*);
 	};
 }

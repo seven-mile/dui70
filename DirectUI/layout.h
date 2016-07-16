@@ -12,21 +12,21 @@ namespace DirectUI
 		virtual ~Layout();
 		Layout & operator=(Layout const &);
 
-		virtual void Attach(Element *);
-		static HRESULT WINAPI Create(Layout **);
+		virtual void Attach(Element*);
+		static HRESULT WINAPI Create(Layout**);
 		void Destroy();
-		virtual void Detach(Element *);
-		virtual void DoLayout(Element *, int, int);
-		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
-		Element * GetChildFromLayoutIndex(Element *, int, DynamicArray<Element *, 0> *);
-		unsigned int GetLayoutChildCount(Element *);
-		int GetLayoutIndexFromChild(Element *, Element *);
+		virtual void Detach(Element*);
+		virtual void DoLayout(Element*, int, int);
+		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
+		Element* GetChildFromLayoutIndex(Element*, int, DynamicArray<Element*, 0>*);
+		unsigned int GetLayoutChildCount(Element*);
+		int GetLayoutIndexFromChild(Element*, Element*);
 		void Initialize();
-		virtual void OnAdd(Element *, Element **, unsigned int);
-		virtual void OnLayoutPosChanged(Element *, Element *, int, int);
-		virtual void OnRemove(Element *, Element **, unsigned int);
-		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
-		static void WINAPI UpdateLayoutRect(Element *, int, int, Element *, int, int, int, int);
+		virtual void OnAdd(Element*, Element**, unsigned int);
+		virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+		virtual void OnRemove(Element*, Element**, unsigned int);
+		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
+		static void WINAPI UpdateLayoutRect(Element*, int, int, Element*, int, int, int, int);
 	protected:
 		void ClearCacheDirty();
 		bool IsCacheDirty();
@@ -42,12 +42,12 @@ namespace DirectUI
 
 		FillLayout & operator=(FillLayout const &);
 
-		static HRESULT WINAPI Create(int, int *, Value **);
-		static HRESULT WINAPI Create(Layout **);
-		virtual void DoLayout(Element *, int, int);
-		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		static HRESULT WINAPI Create(int, int*, Value**);
+		static HRESULT WINAPI Create(Layout**);
+		virtual void DoLayout(Element*, int, int);
+		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
 		void Initialize();
-		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
 	};
 
     class BorderLayout;
@@ -78,16 +78,16 @@ namespace DirectUI
 		virtual ~VerticalFlowLayout();
 		VerticalFlowLayout & operator=(VerticalFlowLayout const &);
 
-		static HRESULT WINAPI Create(int, int *, Value **);
-		static HRESULT WINAPI Create(bool, unsigned int horAlign, unsigned int, unsigned int vertAlign, Layout **);
-		virtual void DoLayout(Element *, int, int);
-		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
-		int GetLine(Element *, Element *);
+		static HRESULT WINAPI Create(int, int*, Value**);
+		static HRESULT WINAPI Create(bool, unsigned int horAlign, unsigned int, unsigned int vertAlign, Layout**);
+		virtual void DoLayout(Element*, int, int);
+		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
+		int GetLine(Element*, Element*);
 		void Initialize(bool, unsigned int, unsigned int, unsigned int);
-		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
 	protected:
-		SIZE BuildCacheInfo(Element *, int, int, Surface *,bool);
+		SIZE BuildCacheInfo(Element*, int, int, Surface*,bool);
 		static SIZE WINAPI SizeZero(void);
 	};
 }

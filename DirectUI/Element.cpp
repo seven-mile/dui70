@@ -14,13 +14,13 @@ namespace DirectUI
 	Element & Element::operator=(const Element &)
 	{
 		// TODO: 在此处插入 return 语句
-		return *this;
+		return*this;
 	}
-	long Element::Initialize(unsigned int, Element *, unsigned long *)
+	long Element::Initialize(unsigned int, Element*, unsigned long*)
 	{
 		return 0;
 	}
-	long Element::Create(unsigned int, Element * parent, unsigned long *, Element ** out)
+	long Element::Create(unsigned int, Element* parent, unsigned long*, Element** out)
 	{
 		return 0;
 	}
@@ -32,66 +32,66 @@ namespace DirectUI
 	{
 		return false;
 	}
-	long Element::UnRegister(IClassInfo **)
+	long Element::UnRegister(IClassInfo**)
 	{
 		return 0;
 	}
-	const unsigned __int16 * Element::GetContentStringAsDisplayed(Value **)
+	const unsigned __int16* Element::GetContentStringAsDisplayed(Value**)
 	{
 		return nullptr;
 	}
-	bool Element::OnPropertyChanging(PropertyInfo const *, int, Value *, Value *)
+	bool Element::OnPropertyChanging(const PropertyInfo*, int, Value*, Value*)
 	{
 		return false;
 	}
-	bool Element::OnPropertyChanging(PropertyInfo *, int, Value *, Value *)
+	bool Element::OnPropertyChanging(PropertyInfo*, int, Value*, Value*)
 	{
 		return false;
 	}
-	void Element::OnPropertyChanged(PropertyInfo const *, int, Value *, Value *)
+	void Element::OnPropertyChanged(const PropertyInfo*, int, Value*, Value*)
 	{
 	}
-	void Element::OnPropertyChanged(PropertyInfo *, int, Value *, Value *)
+	void Element::OnPropertyChanged(PropertyInfo*, int, Value*, Value*)
 	{
 	}
 	void Element::OnGroupChanged(int, bool)
 	{
 	}
-	void Element::OnInput(InputEvent *)
+	void Element::OnInput(InputEvent*)
 	{
 	}
-	void Element::OnKeyFocusMoved(Element *, Element *)
+	void Element::OnKeyFocusMoved(Element*, Element*)
 	{
 	}
-	void Element::OnMouseFocusMoved(Element *, Element *)
+	void Element::OnMouseFocusMoved(Element*, Element*)
 	{
 	}
 	void Element::OnDestroy()
 	{
 	}
-	void Element::OnEvent(Event *)
+	void Element::OnEvent(Event*)
 	{
 	}
-	void Element::Paint(HDC, RECT const *, RECT const *, RECT *, RECT *)
+	void Element::Paint(HDC, RECT const*, RECT const*, RECT*, RECT*)
 	{
 	}
-	SIZE Element::GetContentSize(LPSIZE psizl, int, Surface *)
+	SIZE Element::GetContentSize(LPSIZE psizl, int, Surface*)
 	{
 		return SIZE();
 	}
-	long Element::Add(Element *)
+	long Element::Add(Element*)
 	{
 		return 0;
 	}
-	long Element::Add(Element *, int(*)(const void *, const void *))
+	long Element::Add(Element*, int(*)(const void*, const void*))
 	{
 		return 0;
 	}
-	long Element::Add(Element **, unsigned int)
+	long Element::Add(Element**, unsigned int)
 	{
 		return 0;
 	}
-	long Element::AddListener(IElementListener *)
+	long Element::AddListener(IElementListener*)
 	{
 		return 0;
 	}
@@ -103,21 +103,21 @@ namespace DirectUI
 	{
 		return UID();
 	}
-	void Element::BroadcastEvent(Event *)
+	void Element::BroadcastEvent(Event*)
 	{
 	}
-	void Element::Detach(DeferCycle *)
+	void Element::Detach(DeferCycle*)
 	{
 	}
-	long Element::Insert(Element **, unsigned int, unsigned int)
-	{
-		return 0;
-	}
-	long Element::Remove(Element **, unsigned int)
+	long Element::Insert(Element**, unsigned int, unsigned int)
 	{
 		return 0;
 	}
-	Element * Element::GetAdjacent(Element *, int, const NavReference *, unsigned __int32)
+	long Element::Remove(Element**, unsigned int)
+	{
+		return 0;
+	}
+	Element* Element::GetAdjacent(Element*, int, const NavReference*, unsigned __int32)
 	{
 		return nullptr;
 	}
@@ -128,15 +128,15 @@ namespace DirectUI
 	void Element::SetKeyFocus(void)
 	{
 	}
-	unsigned int Element::MessageCallback(GMSG *)
+	unsigned int Element::MessageCallback(GMSG*)
 	{
 		return 0;
 	}
-	long Element::QueryInterface(GUID const &, void **)
+	long Element::QueryInterface(GUID const &, void**)
 	{
 		return 0;
 	}
-	SIZE Element::_SelfLayoutUpdateDesiredSize(int, int, Surface *)
+	SIZE Element::_SelfLayoutUpdateDesiredSize(int, int, Surface*)
 	{
 		return SIZE();
 	}
@@ -165,46 +165,46 @@ namespace DirectUI
 	{
 		return false;
 	}
-	Element * Element::FindDescendent(ATOM id)
+	Element* Element::FindDescendent(ATOM id)
 	{
 		return nullptr;
 	}
-	void Element::FireEvent(Event *, bool, bool)
+	void Element::FireEvent(Event*, bool, bool)
 	{
 	}
 	bool Element::GetAbsorbsShortcut()
 	{
 		return false;
 	}
-	const unsigned short * Element::GetAccDefAction(Value **)
+	const unsigned short* Element::GetAccDefAction(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccDesc(Value **)
+	const unsigned short* Element::GetAccDesc(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccHelp(Value **)
+	const unsigned short* Element::GetAccHelp(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccItemStatus(Value **)
+	const unsigned short* Element::GetAccItemStatus(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccItemType(Value **)
+	const unsigned short* Element::GetAccItemType(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccName(Value **)
+	const unsigned short* Element::GetAccName(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccNameAsDisplayed(Value **)
+	const unsigned short* Element::GetAccNameAsDisplayed(Value**)
 	{
 		return nullptr;
 	}
-	const unsigned short * Element::GetAccValue(Value **)
+	const unsigned short* Element::GetAccValue(Value**)
 	{
 		return nullptr;
 	}
@@ -224,267 +224,267 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	Element * Element::GetRoot()
+	Element* Element::GetRoot()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AbsorbsShortcutProp()
+	const PropertyInfo* Element::AbsorbsShortcutProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccDefActionProp()
+	const PropertyInfo* Element::AccDefActionProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccDescProp()
+	const PropertyInfo* Element::AccDescProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccHelpProp()
+	const PropertyInfo* Element::AccHelpProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccItemStatusProp()
+	const PropertyInfo* Element::AccItemStatusProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccItemTypeProp()
+	const PropertyInfo* Element::AccItemTypeProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccNameProp()
+	const PropertyInfo* Element::AccNameProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccRoleProp()
+	const PropertyInfo* Element::AccRoleProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccStateProp()
+	const PropertyInfo* Element::AccStateProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccValueProp()
+	const PropertyInfo* Element::AccValueProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AccessibleProp()
+	const PropertyInfo* Element::AccessibleProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ActiveProp()
+	const PropertyInfo* Element::ActiveProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AlphaProp()
+	const PropertyInfo* Element::AlphaProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::AnimationProp()
+	const PropertyInfo* Element::AnimationProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::BackgroundProp()
+	const PropertyInfo* Element::BackgroundProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::BorderColorProp()
+	const PropertyInfo* Element::BorderColorProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::BorderStyleProp()
+	const PropertyInfo* Element::BorderStyleProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::BorderThicknessProp()
+	const PropertyInfo* Element::BorderThicknessProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ChildrenProp()
+	const PropertyInfo* Element::ChildrenProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ClassProp()
+	const PropertyInfo* Element::ClassProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::CompositedTextProp()
+	const PropertyInfo* Element::CompositedTextProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ContentAlignProp()
+	const PropertyInfo* Element::ContentAlignProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ContentProp()
+	const PropertyInfo* Element::ContentProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::CursorProp()
+	const PropertyInfo* Element::CursorProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::CustomProp()
+	const PropertyInfo* Element::CustomProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::DPIProp()
+	const PropertyInfo* Element::DPIProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::DirectionProp()
+	const PropertyInfo* Element::DirectionProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::DesiredSizeProp()
+	const PropertyInfo* Element::DesiredSizeProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ExtentProp()
+	const PropertyInfo* Element::ExtentProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ForegroundProp()
+	const PropertyInfo* Element::ForegroundProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontFaceProp()
+	const PropertyInfo* Element::FontFaceProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontProp()
+	const PropertyInfo* Element::FontProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontQualityProp()
+	const PropertyInfo* Element::FontQualityProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontSizeProp()
+	const PropertyInfo* Element::FontSizeProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontStyleProp()
+	const PropertyInfo* Element::FontStyleProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::FontWeightProp()
+	const PropertyInfo* Element::FontWeightProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::KeyFocusedProp()
+	const PropertyInfo* Element::KeyFocusedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::KeyWithinProp()
+	const PropertyInfo* Element::KeyWithinProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::LastDSConstProp()
+	const PropertyInfo* Element::LastDSConstProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::LayoutPosProp()
+	const PropertyInfo* Element::LayoutPosProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::LayoutProp()
+	const PropertyInfo* Element::LayoutProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::LocationProp()
+	const PropertyInfo* Element::LocationProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::HeightProp()
+	const PropertyInfo* Element::HeightProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::HighDPIProp()
+	const PropertyInfo* Element::HighDPIProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::IDProp()
+	const PropertyInfo* Element::IDProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::MinSizeProp()
+	const PropertyInfo* Element::MinSizeProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::MouseFocusedProp()
+	const PropertyInfo* Element::MouseFocusedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::MouseWithinProp()
+	const PropertyInfo* Element::MouseWithinProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::OverhangProp()
+	const PropertyInfo* Element::OverhangProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::PaddingProp()
+	const PropertyInfo* Element::PaddingProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ParentProp()
+	const PropertyInfo* Element::ParentProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::PosInLayoutProp()
+	const PropertyInfo* Element::PosInLayoutProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::SelectedProp()
+	const PropertyInfo* Element::SelectedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ShadowIntensityProp()
+	const PropertyInfo* Element::ShadowIntensityProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::SheetProp()
+	const PropertyInfo* Element::SheetProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::ShortcutProp()
+	const PropertyInfo* Element::ShortcutProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::SizeInLayoutProp()
+	const PropertyInfo* Element::SizeInLayoutProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::TextGlowSizeProp()
+	const PropertyInfo* Element::TextGlowSizeProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::TooltipMaxWidthProp()
+	const PropertyInfo* Element::TooltipMaxWidthProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::TooltipProp()
+	const PropertyInfo* Element::TooltipProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::VisibleProp()
+	const PropertyInfo* Element::VisibleProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::WidthProp()
+	const PropertyInfo* Element::WidthProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::WindowActiveProp()
+	const PropertyInfo* Element::WindowActiveProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::XProp()
+	const PropertyInfo* Element::XProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * Element::YProp()
+	const PropertyInfo* Element::YProp()
 	{
 		return nullptr;
 	}
@@ -500,7 +500,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	StyleSheet * Element::GetSheet()
+	StyleSheet* Element::GetSheet()
 	{
 		return nullptr;
 	}
@@ -524,7 +524,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	Element * Element::GetTopLevel()
+	Element* Element::GetTopLevel()
 	{
 		return nullptr;
 	}
@@ -532,11 +532,11 @@ namespace DirectUI
 	{
 		return 0.0f;
 	}
-	Value * Element::GetValue(const PropertyInfo *(WINAPI*)(void), int, UpdateCache *)
+	Value* Element::GetValue(const PropertyInfo*(WINAPI*)(void), int, UpdateCache*)
 	{
 		return nullptr;
 	}
-	Value * Element::GetValue(PropertyInfo const *, int, UpdateCache *)
+	Value* Element::GetValue(const PropertyInfo*, int, UpdateCache*)
 	{
 		return nullptr;
 	}
@@ -595,7 +595,7 @@ namespace DirectUI
 	{
 		return UID();
 	}
-	long Element::Insert(Element *, unsigned int)
+	long Element::Insert(Element*, unsigned int)
 	{
 		return 0;
 	}
@@ -617,7 +617,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool Element::IsDescendent(Element *)
+	bool Element::IsDescendent(Element*)
 	{
 		return false;
 	}
@@ -641,11 +641,11 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool Element::IsValidAccessor(PropertyInfo const *, int, bool)
+	bool Element::IsValidAccessor(const PropertyInfo*, int, bool)
 	{
 		return false;
 	}
-	bool Element::IsValidValue(PropertyInfo const *, Value *)
+	bool Element::IsValidValue(const PropertyInfo*, Value*)
 	{
 		return false;
 	}
@@ -653,10 +653,10 @@ namespace DirectUI
 	{
 		return false;
 	}
-	void Element::MapElementPoint(Element *, POINT const *, LPPOINT)
+	void Element::MapElementPoint(Element*, POINT const*, LPPOINT)
 	{
 	}
-	const PropertyInfo * Element::MarginProp()
+	const PropertyInfo* Element::MarginProp()
 	{
 		return nullptr;
 	}
@@ -667,22 +667,22 @@ namespace DirectUI
 	{
 		return false;
 	}
-	void Element::PaintBackground(HDC, Value *, RECT const &, RECT const &, RECT const &, RECT const &)
+	void Element::PaintBackground(HDC, Value*, RECT const &, RECT const &, RECT const &, RECT const &)
 	{
 	}
-	void Element::PaintBorder(HDC, Value *, RECT *, RECT const &)
+	void Element::PaintBorder(HDC, Value*, RECT*, RECT const &)
 	{
 	}
-	void Element::PaintContent(HDC, RECT const *)
+	void Element::PaintContent(HDC, RECT const*)
 	{
 	}
-	void Element::PaintFocusRect(HDC, RECT const *, RECT const *)
+	void Element::PaintFocusRect(HDC, RECT const*, RECT const*)
 	{
 	}
-	void Element::PaintStringContent(HDC, RECT const *, Value *, int)
+	void Element::PaintStringContent(HDC, RECT const*, Value*, int)
 	{
 	}
-	void Element::PostEvent(Event *)
+	void Element::PostEvent(Event*)
 	{
 	}
 	long Element::QueueDefaultAction()
@@ -697,7 +697,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::Remove(Element *)
+	long Element::Remove(Element*)
 	{
 		return 0;
 	}
@@ -705,14 +705,14 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void Element::RemoveListener(IElementListener *)
+	void Element::RemoveListener(IElementListener*)
 	{
 	}
-	long Element::RemoveLocalValue(const PropertyInfo *(WINAPI*)(void))
+	long Element::RemoveLocalValue(const PropertyInfo*(WINAPI*)(void))
 	{
 		return 0;
 	}
-	long Element::RemoveLocalValue(PropertyInfo const *)
+	long Element::RemoveLocalValue(const PropertyInfo*)
 	{
 		return 0;
 	}
@@ -720,27 +720,27 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetAccDefAction(unsigned short const *)
+	long Element::SetAccDefAction(UCString)
 	{
 		return 0;
 	}
-	long Element::SetAccDesc(unsigned short const *)
+	long Element::SetAccDesc(UCString)
 	{
 		return 0;
 	}
-	long Element::SetAccHelp(unsigned short const *)
+	long Element::SetAccHelp(UCString)
 	{
 		return 0;
 	}
-	long Element::SetAccItemStatus(unsigned short const *)
+	long Element::SetAccItemStatus(UCString)
 	{
 		return 0;
 	}
-	long Element::SetAccItemType(unsigned short const *)
+	long Element::SetAccItemType(UCString)
 	{
 		return 0;
 	}
-	long Element::SetAccName(unsigned short const *)
+	long Element::SetAccName(UCString)
 	{
 		return 0;
 	}
@@ -752,7 +752,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetAccValue(unsigned short const *)
+	long Element::SetAccValue(UCString)
 	{
 		return 0;
 	}
@@ -788,7 +788,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetBackgroundColor(unsigned short const *, int, int)
+	long Element::SetBackgroundColor(UCString, int, int)
 	{
 		return 0;
 	}
@@ -816,11 +816,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetClass(unsigned short const *)
+	long Element::SetClass(UCString)
 	{
 		return 0;
 	}
-	void Element::SetClassInfoPtr(IClassInfo *)
+	void Element::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 	long Element::SetCompositedText(bool)
@@ -831,19 +831,19 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetContentGraphic(unsigned short const *, unsigned char, unsigned int)
+	long Element::SetContentGraphic(UCString, unsigned char, unsigned int)
 	{
 		return 0;
 	}
-	long Element::SetContentGraphic(unsigned short const *, unsigned short, unsigned short)
+	long Element::SetContentGraphic(UCString, unsigned short, unsigned short)
 	{
 		return 0;
 	}
-	long Element::SetContentString(unsigned short const *)
+	long Element::SetContentString(UCString)
 	{
 		return 0;
 	}
-	long Element::SetCursor(unsigned short const *)
+	long Element::SetCursor(UCString)
 	{
 		return 0;
 	}
@@ -859,15 +859,15 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetEncodedContentString(unsigned short const *)
+	long Element::SetEncodedContentString(UCString)
 	{
 		return 0;
 	}
-	long Element::SetFont(unsigned short const *)
+	long Element::SetFont(UCString)
 	{
 		return 0;
 	}
-	long Element::SetFontFace(unsigned short const *)
+	long Element::SetFontFace(UCString)
 	{
 		return 0;
 	}
@@ -907,11 +907,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetID(unsigned short const *)
+	long Element::SetID(UCString)
 	{
 		return 0;
 	}
-	long Element::SetLayout(Layout *)
+	long Element::SetLayout(Layout*)
 	{
 		return 0;
 	}
@@ -943,7 +943,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetSheet(StyleSheet *)
+	long Element::SetSheet(StyleSheet*)
 	{
 		return 0;
 	}
@@ -967,11 +967,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SetValue(const PropertyInfo *(WINAPI*)(void), int, Value *)
+	long Element::SetValue(const PropertyInfo*(WINAPI*)(void), int, Value*)
 	{
 		return 0;
 	}
-	long Element::SetValue(PropertyInfo const *, int, Value *)
+	long Element::SetValue(const PropertyInfo*, int, Value*)
 	{
 		return 0;
 	}
@@ -995,17 +995,17 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SortChildren(int(WINAPI*)(void const *, void const *))
+	long Element::SortChildren(int(WINAPI*)(void const*, void const*))
 	{
 		return 0;
 	}
-	void Element::StartDefer(unsigned long *)
+	void Element::StartDefer(unsigned long*)
 	{
 	}
 	void Element::StopAnimation(unsigned int)
 	{
 	}
-	DeferCycle * Element::TestDeferObject()
+	DeferCycle* Element::TestDeferObject()
 	{
 		return nullptr;
 	}
@@ -1016,13 +1016,13 @@ namespace DirectUI
 	void Element::UpdateLayout()
 	{
 	}
-	void Element::_AddDependency(Element *, PropertyInfo const *, int, DepRecs *, DeferCycle *, long *)
+	void Element::_AddDependency(Element*, const PropertyInfo*, int, DepRecs*, DeferCycle*, long*)
 	{
 	}
 	void Element::_ClearNeedsLayout()
 	{
 	}
-	long Element::_DisplayNodeCallback(HGADGET__ *, void *, EventMsg *)
+	long Element::_DisplayNodeCallback(HGADGET__*, void*, EventMsg*)
 	{
 		return 0;
 	}
@@ -1037,15 +1037,15 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	int Element::_MarkElementForDS(Element *)
+	int Element::_MarkElementForDS(Element*)
 	{
 		return 0;
 	}
-	int Element::_MarkElementForLayout(Element *, unsigned int)
+	int Element::_MarkElementForLayout(Element*, unsigned int)
 	{
 		return 0;
 	}
-	bool Element::_SetGroupChanges(Element *, int, DeferCycle *)
+	bool Element::_SetGroupChanges(Element*, int, DeferCycle*)
 	{
 		return false;
 	}
@@ -1056,10 +1056,10 @@ namespace DirectUI
 	void Element::_StartOptimizedLayoutQ(void)
 	{
 	}
-	void Element::_TransferGroupFlags(Element *, int)
+	void Element::_TransferGroupFlags(Element*, int)
 	{
 	}
-	tagSIZE Element::_UpdateDesiredSize(int, int, Surface *)
+	tagSIZE Element::_UpdateDesiredSize(int, int, Surface*)
 	{
 		return tagSIZE();
 	}
@@ -1069,30 +1069,30 @@ namespace DirectUI
 	void Element::_UpdateLayoutSize(int, int)
 	{
 	}
-	void Element::OnHosted(Element *)
+	void Element::OnHosted(Element*)
 	{
 	}
-	void Element::OnUnHosted(Element *)
+	void Element::OnUnHosted(Element*)
 	{
 	}
-	void Element::UpdateTooltip(Element *)
+	void Element::UpdateTooltip(Element*)
 	{
 	}
-	void Element::ActivateTooltip(Element *, unsigned long)
+	void Element::ActivateTooltip(Element*, unsigned long)
 	{
 	}
-	void Element::RemoveTooltip(Element *)
+	void Element::RemoveTooltip(Element*)
 	{
 	}
 	bool Element::GetKeyFocused()
 	{
 		return false;
 	}
-	IClassInfo * Element::GetClassInfoW()
+	IClassInfo* Element::GetClassInfoW()
 	{
 		return nullptr;
 	}
-	long Element::GetAccessibleImpl(IAccessible **)
+	long Element::GetAccessibleImpl(IAccessible**)
 	{
 		return 0;
 	}
@@ -1100,20 +1100,20 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	HRESULT Element::GetElementProviderImpl(ElementProvider **)
+	HRESULT Element::GetElementProviderImpl(ElementProvider**)
 	{
 		return E_NOTIMPL;
 	}
 	void Element::HandleUiaDestroyListener()
 	{
 	}
-	void Element::HandleUiaPropertyListener(PropertyInfo const *, int, Value *, Value *)
+	void Element::HandleUiaPropertyListener(const PropertyInfo*, int, Value*, Value*)
 	{
 	}
-	void Element::HandleUiaPropertyChangingListener(PropertyInfo const *)
+	void Element::HandleUiaPropertyChangingListener(const PropertyInfo*)
 	{
 	}
-	void Element::HandleUiaEventListener(Event *)
+	void Element::HandleUiaEventListener(Event*)
 	{
 	}
 	void Element::MarkHosted()
@@ -1122,32 +1122,32 @@ namespace DirectUI
 	void Element::MarkSelfLayout()
 	{
 	}
-	void Element::_FlushLayout(Element *, DeferCycle *)
+	void Element::_FlushLayout(Element*, DeferCycle*)
 	{
 	}
-	void Element::_InvalidateCachedDSConstraints(Element *)
+	void Element::_InvalidateCachedDSConstraints(Element*)
 	{
 	}
-	void Element::_OnFontPropChanged(Value *)
+	void Element::_OnFontPropChanged(Value*)
 	{
 	}
-	long Element::_RemoveLocalValue(const PropertyInfo *(WINAPI*)(void), bool)
-	{
-		return 0;
-	}
-	long Element::_RemoveLocalValue(PropertyInfo const *, bool)
+	long Element::_RemoveLocalValue(const PropertyInfo*(WINAPI*)(void), bool)
 	{
 		return 0;
 	}
-	long Element::_SetValue(const PropertyInfo *(WINAPI*)(void), int, Value *, bool)
+	long Element::_RemoveLocalValue(const PropertyInfo*, bool)
 	{
 		return 0;
 	}
-	long Element::_SetValue(PropertyInfo const *, int, Value *, bool)
+	long Element::_SetValue(const PropertyInfo*(WINAPI*)(void), int, Value*, bool)
 	{
 		return 0;
 	}
-	Element * Element::FindDescendentWorker(unsigned short)
+	long Element::_SetValue(const PropertyInfo*, int, Value*, bool)
+	{
+		return 0;
+	}
+	Element* Element::FindDescendentWorker(unsigned short)
 	{
 		return nullptr;
 	}
@@ -1164,7 +1164,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	unsigned short * Element::RemoveShortcutFromName(const String)
+	unsigned short* Element::RemoveShortcutFromName(UCString)
 	{
 		return nullptr;
 	}
@@ -1180,46 +1180,46 @@ namespace DirectUI
 	{
 		return false;
 	}
-	void Element::_BroadcastEventWorker(Event *)
+	void Element::_BroadcastEventWorker(Event*)
 	{
 	}
-	int Element::_CachedValueIsEqual(const PropertyInfo *, Element *)
-	{
-		return 0;
-	}
-	void Element::_GetBuriedSheetDependencies(const PropertyInfo *, Element *, DepRecs *, DeferCycle *, long *)
-	{
-	}
-	void Element::_UpdatePropertyInCache(const PropertyInfo *)
-	{
-	}
-	void Element::_VoidPCNotifyTree(int, DeferCycle *)
-	{
-	}
-	void Element::_FlushDS(DeferCycle *)
-	{
-	}
-	Value * Element::_GetComputedValue(PropertyInfo const *, UpdateCache *)
-	{
-		return nullptr;
-	}
-	long Element::_GetDependencies(PropertyInfo const *, int, DepRecs *, int, Value *, DeferCycle *)
+	int Element::_CachedValueIsEqual(const PropertyInfo*, Element*)
 	{
 		return 0;
 	}
-	Value * Element::_GetLocalValue(PropertyInfo const *)
+	void Element::_GetBuriedSheetDependencies(const PropertyInfo*, Element*, DepRecs*, DeferCycle*, long*)
+	{
+	}
+	void Element::_UpdatePropertyInCache(const PropertyInfo*)
+	{
+	}
+	void Element::_VoidPCNotifyTree(int, DeferCycle*)
+	{
+	}
+	void Element::_FlushDS(DeferCycle*)
+	{
+	}
+	Value* Element::_GetComputedValue(const PropertyInfo*, UpdateCache*)
 	{
 		return nullptr;
 	}
-	Value * Element::_GetLocalValueFromVM(PropertyInfo const *)
+	long Element::_GetDependencies(const PropertyInfo*, int, DepRecs*, int, Value*, DeferCycle*)
+	{
+		return 0;
+	}
+	Value* Element::_GetLocalValue(const PropertyInfo*)
 	{
 		return nullptr;
 	}
-	Value * Element::_GetSpecifiedValue(PropertyInfo const *, UpdateCache *)
+	Value* Element::_GetLocalValueFromVM(const PropertyInfo*)
 	{
 		return nullptr;
 	}
-	Value * Element::_GetSpecifiedValueIgnoreCache(PropertyInfo const *)
+	Value* Element::_GetSpecifiedValue(const PropertyInfo*, UpdateCache*)
+	{
+		return nullptr;
+	}
+	Value* Element::_GetSpecifiedValueIgnoreCache(const PropertyInfo*)
 	{
 		return nullptr;
 	}
@@ -1230,11 +1230,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::_PreSourceChange(const PropertyInfo *(WINAPI*)(void), int, Value *, Value *)
+	long Element::_PreSourceChange(const PropertyInfo*(WINAPI*)(void), int, Value*, Value*)
 	{
 		return 0;
 	}
-	long Element::_PreSourceChange(PropertyInfo const *, int, Value *, Value *)
+	long Element::_PreSourceChange(const PropertyInfo*, int, Value*, Value*)
 	{
 		return 0;
 	}
@@ -1250,17 +1250,17 @@ namespace DirectUI
 	ElementWithHWND & ElementWithHWND::operator=(const ElementWithHWND &)
 	{
 		// TODO: 在此处插入 return 语句
-		return *this;
+		return*this;
 	}
-	long ElementWithHWND::Create(Element *, unsigned long *, Element **)
+	long ElementWithHWND::Create(Element*, unsigned long*, Element**)
 	{
 		return 0;
 	}
-	IClassInfo * ElementWithHWND::GetClassInfoPtr()
+	IClassInfo* ElementWithHWND::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
-	IClassInfo * ElementWithHWND::GetClassInfoW()
+	IClassInfo* ElementWithHWND::GetClassInfoW()
 	{
 		return nullptr;
 	}
@@ -1268,7 +1268,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void ElementWithHWND::SetClassInfoPtr(IClassInfo *)
+	void ElementWithHWND::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 }

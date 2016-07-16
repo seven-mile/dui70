@@ -22,15 +22,14 @@
 
 namespace DirectUI
 {
-	UILIB_API HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short *unk1, char unk2, bool bEnableUIAutomationProvider);
-	UILIB_API HRESULT WINAPI UnInitProcessPriv(unsigned short *unk1);
+	UILIB_API HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider);
+	UILIB_API HRESULT WINAPI UnInitProcessPriv(unsigned short*unk1);
 	UILIB_API HRESULT WINAPI InitThread(int iDontKnow);
 	UILIB_API void WINAPI UnInitThread();
 
-	// These might be wrong, disassemble and check if it is DirectUI::XProvider * or DirectUI::XProvider **
-	UILIB_API int WINAPI CreateDUIWrapper(Element*,class XProvider *);
-	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP *, class XProvider *);
-	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE, unsigned short*, unsigned short*, unsigned short*, class XResourceProvider *);
+	UILIB_API int WINAPI CreateDUIWrapper(Element*,class XProvider**);
+	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider**);
+	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE,const unsigned short*, const unsigned short*, const unsigned short*, class XResourceProvider**);
 
 	UILIB_API int WINAPI GetScreenDPI();
 

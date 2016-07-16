@@ -18,12 +18,12 @@ namespace DirectUI
 		virtual int Release();
 
 		//NULL
-		virtual HRESULT WINAPI CreateInstance(Element*, unsigned long *, Element** ) = 0;
+		virtual HRESULT WINAPI CreateInstance(Element*, unsigned long*, Element** ) = 0;
 
 		//2
-		virtual PropertyInfo const * EnumPropertyInfo(unsigned int);
+		virtual const PropertyInfo* EnumPropertyInfo(unsigned int);
 		//3
-		virtual PropertyInfo const * GetByClassIndex(unsigned int);
+		virtual const PropertyInfo* GetByClassIndex(unsigned int);
 		//4
 		virtual unsigned int GetPICount() const;
 		//5
@@ -33,11 +33,11 @@ namespace DirectUI
 		virtual IClassInfo* WINAPI GetBaseClass() = 0;
 
 		//6
-		virtual unsigned short const * GetName() const;
+		virtual UCString GetName() const;
 		//7
-		virtual bool IsValidProperty(PropertyInfo const *) const;
+		virtual bool IsValidProperty(const PropertyInfo*) const;
 		//8
-		virtual bool IsSubclassOf(IClassInfo *) const;
+		virtual bool IsSubclassOf(IClassInfo*) const;
 		//9
 		virtual void Destroy();
 		//10
@@ -54,8 +54,8 @@ namespace DirectUI
 		//15
 		virtual void AssertPIZeroRef() const;
 
-		static bool ClassExist(IClassInfo **, PropertyInfo const * const *, unsigned int, IClassInfo *, HINSTANCE, unsigned short const *, bool);
-		long Initialize(HINSTANCE, unsigned short const *, bool, PropertyInfo const * const *, unsigned int);
+		static bool ClassExist(IClassInfo**, const PropertyInfo* const*, unsigned int, IClassInfo*, HINSTANCE, UCString, bool);
+		long Initialize(HINSTANCE, UCString, bool, const PropertyInfo* const*, unsigned int);
 		long Register();
 	};
 
@@ -114,12 +114,12 @@ namespace DirectUI
 
 		bool IsPinned();
 		bool IsScrollable();
-		void OnMaximumChanged(Value *);
-		void OnMinimumChanged(Value *);
-		void OnPageChanged(Value *);
-		bool OnPageChanging(Value *);
-		void OnPositionChanged(Value *);
-		bool OnPositionChanging(Value *);
+		void OnMaximumChanged(Value*);
+		void OnMinimumChanged(Value*);
+		void OnPageChanged(Value*);
+		bool OnPageChanging(Value*);
+		void OnPositionChanged(Value*);
+		bool OnPositionChanging(Value*);
 		static class UID Scroll();
 		void SetPinned(bool);
 	private:
@@ -135,26 +135,26 @@ namespace DirectUI
 		virtual ~BaseScrollViewer();
 		BaseScrollViewer & operator=(BaseScrollViewer const &);
 
-		long Initialize(Element *, unsigned long *);
+		long Initialize(Element*, unsigned long*);
 
 		//1
-		virtual bool OnListenedPropertyChanging(Element *, PropertyInfo const *, int, Value *, Value *);
+		virtual bool OnListenedPropertyChanging(Element*, const PropertyInfo*, int, Value*, Value*);
 
 		//2
-		virtual void OnPropertyChanged(PropertyInfo const *, int, Value *, Value *);
+		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
 
 		//3
-		virtual void OnInput(InputEvent *);
+		virtual void OnInput(InputEvent*);
 
 		//4
-		virtual void OnEvent(Event *);
+		virtual void OnEvent(Event*);
 
 		//5
-		virtual long Add(Element **, unsigned int);
+		virtual long Add(Element**, unsigned int);
 
-		static IClassInfo * GetClassInfoPtr();
+		static IClassInfo* GetClassInfoPtr();
 		//6
-		virtual IClassInfo * GetClassInfoW();
+		virtual IClassInfo* GetClassInfoW();
 		int GetPinning();
 		int GetXBarVisibility();
 		int GetXOffset();
@@ -165,20 +165,20 @@ namespace DirectUI
 
 		//第二个类虚函数表
 		//0
-		virtual void OnListenerAttach(Element *);
+		virtual void OnListenerAttach(Element*);
 		//1
-		virtual void OnListenerDetach(Element *);
+		virtual void OnListenerDetach(Element*);
 		//2
-		virtual bool OnPropertyChanging(PropertyInfo const *, int, Value *, Value *);
+		virtual bool OnPropertyChanging(const PropertyInfo*, int, Value*, Value*);
 		//3
-		virtual void OnListenedPropertyChanged(Element *, PropertyInfo const *, int, Value *, Value *);
+		virtual void OnListenedPropertyChanged(Element*, const PropertyInfo*, int, Value*, Value*);
 		//4
-		virtual void OnListenedEvent(Element *, Event *);
+		virtual void OnListenedEvent(Element*, Event*);
 		//5
-		virtual void OnListenedInput(Element *, InputEvent *);
+		virtual void OnListenedInput(Element*, InputEvent*);
 
 		static long Register();
-		static void SetClassInfoPtr(IClassInfo *);
+		static void SetClassInfoPtr(IClassInfo*);
 
 		long SetPinning(int);
 		long SetXBarVisibility(int);
@@ -188,19 +188,19 @@ namespace DirectUI
 		long SetYOffset(int);
 		long SetYScrollable(bool);
 
-		static PropertyInfo const * PinningProp();
-		static PropertyInfo const * XBarVisibilityProp();
-		static PropertyInfo const * XOffsetProp();
-		static PropertyInfo const * XScrollableProp();
-		static PropertyInfo const * YBarVisibilityProp();
-		static PropertyInfo const * YOffsetProp();
-		static PropertyInfo const * YScrollableProp();
+		static const PropertyInfo* PinningProp();
+		static const PropertyInfo* XBarVisibilityProp();
+		static const PropertyInfo* XOffsetProp();
+		static const PropertyInfo* XScrollableProp();
+		static const PropertyInfo* YBarVisibilityProp();
+		static const PropertyInfo* YOffsetProp();
+		static const PropertyInfo* YScrollableProp();
 	
 	protected:
 		void FireAnimationChangeEvent(bool);
 
 	private:
-		void CheckScroll(BaseScrollBar *, int, int, int);
-		static IClassInfo * s_pClassInfo;
+		void CheckScroll(BaseScrollBar*, int, int, int);
+		static IClassInfo* s_pClassInfo;
 	};
 }

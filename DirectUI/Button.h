@@ -11,16 +11,16 @@ namespace DirectUI
 		virtual ~Button();
 		Button & operator=(const Button&);
 
-		long Initialize(unsigned int, Element*, unsigned long *);
-		static HRESULT WINAPI Create(unsigned int, Element *, unsigned long *, Element **);
-		static HRESULT WINAPI Create(Element *, unsigned long *, Element **);
+		long Initialize(unsigned int, Element*, unsigned long*);
+		static HRESULT WINAPI Create(unsigned int, Element*, unsigned long*, Element**);
+		static HRESULT WINAPI Create(Element*, unsigned long*, Element**);
 
 		static UID Click();
 		static UID Context();
 		//0
-		virtual void OnPropertyChanged(const PropertyInfo *, int, Value *, Value *);
+		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
 		//1
-		virtual void OnInput(InputEvent *);
+		virtual void OnInput(InputEvent*);
 
 		//2
 		virtual IClassInfo* GetClassInfoW();
@@ -32,16 +32,16 @@ namespace DirectUI
 		static IClassInfo* GetClassInfoPtr();
 		bool GetPressed();
 
-		virtual bool OnLostDialogFocus(class DialogElement *);
-		virtual bool OnReceivedDialogFocus(class DialogElement *);
+		virtual bool OnLostDialogFocus(class DialogElement*);
+		virtual bool OnReceivedDialogFocus(class DialogElement*);
 
 		static long Register();
 		long SetCaptured(bool);
-		static void SetClassInfoPtr(IClassInfo *);
+		static void SetClassInfoPtr(IClassInfo*);
 		long SetPressed(bool);
 
-		static const PropertyInfo * CapturedProp();
-		static const PropertyInfo * PressedProp();
+		static const PropertyInfo* CapturedProp();
+		static const PropertyInfo* PressedProp();
 
 	private:
 		static IClassInfo* s_pClassInfo;

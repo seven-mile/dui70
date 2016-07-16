@@ -10,49 +10,49 @@ namespace DirectUI
 		void AddRef();
 
 		static Value* CreateAtom(unsigned short);
-		static Value* CreateAtom(const String);
+		static Value* CreateAtom(UCString);
 		static Value* CreateBool(bool);
 		static Value* CreateColor(unsigned long);
 		static Value* CreateColor(unsigned long, unsigned long, unsigned char);
 		static Value* CreateColor(unsigned long, unsigned long, unsigned long, unsigned char);
 		static Value* CreateCursor(HICON);
-		static Value* CreateCursor(const String);
+		static Value* CreateCursor(UCString);
 		static Value* CreateDFCFill(unsigned int, unsigned int);
-		static Value* CreateDTBFill(const String, int, int);
-		static Value* CreateElementList(DynamicArray<class Element *, 0> *);
-		static Value* CreateElementRef(class Element *);
-		static Value* CreateEncodedString(const String);
-		static Value* CreateExpression(Expression *);
+		static Value* CreateDTBFill(UCString, int, int);
+		static Value* CreateElementList(DynamicArray<class Element*, 0>*);
+		static Value* CreateElementRef(class Element*);
+		static Value* CreateEncodedString(UCString);
+		static Value* CreateExpression(Expression*);
 		static Value* CreateFill(const class Fill &);
 		static Value* CreateGraphic(HBITMAP, unsigned char, unsigned int, bool, bool, bool);
 		static Value* CreateGraphic(HENHMETAFILE, HENHMETAFILE);
 		static Value* CreateGraphic(HICON, bool, bool, bool);
-		static Value* CreateGraphic(const String, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool);
-		static Value* CreateGraphic(const String, unsigned short, unsigned short, HINSTANCE, bool, bool);
+		static Value* CreateGraphic(UCString, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool);
+		static Value* CreateGraphic(UCString, unsigned short, unsigned short, HINSTANCE, bool, bool);
 		static Value* CreateInt(int);
-		static Value* CreateLayout(class Layout *);
+		static Value* CreateLayout(class Layout*);
 		static Value* CreatePoint(int, int);
 		static Value* CreateRect(int, int, int, int);
 		static Value* CreateSize(int, int);
-		static Value* CreateString(const String, HINSTANCE);
-		static Value* CreateStyleSheet(StyleSheet *);
+		static Value* CreateString(UCString, HINSTANCE);
+		static Value* CreateStyleSheet(StyleSheet*);
 
 		bool GetBool();
-		class Cursor * GetCursor();
-		class Element * GetElement();
-		DynamicArray<class Element *, 0>* GetElementList();
-		class Expression * GetExpression();
-		const class Fill * GetFill();
-		class Graphic * GetGraphic();
-		void * GetImage();
+		class Cursor* GetCursor();
+		class Element* GetElement();
+		DynamicArray<class Element*, 0>* GetElementList();
+		class Expression* GetExpression();
+		const class Fill* GetFill();
+		class Graphic* GetGraphic();
+		void* GetImage();
 		int GetInt();
 		class Layout* GetLayout();
 		const LPPOINT GetPoint();
 		const LPRECT GetRect();
 		int GetRefCount() const;
 		const LPSIZE GetSize();
-		unsigned short const * GetString();
-		StyleSheet * GetStyleSheet();
+		UCString GetString();
+		StyleSheet* GetStyleSheet();
 		int GetType() const;
 
 		unsigned short GetAtom();
@@ -75,11 +75,11 @@ namespace DirectUI
 		static Value* GetUnavailable();
 		static Value* GetUnset();
 
-		bool IsEqual(Value *);
+		bool IsEqual(Value*);
 		void Release();
-		String ToString(String, unsigned int) const;
+		UString ToString(UString, unsigned int) const;
 	private:
 		void _ZeroRelease();
-		static long StrDupW(const String, String*);
+		static long StrDupW(UCString, UString*);
 	};
 }

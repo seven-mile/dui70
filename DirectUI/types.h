@@ -20,7 +20,7 @@ namespace DirectUI
 
 	typedef struct tagGMSG
 	{
-	} GMSG, *LPGMSG;
+	} GMSG,*LPGMSG;
 
 	//// Misc
 	//class CritSecLock;

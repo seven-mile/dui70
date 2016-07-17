@@ -5,6 +5,7 @@
 #include <initguid.h>
 #include <oleacc.h>
 #include <Commctrl.h>
+#include <UIAutomationCore.h>
 
 #if	defined(DIRECTUI_EXPORTS)
 #define UILIB_API __declspec(dllexport)
@@ -64,6 +65,13 @@
 #include "Clipper.h"
 #include "Combobox.h"
 #include "DuiNavigate.h"
+#include "Edit.h"
+#include "ElementProviderManager.h"
+#include "ElementProxy.h"
+#include "EventManager.h"
+#include "ExpandCollapseProvider.h"
+
+//ExpandCollapseProvider
 
 namespace DirectUI
 {

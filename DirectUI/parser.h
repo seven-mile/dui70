@@ -30,6 +30,11 @@ namespace DirectUI
 		enum Pattern
 		{
 		};
+
+		enum Event
+		{
+
+		};
 		/*
 public: class DirectUI::Schema & __ptr64 __cdecl DirectUI::Schema::operator=(class DirectUI::Schema const & __ptr64) __ptr64
 public: static int DirectUI::Schema::AcceleratorKeyProperty

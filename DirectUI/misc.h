@@ -82,4 +82,17 @@ namespace DirectUI
 		virtual Surface::EType GetType(void) const;
 	};
 
+	struct  Event
+	{
+	};
+
+	struct RectangleChange
+	{
+
+	};
+
+	struct ElementRuntimeId
+	{
+
+	};
 }

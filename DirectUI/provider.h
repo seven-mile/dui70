@@ -2,56 +2,96 @@
 
 namespace DirectUI
 {
-	class ElementProvider
+	//此类的声明很可能错误
+	class UILIB_API ElementProvider
+		: public RefcountBase
+		, public IRawElementProviderSimple
+		, public IRawElementProviderFragment
+		, public IRawElementProviderAdviseEvents
 	{
 	public:
 		ElementProvider();
 		virtual ~ElementProvider();
 		
-		virtual unsigned long AddRef();
-		virtual long AdviseEventAdded(int, SAFEARRAY*);
-		virtual long AdviseEventRemoved(int, SAFEARRAY*);
-		static long Create(Element*, class  InvokeHelper*, ElementProvider**out);
+		static long WINAPI Create(Element*, class  InvokeHelper*, ElementProvider**out);
+
 		long DoInvokeArgs(int, class ProviderProxy* (__cdecl*)(Element*), char*);
-		virtual volatile const Element* GetElement();
 		const Element* GetElementKey();
-
-		virtual long GetEmbeddedFragmentRoots(SAFEARRAY**);
-		virtual long GetPatternProvider(int, IUnknown**);
-		virtual long GetPropertyValue(int, VARIANT*);
-
-		virtual ProviderProxy* (*GetProxyCreator())(Element*);
-
-		virtual long GetRuntimeId(SAFEARRAY**);
-		virtual long Navigate(class NavigateDirection, IRawElementProviderFragment**);
-
-		virtual long QueryInterface(const GUID&, void**);
-		virtual unsigned long Release();
-		virtual long SetFocus();
-
 		void TossElement();
 		void TossPatternProvider(Schema::Pattern);
 
-		virtual long get_BoundingRectangle(UiaRect*);
-		virtual long get_FragmentRoot(IRawElementProviderFragmentRoot**);
-		virtual long get_HostRawElementProvider(IRawElementProviderSimple**);
-		virtual long get_ProviderOptions(class ProviderOptions*);
+
+		//IUnknown
+		virtual unsigned long WINAPI AddRef();
+		virtual unsigned long WINAPI Release();
+		virtual long WINAPI QueryInterface(const GUID&, void**);
+
+		//IRawElementProviderSimple
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderOptions(
+			/* [retval][out] */ __RPC__out enum ProviderOptions *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetPatternProvider(
+			/* [in] */ PATTERNID patternId,
+			/* [retval][out] */ __RPC__deref_out_opt IUnknown **pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetPropertyValue(
+			/* [in] */ PROPERTYID propertyId,
+			/* [retval][out] */ __RPC__out VARIANT *pRetVal);
+
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_HostRawElementProvider(
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderSimple **pRetVal);
+
+		//IRawElementProviderFragment
+		virtual HRESULT STDMETHODCALLTYPE Navigate(
+			/* [in] */ enum NavigateDirection direction,
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderFragment **pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetRuntimeId(
+			/* [retval][out] */ __RPC__deref_out_opt SAFEARRAY * *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE get_BoundingRectangle(
+			/* [retval][out] */ __RPC__out struct UiaRect *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetEmbeddedFragmentRoots(
+			/* [retval][out] */ __RPC__deref_out_opt SAFEARRAY * *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE SetFocus(void);
+
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FragmentRoot(
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderFragmentRoot **pRetVal);
+
+		//IRawElementProviderAdviseEvents
+		virtual HRESULT STDMETHODCALLTYPE AdviseEventAdded(
+			/* [in] */ EVENTID eventId,
+			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
+
+		virtual HRESULT STDMETHODCALLTYPE AdviseEventRemoved(
+			/* [in] */ EVENTID eventId,
+			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
+
+		//1 此函数似乎声明不正确
+		virtual ProviderProxy* GetProxyCreator();
+		//2
+		virtual volatile const Element* GetElement();
 
 	protected:
+		//3
 		virtual long Init(Element*, InvokeHelper*);
 		long DoInvoke(int, ...);
 	};
 	
     template <class X, class Y, int>
-    class PatternProvider 
+    class PatternProvider
+		: public RefcountBase
+		, public IProvider
+		, public Y
     {
         public:
             PatternProvider();
             virtual ~PatternProvider();
             
-            static long Create(ElementProvider*, IUnknown**);
+            static long WINAPI Create(ElementProvider*, IUnknown**);
             virtual void Init(ElementProvider*);
-            
         protected:
             long DoInvoke(int,...);
 		private:

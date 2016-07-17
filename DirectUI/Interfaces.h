@@ -31,9 +31,13 @@ namespace DirectUI
 	{
 
 	};
+
+	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
+
 	class IProvider
 	{
-
+	public:
+		virtual ProviderProxyCall GetProxyCreator(void) = 0;
 	};
 	class ISBLeak
 	{
@@ -44,18 +48,6 @@ namespace DirectUI
 
 	};
 	class IXElementCP
-	{
-
-	};
-	struct IRawElementProviderFragment
-	{
-
-	};
-	struct IRawElementProviderFragmentRoot
-	{
-
-	};
-	struct IRawElementProviderSimple
 	{
 
 	};

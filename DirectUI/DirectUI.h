@@ -70,8 +70,18 @@
 #include "ElementProxy.h"
 #include "EventManager.h"
 #include "ExpandCollapseProvider.h"
+#include "ExpandCollapseProxy.h"
+#include "Expando.h"
+#include "ExpandoButtonGlyph.h"
+#include "FontCache.h"
+#include "FontCheckOut.h"
+#include "GridItemProvider.h"
+#include "GridProvider.h"
+#include "HWNDElementProvider.h"
+#include "InvokeHelper.h"
+#include "LinkedList.h"
 
-//ExpandCollapseProvider
+//LinkedList
 
 namespace DirectUI
 {

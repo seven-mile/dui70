@@ -79,7 +79,7 @@ namespace DirectUI
     };
 
 
-	class HWNDHostAccessible : public DuiAccessible
+	class UILIB_API HWNDHostAccessible : public DuiAccessible
 	{
 	public:
 		HWNDHostAccessible();
@@ -125,7 +125,7 @@ namespace DirectUI
 		virtual HRESULT WINAPI put_accValue(VARIANT, BSTR);
 	};
 
-	class HWNDHostClientAccessible
+	class UILIB_API HWNDHostClientAccessible
 	{
 	public:
 		HWNDHostClientAccessible();
@@ -137,7 +137,7 @@ namespace DirectUI
 		virtual HRESULT WINAPI get_accRole(VARIANT, VARIANT*);
 	};
 	 
-	class HWNDElementAccessible : DuiAccessible
+	class UILIB_API HWNDElementAccessible : DuiAccessible
 	{
 	public:
 		HWNDElementAccessible();

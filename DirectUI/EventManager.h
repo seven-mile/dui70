@@ -23,10 +23,10 @@ namespace DirectUI
 		static void __stdcall GetToggleState(VARIANT *);
 		static unsigned long __stdcall HandleAccChange(Element *, IRawElementProviderSimple *, Value *, Value *);
 		static unsigned long __stdcall HandleAccDesc(Element *, IRawElementProviderSimple *, Value *, Value *);
-		static unsigned long __stdcall HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, static void(__stdcall  *)(VARIANT *));
+		static unsigned long __stdcall HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, void(__stdcall  *)(VARIANT *));
 		static unsigned long __stdcall HandleAccRoleEvent(IRawElementProviderSimple *, Value *, Value *);
 		static unsigned long __stdcall HandleAccStateChange(IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *);
-		static unsigned long __stdcall HandleBoolProp(Element *, static bool( __stdcall *)(Element *), IRawElementProviderSimple *, int, Value *, Value *);
+		static unsigned long __stdcall HandleBoolProp(Element *, bool (__stdcall *)(Element *), IRawElementProviderSimple *, int, Value *, Value *);
 		static unsigned long __stdcall HandleChildrenEvent(Element *, Value *, Value *);
 		static unsigned long __stdcall HandleRangeValue(Element *, IRawElementProviderSimple *, Value *, Value *);
 		static unsigned long __stdcall HandleScrollPos(Element *, IRawElementProviderSimple *, Value *, Value *);

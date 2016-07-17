@@ -6,16 +6,17 @@ namespace DirectUI
 	{
 	}
 
-	RefcountBase:: ~RefcountBase()
+	RefcountBase::~RefcountBase()
 	{
 
 	}
 
-	long RefcountBase::AddRef()
+	unsigned long WINAPI RefcountBase::AddRef()
 	{
 		return 0;
 	}
-	long RefcountBase::Release()
+
+	unsigned long WINAPI RefcountBase::Release()
 	{
 		return 0;
 	}

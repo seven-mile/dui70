@@ -32,10 +32,11 @@ namespace DirectUI
 	template<class T, int>
 	class DynamicArray;
 
-	class Expression
+	class UILIB_API Expression
 	{
 	public:
-
+		Expression & operator=(Expression const &);
+		void Destroy(void);
 	};
 
 	class StyleSheet

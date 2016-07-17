@@ -70,7 +70,7 @@ namespace DirectUI
 			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
 
 		//1 此函数似乎声明不正确
-		virtual ProviderProxy* GetProxyCreator();
+		virtual ProviderProxyCall WINAPI GetProxyCreator();
 		//2
 		virtual volatile const Element* GetElement();
 

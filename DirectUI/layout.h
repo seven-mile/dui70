@@ -43,7 +43,7 @@ namespace DirectUI
 		void SetCacheDirty();
 	};
 
-	class FillLayout : public Layout
+	class UILIB_API FillLayout : public Layout
 	{
 	public:
 		FillLayout(FillLayout const &);
@@ -54,16 +54,62 @@ namespace DirectUI
 
 		static HRESULT WINAPI Create(int, int*, Value**);
 		static HRESULT WINAPI Create(Layout**);
+
+		void Initialize();
+
 		virtual void DoLayout(Element*, int, int);
 		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
-		void Initialize();
 		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
 	};
 
     class BorderLayout;
-	class GridLayout;
+
+	class UILIB_API GridLayout : public Layout
+	{
+	public:
+		GridLayout(GridLayout const &);
+		GridLayout(void);
+		virtual ~GridLayout(void);
+		GridLayout & operator=(GridLayout const &);
+
+		static long __stdcall Create(int, int, Layout * *);
+		static long __stdcall Create(int, int *, Value * *);
+		void Initialize(int, int);
+		
+		virtual void DoLayout(Element *, int, int);
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+	
+	protected:
+		unsigned int GetCurrentCols(int);
+		unsigned int GetCurrentCols(Element *);
+		unsigned int GetCurrentRows(int);
+		unsigned int GetCurrentRows(Element *);
+	};
+
 	class FillLayout;
-	class FlowLayout;
+
+	class UILIB_API FlowLayout : public Layout
+	{
+	public:
+		FlowLayout(FlowLayout const &);
+		FlowLayout(void);
+		virtual ~FlowLayout(void);
+		FlowLayout & operator=(FlowLayout const &);
+
+		static long __stdcall Create(int, int *, Value * *);
+		static long __stdcall Create(bool, unsigned int, unsigned int, unsigned int, Layout * *);
+		int GetLine(Element *, Element *);
+		void Initialize(bool, unsigned int, unsigned int, unsigned int);
+		virtual void DoLayout(Element *, int, int);
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+
+	protected:
+		static SIZE __stdcall SizeZero(void);
+		SIZE BuildCacheInfo(Element *, int, int, Surface *, bool);
+	};
+
 	class RowLayout;
 	class NineGridLayout;
 	class ShellBorderLayout;

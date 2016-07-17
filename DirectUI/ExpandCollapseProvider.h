@@ -11,7 +11,7 @@ namespace DirectUI
 		virtual ~ExpandCollapseProvider(void);;
 
 
-		virtual ProviderProxyCall GetProxyCreator(void);
+		virtual ProviderProxyCall WINAPI GetProxyCreator(void);
 
 
 		//IUnknown

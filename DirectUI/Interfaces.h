@@ -23,10 +23,7 @@ namespace DirectUI
 	{
 	public:
 	};
-	class IDataEngine
-	{
 
-	};
 	class IDataEntry
 	{
 
@@ -34,21 +31,61 @@ namespace DirectUI
 
 	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
 
-	class IProvider
+	class UILIB_API IProvider
 	{
 	public:
-		virtual ProviderProxyCall GetProxyCreator(void) = 0;
-	};
-	class ISBLeak
-	{
+		IProvider(IProvider const &);
+		IProvider(void);
+		IProvider & operator=(IProvider const &);
 
+		virtual ProviderProxyCall WINAPI GetProxyCreator(void) = 0;
 	};
-	class IXProviderCP
-	{
 
-	};
-	class IXElementCP
+	class UILIB_API ISBLeak
 	{
+	public:
+		ISBLeak(ISBLeak const &);
+		ISBLeak(void);
+		ISBLeak & operator=(ISBLeak const &);
 
+		virtual void T1() = 0;
+		virtual void T2() = 0;
+		virtual void T3() = 0;
 	};
+
+	class UILIB_API IXProviderCP
+	{
+	public:
+		IXProviderCP(IXProviderCP const &);
+		IXProviderCP(void);
+		IXProviderCP & operator=(IXProviderCP const &);
+
+		virtual void T1() = 0;
+		virtual void T2() = 0;
+		virtual void T3() = 0;
+	};
+
+	class UILIB_API IXElementCP
+	{
+	public:
+		IXElementCP(IXElementCP const &);
+		IXElementCP(void);
+		IXElementCP & operator=(IXElementCP const &);
+
+		virtual void T1() = 0;
+	};
+
+	class IDataEngine
+	{
+	public:
+		IDataEngine(IDataEngine const &);
+		IDataEngine(void);
+		IDataEngine & operator=(IDataEngine const &);
+
+		virtual ~IDataEngine(void);
+
+		virtual void T1() = 0;
+		virtual void T2() = 0;
+	};
+
 }

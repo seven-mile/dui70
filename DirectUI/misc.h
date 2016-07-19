@@ -39,11 +39,6 @@ namespace DirectUI
 		void Destroy(void);
 	};
 
-	class StyleSheet
-	{
-	public:
-
-	};
 
 	
 	
@@ -53,7 +48,7 @@ namespace DirectUI
 	public:
 	};
 
-	class Surface
+	class UILIB_API Surface
 	{
 	public:
 
@@ -69,6 +64,8 @@ namespace DirectUI
 
 		static enum EType __stdcall GetSurfaceType(unsigned int);
 		static unsigned int __stdcall GetSurfaceType(enum EType);
+
+		virtual void T1() = 0;
 	};
 
 	class UILIB_API DCSurface
@@ -94,6 +91,18 @@ namespace DirectUI
 
 	struct ElementRuntimeId
 	{
+
+	};
+
+	class UILIB_API ResourceModuleHandles
+	{
+	public:
+		ResourceModuleHandles(void);
+		~ResourceModuleHandles(void);
+		ResourceModuleHandles & operator=(ResourceModuleHandles const &);
+		long GetHandle(unsigned short const *, struct HINSTANCE__ * *);
+	private:
+		static long volatile g_cRefCount;
 
 	};
 }

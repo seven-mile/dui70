@@ -228,6 +228,96 @@
     <ClInclude Include="LinkedList.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="NavScoring.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PushButton.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Navigator.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="PText.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Page.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextGraphic.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Progress.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RadioButtonGlyph.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeValueProvider.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RefPointElement.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RepeatButton.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Repeater.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollBar.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollItem.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Scroll.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollViewer.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionItem.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Selection.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Selector.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectorNoDefault.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectorSelectionItem.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectorSelection.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="StyledScrollViewer.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TableItem.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Table.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskPage.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Thumb.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Toggle.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UnknownElement.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectUI.def">

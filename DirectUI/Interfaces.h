@@ -29,6 +29,42 @@ namespace DirectUI
 
 	};
 
+	class DECLSPEC_NOVTABLE IProxy
+	{
+	public:
+		virtual long DoMethod(int, char *) = 0;
+
+	protected:
+		virtual void Init(Element *) = 0;
+	};
+
+	class UILIB_API Proxy
+	{
+	public:
+		Proxy(Proxy const &);
+		Proxy(void);
+		virtual ~Proxy(void);
+		Proxy & operator=(Proxy const &);
+
+		static long __stdcall SyncCallback(struct HGADGET__ *, void *, struct EventMsg *);
+
+	protected:
+		void Invoke(unsigned int, void *);
+		virtual void OnInvoke(unsigned int, void *);
+
+	};
+
+	class UILIB_API ProviderProxy : public IProxy
+	{
+	public:
+		ProviderProxy(ProviderProxy const &);
+		ProviderProxy & operator=(ProviderProxy const &);
+
+	protected:
+		ProviderProxy(void);
+		virtual void Init(Element *);
+	};
+
 	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
 
 	class UILIB_API IProvider
@@ -38,7 +74,7 @@ namespace DirectUI
 		IProvider(void);
 		IProvider & operator=(IProvider const &);
 
-		virtual ProviderProxyCall WINAPI GetProxyCreator(void) = 0;
+		virtual ProviderProxyCall GetProxyCreator(void) = 0;
 	};
 
 	class UILIB_API ISBLeak
@@ -60,9 +96,9 @@ namespace DirectUI
 		IXProviderCP(void);
 		IXProviderCP & operator=(IXProviderCP const &);
 
-		virtual void T1() = 0;
-		virtual void T2() = 0;
-		virtual void T3() = 0;
+		virtual long CreateDUICP(HWNDElement *, HWND, HWND, Element * *, DUIXmlParser * *) = 0;
+		virtual long CreateParserCP(DUIXmlParser * *) = 0;
+		virtual void DestroyCP(void) = 0;
 	};
 
 	class UILIB_API IXElementCP
@@ -86,6 +122,27 @@ namespace DirectUI
 
 		virtual void T1() = 0;
 		virtual void T2() = 0;
+	};
+
+	class StyleSheet
+	{
+	public:
+		StyleSheet(StyleSheet const &);
+		StyleSheet(void);
+		StyleSheet & operator=(StyleSheet const &);
+
+		static long __stdcall Create(StyleSheet * *);
+
+		virtual void T1() = 0;
+		virtual void T2() = 0;
+		virtual void T3() = 0;
+		virtual void T4() = 0;
+		virtual void T5() = 0;
+		virtual void T6() = 0;
+		virtual void T7() = 0;
+		virtual void T8() = 0;
+
+
 	};
 
 }

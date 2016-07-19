@@ -30,6 +30,8 @@
 #include "base.h"
 #include "AccessibleButton.h"
 #include "AutoButton.h"
+#include "PushButton.h"
+
 #include "event.h"
 #include "layout.h"
 #include "BorderLayout.h"
@@ -80,8 +82,37 @@
 #include "HWNDElementProvider.h"
 #include "InvokeHelper.h"
 #include "LinkedList.h"
+#include "Macro.h"
+#include "NavScoring.h"
+#include "Navigator.h"
+#include "TextGraphic.h"
+#include "PText.h"
+#include "Page.h"
+#include "Progress.h"
+#include "RadioButtonGlyph.h"
+#include "RangeValueProvider.h"
+#include "RefPointElement.h"
+#include "RepeatButton.h"
+#include "Repeater.h"
+#include "ScrollBar.h"
+#include "ScrollItem.h"
+#include "Scroll.h"
+#include "ScrollViewer.h"
+#include "SelectionItem.h"
+#include "Selection.h"
+#include "Selector.h"
+#include "SelectorNoDefault.h"
+#include "SelectorSelectionItem.h"
+#include "SelectorSelection.h"
+#include "StyledScrollViewer.h"
+#include "TableItem.h"
+#include "Table.h"
+#include "TaskPage.h"
+#include "Thumb.h"
+#include "Toggle.h"
+#include "UnknownElement.h"
 
-//LinkedList
+//UnknownElement
 
 namespace DirectUI
 {

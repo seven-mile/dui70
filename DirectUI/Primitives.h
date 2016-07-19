@@ -39,8 +39,10 @@ namespace DirectUI
 
 	};
 
-	struct NavReference
+	class UILIB_API NavReference
 	{
-
+	public:
+		void Init(Element *, RECT *);
+		NavReference& operator=(NavReference const &);
 	};
 }

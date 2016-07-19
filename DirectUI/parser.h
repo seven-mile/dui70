@@ -24,7 +24,9 @@ namespace DirectUI
 
 	};
 
-	class Schema 
+	typedef bool(__stdcall* Unknow3Call )(Element *);
+
+	class UILIB_API Schema
 	{
 	public:
 		enum Pattern
@@ -35,174 +37,171 @@ namespace DirectUI
 		{
 
 		};
-		/*
-public: class DirectUI::Schema & __ptr64 __cdecl DirectUI::Schema::operator=(class DirectUI::Schema const & __ptr64) __ptr64
-public: static int DirectUI::Schema::AcceleratorKeyProperty
-public: static int DirectUI::Schema::AccessKeyProperty
-public: static int DirectUI::Schema::AsyncContentLoadedEvent
-public: static int DirectUI::Schema::AutomationFocusChangedEvent
-public: static int DirectUI::Schema::AutomationIdProperty
-public: static int DirectUI::Schema::AutomationPropertyChangedEvent
-public: static int DirectUI::Schema::BoundingRectangleProperty
-public: static int DirectUI::Schema::ButtonControlType
-public: static int DirectUI::Schema::CalendarControlType
-public: static int DirectUI::Schema::CheckBoxControlType
-public: static int DirectUI::Schema::ClassNameProperty
-public: static int DirectUI::Schema::ClickablePointProperty
-public: static int DirectUI::Schema::ComboBoxControlType
-public: static int DirectUI::Schema::ControlTypeProperty
-public: static long __cdecl DirectUI::Schema::CreatePatternProvider(enum DirectUI::Schema::Pattern,class DirectUI::ElementProvider* __ptr64,struct IUnknown* __ptr64* __ptr64)
-public: static int DirectUI::Schema::CultureProperty
-public: static int DirectUI::Schema::CustomControlType
-public: static int DirectUI::Schema::DataGridControlType
-public: static int DirectUI::Schema::DataItemControlType
-public: static int DirectUI::Schema::DockPattern
-public: static int DirectUI::Schema::DocumentControlType
-public: static int DirectUI::Schema::EditControlType
-public: static enum DirectUI::Schema::Event __cdecl DirectUI::Schema::EventFromEventId(int)
-public: static int DirectUI::Schema::ExpandCollapsePattern
-public: static int DirectUI::Schema::ExpandCollapse_ExpandCollapseState_Property
-public: static int DirectUI::Schema::FrameworkId
-private: static long __cdecl DirectUI::Schema::GetProcs(void)
-public: static int DirectUI::Schema::GridItemPattern
-public: static int DirectUI::Schema::GridItem_ColumnSpan_Property
-public: static int DirectUI::Schema::GridItem_Column_Property
-public: static int DirectUI::Schema::GridItem_Parent_Property
-public: static int DirectUI::Schema::GridItem_RowSpan_Property
-public: static int DirectUI::Schema::GridItem_Row_Property
-public: static int DirectUI::Schema::GridPattern
-public: static int DirectUI::Schema::Grid_ColumnCount_Property
-public: static int DirectUI::Schema::Grid_RowCount_Property
-public: static int DirectUI::Schema::GroupControlType
-public: static int DirectUI::Schema::HasKeyboardFocusProperty
-public: static int DirectUI::Schema::HeaderControlType
-public: static int DirectUI::Schema::HeaderItemControlType
-public: static int DirectUI::Schema::HelpTextProperty
-public: static int DirectUI::Schema::HyperlinkControlType
-public: static int DirectUI::Schema::ImageControlType
-public: static long __cdecl DirectUI::Schema::Init(void)
-public: static int DirectUI::Schema::InvokeInvokedEvent
-public: static int DirectUI::Schema::InvokePattern
-public: static int DirectUI::Schema::IsContentElementProperty
-public: static int DirectUI::Schema::IsControlElementProperty
-public: static int DirectUI::Schema::IsEnabledProperty
-public: static int DirectUI::Schema::IsKeyboardFocusableProperty
-public: static int DirectUI::Schema::IsOffscreen
-public: static int DirectUI::Schema::IsPasswordProperty
-protected: long __cdecl DirectUI::ElementProxy::IsPatternSupported(enum DirectUI::Schema::Pattern,bool* __ptr64) __ptr64
-public: static int DirectUI::Schema::ItemContainerPattern
-public: static int DirectUI::Schema::ItemStatusProperty
-public: static int DirectUI::Schema::ItemTypeProperty
-public: static int DirectUI::Schema::LabeledByProperty
-public: static int DirectUI::Schema::LayoutInvalidatedEvent
-public: static int DirectUI::Schema::ListControlType
-public: static int DirectUI::Schema::ListItemControlType
-public: static int DirectUI::Schema::LocalizedControlTypeProperty
-public: static int __cdecl DirectUI::Schema::LookupAccessibleRole(int,bool* __ptr64)
-private: static long __cdecl DirectUI::Schema::LookupControlInfos(void)
-private: static long __cdecl DirectUI::Schema::LookupEventInfos(void)
-private: static long __cdecl DirectUI::Schema::LookupPatternInfos(void)
-private: static long __cdecl DirectUI::Schema::LookupPropertyInfos(void)
-public: static int DirectUI::Schema::MenuBarControlType
-public: static int DirectUI::Schema::MenuClosedEvent
-public: static int DirectUI::Schema::MenuControlType
-public: static int DirectUI::Schema::MenuItemControlType
-public: static int DirectUI::Schema::MenuOpenedEvent
-public: static int DirectUI::Schema::MultipleViewPattern
-public: static int DirectUI::Schema::NameProperty
-public: static int DirectUI::Schema::NewNativeWindowHandleProperty
-public: static int DirectUI::Schema::NullControlType
-public: static int DirectUI::Schema::Orientation
-public: static int DirectUI::Schema::PaneControlType
-public: static enum DirectUI::Schema::Pattern __cdecl DirectUI::Schema::PatternFromPatternId(int)
-public: static bool (__cdecl*__cdecl DirectUI::Schema::PfnIsSupportedFromPattern(enum DirectUI::Schema::Pattern))(class DirectUI::Element* __ptr64)
-public: static int DirectUI::Schema::ProcessIdProperty
-public: static int DirectUI::Schema::ProgressBarControlType
-public: static int DirectUI::Schema::RadioButtonControlType
-public: static int DirectUI::Schema::RangeValuePattern
-public: static int DirectUI::Schema::RangeValue_IsReadOnly_Property
-public: static int DirectUI::Schema::RangeValue_LargeChange_Property
-public: static int DirectUI::Schema::RangeValue_Maximum_Property
-public: static int DirectUI::Schema::RangeValue_Minimum_Property
-public: static int DirectUI::Schema::RangeValue_SmallChange_Property
-public: static int DirectUI::Schema::RangeValue_Value_Property
-public: static int DirectUI::Schema::RuntimeIdProperty
-public: static int DirectUI::Schema::ScrollBarControlType
-public: static int DirectUI::Schema::ScrollItemPattern
-public: static int DirectUI::Schema::ScrollPattern
-public: static int DirectUI::Schema::Scroll_HorizontalScrollPercent_Property
-public: static int DirectUI::Schema::Scroll_HorizontalViewSize_Property
-public: static int DirectUI::Schema::Scroll_HorizontallyScrollable_Property
-public: static int DirectUI::Schema::Scroll_VerticalScrollPercent_Property
-public: static int DirectUI::Schema::Scroll_VerticalViewSize_Property
-public: static int DirectUI::Schema::Scroll_VerticallyScrollable_Property
-public: static int DirectUI::Schema::SelectionInvalidatedEvent
-public: static int DirectUI::Schema::SelectionItemElementAddedToSelectionEvent
-public: static int DirectUI::Schema::SelectionItemElementRemovedFromSelectionEvent
-public: static int DirectUI::Schema::SelectionItemElementSelectedEvent
-public: static int DirectUI::Schema::SelectionItemPattern
-public: static int DirectUI::Schema::SelectionItem_IsSelected_Property
-public: static int DirectUI::Schema::SelectionItem_SelectionContainer_Property
-public: static int DirectUI::Schema::SelectionPattern
-public: static int DirectUI::Schema::Selection_CanSelectMultiple_Property
-public: static int DirectUI::Schema::Selection_IsSelectionRequired_Property
-public: static int DirectUI::Schema::Selection_Selection_Property
-public: static int DirectUI::Schema::SeparatorControlType
-public: static int DirectUI::Schema::SliderControlType
-public: static int DirectUI::Schema::SpinnerControlType
-public: static int DirectUI::Schema::SplitButtonControlType
-public: static int DirectUI::Schema::StatusBarControlType
-public: static int DirectUI::Schema::StructureChangedEvent
-public: static int DirectUI::Schema::TabControlType
-public: static int DirectUI::Schema::TabItemControlType
-public: static int DirectUI::Schema::TableControlType
-public: static int DirectUI::Schema::TableItemPattern
-public: static int DirectUI::Schema::TableItem_ColumnHeaderItems_Property
-public: static int DirectUI::Schema::TableItem_RowHeaderItems_Property
-public: static int DirectUI::Schema::TablePattern
-public: static int DirectUI::Schema::Table_ColumnHeaders_Property
-public: static int DirectUI::Schema::Table_RowHeaders_Property
-public: static int DirectUI::Schema::Table_RowOrColumnMajor_Property
-public: static int DirectUI::Schema::TextControlType
-public: static int DirectUI::Schema::TextPattern
-public: static int DirectUI::Schema::TextTextSelectionChangedEvent
-public: static int DirectUI::Schema::ThumbControlType
-public: static int DirectUI::Schema::TitleBarControlType
-public: static int DirectUI::Schema::TogglePattern
-public: static int DirectUI::Schema::Toggle_ToggleState_Property
-public: static int DirectUI::Schema::ToolBarControlType
-public: static int DirectUI::Schema::ToolTipClosedEvent
-public: static int DirectUI::Schema::ToolTipControlType
-public: static int DirectUI::Schema::ToolTipOpenedEvent
-public: void __cdecl DirectUI::ElementProvider::TossPatternProvider(enum DirectUI::Schema::Pattern) __ptr64
-public: static int DirectUI::Schema::TransformPattern
-public: static int DirectUI::Schema::TreeControlType
-public: static int DirectUI::Schema::TreeItemControlType
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaHostProviderFromHwnd)(struct HWND__* __ptr64,struct IRawElementProviderSimple* __ptr64* __ptr64)
-public: static int (__cdecl* __ptr64 DirectUI::Schema::UiaLookupId)(enum AutomationIdentifierType,struct _GUID const* __ptr64)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationEvent)(struct IRawElementProviderSimple* __ptr64,int)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseAutomationPropertyChangedEvent)(struct IRawElementProviderSimple* __ptr64,int,struct tagVARIANT,struct tagVARIANT)
-public: static long (__cdecl* __ptr64 DirectUI::Schema::UiaRaiseStructureChangedEvent)(struct IRawElementProviderSimple* __ptr64,enum StructureChangeType,int* __ptr64,int)
-public: static __int64 (__cdecl* __ptr64 DirectUI::Schema::UiaReturnRawElementProvider)(struct HWND__* __ptr64,unsigned __int64,__int64,struct IRawElementProviderSimple* __ptr64)
-public: static int DirectUI::Schema::ValuePattern
-public: static int DirectUI::Schema::Value_IsReadOnly_Property
-public: static int DirectUI::Schema::Value_Value_Property
-public: static int DirectUI::Schema::VirtualizedItemPattern
-private: static bool __cdecl DirectUI::EventManager::WantEvent(enum DirectUI::Schema::Event,int)
-public: static bool __cdecl DirectUI::EventManager::WantEvent(enum DirectUI::Schema::Event)
-public: static int DirectUI::Schema::WindowControlType
-public: static int DirectUI::Schema::WindowPattern
-public: static int DirectUI::Schema::WindowWindowClosedEvent
-public: static int DirectUI::Schema::WindowWindowOpenedEvent
-private: static struct DirectUI::Schema::RoleMap const* const DirectUI::Schema::_roleMapping
-private: static struct DirectUI::Schema::ControlInfo const* const DirectUI::Schema::g_controlInfoTable
-private: static struct DirectUI::Schema::EventInfo const* const DirectUI::Schema::g_eventInfoTable
-private: static struct DirectUI::Schema::EventMap const* const DirectUI::Schema::g_eventMapping
-private: static bool DirectUI::Schema::g_fInited
-private: static struct DirectUI::Schema::PatternInfo const* const DirectUI::Schema::g_patternInfoTable
-private: static struct DirectUI::Schema::PatternMap const* const DirectUI::Schema::g_patternMapping
-private: static struct DirectUI::Schema::const PropertyInfo* const DirectUI::Schema::g_propertyInfoTable
-*/
+		
+		Schema & operator=(Schema const &);
+		static int AcceleratorKeyProperty;
+		static int AccessKeyProperty;
+		static int AsyncContentLoadedEvent;
+		static int AutomationFocusChangedEvent;
+		static int AutomationIdProperty;
+		static int AutomationPropertyChangedEvent;
+		static int BoundingRectangleProperty;
+		static int ButtonControlType;
+		static int CalendarControlType;
+		static int CheckBoxControlType;
+		static int ClassNameProperty;
+		static int ClickablePointProperty;
+		static int ComboBoxControlType;
+		static int ControlTypeProperty;
+		static long __stdcall CreatePatternProvider(Pattern, ElementProvider *, IUnknown * *);
+		static int CultureProperty;
+		static int CustomControlType;
+		static int DataGridControlType;
+		static int DataItemControlType;
+		static int DockPattern;
+		static int DocumentControlType;
+		static int EditControlType;
+		static Event __stdcall EventFromEventId(int);
+		static int ExpandCollapsePattern;
+		static int ExpandCollapse_ExpandCollapseState_Property;
+		static int FrameworkId;
+		static int GridItemPattern;
+		static int GridItem_ColumnSpan_Property;
+		static int GridItem_Column_Property;
+		static int GridItem_Parent_Property;
+		static int GridItem_RowSpan_Property;
+		static int GridItem_Row_Property;
+		static int GridPattern;
+		static int Grid_ColumnCount_Property;
+		static int Grid_RowCount_Property;
+		static int GroupControlType;
+		static int HasKeyboardFocusProperty;
+		static int HeaderControlType;
+		static int HeaderItemControlType;
+		static int HelpTextProperty;
+		static int HyperlinkControlType;
+		static int ImageControlType;
+		static long __stdcall Init(void);
+		static int InvokeInvokedEvent;
+		static int InvokePattern;
+		static int IsContentElementProperty;
+		static int IsControlElementProperty;
+		static int IsEnabledProperty;
+		static int IsKeyboardFocusableProperty;
+		static int IsOffscreen;
+		static int IsPasswordProperty;
+		static int ItemContainerPattern;
+		static int ItemStatusProperty;
+		static int ItemTypeProperty;
+		static int LabeledByProperty;
+		static int LayoutInvalidatedEvent;
+		static int ListControlType;
+		static int ListItemControlType;
+		static int LocalizedControlTypeProperty;
+		static int __stdcall LookupAccessibleRole(int, bool *);
+		static int MenuBarControlType;
+		static int MenuClosedEvent;
+		static int MenuControlType;
+		static int MenuItemControlType;
+		static int MenuOpenedEvent;
+		static int MultipleViewPattern;
+		static int NameProperty;
+		static int NewNativeWindowHandleProperty;
+		static int NullControlType;
+		static int Orientation;
+		static int PaneControlType;
+		static Pattern __stdcall PatternFromPatternId(int);
+		static Unknow3Call __stdcall PfnIsSupportedFromPattern(Pattern);
+		static int ProcessIdProperty;
+		static int ProgressBarControlType;
+		static int RadioButtonControlType;
+		static int RangeValuePattern;
+		static int RangeValue_IsReadOnly_Property;
+		static int RangeValue_LargeChange_Property;
+		static int RangeValue_Maximum_Property;
+		static int RangeValue_Minimum_Property;
+		static int RangeValue_SmallChange_Property;
+		static int RangeValue_Value_Property;
+		static int RuntimeIdProperty;
+		static int ScrollBarControlType;
+		static int ScrollItemPattern;
+		static int ScrollPattern;
+		static int Scroll_HorizontalScrollPercent_Property;
+		static int Scroll_HorizontalViewSize_Property;
+		static int Scroll_HorizontallyScrollable_Property;
+		static int Scroll_VerticalScrollPercent_Property;
+		static int Scroll_VerticalViewSize_Property;
+		static int Scroll_VerticallyScrollable_Property;
+		static int SelectionInvalidatedEvent;
+		static int SelectionItemElementAddedToSelectionEvent;
+		static int SelectionItemElementRemovedFromSelectionEvent;
+		static int SelectionItemElementSelectedEvent;
+		static int SelectionItemPattern;
+		static int SelectionItem_IsSelected_Property;
+		static int SelectionItem_SelectionContainer_Property;
+		static int SelectionPattern;
+		static int Selection_CanSelectMultiple_Property;
+		static int Selection_IsSelectionRequired_Property;
+		static int Selection_Selection_Property;
+		static int SeparatorControlType;
+		static int SliderControlType;
+		static int SpinnerControlType;
+		static int SplitButtonControlType;
+		static int StatusBarControlType;
+		static int StructureChangedEvent;
+		static int TabControlType;
+		static int TabItemControlType;
+		static int TableControlType;
+		static int TableItemPattern;
+		static int TableItem_ColumnHeaderItems_Property;
+		static int TableItem_RowHeaderItems_Property;
+		static int TablePattern;
+		static int Table_ColumnHeaders_Property;
+		static int Table_RowHeaders_Property;
+		static int Table_RowOrColumnMajor_Property;
+		static int TextControlType;
+		static int TextPattern;
+		static int TextTextSelectionChangedEvent;
+		static int ThumbControlType;
+		static int TitleBarControlType;
+		static int TogglePattern;
+		static int Toggle_ToggleState_Property;
+		static int ToolBarControlType;
+		static int ToolTipClosedEvent;
+		static int ToolTipControlType;
+		static int ToolTipOpenedEvent;
+		static int TransformPattern;
+		static int TreeControlType;
+		static int TreeItemControlType;
+		static long(__stdcall* UiaHostProviderFromHwnd)(HWND, IRawElementProviderSimple * *);
+		static int(__stdcall* UiaLookupId)(enum AutomationIdentifierType, GUID const *);
+		static long(__stdcall* UiaRaiseAutomationEvent)(IRawElementProviderSimple *, int);
+		static long(__stdcall* UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple *, int, VARIANT, VARIANT);
+		static long(__stdcall* UiaRaiseStructureChangedEvent)(IRawElementProviderSimple *, enum StructureChangeType, int *, int);
+		static long(__stdcall* UiaReturnRawElementProvider)(HWND, unsigned int, long, IRawElementProviderSimple *);
+		static int ValuePattern;
+		static int Value_IsReadOnly_Property;
+		static int Value_Value_Property;
+		static int VirtualizedItemPattern;
+		static int WindowControlType;
+		static int WindowPattern;
+		static int WindowWindowClosedEvent;
+		static int WindowWindowOpenedEvent;
+	private:
+		static long __stdcall LookupControlInfos(void);
+		static long __stdcall LookupEventInfos(void);
+		static long __stdcall LookupPatternInfos(void);
+		static long __stdcall LookupPropertyInfos(void);
+		static long __stdcall GetProcs(void);
+
+		static struct RoleMap const * const _roleMapping;
+		static struct ControlInfo const * const g_controlInfoTable;
+		static struct EventInfo const * const g_eventInfoTable;
+		static struct EventMap const * const g_eventMapping;
+		static bool g_fInited;
+		static struct PatternInfo const * const g_patternInfoTable;
+		static struct PatternMap const * const g_patternMapping;
+		static struct PropertyInfo const * const g_propertyInfoTable;
 	};
 
 	typedef Value* (WINAPI* GetSheetCallback)(UCString, void*);

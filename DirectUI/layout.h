@@ -110,10 +110,90 @@ namespace DirectUI
 		SIZE BuildCacheInfo(Element *, int, int, Surface *, bool);
 	};
 
-	class RowLayout;
-	class NineGridLayout;
-	class ShellBorderLayout;
-	class TableLayout;
+	class UILIB_API RowLayout : public Layout
+	{
+	public:
+		RowLayout(RowLayout const &);
+		RowLayout(void);
+		virtual ~RowLayout(void);
+		RowLayout & operator=(RowLayout const &);
+
+		static long __stdcall Create(int, unsigned int, unsigned int, Layout * *);
+		static long __stdcall Create(int, int *, Value * *);
+		static long __stdcall Create(unsigned int, unsigned int, Layout * *);
+		
+		long Initialize(int, unsigned int, unsigned int);
+		
+		virtual void DoLayout(Element *, int, int);
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual struct tagSIZE UpdateDesiredSize(Element *, int, int, Surface *);
+
+	};
+
+	class UILIB_API NineGridLayout : public Layout
+	{
+	public:
+		NineGridLayout(NineGridLayout const &);
+		NineGridLayout(void);
+		virtual ~NineGridLayout(void);
+		NineGridLayout & operator=(NineGridLayout const &);
+
+		static long __stdcall Create(int, int *, Value * *);
+		static long __stdcall Create(Layout * *);
+
+		void Initialize(void);
+
+		virtual void DoLayout(Element *, int, int);
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual void OnAdd(Element *, Element * *, unsigned int);
+		virtual void OnLayoutPosChanged(Element *, Element *, int, int);
+		virtual void OnRemove(Element *, Element * *, unsigned int);
+		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+
+	private:
+		void _UpdateTileList(int, Element *);
+
+	};
+
+	class UILIB_API ShellBorderLayout : public BorderLayout
+	{
+	public:
+		ShellBorderLayout(ShellBorderLayout const &);
+		ShellBorderLayout(void);
+		virtual ~ShellBorderLayout(void);
+		ShellBorderLayout & operator=(ShellBorderLayout const &);
+
+		static long __stdcall Create(int, int *, Value * *);
+		static long __stdcall Create(Layout * *);
+		
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual void OnAdd(Element *, Element * *, unsigned int);
+		virtual void OnLayoutPosChanged(Element *, Element *, int, int);
+		virtual void OnRemove(Element *, Element * *, unsigned int);
+	private:
+		long _CalcTabOrder(Element *);
+		void _Reset(void);
+
+	};
+
+	class UILIB_API TableLayout : public Layout
+	{
+	public:
+		TableLayout(TableLayout const &);
+		TableLayout(void);
+		virtual ~TableLayout(void);
+		TableLayout & operator=(TableLayout const &);
+
+		static long __stdcall Create(int, int *, Value * *);
+		static long __stdcall InternalCreate(int, int, int, int *, Layout * *);
+		class CellInfo * GetCellInfo(int);
+		void Initialize(int, int, int, int *);
+
+		virtual void DoLayout(Element *, int, int);
+		virtual Element * GetAdjacent(Element *, Element *, int, NavReference const *, unsigned long);
+		virtual SIZE UpdateDesiredSize(Element *, int, int, Surface *);
+
+	};
 
 
 	class VerticalFlowLayout : public Layout

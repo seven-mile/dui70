@@ -431,4 +431,127 @@ namespace DirectUI
 		long _PreSourceChange( const PropertyInfo* (WINAPI*)(void), int, Value*, Value*);
 		long _PreSourceChange(const PropertyInfo*, int, Value*, Value*);
 	};
+
+	class UILIB_API ElementProxy : public IProxy
+	{
+	public:
+		ElementProxy(ElementProxy const &);
+		ElementProxy(void);
+		ElementProxy & operator=(ElementProxy const &);
+
+		static ElementProxy * __stdcall Create(Element *);
+		//1
+		virtual long DoMethod(int, char *);
+	protected:
+		long GetAutomationId(VARIANT *);
+		long GetBoundingRect(struct UiaRect *);
+		long GetContent(VARIANT *, IAccessible *);
+		void GetControlType(VARIANT *, IAccessible *);
+		long GetFragmentRoot(IRawElementProviderFragmentRoot * *);
+		long GetHwnd(HWND *);
+		long GetLabel(VARIANT *);
+		long GetProperty(VARIANT *, int);
+		long GetProviderOptions(ProviderOptions *);
+		long GetRuntimeId(SAFEARRAY * *);
+		long IsPatternSupported(Schema::Pattern, bool *);
+		long Navigate(NavigateDirection, IRawElementProviderFragment**);
+		long SetString(VARIANT *, UCString(DirectUI::Element::*)(Value * *));
+		int _UsesUIAProxies(void);
+
+		//2
+		virtual void Init(Element *);
+
+	};
+
+	//此类的声明很可能错误
+	class UILIB_API ElementProvider
+		: public RefcountBase
+		, public IRawElementProviderSimple
+		, public IRawElementProviderFragment
+		, public IRawElementProviderAdviseEvents
+	{
+	public:
+		ElementProvider();
+		virtual ~ElementProvider();
+
+		static long WINAPI Create(Element*, class  InvokeHelper*, ElementProvider**out);
+
+		long DoInvokeArgs(int, class ProviderProxy* (__cdecl*)(Element*), char*);
+		const Element* GetElementKey();
+		void TossElement();
+		void TossPatternProvider(Schema::Pattern);
+
+
+		//IUnknown
+		virtual unsigned long WINAPI AddRef();
+		virtual unsigned long WINAPI Release();
+		virtual long WINAPI QueryInterface(const GUID&, void**);
+
+		//IRawElementProviderSimple
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_ProviderOptions(
+			/* [retval][out] */ __RPC__out enum ProviderOptions *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetPatternProvider(
+			/* [in] */ PATTERNID patternId,
+			/* [retval][out] */ __RPC__deref_out_opt IUnknown **pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetPropertyValue(
+			/* [in] */ PROPERTYID propertyId,
+			/* [retval][out] */ __RPC__out VARIANT *pRetVal);
+
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_HostRawElementProvider(
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderSimple **pRetVal);
+
+		//IRawElementProviderFragment
+		virtual HRESULT STDMETHODCALLTYPE Navigate(
+			/* [in] */ enum NavigateDirection direction,
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderFragment **pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetRuntimeId(
+			/* [retval][out] */ __RPC__deref_out_opt SAFEARRAY * *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE get_BoundingRectangle(
+			/* [retval][out] */ __RPC__out struct UiaRect *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE GetEmbeddedFragmentRoots(
+			/* [retval][out] */ __RPC__deref_out_opt SAFEARRAY * *pRetVal);
+
+		virtual HRESULT STDMETHODCALLTYPE SetFocus(void);
+
+		virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_FragmentRoot(
+			/* [retval][out] */ __RPC__deref_out_opt IRawElementProviderFragmentRoot **pRetVal);
+
+		//IRawElementProviderAdviseEvents
+		virtual HRESULT STDMETHODCALLTYPE AdviseEventAdded(
+			/* [in] */ EVENTID eventId,
+			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
+
+		virtual HRESULT STDMETHODCALLTYPE AdviseEventRemoved(
+			/* [in] */ EVENTID eventId,
+			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
+
+		//1 此函数似乎声明不正确
+		virtual ProviderProxyCall GetProxyCreator();
+		//2
+		virtual volatile const Element* GetElement();
+
+	protected:
+		//3
+		virtual long Init(Element*, InvokeHelper*);
+		long DoInvoke(int, ...);
+	};
+
+	class UILIB_API ElementProviderManager
+	{
+	public:
+		ElementProviderManager & __thiscall operator=(class DirectUI::ElementProviderManager const &);
+
+		static unsigned long Add(ElementProvider *);
+		static void __stdcall Close();
+		static ElementProvider *__stdcall Find(Element *);
+		static bool __stdcall FindProviderCallback(ElementProvider *, void *);
+		static unsigned long __stdcall Init();
+		static void __stdcall Remove(ElementProvider *);
+	};
+
 }

@@ -41,7 +41,7 @@ namespace DirectUI
 		virtual ~InvokeProvider(void);
 
 		virtual unsigned long __stdcall AddRef(void);
-		virtual ProviderProxyCall __stdcall GetProxyCreator(void);
+		virtual ProviderProxyCall GetProxyCreator(void);
 		virtual long __stdcall Invoke(void);
 		virtual long __stdcall QueryInterface(GUID const &, void * *);
 		virtual unsigned long __stdcall Release(void);

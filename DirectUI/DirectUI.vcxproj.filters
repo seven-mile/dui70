@@ -186,19 +186,7 @@
     <ClInclude Include="Edit.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
-    <ClInclude Include="ElementProviderManager.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ElementProxy.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
     <ClInclude Include="EventManager.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ExpandCollapseProvider.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="ExpandCollapseProxy.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="Expando.h">
@@ -211,15 +199,6 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="FontCheckOut.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GridItemProvider.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="GridProvider.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="HWNDElementProvider.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="InvokeHelper.h">
@@ -253,9 +232,6 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="RadioButtonGlyph.h">
-      <Filter>头文件\DirectUI</Filter>
-    </ClInclude>
-    <ClInclude Include="RangeValueProvider.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="RefPointElement.h">
@@ -328,6 +304,18 @@
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
     <ClInclude Include="XProvider.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="ExpandCollapse.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GridItem.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RangeValue.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
   </ItemGroup>

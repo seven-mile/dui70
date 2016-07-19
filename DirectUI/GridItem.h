@@ -10,7 +10,7 @@ namespace DirectUI
 		virtual ~GridItemProvider(void);
 
 		virtual unsigned long __stdcall AddRef(void);
-		virtual ProviderProxyCall __stdcall GetProxyCreator(void);;
+		virtual ProviderProxyCall GetProxyCreator(void);;
 		virtual long __stdcall QueryInterface(GUID const &, void * *);
 		virtual unsigned long __stdcall Release(void);
 		virtual long __stdcall get_Column(int *);
@@ -20,7 +20,7 @@ namespace DirectUI
 		virtual long __stdcall get_RowSpan(int *);
 	};
 
-	class UILIB_API GridItemProxy
+	class UILIB_API GridItemProxy : public IProxy
 	{
 	public:
 		GridItemProxy(GridItemProxy const &);

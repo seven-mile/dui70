@@ -11,7 +11,7 @@ namespace DirectUI
 		virtual ~ExpandCollapseProvider(void);;
 
 
-		virtual ProviderProxyCall WINAPI GetProxyCreator(void);
+		virtual ProviderProxyCall GetProxyCreator(void);
 
 
 		//IUnknown
@@ -33,4 +33,21 @@ namespace DirectUI
 			/* [retval][out] */ __RPC__out enum ExpandCollapseState *pRetVal);
 
 	};
+
+	class UILIB_API ExpandCollapseProxy : public IProxy
+	{
+	public:
+		ExpandCollapseProxy(ExpandCollapseProxy const &);
+		ExpandCollapseProxy(void);
+		ExpandCollapseProxy & operator=(ExpandCollapseProxy const &);
+
+		static ExpandCollapseProxy * __stdcall Create(Element *);
+		//1
+		virtual long DoMethod(int, char *);
+	protected:
+		static bool __stdcall IsPatternSupported(Element *);
+		//2
+		virtual void Init(Element *);
+	};
+
 }

@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class XHost
+	class UILIB_API XHost
 	{
 	public:
 

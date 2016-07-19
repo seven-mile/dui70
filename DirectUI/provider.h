@@ -98,48 +98,7 @@ namespace DirectUI
 			
     };
 	
-	class XProvider 
-	{
-	public:
-		XProvider();
-		XProvider( const XProvider& );
-		virtual ~XProvider(); 
-
-		XProvider& operator=( const XProvider& );
-
-		virtual unsigned long AddRef();
-		virtual long CanSetFocus(bool*);
-		virtual int ClickDefaultButton();
-
-		long Initialize(Element*, IXProviderCP*);
-		static long Create(Element*, IXProviderCP*, XProvider**);
-		virtual long CreateDUI(IXElementCP*, HWND);
-		long CreateParser(DUIXmlParser**);
-
-		virtual int FindElementWithShortcutAndDoDefaultAction(unsigned short, int);
-		virtual long ForceThemeChange(unsigned __int64, __int64);
-
-		virtual long GetDesiredSize(int, int, LPSIZE);
-		virtual long GetHostedElementID(UString id);
-
-		virtual long IsDescendent(Element*, bool*);
-		virtual long Navigate(int, bool*);
-		virtual long QueryInterface(const GUID&, void**pUnk);
-
-		virtual unsigned long Release();
-		virtual long SetButtonClassAcceptsEnterKey(bool);
-
-		virtual long SetDefaultButtonTracking(bool);
-		virtual long SetFocus(Element*);
-		virtual long SetParameter(const GUID&, void*);
-		virtual long SetRegisteredDefaultButton(Element*);
-
-	protected:
-		void SetHandleEnterKey(bool);
-		Element* GetRoot();
-	};
-	
-	class XResourceProvider : public XProvider
+	class UILIB_API XResourceProvider
 	{
 	public:
 		XResourceProvider();
@@ -148,11 +107,15 @@ namespace DirectUI
 
 		static long Create(XResourceProvider**pOut);
 		static long Create(HINSTANCE, UCString, UCString, UCString, XResourceProvider**pOut );
-		virtual long CreateDUICP(HWNDElement*, HWND, HWND, Element**, class DUIXmlParser**);
-		virtual long CreateParserCP(class DUIXmlParser**pOut);
-
-		virtual void DestroyCP();
+		
 		long Initialize(HINSTANCE h, UCString s1, UCString s2, UCString s3);
+		
+		//1
+		virtual long CreateDUICP(HWNDElement*, HWND, HWND, Element**, class DUIXmlParser**);
+		//2
+		virtual long CreateParserCP(class DUIXmlParser**pOut);
+		//3
+		virtual void DestroyCP();
 
 	};
 }

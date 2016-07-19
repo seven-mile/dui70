@@ -111,6 +111,10 @@
 #include "Thumb.h"
 #include "Toggle.h"
 #include "UnknownElement.h"
+#include "Viewer.h"
+#include "XBaby.h"
+#include "XElement.h"
+#include "XProvider.h"
 
 //UnknownElement
 

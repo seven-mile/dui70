@@ -318,6 +318,18 @@
     <ClInclude Include="UnknownElement.h">
       <Filter>头文件\DirectUI</Filter>
     </ClInclude>
+    <ClInclude Include="Viewer.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="XBaby.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="XElement.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="XProvider.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DirectUI.def">

@@ -196,7 +196,7 @@ namespace DirectUI
 	};
 
 
-	class VerticalFlowLayout : public Layout
+	class UILIB_API VerticalFlowLayout : public Layout
 	{
 	public:	
 		enum Align
@@ -216,10 +216,12 @@ namespace DirectUI
 
 		static HRESULT WINAPI Create(int, int*, Value**);
 		static HRESULT WINAPI Create(bool, unsigned int horAlign, unsigned int, unsigned int vertAlign, Layout**);
-		virtual void DoLayout(Element*, int, int);
-		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
+		
 		int GetLine(Element*, Element*);
 		void Initialize(bool, unsigned int, unsigned int, unsigned int);
+
+		virtual void DoLayout(Element*, int, int);
+		virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
 		virtual SIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
 	protected:

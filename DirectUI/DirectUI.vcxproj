@@ -249,6 +249,10 @@
     <ClInclude Include="types.h" />
     <ClInclude Include="UnknownElement.h" />
     <ClInclude Include="Value.h" />
+    <ClInclude Include="Viewer.h" />
+    <ClInclude Include="XBaby.h" />
+    <ClInclude Include="XElement.h" />
+    <ClInclude Include="XProvider.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="accessibility.cpp" />

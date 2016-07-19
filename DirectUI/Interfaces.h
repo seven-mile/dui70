@@ -108,7 +108,7 @@ namespace DirectUI
 		IXElementCP(void);
 		IXElementCP & operator=(IXElementCP const &);
 
-		virtual void T1() = 0;
+		virtual HWND GetNotificationSinkHWND(void) = 0;
 	};
 
 	class IDataEngine

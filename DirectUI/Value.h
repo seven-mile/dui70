@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class Value
+	class UILIB_API Value
 	{
 	public:
 		Value& operator=(const Value &);
@@ -80,5 +80,39 @@ namespace DirectUI
 	private:
 		void _ZeroRelease();
 		static long StrDupW(UCString, UString*);
+	};
+
+	class UILIB_API ValueProvider : public PatternProvider<ValueProvider, IValueProvider, 12>
+	{
+	public:
+		ValueProvider(void);
+		virtual ~ValueProvider(void);
+		virtual unsigned long __stdcall AddRef(void);
+		virtual ProviderProxyCall GetProxyCreator(void);
+		virtual long __stdcall QueryInterface(GUID const &, void * *);
+		virtual unsigned long __stdcall Release(void);
+		virtual long __stdcall SetValue(unsigned short const *);
+		virtual long __stdcall get_IsReadOnly(int *);
+		virtual long __stdcall get_Value(unsigned short * *);
+	};
+
+	class UILIB_API ValueProxy : IProxy
+	{
+	public:
+		ValueProxy(ValueProxy const &);
+		ValueProxy(void);
+		ValueProxy & operator=(ValueProxy const &);
+		static ValueProxy * __stdcall Create(Element *);
+		static bool __stdcall IsPatternSupported(Element *);
+
+		virtual long DoMethod(int, char *);
+
+	protected:
+		virtual void Init(Element *);
+
+	private:
+		long GetIsReadOnly(int *);
+		long GetValue(unsigned short * *);
+		long SetValue(unsigned short const *);
 	};
 }

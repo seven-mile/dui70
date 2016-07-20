@@ -57,15 +57,6 @@ namespace DirectUI
 		long Register();
 	};
 
-	class UILIB_API RefcountBase
-	{
-	public:
-		RefcountBase();
-		virtual ~RefcountBase();
-
-		unsigned long WINAPI AddRef();
-		unsigned long WINAPI Release();
-	};
 
 	class UILIB_API BaseScrollBar
 	{

@@ -2,22 +2,22 @@
 
 namespace DirectUI
 {
-    // exported for int
-    template<typename>
-    class SafeArrayAccessor 
-    {
+  // exported for int
+  template<typename T>
+  class SafeArrayAccessor 
+  {
 	public:
-        SafeArrayAccessor();
-        ~SafeArrayAccessor();
-        operator typename*();
-        long Access(SAFEARRAY *, UChar);
-        int Count();
-           
+    SafeArrayAccessor();
+    ~SafeArrayAccessor();
+    operator T*();
+    long Access(SAFEARRAY *, UChar);
+    int Count();
+      
 	private:
 		void*unk1;
 		void*unk2;
 		void*unk3;
-    };
+  };
 
 	class UILIB_API CritSecLock
 	{
@@ -80,7 +80,7 @@ namespace DirectUI
 		virtual Surface::EType GetType(void) const;
 	};
 
-	struct  Event
+	struct Event
 	{
 	};
 
@@ -100,9 +100,12 @@ namespace DirectUI
 		ResourceModuleHandles(void);
 		~ResourceModuleHandles(void);
 		ResourceModuleHandles & operator=(ResourceModuleHandles const &);
-		long GetHandle(unsigned short const *, struct HINSTANCE__ * *);
+		long GetHandle(unsigned short const *, HINSTANCE *);
 	private:
 		static long volatile g_cRefCount;
 
 	};
+
+
+
 }

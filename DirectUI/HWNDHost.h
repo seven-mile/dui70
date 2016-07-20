@@ -97,7 +97,7 @@ namespace DirectUI
 		virtual bool EraseBkgnd(HDC, LRESULT*);
 
 	private:
-		static unsigned int const (*g_rgMouseMap)[3];
+		static unsigned int const *g_rgMouseMap[3];
 		static IClassInfo* s_pClassInfo;
 		static int _CtrlWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
 		static int _SinkWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);

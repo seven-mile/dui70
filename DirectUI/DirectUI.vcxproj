@@ -251,14 +251,7 @@
     <ClInclude Include="XProvider.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="accessibility.cpp" />
-    <ClCompile Include="Base.cpp" />
-    <ClCompile Include="Button.cpp" />
     <ClCompile Include="DirectUI.cpp" />
-    <ClCompile Include="Element.cpp" />
-    <ClCompile Include="host.cpp" />
-    <ClCompile Include="NativeHWNDHost.cpp" />
-    <ClCompile Include="parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

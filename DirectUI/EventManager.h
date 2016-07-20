@@ -5,7 +5,7 @@ namespace DirectUI
 	class UILIB_API EventManager
 	{
 	public:
-		EventManager & __thiscall operator=(EventManager const &);
+		EventManager & operator=(EventManager const &);
 
 		static unsigned long __stdcall AddRectangleChange(Element *, bool, bool);
 		static unsigned long __stdcall AdviseEventAdded(LPCRITICAL_SECTION lpCriticalSection, SAFEARRAY *);
@@ -23,7 +23,7 @@ namespace DirectUI
 		static void __stdcall GetToggleState(VARIANT *);
 		static unsigned long __stdcall HandleAccChange(Element *, IRawElementProviderSimple *, Value *, Value *);
 		static unsigned long __stdcall HandleAccDesc(Element *, IRawElementProviderSimple *, Value *, Value *);
-		static unsigned long __stdcall HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, void(__stdcall  *)(VARIANT *));
+		static unsigned long __stdcall HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, void(__stdcall *)(VARIANT *));
 		static unsigned long __stdcall HandleAccRoleEvent(IRawElementProviderSimple *, Value *, Value *);
 		static unsigned long __stdcall HandleAccStateChange(IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *);
 		static unsigned long __stdcall HandleBoolProp(Element *, bool (__stdcall *)(Element *), IRawElementProviderSimple *, int, Value *, Value *);

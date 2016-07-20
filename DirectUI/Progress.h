@@ -34,7 +34,7 @@ namespace DirectUI
 
 	};
 
-	class UILIB_API ProgressRangeValueProxy
+	class UILIB_API ProgressRangeValueProxy : public IProxy
 	{
 	public:
 		ProgressRangeValueProxy(ProgressRangeValueProxy const &);

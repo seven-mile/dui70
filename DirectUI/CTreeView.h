@@ -18,7 +18,7 @@ namespace DirectUI
 		
 		HTREEITEM InsertItem(unsigned short *, unsigned int, const HTREEITEM, const HTREEITEM);
 		HTREEITEM InsertItem(const TVINSERTSTRUCTW *);
-		unsigned int GetItemState(HTREEITEM  const);
+		unsigned int GetItemState(HTREEITEM const);
 		unsigned long GetStyle(void);
 		void SetItemState(HTREEITEM, unsigned int);
 

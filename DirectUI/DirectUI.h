@@ -15,13 +15,15 @@
 
 #include "types.h"
 #include "misc.h"
-#include "Value.h"
+#include "Interfaces.h"
 
 #include "AutoLock.h"
 #include "AutoThread.h"
 #include "AutoVariant.h"
-#include "Interfaces.h"
+#include "Value.h"
+
 #include "Primitives.h"
+#include "parser.h"
 #include "element.h"
 #include "Browser.h"
 #include "Bind.h"
@@ -36,7 +38,6 @@
 #include "BorderLayout.h"
 #include "host.h"
 #include "accessibility.h"
-#include "parser.h"
 #include "provider.h"
 #include "Movie.h"
 #include "ElementWithHWND.h"
@@ -117,40 +118,40 @@
 
 namespace DirectUI
 {
-	UILIB_API HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider);
-	UILIB_API HRESULT WINAPI UnInitProcessPriv(unsigned short*unk1);
-	UILIB_API HRESULT WINAPI InitThread(int iDontKnow);
-	UILIB_API void WINAPI UnInitThread();
+	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider);
+	HRESULT WINAPI UnInitProcessPriv(unsigned short*unk1);
+	HRESULT WINAPI InitThread(int iDontKnow);
+	void WINAPI UnInitThread();
 
-	UILIB_API int WINAPI CreateDUIWrapper(Element*,class XProvider**);
-	UILIB_API int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider**);
-	UILIB_API int WINAPI CreateDUIWrapperFromResource(HINSTANCE,UCString, UCString, UCString, class XResourceProvider**);
+	int WINAPI CreateDUIWrapper(Element*,class XProvider**);
+	int WINAPI CreateDUIWrapperEx(Element*, class IXProviderCP*, class XProvider**);
+	int WINAPI CreateDUIWrapperFromResource(HINSTANCE,UCString, UCString, UCString, class XResourceProvider**);
 
-	UILIB_API int WINAPI GetScreenDPI();
+	int WINAPI GetScreenDPI();
 
-	UILIB_API int WINAPI RegisterAllControls();
-	UILIB_API int WINAPI RegisterBaseControls();
-	UILIB_API int WINAPI RegisterBrowserControls();
-	UILIB_API int WINAPI RegisterCommonControls();
-	UILIB_API int WINAPI RegisterExtendedControls();
-	UILIB_API int WINAPI RegisterMacroControls();
-	UILIB_API int WINAPI RegisterMiscControls();
-	UILIB_API int WINAPI RegisterStandardControls();
-	UILIB_API int WINAPI RegisterXControls();
+	int WINAPI RegisterAllControls();
+	int WINAPI RegisterBaseControls();
+	int WINAPI RegisterBrowserControls();
+	int WINAPI RegisterCommonControls();
+	int WINAPI RegisterExtendedControls();
+	int WINAPI RegisterMacroControls();
+	int WINAPI RegisterMiscControls();
+	int WINAPI RegisterStandardControls();
+	int WINAPI RegisterXControls();
 
-	UILIB_API int WINAPI StartMessagePump();
-	UILIB_API int WINAPI StopMessagePump();
-
-
-	UILIB_API ATOM WINAPI StrToID(UCString resId);
+	int WINAPI StartMessagePump();
+	int WINAPI StopMessagePump();
 
 
-	UILIB_API int WINAPI UnicodeToMultiByte(UCString lpWideCharStr, int cchWideChar, int unk);
-	UILIB_API int WINAPI MultiByteToUnicode(LPCSTR lpMultiByteStr, int cbMultiByte, int unk);
+	ATOM WINAPI StrToID(UCString resId);
 
-	UILIB_API BOOL WINAPI IsAnimationsEnabled();
-	UILIB_API int WINAPI IsPalette(HWND hWnd);
-	UILIB_API BOOL WINAPI IsUIAutomationProviderEnabled();
 
-	UILIB_API int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF color);
+	int WINAPI UnicodeToMultiByte(UCString lpWideCharStr, int cchWideChar, int unk);
+	int WINAPI MultiByteToUnicode(LPCSTR lpMultiByteStr, int cbMultiByte, int unk);
+
+	BOOL WINAPI IsAnimationsEnabled();
+	int WINAPI IsPalette(HWND hWnd);
+	BOOL WINAPI IsUIAutomationProviderEnabled();
+
+	int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF color);
 }

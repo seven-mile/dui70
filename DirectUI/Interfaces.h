@@ -2,21 +2,21 @@
 
 namespace DirectUI
 {
-	class IElementListener
+	class UILIB_API IElementListener
 	{
 	public:
 		//0
-		virtual void OnListenerAttach(Element*) = 0;
+		virtual void OnListenerAttach(class Element*) = 0;
 		//1
-		virtual void OnListenerDetach(Element*) = 0;
+		virtual void OnListenerDetach(class Element*) = 0;
 		//2
-		virtual bool OnPropertyChanging(const class PropertyInfo*, int, Value*, Value*) = 0;
+		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value*, class Value*) = 0;
 		//3
-		virtual void OnListenedPropertyChanged(Element*, const class PropertyInfo*, int, Value*, Value*) = 0;
+		virtual void OnListenedPropertyChanged(class Element*, const class PropertyInfo*, int, class Value*, class Value*) = 0;
 		//4
-		virtual void OnListenedEvent(Element*,class Event*) = 0;
+		virtual void OnListenedEvent(class Element*,class Event*) = 0;
 		//5
-		virtual void OnListenedInput(Element*, class InputEvent*) = 0;
+		virtual void OnListenedInput(class Element*, class InputEvent*) = 0;
 	};
 
 	struct IClassInfo
@@ -35,7 +35,7 @@ namespace DirectUI
 		virtual long DoMethod(int, char *) = 0;
 
 	protected:
-		virtual void Init(Element *) = 0;
+		virtual void Init(class Element *) = 0;
 	};
 
 	class UILIB_API Proxy
@@ -62,7 +62,7 @@ namespace DirectUI
 
 	protected:
 		ProviderProxy(void);
-		virtual void Init(Element *);
+		virtual void Init(class Element *);
 	};
 
 	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
@@ -76,6 +76,36 @@ namespace DirectUI
 
 		virtual ProviderProxyCall GetProxyCreator(void) = 0;
 	};
+
+	class UILIB_API RefcountBase
+	{
+	public:
+		RefcountBase();
+		virtual ~RefcountBase();
+
+		unsigned long WINAPI AddRef();
+		unsigned long WINAPI Release();
+	};
+
+
+	template <class X, class Y, int i>
+	class PatternProvider
+		: public RefcountBase
+		, public IProvider
+		, public Y
+	{
+	public:
+		PatternProvider();
+		virtual ~PatternProvider();
+
+		static long WINAPI Create(class ElementProvider*, IUnknown**);
+		virtual void Init(class ElementProvider*);
+	protected:
+		long DoInvoke(int, ...);
+	private:
+
+	};
+
 
 	class UILIB_API ISBLeak
 	{
@@ -96,8 +126,8 @@ namespace DirectUI
 		IXProviderCP(void);
 		IXProviderCP & operator=(IXProviderCP const &);
 
-		virtual long CreateDUICP(HWNDElement *, HWND, HWND, Element * *, DUIXmlParser * *) = 0;
-		virtual long CreateParserCP(DUIXmlParser * *) = 0;
+		virtual long CreateDUICP(class HWNDElement *, HWND, HWND, class Element * *, class DUIXmlParser * *) = 0;
+		virtual long CreateParserCP(class DUIXmlParser * *) = 0;
 		virtual void DestroyCP(void) = 0;
 	};
 
@@ -111,7 +141,7 @@ namespace DirectUI
 		virtual HWND GetNotificationSinkHWND(void) = 0;
 	};
 
-	class IDataEngine
+	class UILIB_API IDataEngine
 	{
 	public:
 		IDataEngine(IDataEngine const &);
@@ -124,7 +154,7 @@ namespace DirectUI
 		virtual void T2() = 0;
 	};
 
-	class StyleSheet
+	class UILIB_API StyleSheet
 	{
 	public:
 		StyleSheet(StyleSheet const &);
@@ -141,8 +171,6 @@ namespace DirectUI
 		virtual void T6() = 0;
 		virtual void T7() = 0;
 		virtual void T8() = 0;
-
-
 	};
 
 }

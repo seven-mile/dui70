@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class AutoThread
+	class UILIB_API AutoThread
 	{
 	public:
 		AutoThread();

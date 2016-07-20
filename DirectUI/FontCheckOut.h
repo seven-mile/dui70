@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class FontCheckOut
+	class UILIB_API FontCheckOut
 	{
 	public:
 		FontCheckOut(Element *, HDC);

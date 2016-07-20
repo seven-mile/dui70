@@ -12,7 +12,7 @@ namespace DirectUI
 		void CacheParser(DUIXmlParser *);
 		
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
-		static long __stdcall Create(IXElementCP *, XProvider *, HWND, Element *, unsigned long *, Element * *);
+		static long __stdcall Create(IXElementCP *,class XProvider *, HWND, Element *, unsigned long *, Element * *);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);

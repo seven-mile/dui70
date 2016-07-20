@@ -3,23 +3,6 @@
 namespace DirectUI
 {
 	
-    template <class X, class Y, int>
-    class PatternProvider
-		: public RefcountBase
-		, public IProvider
-		, public Y
-    {
-        public:
-            PatternProvider();
-            virtual ~PatternProvider();
-            
-            static long WINAPI Create(ElementProvider*, IUnknown**);
-            virtual void Init(ElementProvider*);
-        protected:
-            long DoInvoke(int,...);
-		private:
-			
-    };
 	
 	class UILIB_API XResourceProvider
 	{

@@ -22,7 +22,9 @@ namespace DirectUI
 	protected:
 		virtual void PostCreate(HWND);
 	private:
-		static IClassInfo * s_pClassInfo;
 		void OpenAnimation(HWND);
+
+		static IClassInfo * s_pClassInfo;
+		
 	};
 }

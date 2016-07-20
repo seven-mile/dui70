@@ -2,13 +2,13 @@
 
 namespace DirectUI
 {
-    class UILIB_API DuiAccessible
+  class UILIB_API DuiAccessible
 		: public IAccessible
 		, public IEnumVARIANT
 		, public IOleWindow
 		, public IAccIdentity
 		, public IServiceProvider
-    {
+  {
 	public:
 		DuiAccessible();
 		virtual ~DuiAccessible();
@@ -27,7 +27,7 @@ namespace DirectUI
 		
 		// IDispatch
 		virtual HRESULT WINAPI GetTypeInfoCount(UINT*pctinfo);
-		virtual HRESULT WINAPI GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo**ppTInfo  );
+		virtual HRESULT WINAPI GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo**ppTInfo );
 		virtual HRESULT WINAPI GetIDsOfNames(REFIID riid, LPOLESTR*rgszNames, UINT cNames, LCID lcid, DISPID*rgDispId);	
 		virtual HRESULT WINAPI Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS*pDispParams, VARIANT*pVarResult, EXCEPINFO*pExcepInfo, UINT*puArgErr);
 		
@@ -38,7 +38,7 @@ namespace DirectUI
 		virtual HRESULT WINAPI get_accParent(IDispatch**);
 		virtual HRESULT WINAPI get_accChildCount(long*);
 		virtual HRESULT WINAPI get_accChild(VARIANT, IDispatch**);
-		virtual HRESULT WINAPI get_accName(VARIANT,  BSTR*);
+		virtual HRESULT WINAPI get_accName(VARIANT, BSTR*);
 		virtual HRESULT WINAPI get_accValue(VARIANT, BSTR*);
 		virtual HRESULT WINAPI get_accDescription(VARIANT, BSTR*);
 		virtual HRESULT WINAPI get_accRole(VARIANT, VARIANT*);
@@ -76,7 +76,7 @@ namespace DirectUI
 		long GetAccName(VARIANT, int, unsigned short**);
 		long GetAccNameFromContent(unsigned short**);
 		long GetDispatchFromElement(Element*, IDispatch**);
-    };
+  };
 
 
 	class UILIB_API HWNDHostAccessible : public DuiAccessible
@@ -115,7 +115,7 @@ namespace DirectUI
 		virtual HRESULT WINAPI get_accHelp(VARIANT, BSTR*);
 		virtual HRESULT WINAPI get_accHelpTopic(BSTR*, VARIANT, long*);
 		virtual HRESULT WINAPI get_accKeyboardShortcut(VARIANT, BSTR*);
-		virtual HRESULT WINAPI get_accName(VARIANT,  BSTR*);
+		virtual HRESULT WINAPI get_accName(VARIANT, BSTR*);
 		virtual HRESULT WINAPI get_accParent(IDispatch**);
 		virtual HRESULT WINAPI get_accRole(VARIANT, VARIANT*);
 		virtual HRESULT WINAPI get_accSelection(VARIANT*);
@@ -150,5 +150,5 @@ namespace DirectUI
 		virtual HRESULT WINAPI get_accParent(IDispatch**);
 	};
 
-    
+  
 }

@@ -33,7 +33,7 @@ namespace DirectUI
 		};
 
 	private:
-		static ACCESSIBLEROLE const* const c_rgar;
+		static const ACCESSIBLEROLE* c_rgar;
 		static IClassInfo* s_pClassInfo;
 		static const ACCESSIBLEROLE* FindAccessibleRole(int);
 	};

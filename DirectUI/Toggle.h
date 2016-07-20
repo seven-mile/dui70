@@ -8,7 +8,7 @@ namespace DirectUI
 		ToggleProvider(void);
 		virtual ~ToggleProvider(void);
 		virtual unsigned long __stdcall AddRef(void);
-		virtual ProviderProxyCall GetProxyCreator(void);;
+		virtual ProviderProxyCall GetProxyCreator(void);
 		virtual long __stdcall QueryInterface(GUID const &, void * *);
 		virtual unsigned long __stdcall Release(void);
 		virtual long __stdcall Toggle(void);

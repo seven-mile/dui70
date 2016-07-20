@@ -331,26 +331,5 @@
     <ClCompile Include="DirectUI.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="host.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Element.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="parser.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="NativeHWNDHost.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Base.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="accessibility.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

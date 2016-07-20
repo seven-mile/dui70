@@ -34,7 +34,7 @@ namespace DirectUI
 		static InvokeHelper * __stdcall FindInvokeHelper(unsigned int *);
 	};
 
-	class InvokeProvider : public PatternProvider<InvokeProvider, IInvokeProvider, 0>
+	class UILIB_API InvokeProvider : public PatternProvider<InvokeProvider, IInvokeProvider, 0>
 	{
 	public:
 		InvokeProvider(void);

@@ -12,6 +12,9 @@ namespace DirectUI
 	{
 	} GMSG,*LPGMSG;
 
+
+	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
+
 	//// Misc
 	//class CritSecLock;
 	//class LinkedList;
@@ -27,7 +30,7 @@ namespace DirectUI
 	//template<typename T, int> class DynamicArray;
 	//template<typename> class SafeArrayAccessor;
 
- //   // Primitives
+ //  // Primitives
 	//struct Fill;
 
 	//struct Cursor;
@@ -47,23 +50,23 @@ namespace DirectUI
 	//struct DepRecs;
 
 	//struct NavReference;
- //   
+ //  
 	//// Base
- //   class BaseScrollBar;
- //   class BaseScrollViewer;
+ //  class BaseScrollBar;
+ //  class BaseScrollViewer;
 	//class ClassInfoBase;
 	//class RefcountBase;
 
- //   // Elements
- //   class Element;
+ //  // Elements
+ //  class Element;
 	//class ElementWithHWND;
 	//class UnknownElement;
- //   class HWNDElement;
+ //  class HWNDElement;
 	//class DialogElement;
 	//class AnimationStrip;
 	//class RefPointElement;
- //   class Button;
- //   class AutoButton;
+ //  class Button;
+ //  class AutoButton;
 	//class PushButton;
 	//class RepeatButton;
 	//class Progress;
@@ -78,7 +81,7 @@ namespace DirectUI
 
 	//// Accessibility
 	//class DuiAccessible;
- //   class AccessibleButton;
+ //  class AccessibleButton;
 	//class HWNDElementAccessible;
 	//class HWNDHostAccessible;
 	//class HWNDHostClientAccessible;
@@ -86,7 +89,7 @@ namespace DirectUI
 
 	//// Layouts
 	//class Layout;
- //   class BorderLayout;
+ //  class BorderLayout;
 	//class GridLayout;
 	//class FillLayout;
 	//class FlowLayout;
@@ -120,14 +123,14 @@ namespace DirectUI
 	//class Browser;
 	//class BrowserSelectionProxy;
 
- //   // Providers
- //   class ElementProvider;
+ //  // Providers
+ //  class ElementProvider;
 	//class ExpandCollapseProvider;
 	//class GridItemProvider;
 	//class GridProvider;
 	//class HWNDElementProvider;
 	//class InvokeProvider;
- //   template <class X, class Y, int> class PatternProvider;
+ //  template <class X, class Y, int> class PatternProvider;
 	//class RangeValueProvider;
 	//class ScrollItemProvider;
 	//class ScrollProvider;
@@ -137,9 +140,9 @@ namespace DirectUI
 	//class TableProvider;
 	//class ToggleProvider;
 	//class ValueProvider;
- //   class XProvider;
- //   class XResourceProvider;
- //   
+ //  class XProvider;
+ //  class XResourceProvider;
+ //  
 	//// Proxies
 	//class Proxy;
 	//class ElementProxy;
@@ -168,13 +171,13 @@ namespace DirectUI
 	//class HWNDHost;
 	//class XHost;
 
- //   // Events
+ //  // Events
 	//struct Event;
 	//struct InputEvent;
 	//struct KeyboardEvent;
 	//struct ThemeChangedEvent;
- //   
- //   // Interfaces
+ //  
+ //  // Interfaces
 	//class IElementListener;
 	//struct IClassInfo;
 	//class IDataEngine;
@@ -188,26 +191,26 @@ namespace DirectUI
 	//struct IRawElementProviderFragmentRoot;
 	//struct IRawElementProviderSimple;
 
- //   // XML Parser
- //   class DUIXmlParser;
- //   class Schema;
+ //  // XML Parser
+ //  class DUIXmlParser;
+ //  class Schema;
 	//enum _DUI_PARSE_STATE;
 	//namespace ParserTools
 	//{
 	//	struct ExprNode;
 	//	class ValueParser;
 	//}
- //   
+ //  
 	//// Auto Objects
 	//class AutoButton;
 	//class AutoLock;
 	//class AutoThread;
 	//class AutoVariant;
 
- //  
+ // 
 	//
 	//// Unknown
- //   class Bind;
+ //  class Bind;
 	//class CallstackTracker;
 	//class CheckBoxGlyph;
 	//class Clipper;

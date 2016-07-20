@@ -24,7 +24,7 @@ namespace DirectUI
 
 	};
 
-	typedef bool(__stdcall* Unknow3Call )(Element *);
+	typedef bool(__stdcall* Unknow3Call )(class Element *);
 
 	class UILIB_API Schema
 	{
@@ -39,6 +39,13 @@ namespace DirectUI
 		};
 		
 		Schema & operator=(Schema const &);
+		static long __stdcall CreatePatternProvider(Pattern, ElementProvider *, IUnknown * *);
+		static Event __stdcall EventFromEventId(int);
+		static long __stdcall Init(void);
+		static int __stdcall LookupAccessibleRole(int, bool *);
+		static Pattern __stdcall PatternFromPatternId(int);
+		static Unknow3Call __stdcall PfnIsSupportedFromPattern(Pattern);
+
 		static int AcceleratorKeyProperty;
 		static int AccessKeyProperty;
 		static int AsyncContentLoadedEvent;
@@ -53,7 +60,6 @@ namespace DirectUI
 		static int ClickablePointProperty;
 		static int ComboBoxControlType;
 		static int ControlTypeProperty;
-		static long __stdcall CreatePatternProvider(Pattern, ElementProvider *, IUnknown * *);
 		static int CultureProperty;
 		static int CustomControlType;
 		static int DataGridControlType;
@@ -61,7 +67,6 @@ namespace DirectUI
 		static int DockPattern;
 		static int DocumentControlType;
 		static int EditControlType;
-		static Event __stdcall EventFromEventId(int);
 		static int ExpandCollapsePattern;
 		static int ExpandCollapse_ExpandCollapseState_Property;
 		static int FrameworkId;
@@ -81,7 +86,6 @@ namespace DirectUI
 		static int HelpTextProperty;
 		static int HyperlinkControlType;
 		static int ImageControlType;
-		static long __stdcall Init(void);
 		static int InvokeInvokedEvent;
 		static int InvokePattern;
 		static int IsContentElementProperty;
@@ -98,7 +102,6 @@ namespace DirectUI
 		static int ListControlType;
 		static int ListItemControlType;
 		static int LocalizedControlTypeProperty;
-		static int __stdcall LookupAccessibleRole(int, bool *);
 		static int MenuBarControlType;
 		static int MenuClosedEvent;
 		static int MenuControlType;
@@ -110,8 +113,6 @@ namespace DirectUI
 		static int NullControlType;
 		static int Orientation;
 		static int PaneControlType;
-		static Pattern __stdcall PatternFromPatternId(int);
-		static Unknow3Call __stdcall PfnIsSupportedFromPattern(Pattern);
 		static int ProcessIdProperty;
 		static int ProgressBarControlType;
 		static int RadioButtonControlType;

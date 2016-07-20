@@ -417,7 +417,7 @@ namespace DirectUI
 		void _GetBuriedSheetDependencies(const PropertyInfo*, Element*, class DepRecs*, DeferCycle*, long*);
 		void _UpdatePropertyInCache(const PropertyInfo*);
 		static void _VoidPCNotifyTree(int, DeferCycle*);
-		static IClassInfo*s_pClassInfo;
+		
 
 		void _FlushDS(DeferCycle*);
 		Value* _GetComputedValue(const PropertyInfo*, UpdateCache*);
@@ -430,6 +430,8 @@ namespace DirectUI
 		long _PostSourceChange();
 		long _PreSourceChange( const PropertyInfo* (WINAPI*)(void), int, Value*, Value*);
 		long _PreSourceChange(const PropertyInfo*, int, Value*, Value*);
+
+		static IClassInfo*s_pClassInfo;
 	};
 
 	class UILIB_API ElementProxy : public IProxy
@@ -474,7 +476,7 @@ namespace DirectUI
 		ElementProvider();
 		virtual ~ElementProvider();
 
-		static long WINAPI Create(Element*, class  InvokeHelper*, ElementProvider**out);
+		static long WINAPI Create(Element*, class InvokeHelper*, ElementProvider**out);
 
 		long DoInvokeArgs(int, class ProviderProxy* (__cdecl*)(Element*), char*);
 		const Element* GetElementKey();
@@ -544,7 +546,7 @@ namespace DirectUI
 	class UILIB_API ElementProviderManager
 	{
 	public:
-		ElementProviderManager & __thiscall operator=(class DirectUI::ElementProviderManager const &);
+		ElementProviderManager & operator=(class DirectUI::ElementProviderManager const &);
 
 		static unsigned long Add(ElementProvider *);
 		static void __stdcall Close();

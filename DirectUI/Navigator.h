@@ -31,7 +31,7 @@ namespace DirectUI
 
 	};
 
-	class UILIB_API NavigatorSelectionItemProxy
+	class UILIB_API NavigatorSelectionItemProxy : public IProxy
 	{
 	public:
 		NavigatorSelectionItemProxy(NavigatorSelectionItemProxy const &);

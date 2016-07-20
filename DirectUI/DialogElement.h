@@ -57,7 +57,7 @@ namespace DirectUI
 
 	protected:
 		void SetRegisteredDefaultButtonSelectedState(bool);
-		static bool __stdcall IsButtonEnabledAndVisible(Element *);;
+		static bool __stdcall IsButtonEnabledAndVisible(Element *);
 
 	private:
 		static IClassInfo * s_pClassInfo;

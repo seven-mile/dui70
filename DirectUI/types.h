@@ -1,6 +1,29 @@
 #pragma once
 
 
+class UID
+{
+public:
+	LPCSTR szID;
+};
+
+struct GMA_ACTIONINFO
+{
+
+};
+
+typedef struct tagGMSG
+{
+} GMSG, *LPGMSG;
+
+
+DECLARE_HANDLE(HGADGET);
+
+struct EventMsg
+{
+
+};
+
 //forward declares
 namespace DirectUI
 {
@@ -8,9 +31,6 @@ namespace DirectUI
 	typedef UChar* UString;
 	typedef const unsigned short* UCString;
 
-	typedef struct tagGMSG
-	{
-	} GMSG,*LPGMSG;
 
 
 	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);

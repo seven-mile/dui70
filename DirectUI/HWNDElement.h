@@ -54,7 +54,7 @@ namespace DirectUI
 		//16
 		virtual bool CanSetFocus();
 
-		static class UID CompositionChange();
+		static UID CompositionChange();
 		static HRESULT WINAPI Create(HWND, bool, unsigned int, Element*, unsigned long*, Element**pOut);
 		//17
 		virtual long CreateStyleParser(DUIXmlParser**);
@@ -84,7 +84,7 @@ namespace DirectUI
 		bool ShowAccel(void);
 		bool ShowFocus(void);
 		void ShowUIState(bool, bool);
-		static class UID ThemeChange();
+		static UID ThemeChange();
 
 		void ToggleUIState(bool, bool);
 		static const PropertyInfo* WINAPI WrapKeyboardNavigateProp();

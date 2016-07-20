@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class IElementListener
+	struct IElementListener
 	{
 	public:
 		//0

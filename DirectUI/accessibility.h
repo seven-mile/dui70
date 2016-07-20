@@ -12,6 +12,7 @@ namespace DirectUI
 	public:
 		DuiAccessible();
 		DuiAccessible(const DuiAccessible&) = delete;
+		DuiAccessible& operator = (const DuiAccessible&) = delete;
 
 		virtual ~DuiAccessible();
 		

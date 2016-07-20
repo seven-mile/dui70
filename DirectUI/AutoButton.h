@@ -14,8 +14,8 @@ namespace DirectUI
 		static long __stdcall Create(Element* , unsigned long *, Element** );
 		static IClassInfo* __stdcall GetClassInfoPtr();
 		static long __stdcall Register();
-		static void __stdcallSetClassInfoPtr(IClassInfo *);
-		static class UID __stdcall Toggle();
+		static void __stdcall SetClassInfoPtr(IClassInfo *);
+		static UID __stdcall Toggle();
 
 		virtual IClassInfo* GetClassInfoW();
 		virtual void OnEvent(Event *);

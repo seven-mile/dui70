@@ -10,7 +10,7 @@ namespace DirectUI
 		virtual ~Navigator(void);
 		Navigator & operator=(Navigator const &);
 
-		static class UID __stdcall ActionInitiated(void);
+		static UID __stdcall ActionInitiated(void);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);

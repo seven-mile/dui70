@@ -42,7 +42,7 @@ namespace DirectUI
 		//8
 		virtual void OnGroupChanged(int, bool);
 		//9
-		virtual void OnInput(class InputEvent*);
+		virtual void OnInput(struct InputEvent*);
 		//10
 		virtual void OnKeyFocusMoved(Element*, Element*);
 		//11
@@ -76,7 +76,7 @@ namespace DirectUI
 		virtual long Remove(Element**, unsigned int);
 
 		//19
-		virtual Element* GetAdjacent(Element*, int, const struct NavReference*, unsigned __int32);
+		virtual Element* GetAdjacent(Element*, int, const struct NavReference*, unsigned long);
 
 		//20
 		virtual bool EnsureVisible(int, int, int, int);
@@ -343,7 +343,7 @@ namespace DirectUI
 		void UpdateLayout();
 		static void _AddDependency(Element*, const PropertyInfo*, int, class DepRecs*, DeferCycle*, long*);
 		void _ClearNeedsLayout();
-		static long _DisplayNodeCallback(struct HGADGET__*, void*, struct EventMsg*);
+		static long _DisplayNodeCallback(HGADGET, void*, struct EventMsg*);
 		void _EndOptimizedLayoutQ();
 		int _GetChangesUpdatePass();
 		unsigned int _GetNeedsLayout();
@@ -356,7 +356,12 @@ namespace DirectUI
 		struct tagSIZE _UpdateDesiredSize(int, int, Surface*);
 		void _UpdateLayoutPosition(int, int);
 		void _UpdateLayoutSize(int, int);
-
+		static PropertyInfo const * __stdcall EnabledProp();
+		int GetAlpha(void);
+		int GetAnimation(void);
+		struct Fill const * GetBackgroundColor(Value * *);
+		int GetBackgroundStdColor(void);
+		struct Fill const * GetBorderColor(Value * *);
 	protected:
 		//26
 		virtual void OnHosted(Element*);

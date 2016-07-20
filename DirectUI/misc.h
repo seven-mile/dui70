@@ -46,10 +46,10 @@ namespace DirectUI
 	
 	
 
-	class UID
+	/*class UID
 	{
 	public:
-	};
+	};*/
 
 	class UILIB_API Surface
 	{
@@ -85,6 +85,11 @@ namespace DirectUI
 
 	struct Event
 	{
+	};
+
+	struct InputEvent
+	{
+
 	};
 
 	struct RectangleChange

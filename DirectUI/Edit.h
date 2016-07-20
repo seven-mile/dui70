@@ -13,7 +13,7 @@ namespace DirectUI
 		static long __stdcall Create(unsigned int, Element *, unsigned long *, Element * *);
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static const PropertyInfo* __stdcall DirtyProp(void);
-		static class UID __stdcall Enter(void);
+		static UID __stdcall Enter(void);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
 		static const PropertyInfo* __stdcall MultilineProp(void);
 		static const PropertyInfo* __stdcall MaxLengthProp(void);

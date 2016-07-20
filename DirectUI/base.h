@@ -110,7 +110,7 @@ namespace DirectUI
 		bool OnPageChanging(Value*);
 		void OnPositionChanged(Value*);
 		bool OnPositionChanging(Value*);
-		static class UID Scroll();
+		static UID Scroll();
 		void SetPinned(bool);
 	private:
 		int GetPageInc();

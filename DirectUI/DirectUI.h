@@ -6,6 +6,8 @@
 #include <oleacc.h>
 #include <Commctrl.h>
 #include <UIAutomationCore.h>
+#include <DbgHelp.h>
+#include <XmlLite.h>
 
 #if	defined(DIRECTUI_EXPORTS)
 #define UILIB_API __declspec(dllexport)

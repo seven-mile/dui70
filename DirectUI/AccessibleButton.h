@@ -26,8 +26,12 @@ namespace DirectUI
 		static void WINAPI SetClassInfoPtr(IClassInfo*);
 
 		// member types
-		struct ACCESSIBLEROLE
+		struct UILIB_API ACCESSIBLEROLE
 		{
+			ACCESSIBLEROLE() = delete;
+			ACCESSIBLEROLE(const ACCESSIBLEROLE&) = delete;
+			~ACCESSIBLEROLE() = delete;
+
 			// see http://msdn.microsoft.com/en-us/library/system.windows.forms.accessiblerole.aspx
 			ACCESSIBLEROLE& operator=(const ACCESSIBLEROLE&);
 		};

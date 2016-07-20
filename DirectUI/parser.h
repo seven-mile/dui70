@@ -9,11 +9,6 @@ namespace DirectUI
 
 	typedef _DUI_PARSE_STATE DUI_PARSE_STATE;
 
-	struct IXmlReader
-	{
-		// ??
-	};
-
 	struct LINEINFO
 	{
 
@@ -211,7 +206,7 @@ namespace DirectUI
 
 	namespace ParserTools
 	{
-		class ExprNode
+		struct ExprNode
 		{
 		public:
 
@@ -253,7 +248,7 @@ namespace DirectUI
 
 		void SetDefaultHInstance(HINSTANCE);
 		
-		void SetGetSheetCallback(GetSheetCallback);
+		void SetGetSheetCallback(GetSheetCallback,void*);
 		void SetParseErrorCallback(ParseErrorCallback, void*);
 		void SetUnknownAttrCallback(bool (__cdecl*)(UCString, void*), void*);
 

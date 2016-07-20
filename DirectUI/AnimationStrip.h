@@ -34,13 +34,13 @@ namespace DirectUI
 	protected:
 		virtual void OnDestroy(void);
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value *, Value *);
-		virtual void Paint(HDC*, const RECT*, const RECT*, RECT *, RECT *);
+		virtual void Paint(HDC, const RECT*, const RECT*, RECT *, RECT *);
 
 		void AdvanceFrame(void);
 		long LoadImagesIntoAnimationStrip();
-		void OnAction(struct GMA_ACTIONINFO *);
+		void OnAction(GMA_ACTIONINFO *);
 
-		static void __stdcall RawActionProc(struct GMA_ACTIONINFO *);
+		static void __stdcall RawActionProc(GMA_ACTIONINFO *);
 
 	private:
 		long LoadCommonControlExports();

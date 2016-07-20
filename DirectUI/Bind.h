@@ -22,8 +22,8 @@ namespace DirectUI
 		UCString GetConnect(Value * *);
 		UCString GetProperty(Value * *);
 		long Initialize(Element *, unsigned long *);
-		long SetConnect(UString);
-		long SetProperty(UString);
+		long SetConnect(UCString);
+		long SetProperty(UCString);
 	private:
 		static IClassInfo* s_pClassInfo;
 	};

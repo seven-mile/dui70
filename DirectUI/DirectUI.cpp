@@ -540,6 +540,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
+	IClassInfo* Button::s_pClassInfo;
 
 	Element::Element()
 	{
@@ -656,7 +657,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	Element* Element::GetAdjacent(Element*, int, const NavReference*, unsigned __int32)
+	Element* Element::GetAdjacent(Element*, int, const NavReference*, unsigned long)
 	{
 		return nullptr;
 	}
@@ -940,6 +941,30 @@ namespace DirectUI
 		return nullptr;
 	}
 	const PropertyInfo* Element::HeightProp()
+	{
+		return nullptr;
+	}
+	PropertyInfo const * __stdcall Element::EnabledProp()
+	{
+		return nullptr;
+	}
+	int Element::GetAlpha(void)
+	{
+		return 0;
+	}
+	int Element::GetAnimation(void)
+	{
+		return 0;
+	}
+	Fill const * Element::GetBackgroundColor(Value **)
+	{
+		return nullptr;
+	}
+	int Element::GetBackgroundStdColor(void)
+	{
+		return 0;
+	}
+	Fill const * Element::GetBorderColor(Value **)
 	{
 		return nullptr;
 	}
@@ -1880,7 +1905,7 @@ namespace DirectUI
 	void DUIXmlParser::SetDefaultHInstance(HINSTANCE)
 	{
 	}
-	void DUIXmlParser::SetGetSheetCallback(GetSheetCallback)
+	void DUIXmlParser::SetGetSheetCallback(GetSheetCallback,void*)
 	{
 	}
 	void DUIXmlParser::SetParseErrorCallback(ParseErrorCallback, void*)
@@ -2557,7 +2582,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void AutoButton::__stdcallSetClassInfoPtr(IClassInfo *)
+	void __stdcall AutoButton::SetClassInfoPtr(IClassInfo *)
 	{
 	}
 	UID AutoButton::Toggle()
@@ -3215,7 +3240,7 @@ namespace DirectUI
 	void AnimationStrip::OnPropertyChanged(const PropertyInfo *, int, Value *, Value *)
 	{
 	}
-	void AnimationStrip::Paint(HDC *, const RECT *, const RECT *, RECT *, RECT *)
+	void AnimationStrip::Paint(HDC, const RECT *, const RECT *, RECT *, RECT *)
 	{
 	}
 	void AnimationStrip::AdvanceFrame(void)
@@ -3269,10 +3294,6 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	HRESULT ClassInfoBase::CreateInstance(Element *, unsigned long *, Element **)
-	{
-		return E_NOTIMPL;
-	}
 	const PropertyInfo * ClassInfoBase::EnumPropertyInfo(unsigned int)
 	{
 		return nullptr;
@@ -3288,10 +3309,6 @@ namespace DirectUI
 	unsigned int ClassInfoBase::GetGlobalIndex() const
 	{
 		return 0;
-	}
-	IClassInfo * ClassInfoBase::GetBaseClass()
-	{
-		return nullptr;
 	}
 	UCString ClassInfoBase::GetName() const
 	{
@@ -3354,54 +3371,7 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return *this;
 	}
-	Element * BaseScrollBar::GetElement()
-	{
-		return nullptr;
-	}
-	int BaseScrollBar::GetPosition()
-	{
-		return 0;
-	}
-	int BaseScrollBar::GetMaximum()
-	{
-		return 0;
-	}
-	int BaseScrollBar::GetMinimum()
-	{
-		return 0;
-	}
-	int BaseScrollBar::GetPage()
-	{
-		return 0;
-	}
-	int BaseScrollBar::GetLine()
-	{
-		return 0;
-	}
-	long BaseScrollBar::SetPosition(int)
-	{
-		return 0;
-	}
-	long BaseScrollBar::SetMaximum(int)
-	{
-		return 0;
-	}
-	long BaseScrollBar::SetMinimum(int)
-	{
-		return 0;
-	}
-	long BaseScrollBar::SetPage(int)
-	{
-		return 0;
-	}
-	long BaseScrollBar::SetLine(int)
-	{
-		return 0;
-	}
-	bool BaseScrollBar::CanSetFocus()
-	{
-		return false;
-	}
+
 	void BaseScrollBar::LineUp(unsigned int)
 	{
 	}
@@ -3674,11 +3644,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Bind::SetConnect(UString)
+	long Bind::SetConnect(UCString)
 	{
 		return 0;
 	}
-	long Bind::SetProperty(UString)
+	long Bind::SetProperty(UCString)
 	{
 		return 0;
 	}
@@ -3804,7 +3774,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void CallstackTracker::FillSymbolInfo(STACK_SYMBOL_INFO *, unsigned __int64)
+	void CallstackTracker::FillSymbolInfo(CallstackTracker::STACK_SYMBOL_INFO *, unsigned __int64)
 	{
 	}
 	unsigned __int64 CallstackTracker::GetModuleBase(void *, unsigned __int64)
@@ -3814,15 +3784,15 @@ namespace DirectUI
 
 	int const CallstackTracker::STACKDEPTH=0;
 	int const CallstackTracker::INITIALSTACKSKIP=0;
-	struct IMGHLPFN_LOAD * CallstackTracker::s_ImageHlpFuncList;
+	CallstackTracker::IMGHLPFN_LOAD * CallstackTracker::s_ImageHlpFuncList;
 	int CallstackTracker::s_fInitFailed;
 	void * CallstackTracker::s_hProcess;
 	struct HINSTANCE__ * CallstackTracker::s_hinstImageHlp;
 	struct HINSTANCE__ * CallstackTracker::s_hinstNtDll;
 	struct API_VERSION * (__stdcall* CallstackTracker::s_pfnImagehlpApiVersionEx)(struct API_VERSION *);
 	unsigned short(__stdcall* CallstackTracker::s_pfnRtlCaptureStackBackTrace)(unsigned long, unsigned long, void * *, unsigned long *);
-	int(__stdcall* CallstackTracker::s_pfnSymFromAddr)(void *, unsigned __int64, unsigned __int64 *, struct _SYMBOL_INFO *);
-	int(__stdcall* CallstackTracker::s_pfnSymGetModuleInfo64)(void *, unsigned __int64, struct _IMAGEHLP_MODULE64 *);
+	int(__stdcall* CallstackTracker::s_pfnSymFromAddr)(void *, unsigned __int64, unsigned __int64 *, SYMBOL_INFO *);
+	int(__stdcall* CallstackTracker::s_pfnSymGetModuleInfo64)(void *, unsigned __int64, IMAGEHLP_MODULE64 *);
 	int(__stdcall* CallstackTracker::s_pfnSymInitialize)(void *, char const *, int);
 	unsigned __int64(__stdcall* CallstackTracker::s_pfnSymLoadModule64)(void *, void *, char const *, char const *, unsigned __int64, unsigned long);
 	unsigned long(__stdcall* CallstackTracker::s_pfnSymSetOptions)(unsigned long);
@@ -4821,7 +4791,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool CCPushButton::GetButtonColor(HDC *, HBRUSH **)
+	bool CCPushButton::GetButtonColor(HDC, HBRUSH *)
 	{
 		return false;
 	}
@@ -5073,11 +5043,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long CCTreeView::_OnGetInfoTip(const LPNMTVGETINFOTIPW)
+	long CCTreeView::_OnGetInfoTip(NMTVGETINFOTIPW const *)
 	{
 		return 0;
 	}
-	long CCTreeView::_OnItemChanged(const NMTVITEMCHANGE *)
+	long CCTreeView::_OnItemChanged(NMTVITEMCHANGE const *)
 	{
 		return 0;
 	}

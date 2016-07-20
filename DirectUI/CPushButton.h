@@ -35,7 +35,7 @@ namespace DirectUI
 		virtual bool OnReceivedDialogFocus(DialogElement *);
 
 		//1
-		virtual bool GetButtonColor(HDC *, HBRUSH**);
+		virtual bool GetButtonColor(HDC, HBRUSH*);
 		//2
 		virtual void OnSelectedPropertyChanged(void);
 		//3

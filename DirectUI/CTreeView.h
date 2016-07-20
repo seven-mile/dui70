@@ -29,9 +29,9 @@ namespace DirectUI
 
 	protected:
 		//1
-		virtual long _OnGetInfoTip(const LPNMTVGETINFOTIPW);
+		virtual long _OnGetInfoTip(NMTVGETINFOTIPW const *);
 		//2
-		virtual long _OnItemChanged(const NMTVITEMCHANGE*);
+		virtual long _OnItemChanged(NMTVITEMCHANGE const *);
 
 	private:
 		static IClassInfo * s_pClassInfo;

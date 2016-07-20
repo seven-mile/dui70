@@ -14,7 +14,7 @@ namespace DirectUI
 		static long __stdcall Create(Element *, unsigned long *, Element * *);
 		static PropertyInfo const * __stdcall EnforceSizeProp(void);
 		static IClassInfo * __stdcall GetClassInfoPtr(void);
-		static class UID __stdcall Hosted(void);
+		static UID __stdcall Hosted(void);
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
 		

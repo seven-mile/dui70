@@ -96,6 +96,8 @@ namespace DirectUI
 	{
 	public:
 		PatternProvider();
+		PatternProvider(const PatternProvider&) = delete;
+
 		virtual ~PatternProvider();
 
 		static long WINAPI Create(class ElementProvider*, IUnknown**);

@@ -127,6 +127,127 @@ namespace DirectUI
 		return 0;
 	}
 
+	int WINAPI BlurBitmap(void *, void *, void *, void *, void *)
+	{
+		return 0;
+	}
+
+	HBRUSH WINAPI BrushFromEnumI(int Index)
+	{
+		return HBRUSH();
+	}
+
+	DWORD WINAPI ColorFromEnumI(int Index)
+	{
+		return 0;
+	}
+
+	LPVOID WINAPI DisableAnimations()
+	{
+		return LPVOID();
+	}
+
+	int WINAPI DrawShadowTextEx(HDC hdc, const WCHAR * lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF dwTextColor, COLORREF dwBkColor, int a9, int a10, COLORREF a11, int a12)
+	{
+		return 0;
+	}
+
+	void * WINAPI ElementFromGadget(void *)
+	{
+		return nullptr;
+	}
+
+	LPVOID WINAPI EnableAnimations()
+	{
+		return LPVOID();
+	}
+
+	void WINAPI FlushThemeHandles(unsigned int)
+	{
+	}
+
+	void WINAPI ForceDebugBreak()
+	{
+	}
+
+	DWORD WINAPI GetElementDataEntry(int a1)
+	{
+		return 0;
+	}
+
+	Macro * WINAPI GetElementMacro(int a1)
+	{
+		return nullptr;
+	}
+
+	LPVOID WINAPI GetFontCache()
+	{
+		return LPVOID();
+	}
+
+	HRESULT WINAPI GetThemeHandle(LPCWSTR, void **)
+	{
+		return E_NOTIMPL;
+	}
+
+	HRESULT WINAPI HrSysAllocString(OLECHAR * psz, BSTR * ppStr)
+	{
+		return E_NOTIMPL;
+	}
+
+	HRESULT WINAPI HStrDup(LPCWSTR lpString, LPCWSTR * ppStr)
+	{
+		return E_NOTIMPL;
+	}
+
+	BOOL WINAPI InitPreprocessor()
+	{
+		return 0;
+	}
+
+	HRESULT WINAPI SetDefAction(Element * a1, DWORD dwRole)
+	{
+		return E_NOTIMPL;
+	}
+
+	BOOL WINAPI UiaHideOnGetObject(HWND hWnd, int a2, int a3)
+	{
+		return 0;
+	}
+
+	HANDLE WINAPI UiaOnDestroySink(HWND hWnd)
+	{
+		return HANDLE();
+	}
+
+	HRESULT WINAPI UiaOnGetObject(void ** a1, int a2, InvokeHelper * a3, int a4, int a5)
+	{
+		return E_NOTIMPL;
+	}
+
+	BOOL WINAPI UiaOnToolTip(Element *, DWORD)
+	{
+		return 0;
+	}
+
+	void WINAPI NotifyAccessibilityEvent(DWORD event, Element *)
+	{
+	}
+
+	void * WINAPI PreprocessBuffer(LPCWSTR Src, SIZE_T cSrc, BOOLEAN a3)
+	{
+		return nullptr;
+	}
+
+	HGDIOBJ WINAPI ProcessAlphaBitmapI(HBITMAP hgdiobj)
+	{
+		return HGDIOBJ();
+	}
+
+	void WINAPI PurgeThemeHandles()
+	{
+	}
+
 	DuiAccessible::DuiAccessible()
 	{
 	}

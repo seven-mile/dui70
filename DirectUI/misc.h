@@ -3,21 +3,20 @@
 namespace DirectUI
 {
   // exported for int
-  template<typename T>
-  class SafeArrayAccessor 
-  {
+	template<typename T>
+	class SafeArrayAccessor 
+	{
 	public:
-    SafeArrayAccessor();
-    ~SafeArrayAccessor();
-    operator T*();
-    long Access(SAFEARRAY *, UChar);
-    int Count();
-      
+		SafeArrayAccessor();
+		~SafeArrayAccessor();
+		operator T*();
+		long Access(SAFEARRAY *, UChar);
+		int Count();   
 	private:
 		void*unk1;
 		void*unk2;
 		void*unk3;
-  };
+	};
 
 	class UILIB_API CritSecLock
 	{

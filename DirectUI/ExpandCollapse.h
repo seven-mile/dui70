@@ -8,6 +8,7 @@ namespace DirectUI
 	{
 	public:
 		ExpandCollapseProvider(void);
+
 		virtual ~ExpandCollapseProvider(void);;
 
 

@@ -153,5 +153,49 @@ namespace DirectUI
 	int WINAPI IsPalette(HWND hWnd);
 	BOOL WINAPI IsUIAutomationProviderEnabled();
 
-	int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF color);
+	int WINAPI DUIDrawShadowText(HDC hdcDest, UCString lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF dwTextColor);
+
+	int WINAPI BlurBitmap(void*, void*, void*, void*, void*);
+
+	HBRUSH WINAPI BrushFromEnumI(_In_ int Index);
+
+	DWORD WINAPI ColorFromEnumI(_In_ int Index);
+
+	LPVOID WINAPI DisableAnimations();
+	int WINAPI DrawShadowTextEx(HDC hdc, const WCHAR *lpchText, int cchText, LPRECT hdcSrc, UINT format, COLORREF dwTextColor, COLORREF dwBkColor, int a9, int a10, COLORREF a11, int a12);
+	void* WINAPI ElementFromGadget(void*);
+	LPVOID WINAPI EnableAnimations();
+	void WINAPI FlushThemeHandles(unsigned int);
+
+	//此函数仅调用DebugBreak，将程序中断
+	void WINAPI ForceDebugBreak();
+
+	DWORD WINAPI GetElementDataEntry(int a1);
+	Macro* WINAPI GetElementMacro(int a1);
+	LPVOID WINAPI GetFontCache();
+
+	HRESULT WINAPI GetThemeHandle(LPCWSTR, void **);
+
+	//此函数调用SysAllocString，并返回ppStr
+	HRESULT WINAPI HrSysAllocString(OLECHAR *psz, BSTR* ppStr);
+
+	//此函数用于复制lpString字符串，并返回ppStr
+	HRESULT WINAPI HStrDup(LPCWSTR lpString, LPCWSTR* ppStr);
+
+	//此函数是空实现，无任何作用
+	BOOL WINAPI InitPreprocessor();
+
+	HRESULT WINAPI SetDefAction(Element *a1, _In_  DWORD dwRole);
+
+	BOOL WINAPI UiaHideOnGetObject(_In_ HWND hWnd, int a2, int a3);
+
+	//调用RemoveProp 返回举个句柄
+	HANDLE WINAPI UiaOnDestroySink(_In_ HWND hWnd);
+	HRESULT WINAPI UiaOnGetObject(void* *a1, int a2, InvokeHelper *a3, int a4, int a5);
+	BOOL WINAPI UiaOnToolTip(Element *, DWORD);
+
+	void WINAPI NotifyAccessibilityEvent(DWORD event, Element *);
+	void *WINAPI PreprocessBuffer(LPCWSTR Src, SIZE_T cSrc, BOOLEAN a3);
+	HGDIOBJ WINAPI ProcessAlphaBitmapI(HBITMAP hgdiobj);
+	void WINAPI PurgeThemeHandles();
 }

@@ -7,7 +7,6 @@ namespace DirectUI
 	public:
 		ClassInfoBase(ClassInfoBase const &);
 		ClassInfoBase();
-		~ClassInfoBase();
 		ClassInfoBase & operator=(ClassInfoBase const &);
 
 		//0
@@ -51,6 +50,8 @@ namespace DirectUI
 		virtual int GetChildren() const;
 		//15
 		virtual void AssertPIZeroRef() const;
+
+		virtual ~ClassInfoBase();
 
 		static bool ClassExist(IClassInfo**, const PropertyInfo* const*, unsigned int, IClassInfo*, HINSTANCE, UCString, bool);
 		long Initialize(HINSTANCE, UCString, bool, const PropertyInfo* const*, unsigned int);

@@ -2586,7 +2586,7 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return *this;
 	}
-	AutoLock::AutoLock()
+	AutoLock::~AutoLock()
 	{
 	}
 
@@ -9186,6 +9186,10 @@ namespace DirectUI
 	{
 	}
 
+	TaskPage::TaskPage(TaskPage const &)
+	{
+	}
+
 	TaskPage::TaskPage()
 	{
 
@@ -10603,5 +10607,96 @@ namespace DirectUI
 	void __stdcall ElementProviderManager::Remove(ElementProvider *)
 	{
 
+	}
+
+	DUIFactory::DUIFactory(HWND)
+	{
+
+	}
+	DUIFactory::~DUIFactory(void)
+	{
+	}
+	DUIFactory & DUIFactory::operator=(DUIFactory const &)
+	{
+		// TODO: 在此处插入 return 语句
+		return *this;
+	}
+	long DUIFactory::CreateParser(void)
+	{
+		return 0;
+	}
+	DUIXmlParser * DUIFactory::DetachParser(void)
+	{
+		return nullptr;
+	}
+	DUIXmlParser * DUIFactory::GetParser(void)
+	{
+		return nullptr;
+	}
+	long DUIFactory::LoadFromBuffer(UCString, unsigned int, UCString, Element *, unsigned long *, Element **)
+	{
+		return 0;
+	}
+	long DUIFactory::LoadFromFile(UCString, UCString, Element *, unsigned long *, Element **)
+	{
+		return 0;
+	}
+	long DUIFactory::LoadFromResource(HINSTANCE, UCString, UCString, Element *, unsigned long *, Element **, UCString)
+	{
+		return 0;
+	}
+	void DUIFactory::SetError(UCString, ...)
+	{
+	}
+	void DUIFactory::s_XMLParseError(UCString, UCString, int, void *)
+	{
+	}
+	void DUIFactory::ClearParser(void)
+	{
+	}
+
+	BrowserSelectionProxy::BrowserSelectionProxy(BrowserSelectionProxy const &)
+	{
+	}
+	BrowserSelectionProxy::BrowserSelectionProxy(void)
+	{
+	}
+	BrowserSelectionProxy & BrowserSelectionProxy::operator=(BrowserSelectionProxy const &)
+	{
+		// TODO: 在此处插入 return 语句
+		return *this;
+	}
+	long BrowserSelectionProxy::DoMethod(int, char *)
+	{
+		return 0;
+	}
+	void BrowserSelectionProxy::Init(Element *)
+	{
+	}
+	long BrowserSelectionProxy::GetIsSelectionRequired(int *)
+	{
+		return 0;
+	}
+	long BrowserSelectionProxy::GetSelection(SAFEARRAY **)
+	{
+		return 0;
+	}
+
+	IDataEntry::IDataEntry()
+	{
+
+	}
+
+	IDataEntry::IDataEntry(IDataEntry const &)
+	{
+	}
+
+	IDataEntry::~IDataEntry(void)
+	{
+	}
+
+	IDataEntry & IDataEntry::operator=(IDataEntry const &)
+	{
+		return *this;
 	}
 }

@@ -163,6 +163,7 @@
     <ClInclude Include="Bind.h" />
     <ClInclude Include="BorderLayout.h" />
     <ClInclude Include="Browser.h" />
+    <ClInclude Include="BrowserSelection.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CallstackTracker.h" />
     <ClInclude Include="CAVI.h" />

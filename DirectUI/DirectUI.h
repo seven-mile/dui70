@@ -113,6 +113,7 @@
 #include "XBaby.h"
 #include "XElement.h"
 #include "XProvider.h"
+#include "BrowserSelection.h"
 
 //UnknownElement
 

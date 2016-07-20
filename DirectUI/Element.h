@@ -474,6 +474,7 @@ namespace DirectUI
 	{
 	public:
 		ElementProvider();
+		ElementProvider(const ElementProvider&) = delete;
 		virtual ~ElementProvider();
 
 		static long WINAPI Create(Element*, class InvokeHelper*, ElementProvider**out);

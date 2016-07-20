@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class SelectorSelectionProxy :IProxy
+	class UILIB_API SelectorSelectionProxy :IProxy
 	{
 	public:
 		SelectorSelectionProxy(SelectorSelectionProxy const &);

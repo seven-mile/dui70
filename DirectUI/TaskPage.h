@@ -3,13 +3,13 @@
 namespace DirectUI
 {
 	//问号部分无法确定顺序
-	class TaskPage
+	class UILIB_API TaskPage
 		: public IElementListener
 		, public IXProviderCP
 	{
 	public:
 		TaskPage(TaskPage const &);
-		TaskPage(void);
+		TaskPage();
 		virtual ~TaskPage(void);
 		TaskPage & operator=(TaskPage const &);
 		operator struct _PSP *(void);

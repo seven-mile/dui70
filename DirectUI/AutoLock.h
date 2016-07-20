@@ -7,6 +7,6 @@ namespace DirectUI
 	public:
 		AutoLock(LPCRITICAL_SECTION lpCriticalSection);
 		AutoLock& operator=(const AutoLock& );
-		AutoLock();
+		~AutoLock();
 	};
 }

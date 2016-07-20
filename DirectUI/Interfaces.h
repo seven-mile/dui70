@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class UILIB_API IElementListener
+	class IElementListener
 	{
 	public:
 		//0
@@ -24,9 +24,14 @@ namespace DirectUI
 	public:
 	};
 
-	class IDataEntry
+	struct UILIB_API IDataEntry
 	{
+	public:
+		IDataEntry(IDataEntry const &);
+		IDataEntry(void);
+		virtual ~IDataEntry(void);
 
+		IDataEntry & operator=(IDataEntry const &);
 	};
 
 	class DECLSPEC_NOVTABLE IProxy
@@ -81,6 +86,7 @@ namespace DirectUI
 	{
 	public:
 		RefcountBase();
+		RefcountBase(const RefcountBase&) = delete;
 		virtual ~RefcountBase();
 
 		unsigned long WINAPI AddRef();
@@ -97,7 +103,7 @@ namespace DirectUI
 	public:
 		PatternProvider();
 		PatternProvider(const PatternProvider&) = delete;
-
+		PatternProvider& operator=(const PatternProvider&) = delete;
 		virtual ~PatternProvider();
 
 		static long WINAPI Create(class ElementProvider*, IUnknown**);
@@ -109,7 +115,7 @@ namespace DirectUI
 	};
 
 
-	class UILIB_API ISBLeak
+	struct UILIB_API ISBLeak
 	{
 	public:
 		ISBLeak(ISBLeak const &);
@@ -143,7 +149,7 @@ namespace DirectUI
 		virtual HWND GetNotificationSinkHWND(void) = 0;
 	};
 
-	class UILIB_API IDataEngine
+	struct UILIB_API IDataEngine
 	{
 	public:
 		IDataEngine(IDataEngine const &);

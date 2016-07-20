@@ -11,6 +11,8 @@ namespace DirectUI
   {
 	public:
 		DuiAccessible();
+		DuiAccessible(const DuiAccessible&) = delete;
+
 		virtual ~DuiAccessible();
 		
 		void Initialize(Element*);
@@ -129,6 +131,7 @@ namespace DirectUI
 	{
 	public:
 		HWNDHostClientAccessible();
+		HWNDHostClientAccessible(const HWNDHostClientAccessible&) = delete;
 		virtual ~HWNDHostClientAccessible();
 
 		static HRESULT WINAPI Create(Element*, IAccessible*, DuiAccessible**);

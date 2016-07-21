@@ -53,7 +53,7 @@ namespace DirectUI
 
 		static UiaArray<int> * g_pArrayPropertyEvent;
 		static bool g_fWantAnyEvent;
-		static unsigned int * g_eventRegisteredMap;
+		static unsigned int * __ptr32 g_eventRegisteredMap;
 		static CRITICAL_SECTION g_cs;
 		static int const cChangeBulk;
 	};

@@ -226,14 +226,14 @@ namespace DirectUI
 		static long __stdcall LookupPropertyInfos(void);
 		static long __stdcall GetProcs(void);
 
-		static RoleMap const * const _roleMapping;
-		static ControlInfo const * const g_controlInfoTable;
-		static EventInfo const * const g_eventInfoTable;
-		static EventMap const * const g_eventMapping;
+		static RoleMap const * __ptr32 const _roleMapping;
+		static ControlInfo const * __ptr32 const g_controlInfoTable;
+		static EventInfo const * __ptr32 const g_eventInfoTable;
+		static EventMap const * __ptr32 const g_eventMapping;
 		static bool g_fInited;
-		static PatternInfo const * const g_patternInfoTable;
-		static PatternMap const * const g_patternMapping;
-		static PropertyInfo const * const g_propertyInfoTable;
+		static PatternInfo const * __ptr32 const g_patternInfoTable;
+		static PatternMap const * __ptr32 const g_patternMapping;
+		static const Schema::PropertyInfo * __ptr32 const g_propertyInfoTable;
 	};
 
 	typedef Value* (WINAPI* GetSheetCallback)(UCString, void*);
@@ -396,12 +396,12 @@ namespace DirectUI
 		long _RecordSetElementProperties(IXmlReader*);
 		long _RecordSetValue(IXmlReader*, UCString, UCString);
 
-		static FunctionDefinition<unsigned long> const* const s_fdClr;
-		static FunctionDefinition<Value*> const* const s_fdFill;
-		static FunctionDefinition<Value*> const* const s_fdGraphic;
-		static FunctionDefinition<int> const* const s_fdInt;
-		static FunctionDefinition<RECT> const* const s_fdRect;
-		static FunctionDefinition<Value*> const* const s_fdString;
+		static FunctionDefinition<unsigned long> const* __ptr32 const s_fdClr;
+		static FunctionDefinition<Value*> const* __ptr32 const s_fdFill;
+		static FunctionDefinition<Value*> const* __ptr32 const s_fdGraphic;
+		static FunctionDefinition<int> const* __ptr32 const s_fdInt;
+		static FunctionDefinition<RECT> const* __ptr32 const s_fdRect;
+		static FunctionDefinition<Value*> const* __ptr32 const s_fdString;
 	
 	private:
 		void SetParseState(DUI_PARSE_STATE);

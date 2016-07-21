@@ -2456,12 +2456,12 @@ namespace DirectUI
 		return *this;
 	}
 
-	DUIXmlParser::FunctionDefinition<unsigned long> const* const DUIXmlParser::s_fdClr = NULL;
-	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdFill = NULL;
-	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdGraphic = NULL;
-	DUIXmlParser::FunctionDefinition<int> const* const DUIXmlParser::s_fdInt = NULL;
-	DUIXmlParser::FunctionDefinition<RECT> const* const DUIXmlParser::s_fdRect = NULL;
-	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdString = NULL;
+	DUIXmlParser::FunctionDefinition<unsigned long> const* __ptr32 const DUIXmlParser::s_fdClr = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* __ptr32 const DUIXmlParser::s_fdFill = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* __ptr32 const DUIXmlParser::s_fdGraphic = NULL;
+	DUIXmlParser::FunctionDefinition<int> const* __ptr32 const DUIXmlParser::s_fdInt = NULL;
+	DUIXmlParser::FunctionDefinition<RECT> const* __ptr32 const DUIXmlParser::s_fdRect = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* __ptr32 const DUIXmlParser::s_fdString = NULL;
 
 
 	NativeHWNDHost::NativeHWNDHost(const NativeHWNDHost &)
@@ -2779,7 +2779,7 @@ namespace DirectUI
 		return nullptr;
 	}
 
-	const AccessibleButton::ACCESSIBLEROLE* AccessibleButton::c_rgar;
+	const AccessibleButton::ACCESSIBLEROLE* __ptr32 AccessibleButton::c_rgar;
 	IClassInfo* AccessibleButton::s_pClassInfo;
 
 	AutoButton::AutoButton(const AutoButton &)
@@ -4010,7 +4010,7 @@ namespace DirectUI
 
 	int const CallstackTracker::STACKDEPTH=0;
 	int const CallstackTracker::INITIALSTACKSKIP=0;
-	CallstackTracker::IMGHLPFN_LOAD * CallstackTracker::s_ImageHlpFuncList;
+	CallstackTracker::IMGHLPFN_LOAD * __ptr32 CallstackTracker::s_ImageHlpFuncList;
 	int CallstackTracker::s_fInitFailed;
 	void * CallstackTracker::s_hProcess;
 	HINSTANCE CallstackTracker::s_hinstImageHlp;
@@ -5777,7 +5777,7 @@ namespace DirectUI
 	}
 	UiaArray<int> * EventManager::g_pArrayPropertyEvent;
 	bool EventManager::g_fWantAnyEvent;
-	unsigned int * EventManager::g_eventRegisteredMap;
+	unsigned int * __ptr32 EventManager::g_eventRegisteredMap;
 	CRITICAL_SECTION EventManager::g_cs;
 	int const EventManager::cChangeBulk=0;
 
@@ -6796,7 +6796,7 @@ namespace DirectUI
 	{
 	}
 
-	unsigned int const (* HWNDHost::g_rgMouseMap)[3];
+	unsigned int const (*__ptr32 HWNDHost::g_rgMouseMap)[3];
 
 	IClassInfo* HWNDHost::s_pClassInfo;
 
@@ -7854,14 +7854,14 @@ namespace DirectUI
 	int Schema::WindowWindowClosedEvent;
 	int Schema::WindowWindowOpenedEvent;
 
-	Schema::RoleMap const * const Schema::_roleMapping=NULL;
-	Schema::ControlInfo const * const Schema::g_controlInfoTable = NULL;
-	Schema::EventInfo const * const Schema::g_eventInfoTable = NULL;
-	Schema::EventMap const * const Schema::g_eventMapping = NULL;
+	Schema::RoleMap const * __ptr32 const Schema::_roleMapping=NULL;
+	Schema::ControlInfo const * __ptr32 const Schema::g_controlInfoTable = NULL;
+	Schema::EventInfo const * __ptr32 const Schema::g_eventInfoTable = NULL;
+	Schema::EventMap const * __ptr32 const Schema::g_eventMapping = NULL;
 	bool Schema::g_fInited;
-	Schema::PatternInfo const * const Schema::g_patternInfoTable = NULL;
-	Schema::PatternMap const * const Schema::g_patternMapping = NULL;
-	Schema::PropertyInfo const * const Schema::g_propertyInfoTable = NULL;
+	Schema::PatternInfo const * __ptr32 const Schema::g_patternInfoTable = NULL;
+	Schema::PatternMap const * __ptr32 const Schema::g_patternMapping = NULL;
+	const Schema::PropertyInfo * __ptr32 const Schema::g_propertyInfoTable = NULL;
 
 
 	void NavReference::Init(Element *, RECT *)

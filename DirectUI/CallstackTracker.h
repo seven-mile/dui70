@@ -34,7 +34,7 @@ namespace DirectUI
 
 		static int const STACKDEPTH;
 		static int const INITIALSTACKSKIP;
-		static IMGHLPFN_LOAD * s_ImageHlpFuncList;
+		static IMGHLPFN_LOAD * __ptr32 s_ImageHlpFuncList;
 		static int s_fInitFailed;
 		static void * s_hProcess;
 		static HINSTANCE s_hinstImageHlp;

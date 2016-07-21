@@ -1,6 +1,14 @@
 #include "DirectUI.h"
 
 
+
+#ifdef _AMD64_
+#pragma comment(linker, "/export:InitThread=?InitThread@DirectUI@@YAJH@Z")
+#else
+#pragma comment(linker, "/export:InitThread=?InitThread@DirectUI@@YGJH@Z")
+#endif
+
+
 void WINAPI DumpDuiTree(DirectUI::Element *, int)
 {
 }

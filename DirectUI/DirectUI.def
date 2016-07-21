@@ -2,7 +2,6 @@ LIBRARY
 EXPORTS
 InitProcessPriv
 UnInitProcessPriv
-InitThread=?InitThread@DirectUI@@YGJH@Z
 UnInitThread
 CreateDUIWrapper
 CreateDUIWrapperEx

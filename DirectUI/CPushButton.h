@@ -29,8 +29,8 @@ namespace DirectUI
 		virtual SIZE GetContentSize(int, int, Surface *);
 		virtual void OnInput(InputEvent *);
 		virtual bool OnLostDialogFocus(DialogElement *);
-		virtual bool OnMessage(unsigned int, unsigned int, long, long *);
-		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+		virtual bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		virtual void OnPropertyChanged(const PropertyInfo *, int, Value *, Value *);
 		virtual bool OnReceivedDialogFocus(DialogElement *);
 

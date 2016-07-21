@@ -19,7 +19,7 @@ namespace DirectUI
 	
 	protected:
 		Element * GetElement(void);
-		long PropSheet_SendMessage(unsigned int, unsigned int, long);
+		LONG_PTR PropSheet_SendMessage(UINT message, WPARAM, LPARAM);
 		
 		//IElementListener
 		virtual void OnListenerAttach(Element *);
@@ -40,23 +40,23 @@ namespace DirectUI
 		virtual void InitPropSheetPage(PROPSHEETPAGEW *);
 
 		//??
-		virtual long OnKillActive(void);
-		virtual long OnQueryCancel(void);
+		virtual LRESULT OnKillActive(void);
+		virtual LRESULT OnQueryCancel(void);
 		virtual Element * OnQueryInitialFocus(void);
-		virtual long OnReset(void);
-		virtual long OnSetActive(void);
-		virtual long OnWizBack(void);
-		virtual long OnWizFinish(void);
-		virtual long OnWizNext(void);
+		virtual LRESULT OnReset(void);
+		virtual LRESULT OnSetActive(void);
+		virtual LRESULT OnWizBack(void);
+		virtual LRESULT OnWizFinish(void);
+		virtual LRESULT OnWizNext(void);
 		//14
-		virtual bool OnMessage(unsigned int, unsigned int, long, long *);
+		virtual bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
 	private:
-		static long __stdcall StaticXHostSubclassProc(HWND, unsigned int, unsigned int, long);
+		static LRESULT __stdcall StaticXHostSubclassProc(HWND, UINT message, WPARAM wParam, LPARAM lParam);
 		static void __stdcall StaticXmlParserError(unsigned short const *, unsigned short const *, int, void *);
 
 		void FreeComCtl32(void);
-		int OnWndMsg(unsigned int, unsigned int, long, long *);
+		int OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		long LoadComCtl32(void);
 		long LoadPage(Element * *, Element *, DUIXmlParser * *);
 

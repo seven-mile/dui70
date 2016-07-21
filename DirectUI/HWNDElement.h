@@ -89,7 +89,7 @@ namespace DirectUI
 		void ToggleUIState(bool, bool);
 		static const PropertyInfo* WINAPI WrapKeyboardNavigateProp();
 
-		static long WINAPI StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		static LRESULT WINAPI StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		//18
 		virtual LRESULT WndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

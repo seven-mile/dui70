@@ -32,8 +32,8 @@ namespace DirectUI
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual void OnEvent(Event *);
 		virtual void OnInput(InputEvent *);
-		virtual bool OnMessage(unsigned int, unsigned int, long, long *);
-		virtual bool OnSinkThemeChanged(unsigned int, unsigned int, long, long *);
+		virtual bool OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
+		virtual bool OnSinkThemeChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*);
 		virtual bool OnSysChar(unsigned short);
 		virtual void SetKeyFocus(void);
 

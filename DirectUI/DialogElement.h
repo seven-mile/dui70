@@ -32,7 +32,7 @@ namespace DirectUI
 
 		//»ùÀà
 		virtual void OnDestroy(void);
-		virtual void OnGetDlgCode(MSG *, long *);
+		virtual void OnGetDlgCode(MSG *, LRESULT *);
 		virtual void OnInput(InputEvent *);
 		virtual void OnKeyFocusMoved(Element *, Element *);
 		virtual void OnListenedEvent(Element *, Event *);

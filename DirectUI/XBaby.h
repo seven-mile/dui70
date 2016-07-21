@@ -17,7 +17,7 @@ namespace DirectUI
 		static long __stdcall Register(void);
 		static void __stdcall SetClassInfoPtr(IClassInfo *);
 
-		void ForceThemeChange(unsigned int, long);
+		void ForceThemeChange(UINT_PTR, LONG_PTR);
 		SIZE GetContentDesiredSize(int, int);
 		long GetHostedElementID(unsigned short *);
 		long SetToHost(Element *);
@@ -31,7 +31,7 @@ namespace DirectUI
 		virtual void OnEvent(Event *);
 		virtual void OnNoChildWithShortcutFound(KeyboardEvent *);
 		virtual void OnThemeChanged(ThemeChangedEvent *);
-		virtual void OnWmThemeChanged(unsigned int, long);
+		virtual void OnWmThemeChanged(WPARAM wParam, LPARAM lParam);
 		virtual void SetKeyFocus(void);
 
 		//1

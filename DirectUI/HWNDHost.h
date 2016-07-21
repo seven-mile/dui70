@@ -66,7 +66,7 @@ namespace DirectUI
 
 	protected:
 		static void WINAPI AttachCtrlSubclassProc(HWND);
-		static long WINAPI CtrlSubclassProc(HWND, unsigned int, unsigned int, long);
+		static LRESULT WINAPI CtrlSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 		void PrintRTLControl(HDC, HDC, const RECT&);
 		long SetThemeChanged(int);
@@ -99,8 +99,8 @@ namespace DirectUI
 	private:
 		static unsigned int const (*g_rgMouseMap)[3];
 		static IClassInfo* s_pClassInfo;
-		static int __stdcall _CtrlWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
-		static int WINAPI _SinkWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
+		static BOOL __stdcall _CtrlWndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
+		static BOOL WINAPI _SinkWndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
 		void ApplySinkRegion(RECT const *, bool);
 		long GetAccessibleImpl(IAccessible**, bool);

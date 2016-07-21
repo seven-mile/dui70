@@ -205,12 +205,12 @@ namespace DirectUI
 		static int TransformPattern;
 		static int TreeControlType;
 		static int TreeItemControlType;
-		static long(__stdcall* UiaHostProviderFromHwnd)(HWND, IRawElementProviderSimple * *);
-		static int(__stdcall* UiaLookupId)(AutomationIdentifierType, GUID const *);
-		static long(__stdcall* UiaRaiseAutomationEvent)(IRawElementProviderSimple *, int);
-		static long(__stdcall* UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple *, int, VARIANT, VARIANT);
-		static long(__stdcall* UiaRaiseStructureChangedEvent)(IRawElementProviderSimple *, enum StructureChangeType, int *, int);
-		static long(__stdcall* UiaReturnRawElementProvider)(HWND, unsigned int, long, IRawElementProviderSimple *);
+		static long(__stdcall* UiaHostProviderFromHwnd)(HWND hwnd, IRawElementProviderSimple ** ppProvider);
+		static int(__stdcall* UiaLookupId)(AutomationIdentifierType type, const GUID* pGuid);
+		static long(__stdcall* UiaRaiseAutomationEvent)(IRawElementProviderSimple * pProvider, EVENTID id);
+		static long(__stdcall* UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple * pProvider, PROPERTYID id, VARIANT oldValue, VARIANT newValue);
+		static long(__stdcall* UiaRaiseStructureChangedEvent)(IRawElementProviderSimple * pProvider, StructureChangeType structureChangeType, int * pRuntimeId, int cRuntimeIdLen);
+		static LRESULT(__stdcall* UiaReturnRawElementProvider)(HWND hwnd, WPARAM wParam, LPARAM lParam, IRawElementProviderSimple * el);
 		static int ValuePattern;
 		static int Value_IsReadOnly_Property;
 		static int Value_Value_Property;
@@ -416,7 +416,7 @@ namespace DirectUI
 		long CreateParser(void);
 		DUIXmlParser * DetachParser(void);
 		DUIXmlParser * GetParser(void);
-		long LoadFromBuffer(UCString, unsigned int, UCString, Element *, unsigned long *, Element * *);
+		long LoadFromBuffer(UCString, UINT_PTR, UCString, Element *, unsigned long *, Element * *);
 		long LoadFromFile(UCString, UCString, Element *, unsigned long *, Element * *);
 		long LoadFromResource(HINSTANCE, UCString, UCString, Element *, unsigned long *, Element * *, UCString);
 		void __cdecl SetError(UCString, ...);

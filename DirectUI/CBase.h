@@ -20,7 +20,7 @@ namespace DirectUI
 
 		int GetWinStyle(void);
 		long Initialize(unsigned int, Element *, unsigned long *);
-		void SetNotifyHandler(int(__stdcall*)(unsigned int, unsigned int, long, long *, void *), void *);
+		void SetNotifyHandler(BOOL (WINAPI*)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult, void* pUserData), void* pUserData);
 		long SetWinStyle(int);
 
 		//∏∏¿‡∏∏∫Ø ˝÷ÿ‘ÿ
@@ -30,10 +30,10 @@ namespace DirectUI
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual SIZE GetContentSize(int, int, Surface *);
 		virtual void OnInput(InputEvent *);
-		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
 		//1
-		virtual bool OnCustomDraw(NMCUSTOMDRAW *, long *);
+		virtual bool OnCustomDraw(NMCUSTOMDRAW *, LRESULT *);
 		//2
 		virtual bool OnLostDialogFocus(DialogElement *);
 		//3

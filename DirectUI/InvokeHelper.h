@@ -21,7 +21,7 @@ namespace DirectUI
 		void Uninit(void);
 
 	private:
-		static int __stdcall _WndProc(void *, HWND, unsigned int, unsigned int, long, long *);
+		static int __stdcall _WndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		static unsigned int const s_uInvokeHelperMsg;
 
 		void OnInvoke(InvokeArgs *);

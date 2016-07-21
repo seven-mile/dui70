@@ -15,7 +15,7 @@ namespace DirectUI
 		virtual long __stdcall CanSetFocus(bool *) = 0;
 		virtual int __stdcall FindElementWithShortcutAndDoDefaultAction(unsigned short, int) = 0;
 		virtual long __stdcall GetHostedElementID(unsigned short *) = 0;
-		virtual long __stdcall ForceThemeChange(unsigned int, long) = 0;
+		virtual long __stdcall ForceThemeChange(UINT_PTR, LONG_PTR) = 0;
 		virtual long __stdcall SetDefaultButtonTracking(bool) = 0;
 		virtual int __stdcall ClickDefaultButton(void) = 0;
 		virtual long __stdcall SetRegisteredDefaultButton(Element *) = 0;
@@ -40,7 +40,7 @@ namespace DirectUI
 		virtual int __stdcall ClickDefaultButton(void);
 		virtual long __stdcall CreateDUI(IXElementCP *, HWND *);
 		virtual int __stdcall FindElementWithShortcutAndDoDefaultAction(unsigned short, int);
-		virtual long __stdcall ForceThemeChange(unsigned int, long);
+		virtual long __stdcall ForceThemeChange(UINT_PTR, LONG_PTR);
 		virtual long __stdcall GetDesiredSize(int, int, SIZE *);
 		virtual long __stdcall GetHostedElementID(unsigned short *);
 		virtual long __stdcall IsDescendent(Element *, bool *);

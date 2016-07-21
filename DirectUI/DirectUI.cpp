@@ -1788,7 +1788,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long Element::GetEncodedContentString(unsigned short *, unsigned int)
+	long Element::GetEncodedContentString(unsigned short *, UINT_PTR)
 	{
 		return 0;
 	}
@@ -4123,7 +4123,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void CCBase::SetNotifyHandler(int(__stdcall *)(unsigned int, unsigned int, long, long *, void *), void *)
+	void CCBase::SetNotifyHandler(BOOL(WINAPI*)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult, void* pUserData), void* pUserData)
 	{
 	}
 	long CCBase::SetWinStyle(int)
@@ -4152,11 +4152,11 @@ namespace DirectUI
 	void CCBase::OnInput(InputEvent *)
 	{
 	}
-	bool CCBase::OnNotify(unsigned int, unsigned int, long, long *)
+	bool CCBase::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
-	bool CCBase::OnCustomDraw(NMCUSTOMDRAW *, long *)
+	bool CCBase::OnCustomDraw(NMCUSTOMDRAW *, LRESULT *)
 	{
 		return false;
 	}
@@ -4328,7 +4328,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool CCBaseScrollBar::OnMessage(unsigned int, unsigned int, long, long *)
+	bool CCBaseScrollBar::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -4404,7 +4404,7 @@ namespace DirectUI
 	void CCCheckBox::OnInput(InputEvent *)
 	{
 	}
-	bool CCCheckBox::OnNotify(unsigned int, unsigned int, long, long *)
+	bool CCCheckBox::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -4870,7 +4870,7 @@ namespace DirectUI
 	void Combobox::OnInput(InputEvent *)
 	{
 	}
-	bool Combobox::OnNotify(unsigned int, unsigned int, long, long *)
+	bool Combobox::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -5003,11 +5003,11 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool CCPushButton::OnMessage(unsigned int, unsigned int, long, long *)
+	bool CCPushButton::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
-	bool CCPushButton::OnNotify(unsigned int, unsigned int, long, long *)
+	bool CCPushButton::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -5089,7 +5089,7 @@ namespace DirectUI
 	void CCRadioButton::OnInput(InputEvent *)
 	{
 	}
-	bool CCRadioButton::OnNotify(unsigned int, unsigned int, long, long *)
+	bool CCRadioButton::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -5183,7 +5183,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	bool CCTrackBar::OnMessage(unsigned int, unsigned int, long, long *)
+	bool CCTrackBar::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -5262,7 +5262,7 @@ namespace DirectUI
 	{
 		return SIZE();
 	}
-	bool CCTreeView::OnNotify(unsigned int, unsigned int, long, long *)
+	bool CCTreeView::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -5407,7 +5407,7 @@ namespace DirectUI
 	void DialogElement::OnDestroy(void)
 	{
 	}
-	void DialogElement::OnGetDlgCode(MSG *, long *)
+	void DialogElement::OnGetDlgCode(MSG *, LRESULT *)
 	{
 	}
 	void DialogElement::OnInput(InputEvent *)
@@ -5617,7 +5617,7 @@ namespace DirectUI
 	void Edit::OnInput(InputEvent *)
 	{
 	}
-	bool Edit::OnNotify(unsigned int, unsigned int, long, long *)
+	bool Edit::OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
@@ -6440,7 +6440,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long WINAPI HWNDElement::StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	LRESULT WINAPI HWNDElement::StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
@@ -6684,7 +6684,7 @@ namespace DirectUI
 	void WINAPI HWNDHost::AttachCtrlSubclassProc(HWND)
 	{
 	}
-	long WINAPI HWNDHost::CtrlSubclassProc(HWND, unsigned int, unsigned int, long)
+	LRESULT WINAPI HWNDHost::CtrlSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
@@ -6764,11 +6764,11 @@ namespace DirectUI
 	{
 		return false;
 	}
-	int HWNDHost::_CtrlWndProc(void *, HWND, unsigned int, unsigned int, long, long *)
+	BOOL HWNDHost::_CtrlWndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return 0;
 	}
-	int WINAPI HWNDHost::_SinkWndProc(void *, HWND, unsigned int, unsigned int, long, long *)
+	BOOL WINAPI HWNDHost::_SinkWndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return 0;
 	}
@@ -6936,7 +6936,7 @@ namespace DirectUI
 	void InvokeHelper::Uninit(void)
 	{
 	}
-	int InvokeHelper::_WndProc(void *, HWND, unsigned int, unsigned int, long, long *)
+	int InvokeHelper::_WndProc(void *, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return 0;
 	}
@@ -7839,12 +7839,12 @@ namespace DirectUI
 	int Schema::TransformPattern;
 	int Schema::TreeControlType;
 	int Schema::TreeItemControlType;
-	long(__stdcall* Schema::UiaHostProviderFromHwnd)(HWND, IRawElementProviderSimple * *);
-	int(__stdcall* Schema::UiaLookupId)(AutomationIdentifierType, GUID const *);
-	long(__stdcall* Schema::UiaRaiseAutomationEvent)(IRawElementProviderSimple *, int);
-	long(__stdcall* Schema::UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple *, int, VARIANT, VARIANT);
-	long(__stdcall* Schema::UiaRaiseStructureChangedEvent)(IRawElementProviderSimple *, enum StructureChangeType, int *, int);
-	long(__stdcall* Schema::UiaReturnRawElementProvider)(HWND, unsigned int, long, IRawElementProviderSimple *);
+	long(__stdcall* Schema::UiaHostProviderFromHwnd)(HWND hwnd, IRawElementProviderSimple ** ppProvider);
+	int(__stdcall* Schema::UiaLookupId)(AutomationIdentifierType type, const GUID* pGuid);
+	long(__stdcall* Schema::UiaRaiseAutomationEvent)(IRawElementProviderSimple * pProvider, EVENTID id);
+	long(__stdcall* Schema::UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple * pProvider, PROPERTYID id, VARIANT oldValue, VARIANT newValue);
+	long(__stdcall* Schema::UiaRaiseStructureChangedEvent)(IRawElementProviderSimple * pProvider, StructureChangeType structureChangeType, int * pRuntimeId, int cRuntimeIdLen);
+	LRESULT(__stdcall* Schema::UiaReturnRawElementProvider)(HWND hwnd, WPARAM wParam, LPARAM lParam, IRawElementProviderSimple * el);
 	int Schema::ValuePattern;
 	int Schema::Value_IsReadOnly_Property;
 	int Schema::Value_Value_Property;
@@ -9435,7 +9435,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long TaskPage::PropSheet_SendMessage(unsigned int, unsigned int, long)
+	LONG_PTR TaskPage::PropSheet_SendMessage(UINT message, WPARAM, LPARAM)
 	{
 		return 0;
 	}
@@ -9477,11 +9477,11 @@ namespace DirectUI
 	void TaskPage::InitPropSheetPage(PROPSHEETPAGEW *)
 	{
 	}
-	long TaskPage::OnKillActive(void)
+	LRESULT TaskPage::OnKillActive(void)
 	{
 		return 0;
 	}
-	long TaskPage::OnQueryCancel(void)
+	LRESULT TaskPage::OnQueryCancel(void)
 	{
 		return 0;
 	}
@@ -9489,31 +9489,31 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long TaskPage::OnReset(void)
+	LRESULT TaskPage::OnReset(void)
 	{
 		return 0;
 	}
-	long TaskPage::OnSetActive(void)
+	LRESULT TaskPage::OnSetActive(void)
 	{
 		return 0;
 	}
-	long TaskPage::OnWizBack(void)
+	LRESULT TaskPage::OnWizBack(void)
 	{
 		return 0;
 	}
-	long TaskPage::OnWizFinish(void)
+	LRESULT TaskPage::OnWizFinish(void)
 	{
 		return 0;
 	}
-	long TaskPage::OnWizNext(void)
+	LRESULT TaskPage::OnWizNext(void)
 	{
 		return 0;
 	}
-	bool TaskPage::OnMessage(unsigned int, unsigned int, long, long *)
+	bool TaskPage::OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return false;
 	}
-	long TaskPage::StaticXHostSubclassProc(HWND, unsigned int, unsigned int, long)
+	LONG_PTR TaskPage::StaticXHostSubclassProc(HWND, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
@@ -9523,7 +9523,7 @@ namespace DirectUI
 	void TaskPage::FreeComCtl32(void)
 	{
 	}
-	int TaskPage::OnWndMsg(unsigned int, unsigned int, long, long *)
+	int TaskPage::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult)
 	{
 		return 0;
 	}
@@ -10297,7 +10297,7 @@ namespace DirectUI
 	void XBaby::SetClassInfoPtr(IClassInfo *)
 	{
 	}
-	void XBaby::ForceThemeChange(unsigned int, long)
+	void XBaby::ForceThemeChange(UINT_PTR, LONG_PTR)
 	{
 	}
 	SIZE XBaby::GetContentDesiredSize(int, int)
@@ -10345,7 +10345,7 @@ namespace DirectUI
 	void XBaby::OnThemeChanged(ThemeChangedEvent *)
 	{
 	}
-	void XBaby::OnWmThemeChanged(unsigned int, long)
+	void XBaby::OnWmThemeChanged(WPARAM wParam, LPARAM lParam)
 	{
 	}
 	void XBaby::SetKeyFocus(void)
@@ -10444,11 +10444,11 @@ namespace DirectUI
 	void XElement::OnInput(InputEvent *)
 	{
 	}
-	bool XElement::OnMessage(unsigned int, unsigned int, long, long *)
+	bool XElement::OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*)
 	{
 		return false;
 	}
-	bool XElement::OnSinkThemeChanged(unsigned int, unsigned int, long, long *)
+	bool XElement::OnSinkThemeChanged(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT*)
 	{
 		return false;
 	}
@@ -10514,7 +10514,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long XProvider::ForceThemeChange(unsigned int, long)
+	long XProvider::ForceThemeChange(UINT_PTR, LONG_PTR)
 	{
 		return 0;
 	}
@@ -10860,7 +10860,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long DUIFactory::LoadFromBuffer(UCString, unsigned int, UCString, Element *, unsigned long *, Element **)
+	long DUIFactory::LoadFromBuffer(UCString, UINT_PTR, UCString, Element *, unsigned long *, Element **)
 	{
 		return 0;
 	}

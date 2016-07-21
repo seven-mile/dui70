@@ -24,7 +24,7 @@ namespace DirectUI
 
 		virtual IClassInfo *GetClassInfoW(void);
 		virtual SIZE GetContentSize(int, int, Surface *);
-		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		unsigned long SetStyle(unsigned long);
 
 	protected:

@@ -18,7 +18,7 @@ namespace DirectUI
 
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual void OnInput(InputEvent *);
-		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
 	private:
 		static IClassInfo * s_pClassInfo;

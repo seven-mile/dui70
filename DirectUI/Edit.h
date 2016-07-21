@@ -44,7 +44,7 @@ namespace DirectUI
 		virtual bool IsContentProtected(void);
 		virtual unsigned int MessageCallback(LPGMSG);
 		virtual void OnInput(InputEvent *);
-		virtual bool OnNotify(unsigned int, unsigned int, long, long *);
+		virtual bool OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value *, Value *);
 
 	protected:

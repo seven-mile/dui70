@@ -39,7 +39,7 @@ namespace DirectUI
 		virtual int GetPage(void);
 		virtual int GetPosition(void);
 		virtual bool GetProportional(void);
-		virtual bool OnMessage(unsigned int, unsigned int, long, long *);
+		virtual bool OnMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value *, Value *);
 		virtual bool OnPropertyChanging(const PropertyInfo*, int, Value *, Value *);
 		virtual long SetLine(int);

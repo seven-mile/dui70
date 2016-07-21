@@ -51,7 +51,7 @@ namespace DirectUI
 		unsigned short const * GetFont(Value * *);
 		static CRITICAL_SECTION * __stdcall GetFactoryLock(void);
 		SIZE const * GetExtent(Value * *);
-		long GetEncodedContentString(unsigned short *, unsigned int);
+		long GetEncodedContentString(unsigned short *, UINT_PTR);
 		bool GetEnabled(void);
 
 		int GetDPI(void);

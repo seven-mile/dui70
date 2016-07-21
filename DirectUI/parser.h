@@ -32,6 +32,12 @@ namespace DirectUI
 		{
 
 		};
+
+		struct RoleMap
+		{
+
+		};
+
 		
 		Schema & operator=(Schema const &);
 		static long __stdcall CreatePatternProvider(Pattern, ElementProvider *, IUnknown * *);
@@ -190,7 +196,7 @@ namespace DirectUI
 		static long __stdcall LookupPropertyInfos(void);
 		static long __stdcall GetProcs(void);
 
-		static struct RoleMap const * const _roleMapping;
+		static RoleMap const * const _roleMapping;
 		static struct ControlInfo const * const g_controlInfoTable;
 		static struct EventInfo const * const g_eventInfoTable;
 		static struct EventMap const * const g_eventMapping;

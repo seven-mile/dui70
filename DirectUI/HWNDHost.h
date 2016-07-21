@@ -99,10 +99,10 @@ namespace DirectUI
 	private:
 		static unsigned int const *g_rgMouseMap[3];
 		static IClassInfo* s_pClassInfo;
-		static int _CtrlWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
-		static int _SinkWndProc(void*, HWND, unsigned int, unsigned __int64, __int64, __int64*);
+		static int __stdcall _CtrlWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
+		static int WINAPI _SinkWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
 
-		void ApplySinkRegion(const LPRECT, bool);
+		void ApplySinkRegion(RECT const *, bool);
 		long GetAccessibleImpl(IAccessible**, bool);
 		void GetSinkRect(const LPRECT, LPRECT);
 		bool HaveWin32Focus();

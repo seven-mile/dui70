@@ -2,13 +2,14 @@
 
 namespace DirectUI
 {
-  class UILIB_API DuiAccessible
+
+	class UILIB_API DuiAccessible
 		: public IAccessible
 		, public IEnumVARIANT
 		, public IOleWindow
 		, public IAccIdentity
 		, public IServiceProvider
-  {
+	{
 	public:
 		DuiAccessible();
 		DuiAccessible(const DuiAccessible&) = delete;
@@ -79,8 +80,7 @@ namespace DirectUI
 		long GetAccName(VARIANT, int, unsigned short**);
 		long GetAccNameFromContent(unsigned short**);
 		long GetDispatchFromElement(Element*, IDispatch**);
-  };
-
+	};
 
 	class UILIB_API HWNDHostAccessible : public DuiAccessible
 	{
@@ -128,11 +128,13 @@ namespace DirectUI
 		virtual HRESULT WINAPI put_accValue(VARIANT, BSTR);
 	};
 
-	class UILIB_API HWNDHostClientAccessible
+	class UILIB_API HWNDHostClientAccessible: public HWNDHostAccessible
 	{
 	public:
 		HWNDHostClientAccessible();
 		HWNDHostClientAccessible(const HWNDHostClientAccessible&) = delete;
+		HWNDHostClientAccessible& operator=(const HWNDHostClientAccessible&) = delete;
+
 		virtual ~HWNDHostClientAccessible();
 
 		static HRESULT WINAPI Create(Element*, IAccessible*, DuiAccessible**);

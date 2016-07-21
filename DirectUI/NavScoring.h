@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	class UILIB_API NavScoring
+	struct UILIB_API NavScoring
 	{
 	public:
 		void Init(Element *, int, NavReference const *);

@@ -635,11 +635,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	unsigned long Element::AddRef()
+	long WINAPI Element::AddRef()
 	{
 		return 0;
 	}
-	UID Element::AnimationChange()
+	UID WINAPI Element::AnimationChange()
 	{
 		return UID();
 	}
@@ -1584,13 +1584,13 @@ namespace DirectUI
 	void Element::UpdateLayout()
 	{
 	}
-	void Element::_AddDependency(Element*, const PropertyInfo*, int, DepRecs*, DeferCycle*, long*)
+	void WINAPI Element::_AddDependency(Element*, const PropertyInfo*, int, DepRecs*, DeferCycle*, long*)
 	{
 	}
 	void Element::_ClearNeedsLayout()
 	{
 	}
-	long Element::_DisplayNodeCallback(HGADGET__*, void*, EventMsg*)
+	long WINAPI Element::_DisplayNodeCallback(HGADGET__*, void*, EventMsg*)
 	{
 		return 0;
 	}
@@ -1605,15 +1605,15 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	int Element::_MarkElementForDS(Element*)
+	int WINAPI Element::_MarkElementForDS(Element*)
 	{
 		return 0;
 	}
-	int Element::_MarkElementForLayout(Element*, unsigned int)
+	int WINAPI Element::_MarkElementForLayout(Element*, unsigned int)
 	{
 		return 0;
 	}
-	bool Element::_SetGroupChanges(Element*, int, DeferCycle*)
+	bool WINAPI Element::_SetGroupChanges(Element*, int, DeferCycle*)
 	{
 		return false;
 	}
@@ -1624,7 +1624,7 @@ namespace DirectUI
 	void Element::_StartOptimizedLayoutQ(void)
 	{
 	}
-	void Element::_TransferGroupFlags(Element*, int)
+	void WINAPI Element::_TransferGroupFlags(Element*, int)
 	{
 	}
 	tagSIZE Element::_UpdateDesiredSize(int, int, Surface*)
@@ -1690,10 +1690,10 @@ namespace DirectUI
 	void Element::MarkSelfLayout()
 	{
 	}
-	void Element::_FlushLayout(Element*, DeferCycle*)
+	void WINAPI Element::_FlushLayout(Element*, DeferCycle*)
 	{
 	}
-	void Element::_InvalidateCachedDSConstraints(Element*)
+	void WINAPI Element::_InvalidateCachedDSConstraints(Element*)
 	{
 	}
 	void Element::_OnFontPropChanged(Value*)
@@ -1761,7 +1761,7 @@ namespace DirectUI
 	void Element::_UpdatePropertyInCache(const PropertyInfo*)
 	{
 	}
-	void Element::_VoidPCNotifyTree(int, DeferCycle*)
+	void WINAPI Element::_VoidPCNotifyTree(int, DeferCycle*)
 	{
 	}
 	void Element::_FlushDS(DeferCycle*)
@@ -2548,6 +2548,12 @@ namespace DirectUI
 	void AccessibleButton::SetClassInfoPtr(IClassInfo *)
 	{
 	}
+
+	AccessibleButton::ACCESSIBLEROLE& AccessibleButton::ACCESSIBLEROLE::operator=(const AccessibleButton::ACCESSIBLEROLE&)
+	{
+		return *this;
+	}
+
 	const AccessibleButton::ACCESSIBLEROLE * AccessibleButton::FindAccessibleRole(int)
 	{
 		return nullptr;
@@ -5424,11 +5430,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	unsigned long EventManager::AdviseEventAdded(LPCRITICAL_SECTION lpCriticalSection, SAFEARRAY *)
+	long EventManager::AdviseEventAdded(int, SAFEARRAY *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::AdviseEventRemoved(int, SAFEARRAY *)
+	long EventManager::AdviseEventRemoved(int, SAFEARRAY *)
 	{
 		return 0;
 	}
@@ -6531,15 +6537,15 @@ namespace DirectUI
 	{
 		return false;
 	}
-	int HWNDHost::_CtrlWndProc(void *, HWND, unsigned int, unsigned __int64, __int64, __int64 *)
+	int HWNDHost::_CtrlWndProc(void *, HWND, unsigned int, unsigned int, long, long *)
 	{
 		return 0;
 	}
-	int HWNDHost::_SinkWndProc(void *, HWND, unsigned int, unsigned __int64, __int64, __int64 *)
+	int WINAPI HWNDHost::_SinkWndProc(void *, HWND, unsigned int, unsigned int, long, long *)
 	{
 		return 0;
 	}
-	void HWNDHost::ApplySinkRegion(const LPRECT, bool)
+	void HWNDHost::ApplySinkRegion(struct tagRECT const *, bool)
 	{
 	}
 	long HWNDHost::GetAccessibleImpl(IAccessible **, bool)
@@ -7616,7 +7622,7 @@ namespace DirectUI
 	int Schema::WindowWindowClosedEvent;
 	int Schema::WindowWindowOpenedEvent;
 
-	struct RoleMap const * const Schema::_roleMapping=NULL;
+	Schema::RoleMap const * const Schema::_roleMapping=NULL;
 	struct ControlInfo const * const Schema::g_controlInfoTable = NULL;
 	struct EventInfo const * const Schema::g_eventInfoTable = NULL;
 	struct EventMap const * const Schema::g_eventMapping = NULL;
@@ -10554,7 +10560,7 @@ namespace DirectUI
 		return *this;
 	}
 
-	unsigned long ElementProviderManager::Add(ElementProvider *)
+	long WINAPI ElementProviderManager::Add(ElementProvider *)
 	{
 		return 0;
 	}

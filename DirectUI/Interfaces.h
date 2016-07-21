@@ -87,6 +87,8 @@ namespace DirectUI
 	public:
 		RefcountBase();
 		RefcountBase(const RefcountBase&) = delete;
+		RefcountBase&operator=(const RefcountBase&) = delete;
+
 		virtual ~RefcountBase();
 
 		unsigned long WINAPI AddRef();

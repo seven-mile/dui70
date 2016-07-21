@@ -6,6 +6,8 @@ namespace DirectUI
 	{
 	public:
 		InvokeHelper(void);
+		InvokeHelper(const InvokeHelper&) = delete;
+		InvokeHelper&operator=(const InvokeHelper&) = delete;
 		virtual ~InvokeHelper(void);
 
 		long DoInvoke(int, ElementProvider *, ProviderProxy * (__stdcall*)(Element *), char *);

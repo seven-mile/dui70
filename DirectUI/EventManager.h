@@ -7,9 +7,8 @@ namespace DirectUI
 	public:
 		EventManager & operator=(EventManager const &);
 
-		static unsigned long __stdcall AddRectangleChange(Element *, bool, bool);
-		static unsigned long __stdcall AdviseEventAdded(LPCRITICAL_SECTION lpCriticalSection, SAFEARRAY *);
-		static unsigned long __stdcall AdviseEventRemoved(int, SAFEARRAY *);
+		static long __stdcall AdviseEventAdded(int, SAFEARRAY *);
+		static long __stdcall AdviseEventRemoved(int, SAFEARRAY *);
 		static void __stdcall Close();
 		static void __stdcall DestroyListener(Element *);
 		static unsigned long __stdcall EndDefer(Element *);
@@ -46,5 +45,9 @@ namespace DirectUI
 		static bool __stdcall WantEvent(Schema::Event);
 		static bool __stdcall WantEvent(Schema::Event, int);
 		static bool __stdcall WantPropertyEvent(int);
+
+	private:
+		static unsigned long __stdcall AddRectangleChange(Element *, bool, bool);
+
 	};
 }

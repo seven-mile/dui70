@@ -107,6 +107,8 @@ namespace DirectUI
 		HWNDElementProvider(void);
 		virtual ~HWNDElementProvider(void);
 
+		HWNDElementProvider& operator=(const HWNDElementProvider&) = delete;
+
 		static long __stdcall Create(HWNDElement *, InvokeHelper *, HWNDElementProvider * *);
 
 		virtual unsigned long __stdcall AddRef(void);

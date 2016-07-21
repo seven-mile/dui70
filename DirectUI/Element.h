@@ -64,8 +64,8 @@ namespace DirectUI
 
 		long AddListener(class IElementListener*);
 
-		unsigned long AddRef();
-		static UID AnimationChange();
+		long WINAPI AddRef();
+		static UID WINAPI AnimationChange();
 
 		void BroadcastEvent(class Event*);
 		void Detach(class DeferCycle*);
@@ -90,11 +90,6 @@ namespace DirectUI
 		//23
 		virtual long WINAPI QueryInterface(GUID const &, void**);
 
-		//24
-		virtual void _SelfLayoutDoLayout(int, int);
-
-		//25
-		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
 
 
 		long Destroy(bool);
@@ -341,18 +336,18 @@ namespace DirectUI
 		DeferCycle* TestDeferObject();
 		bool UiaEvents();
 		void UpdateLayout();
-		static void _AddDependency(Element*, const PropertyInfo*, int, class DepRecs*, DeferCycle*, long*);
+		static void WINAPI _AddDependency(Element*, const PropertyInfo*, int, class DepRecs*, DeferCycle*, long*);
 		void _ClearNeedsLayout();
-		static long _DisplayNodeCallback(HGADGET, void*, struct EventMsg*);
+		static long WINAPI _DisplayNodeCallback(HGADGET, void*, struct EventMsg*);
 		void _EndOptimizedLayoutQ();
 		int _GetChangesUpdatePass();
 		unsigned int _GetNeedsLayout();
-		static int _MarkElementForDS(Element*);
-		static int _MarkElementForLayout(Element*, unsigned int);
-		static bool _SetGroupChanges(Element*, int, DeferCycle*);
+		static int WINAPI _MarkElementForDS(Element*);
+		static int WINAPI _MarkElementForLayout(Element*, unsigned int);
+		static bool WINAPI _SetGroupChanges(Element*, int, DeferCycle*);
 		int _SetNeedsLayout(unsigned int);
 		void _StartOptimizedLayoutQ(void);
-		static void _TransferGroupFlags(Element*, int);
+		static void WINAPI _TransferGroupFlags(Element*, int);
 		struct tagSIZE _UpdateDesiredSize(int, int, Surface*);
 		void _UpdateLayoutPosition(int, int);
 		void _UpdateLayoutSize(int, int);
@@ -363,6 +358,12 @@ namespace DirectUI
 		int GetBackgroundStdColor(void);
 		struct Fill const * GetBorderColor(Value * *);
 	protected:
+		//24
+		virtual void _SelfLayoutDoLayout(int, int);
+
+		//25
+		virtual SIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
+
 		//26
 		virtual void OnHosted(Element*);
 		//27
@@ -399,8 +400,8 @@ namespace DirectUI
 
 		void MarkHosted();
 		void MarkSelfLayout();
-		static void _FlushLayout(Element*, DeferCycle*);
-		static void _InvalidateCachedDSConstraints(Element*);
+		static void WINAPI _FlushLayout(Element*, DeferCycle*);
+		static void WINAPI _InvalidateCachedDSConstraints(Element*);
 		void _OnFontPropChanged(Value*);
 		long _RemoveLocalValue( const PropertyInfo* (WINAPI*)(void), bool);
 		long _RemoveLocalValue(const PropertyInfo*, bool);
@@ -421,7 +422,7 @@ namespace DirectUI
 		int _CachedValueIsEqual(const PropertyInfo*, Element*);
 		void _GetBuriedSheetDependencies(const PropertyInfo*, Element*, class DepRecs*, DeferCycle*, long*);
 		void _UpdatePropertyInCache(const PropertyInfo*);
-		static void _VoidPCNotifyTree(int, DeferCycle*);
+		static void WINAPI _VoidPCNotifyTree(int, DeferCycle*);
 		
 
 		void _FlushDS(DeferCycle*);
@@ -554,12 +555,12 @@ namespace DirectUI
 	public:
 		ElementProviderManager & operator=(class DirectUI::ElementProviderManager const &);
 
-		static unsigned long Add(ElementProvider *);
-		static void __stdcall Close();
-		static ElementProvider *__stdcall Find(Element *);
-		static bool __stdcall FindProviderCallback(ElementProvider *, void *);
-		static unsigned long __stdcall Init();
-		static void __stdcall Remove(ElementProvider *);
+		static long WINAPI Add(ElementProvider *);
+		static void WINAPI Close();
+		static ElementProvider *WINAPI Find(Element *);
+		static bool WINAPI FindProviderCallback(ElementProvider *, void *);
+		static unsigned long WINAPI Init();
+		static void WINAPI Remove(ElementProvider *);
 	};
 
 }

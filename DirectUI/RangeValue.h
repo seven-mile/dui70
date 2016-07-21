@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API RangeValueProvider : public PatternProvider<RangeValueProvider, IRangeValueProvider, 4>
+	class UILIB_API RangeValueProvider
+		: public PatternProvider<RangeValueProvider, IRangeValueProvider, 4>
+		, public IRangeValueProvider
 	{
 	public:
 		RangeValueProvider(void);
@@ -28,10 +30,11 @@ namespace DirectUI
 		RangeValueProxy & operator=(RangeValueProxy const &);
 
 		static RangeValueProxy * __stdcall Create(Element *);
+		static bool __stdcall IsPatternSupported(Element *);
+		
 		virtual long DoMethod(int, char *);
 	protected:
 		RangeValueProxy(void);
-		static bool __stdcall IsPatternSupported(Element *);
 
 		virtual void Init(Element *);
 

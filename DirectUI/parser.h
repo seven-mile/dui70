@@ -38,6 +38,36 @@ namespace DirectUI
 
 		};
 
+		struct PropertyInfo
+		{
+
+		};
+
+		struct PatternMap
+		{
+
+		};
+
+		struct EventMap
+		{
+
+		};
+
+		struct EventInfo
+		{
+
+		};
+
+		struct ControlInfo
+		{
+
+		};
+
+		struct PatternInfo
+		{
+
+		};
+
 		
 		Schema & operator=(Schema const &);
 		static long __stdcall CreatePatternProvider(Pattern, ElementProvider *, IUnknown * *);
@@ -176,7 +206,7 @@ namespace DirectUI
 		static int TreeControlType;
 		static int TreeItemControlType;
 		static long(__stdcall* UiaHostProviderFromHwnd)(HWND, IRawElementProviderSimple * *);
-		static int(__stdcall* UiaLookupId)(enum AutomationIdentifierType, GUID const *);
+		static int(__stdcall* UiaLookupId)(AutomationIdentifierType, GUID const *);
 		static long(__stdcall* UiaRaiseAutomationEvent)(IRawElementProviderSimple *, int);
 		static long(__stdcall* UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple *, int, VARIANT, VARIANT);
 		static long(__stdcall* UiaRaiseStructureChangedEvent)(IRawElementProviderSimple *, enum StructureChangeType, int *, int);
@@ -197,13 +227,13 @@ namespace DirectUI
 		static long __stdcall GetProcs(void);
 
 		static RoleMap const * const _roleMapping;
-		static struct ControlInfo const * const g_controlInfoTable;
-		static struct EventInfo const * const g_eventInfoTable;
-		static struct EventMap const * const g_eventMapping;
+		static ControlInfo const * const g_controlInfoTable;
+		static EventInfo const * const g_eventInfoTable;
+		static EventMap const * const g_eventMapping;
 		static bool g_fInited;
-		static struct PatternInfo const * const g_patternInfoTable;
-		static struct PatternMap const * const g_patternMapping;
-		static struct PropertyInfo const * const g_propertyInfoTable;
+		static PatternInfo const * const g_patternInfoTable;
+		static PatternMap const * const g_patternMapping;
+		static PropertyInfo const * const g_propertyInfoTable;
 	};
 
 	typedef Value* (WINAPI* GetSheetCallback)(UCString, void*);
@@ -249,14 +279,14 @@ namespace DirectUI
 		long GetSheet(UCString, Value**);
 		void* GetSheetContext();
 		
-		long LookupElement(IXmlReader*, UCString, HINSTANCE,class IClassInfo**);
-		long LookupElement(LINEINFO, UCString, HINSTANCE, class IClassInfo**);
+		long LookupElement(IXmlReader*, UCString, HINSTANCE, struct IClassInfo**);
+		long LookupElement(LINEINFO, UCString, HINSTANCE, struct IClassInfo**);
 
 		void SetDefaultHInstance(HINSTANCE);
 		
 		void SetGetSheetCallback(GetSheetCallback,void*);
 		void SetParseErrorCallback(ParseErrorCallback, void*);
-		void SetUnknownAttrCallback(bool (__cdecl*)(UCString, void*), void*);
+		void SetUnknownAttrCallback(bool (__stdcall*)(UCString, void*), void*);
 
 		long SetPreprocessedXML(UCString, HINSTANCE, HINSTANCE);
 		void SetUnavailableIcon(HICON);
@@ -273,9 +303,13 @@ namespace DirectUI
 
 		// exported for: int, unsigned long, Value*, RECT
 		template<typename T>
-		struct FunctionDefinition 
+		struct UILIB_API FunctionDefinition
 		{
-			FunctionDefinition<T>& operator=(const FunctionDefinition<T> &);
+			FunctionDefinition() = delete;
+			FunctionDefinition(const FunctionDefinition&) = delete;
+			~FunctionDefinition() = delete;
+
+			FunctionDefinition& operator=(const FunctionDefinition &);
 		};
 
 		union ParsedArg
@@ -288,20 +322,20 @@ namespace DirectUI
 		LINEINFO _GetLineInfo(IXmlReader*);
 
 		long AddRulesToStyleSheet(IXmlReader*, StyleSheet*, UCString, DynamicArray<XMLParserCond, 0>*, DynamicArray<UString, 0>*);
-		long CreateLayout(const ParserTools::ExprNode*, long (__cdecl*)(int, int*, Value**));
+		long CreateLayout(const ParserTools::ExprNode*, long (WINAPI*)(int, int*, Value**));
 		long CreateStyleSheet(IXmlReader*, UCString, StyleSheet**);
 		long CreateXmlReader(IXmlReader**);
 		long CreateXmlReaderFromHGLOBAL(void*, IXmlReader**);
 		long CreateXmlReaderInputWithEncodingName(IStream*, UCString, IUnknown**);
 		long GetParserCommon(DUIXmlParser**);
-		long GetPropValPairInfo(IXmlReader*, IClassInfo*, UCString, UCString,class PropertyInfo**, Value**);
-		long GetPropValPairInfo(LINEINFO, IClassInfo*, UCString, UCString, const PropertyInfo**, Value**);
+		long GetPropValPairInfo(IXmlReader*, IClassInfo*, UCString, UCString, PropertyInfo const **, Value**);
+		long GetPropValPairInfo(LINEINFO, IClassInfo*, UCString, UCString, PropertyInfo const **, Value**);
 		long GetValueParser(ParserTools::ValueParser**);
-		static long GetXmlLiteDll(HINSTANCE*);
+		static long WINAPI GetXmlLiteDll(HINSTANCE*);
 		long Initialize();
 		long InitializeParserFromXmlLiteReader(IXmlReader*);
-		static bool IsThemeClassName(const ParserTools::ExprNode*);
-		long MapPropertyEnumValue(const class EnumMap*, UCString, int*);
+		static bool WINAPI IsThemeClassName(const ParserTools::ExprNode*);
+		long MapPropertyEnumValue(const struct EnumMap*, UCString, int*);
 		long MapPropertyNameToPropertyInfo(LINEINFO, IClassInfo*, UCString, const PropertyInfo**);
 		long ParseARGBColor(const ParserTools::ExprNode*, unsigned long*);
 		long ParseArgs(const ParserTools::ExprNode*, ParsedArg*, unsigned int, const char*);
@@ -347,8 +381,8 @@ namespace DirectUI
 		long ParseSysMetricInt(const ParserTools::ExprNode*, int*);
 		long ParseSysMetricStr(const ParserTools::ExprNode*, Value**);
 		long ParseTheme(const ParserTools::ExprNode*, void**);
-		static int QuerySysMetric(int);
-		static UCString QuerySysMetricStr(int, UString, unsigned int);
+		static int WINAPI QuerySysMetric(int);
+		static UCString WINAPI QuerySysMetricStr(int, UString, unsigned int);
 		void ReturnValueParser(ParserTools::ValueParser*);
 		void SendParseError(UCString, UCString, int, int, long);
 		void SendParseError(UCString, UCString, IXmlReader*, long);
@@ -367,7 +401,7 @@ namespace DirectUI
 		static FunctionDefinition<Value*> const* const s_fdGraphic;
 		static FunctionDefinition<int> const* const s_fdInt;
 		static FunctionDefinition<RECT> const* const s_fdRect;
-		static FunctionDefinition<Value*> const* s_fdString;
+		static FunctionDefinition<Value*> const* const s_fdString;
 	
 	private:
 		void SetParseState(DUI_PARSE_STATE);

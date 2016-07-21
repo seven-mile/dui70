@@ -6,7 +6,7 @@ namespace DirectUI
 	{
 	public:
 		CCCheckBox(const CCCheckBox &);
-		CCCheckBox(unsigned long);
+		CCCheckBox(unsigned long v1=0x403);
 		CCCheckBox & operator=(const CCCheckBox &);
 		virtual ~CCCheckBox(void);
 

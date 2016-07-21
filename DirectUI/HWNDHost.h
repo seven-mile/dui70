@@ -22,15 +22,15 @@ namespace DirectUI
 		long SetOptimizeMove(bool);
 		long SetTransparent(bool);
 
-		static long Create(unsigned int, unsigned int, Element*, unsigned long*, Element**pOut);
-		static long Create(Element*, unsigned long*, Element**pOut);
-		static const PropertyInfo* BackgroundOwnerIDProp();
-		static IClassInfo* GetClassInfoPtr();
-		static const PropertyInfo* OptimizeMoveProp();
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo*);
-		static const PropertyInfo* ThemeChangedProp();
-		static const PropertyInfo* TransparentProp();
+		static long WINAPI Create(unsigned int, unsigned int, Element*, unsigned long*, Element**pOut);
+		static long WINAPI Create(Element*, unsigned long*, Element**pOut);
+		static const PropertyInfo* WINAPI BackgroundOwnerIDProp();
+		static IClassInfo* WINAPI GetClassInfoPtr();
+		static const PropertyInfo* WINAPI OptimizeMoveProp();
+		static long WINAPI Register();
+		static void WINAPI SetClassInfoPtr(IClassInfo*);
+		static const PropertyInfo* WINAPI ThemeChangedProp();
+		static const PropertyInfo* WINAPI TransparentProp();
 
 		//∏∏¿‡÷ÿ‘ÿ
 		virtual IClassInfo* GetClassInfoW();
@@ -65,8 +65,8 @@ namespace DirectUI
 		virtual int OnAdjustWindowSize(int, int, unsigned int);
 
 	protected:
-		static void AttachCtrlSubclassProc(HWND);
-		static __int64 CtrlSubclassProc(HWND, unsigned int, unsigned __int64, __int64);
+		static void WINAPI AttachCtrlSubclassProc(HWND);
+		static long WINAPI CtrlSubclassProc(HWND, unsigned int, unsigned int, long);
 
 		void PrintRTLControl(HDC, HDC, const RECT&);
 		long SetThemeChanged(int);
@@ -97,14 +97,14 @@ namespace DirectUI
 		virtual bool EraseBkgnd(HDC, LRESULT*);
 
 	private:
-		static unsigned int const *g_rgMouseMap[3];
+		static unsigned int const (*g_rgMouseMap)[3];
 		static IClassInfo* s_pClassInfo;
 		static int __stdcall _CtrlWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
 		static int WINAPI _SinkWndProc(void *, HWND, unsigned int, unsigned int, long, long *);
 
 		void ApplySinkRegion(RECT const *, bool);
 		long GetAccessibleImpl(IAccessible**, bool);
-		void GetSinkRect(const LPRECT, LPRECT);
+		void GetSinkRect(RECT const *, LPRECT);
 		bool HaveWin32Focus();
 		void SyncColorsAndFonts();
 		void UnvirtualizePosition();

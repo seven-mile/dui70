@@ -53,7 +53,7 @@ namespace DirectUI
 
 		virtual ~ClassInfoBase();
 
-		static bool ClassExist(IClassInfo**, const PropertyInfo* const*, unsigned int, IClassInfo*, HINSTANCE, UCString, bool);
+		static bool WINAPI ClassExist(IClassInfo**, const PropertyInfo* const*, unsigned int, IClassInfo*, HINSTANCE, UCString, bool);
 		long Initialize(HINSTANCE, UCString, bool, const PropertyInfo* const*, unsigned int);
 		long Register();
 	};
@@ -110,7 +110,7 @@ namespace DirectUI
 		bool OnPageChanging(Value*);
 		void OnPositionChanged(Value*);
 		bool OnPositionChanging(Value*);
-		static UID Scroll();
+		static UID WINAPI Scroll();
 		void SetPinned(bool);
 	private:
 		int GetPageInc();
@@ -142,7 +142,6 @@ namespace DirectUI
 		//5
 		virtual long Add(Element**, unsigned int);
 
-		static IClassInfo* GetClassInfoPtr();
 		//6
 		virtual IClassInfo* GetClassInfoW();
 		int GetPinning();
@@ -167,8 +166,6 @@ namespace DirectUI
 		//5
 		virtual void OnListenedInput(Element*, InputEvent*);
 
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo*);
 
 		long SetPinning(int);
 		long SetXBarVisibility(int);
@@ -178,13 +175,18 @@ namespace DirectUI
 		long SetYOffset(int);
 		long SetYScrollable(bool);
 
-		static const PropertyInfo* PinningProp();
-		static const PropertyInfo* XBarVisibilityProp();
-		static const PropertyInfo* XOffsetProp();
-		static const PropertyInfo* XScrollableProp();
-		static const PropertyInfo* YBarVisibilityProp();
-		static const PropertyInfo* YOffsetProp();
-		static const PropertyInfo* YScrollableProp();
+		static IClassInfo* WINAPI GetClassInfoPtr();
+
+		static long WINAPI Register();
+		static void WINAPI SetClassInfoPtr(IClassInfo*);
+
+		static const PropertyInfo* WINAPI PinningProp();
+		static const PropertyInfo* WINAPI XBarVisibilityProp();
+		static const PropertyInfo* WINAPI XOffsetProp();
+		static const PropertyInfo* WINAPI XScrollableProp();
+		static const PropertyInfo* WINAPI YBarVisibilityProp();
+		static const PropertyInfo* WINAPI YOffsetProp();
+		static const PropertyInfo* WINAPI YScrollableProp();
 	
 	protected:
 		void FireAnimationChangeEvent(bool);

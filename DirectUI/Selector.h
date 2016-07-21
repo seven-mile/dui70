@@ -23,7 +23,7 @@ namespace DirectUI
 		virtual Element * GetAdjacent(Element *, int, NavReference const *, unsigned long);
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual void OnEvent(Event *);
-		virtual void OnInput(class InputEvent *);
+		virtual void OnInput(struct InputEvent *);
 		virtual void OnKeyFocusMoved(Element *, Element *);
 		virtual void OnPropertyChanged(PropertyInfo const *, int, Value *, Value *);
 		

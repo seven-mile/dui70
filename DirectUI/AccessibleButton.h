@@ -37,9 +37,10 @@ namespace DirectUI
 		};
 
 	private:
+		static const ACCESSIBLEROLE* WINAPI FindAccessibleRole(int);
+		
 		static const ACCESSIBLEROLE* c_rgar;
 		static IClassInfo* s_pClassInfo;
-		static const ACCESSIBLEROLE* FindAccessibleRole(int);
 	};
 
 }

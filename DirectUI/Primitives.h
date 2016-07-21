@@ -24,11 +24,6 @@ namespace DirectUI
 
 	};
 
-	struct UiaRect
-	{
-
-	};
-
 	struct PropertyInfo
 	{
 

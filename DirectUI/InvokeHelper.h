@@ -5,6 +5,12 @@ namespace DirectUI
 	class UILIB_API InvokeHelper : public RefcountBase
 	{
 	public:
+		struct InvokeArgs
+		{
+
+		};
+
+
 		InvokeHelper(void);
 		InvokeHelper(const InvokeHelper&) = delete;
 		InvokeHelper&operator=(const InvokeHelper&) = delete;
@@ -18,7 +24,7 @@ namespace DirectUI
 		static int __stdcall _WndProc(void *, HWND, unsigned int, unsigned int, long, long *);
 		static unsigned int const s_uInvokeHelperMsg;
 
-		void OnInvoke(class InvokeArgs *);
+		void OnInvoke(InvokeArgs *);
 
 	};
 
@@ -34,9 +40,13 @@ namespace DirectUI
 
 	private:
 		static InvokeHelper * __stdcall FindInvokeHelper(unsigned int *);
+		static UiaArray<InvokeHelper *> * g_pArrayInvokeHelper;
+		static CRITICAL_SECTION g_cs;
 	};
 
-	class UILIB_API InvokeProvider : public PatternProvider<InvokeProvider, IInvokeProvider, 0>
+	class UILIB_API InvokeProvider 
+		: public PatternProvider<InvokeProvider, IInvokeProvider, 0>
+		, public IInvokeProvider
 	{
 	public:
 		InvokeProvider(void);

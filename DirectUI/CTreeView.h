@@ -6,7 +6,7 @@ namespace DirectUI
 	{
 	public:
 		CCTreeView(CCTreeView const &);
-		CCTreeView(unsigned long);
+		CCTreeView(unsigned long v1=0);
 		virtual~CCTreeView(void);
 		CCTreeView &operator=(CCTreeView const &);
 		

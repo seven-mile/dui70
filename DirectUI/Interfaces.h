@@ -10,13 +10,13 @@ namespace DirectUI
 		//1
 		virtual void OnListenerDetach(class Element*) = 0;
 		//2
-		virtual bool OnPropertyChanging(const class PropertyInfo*, int, class Value*, class Value*) = 0;
+		virtual bool OnPropertyChanging(const struct PropertyInfo*, int, class Value*, class Value*) = 0;
 		//3
-		virtual void OnListenedPropertyChanged(class Element*, const class PropertyInfo*, int, class Value*, class Value*) = 0;
+		virtual void OnListenedPropertyChanged(class Element*, const struct PropertyInfo*, int, class Value*, class Value*) = 0;
 		//4
-		virtual void OnListenedEvent(class Element*,class Event*) = 0;
+		virtual void OnListenedEvent(class Element*, struct Event*) = 0;
 		//5
-		virtual void OnListenedInput(class Element*, class InputEvent*) = 0;
+		virtual void OnListenedInput(class Element*, struct InputEvent*) = 0;
 	};
 
 	struct IClassInfo
@@ -91,8 +91,8 @@ namespace DirectUI
 
 		virtual ~RefcountBase();
 
-		unsigned long WINAPI AddRef();
-		unsigned long WINAPI Release();
+		long AddRef();
+		long Release();
 	};
 
 
@@ -100,7 +100,7 @@ namespace DirectUI
 	class PatternProvider
 		: public RefcountBase
 		, public IProvider
-		, public Y
+		//, public Y
 	{
 	public:
 		PatternProvider();
@@ -110,6 +110,8 @@ namespace DirectUI
 
 		static long WINAPI Create(class ElementProvider*, IUnknown**);
 		virtual void Init(class ElementProvider*);
+		//IProvider
+		virtual ProviderProxyCall GetProxyCreator(void);
 	protected:
 		long DoInvoke(int, ...);
 	private:

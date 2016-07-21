@@ -9,7 +9,7 @@ namespace DirectUI
 	{
 	public:
 		CCBaseScrollBar(const CCBaseScrollBar &);
-		CCBaseScrollBar(unsigned long);
+		CCBaseScrollBar(unsigned long v1=0);
 		CCBaseScrollBar & operator=(const CCBaseScrollBar &);
 
 		virtual ~CCBaseScrollBar(void);

@@ -11,8 +11,8 @@ namespace DirectUI
 		XResourceProvider( const XResourceProvider& );
 		XResourceProvider& operator=( const XResourceProvider& );
 
-		static long Create(XResourceProvider**pOut);
-		static long Create(HINSTANCE, UCString, UCString, UCString, XResourceProvider**pOut );
+		static long WINAPI Create(XResourceProvider**pOut);
+		static long WINAPI Create(HINSTANCE, UCString, UCString, UCString, XResourceProvider**pOut );
 		
 		long Initialize(HINSTANCE h, UCString s1, UCString s2, UCString s3);
 		

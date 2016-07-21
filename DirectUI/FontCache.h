@@ -13,5 +13,10 @@ namespace DirectUI
 		static long __stdcall InitThread(void);
 		static void __stdcall UninitProcess(void);
 		static void __stdcall UninitThread(void);
+
+		virtual void T1() = 0;
+		virtual void T2() = 0;
+		virtual void T3() = 0;
+		virtual void T4() = 0;
 	};
 }

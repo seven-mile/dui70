@@ -6,7 +6,7 @@ namespace DirectUI
 	{
 	public:
 		CCCommandLink(CCCommandLink const &);
-		CCCommandLink(unsigned long);
+		CCCommandLink(unsigned long v1=0xE);
 		virtual ~CCCommandLink(void);
 		CCCommandLink & operator=(CCCommandLink const &);
 

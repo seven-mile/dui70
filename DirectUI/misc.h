@@ -1,14 +1,18 @@
 #pragma once
 
+
 namespace DirectUI
 {
   // exported for int
 	template<typename T>
-	class SafeArrayAccessor 
+	class UILIB_API SafeArrayAccessor
 	{
 	public:
 		SafeArrayAccessor();
 		~SafeArrayAccessor();
+		SafeArrayAccessor(const SafeArrayAccessor&) = delete;
+		SafeArrayAccessor& operator=(const SafeArrayAccessor&) = delete;
+
 		operator T*();
 		long Access(SAFEARRAY *, UChar);
 		int Count();   
@@ -114,6 +118,16 @@ namespace DirectUI
 
 	};
 
+	template<class T>
+	class UiaArray
+	{
+	public:
 
+	};
+
+	class DeferCycle
+	{
+
+	};
 
 }

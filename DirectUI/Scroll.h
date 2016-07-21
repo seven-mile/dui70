@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API ScrollProvider : public PatternProvider<ScrollProvider, IScrollProvider, 5>
+	class UILIB_API ScrollProvider
+		: public PatternProvider<ScrollProvider, IScrollProvider, 5>
+		, public IScrollProvider
 	{
 	public:
 		ScrollProvider(void);

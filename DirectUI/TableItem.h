@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API TableItemProvider : public PatternProvider<TableItemProvider, ITableItemProvider, 10>
+	class UILIB_API TableItemProvider
+		: public PatternProvider<TableItemProvider, ITableItemProvider, 10>
+		, public ITableItemProvider
 	{
 	public:
 		TableItemProvider(void);

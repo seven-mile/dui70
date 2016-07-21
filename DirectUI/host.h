@@ -10,7 +10,7 @@ namespace DirectUI
 		~XHost();
 		XHost & operator=(XHost const &);
 
-		static long Create(class IXElementCP*, XHost**);
+		static long WINAPI Create(class IXElementCP*, XHost**);
 		void Destroy();
 		void DestroyWindow();
 
@@ -22,6 +22,6 @@ namespace DirectUI
 		long Initialize(class IXElementCP*);
 		void ShowWindow(int);
 
-		static LRESULT WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		static LRESULT WINAPI WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	};
 }

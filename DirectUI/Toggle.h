@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API ToggleProvider : public PatternProvider<ToggleProvider, IToggleProvider, 11>
+	class UILIB_API ToggleProvider
+		: public PatternProvider<ToggleProvider, IToggleProvider, 11>
+		, public IToggleProvider
 	{
 	public:
 		ToggleProvider(void);

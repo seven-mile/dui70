@@ -24,6 +24,8 @@ struct EventMsg
 
 };
 
+
+
 //forward declares
 namespace DirectUI
 {
@@ -34,6 +36,22 @@ namespace DirectUI
 
 
 	typedef class ProviderProxy* (__stdcall * ProviderProxyCall)(class Element *);
+
+
+	struct ThemeChangedEvent
+	{
+
+	};
+
+	struct KeyboardEvent
+	{
+
+	};
+
+	struct CellInfo
+	{
+
+	};
 
 	//// Misc
 	//class CritSecLock;

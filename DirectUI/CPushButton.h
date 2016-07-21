@@ -6,7 +6,7 @@ namespace DirectUI
 	{
 	public:
 		CCPushButton(const CCPushButton &);
-		CCPushButton(unsigned long);
+		CCPushButton(unsigned long v1=0);
 		CCPushButton & operator=(const CCPushButton &);
 		
 		virtual ~CCPushButton(void);

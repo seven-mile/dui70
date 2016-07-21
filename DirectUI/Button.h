@@ -14,8 +14,8 @@ namespace DirectUI
 		static HRESULT WINAPI Create(unsigned int, Element*, unsigned long*, Element**);
 		static HRESULT WINAPI Create(Element*, unsigned long*, Element**);
 
-		static UID Click();
-		static UID Context();
+		static UID WINAPI Click();
+		static UID WINAPI Context();
 		//Element类函数重写
 		//0
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
@@ -29,7 +29,7 @@ namespace DirectUI
 		virtual long DefaultAction();
 
 		bool GetCaptured();
-		static IClassInfo* GetClassInfoPtr();
+		static IClassInfo* WINAPI GetClassInfoPtr();
 		bool GetPressed();
 		//Button 新增虚函数
 		//0
@@ -37,13 +37,14 @@ namespace DirectUI
 		//1
 		virtual bool OnReceivedDialogFocus(class DialogElement*);
 
-		static long Register();
+		static long WINAPI Register();
+		static const PropertyInfo* WINAPI CapturedProp();
+		static const PropertyInfo* WINAPI PressedProp();
+		static void WINAPI SetClassInfoPtr(IClassInfo*);
+		
 		long SetCaptured(bool);
-		static void SetClassInfoPtr(IClassInfo*);
 		long SetPressed(bool);
 
-		static const PropertyInfo* CapturedProp();
-		static const PropertyInfo* PressedProp();
 
 	private:
 		static IClassInfo* s_pClassInfo;

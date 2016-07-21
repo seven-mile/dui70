@@ -11,10 +11,10 @@ namespace DirectUI
 
 		virtual ~ElementWithHWND();
 
-		static long Create(Element*, unsigned long*, Element**);
-		static IClassInfo* GetClassInfoPtr();
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo*);
+		static long WINAPI Create(Element*, unsigned long*, Element**);
+		static IClassInfo* WINAPI GetClassInfoPtr();
+		static long WINAPI Register();
+		static void WINAPI SetClassInfoPtr(IClassInfo*);
 
 		virtual IClassInfo* GetClassInfoW();
 

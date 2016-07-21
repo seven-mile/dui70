@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API GridProvider : public PatternProvider<GridProvider, IGridProvider,3>
+	class UILIB_API GridProvider
+		: public PatternProvider<GridProvider, IGridProvider,3>
+		, public IGridProvider
 	{
 	public:
 		GridProvider(void);

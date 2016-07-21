@@ -2,7 +2,9 @@
 
 namespace DirectUI
 {
-	class UILIB_API SelectionItemProvider : public PatternProvider<SelectionItemProvider, ISelectionItemProvider, 7>
+	class UILIB_API SelectionItemProvider
+		: public PatternProvider<SelectionItemProvider, ISelectionItemProvider, 7>
+		, public ISelectionItemProvider
 	{
 	public:
 		SelectionItemProvider(void);

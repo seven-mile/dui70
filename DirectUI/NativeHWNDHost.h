@@ -12,7 +12,7 @@ namespace DirectUI
 
 		static LRESULT WINAPI WndProc(HWND, UINT, WPARAM, LPARAM);
 		NativeHWNDHost& operator=(const NativeHWNDHost&);
-		static UINT AsyncDestroyMsg();
+		static UINT WINAPI AsyncDestroyMsg();
 
 		static HRESULT WINAPI Create(UCString lpClassName, UCString lpWindowName, HWND hWndParent, HICON hIcon, int x, int y, int nWidth, int nHeight, int dwExStyle, int dwStyle, HINSTANCE, UINT, NativeHWNDHost**out);
 		static HRESULT WINAPI Create(UCString lpWindowName, HWND hWndParent, HICON hIcon, int x, int y, int nWidth, int nHeight, int dwExStyle, int dwStyle, unsigned int, NativeHWNDHost**out);

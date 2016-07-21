@@ -8,81 +8,83 @@ namespace DirectUI
 		Value& operator=(const Value &);
 		void AddRef();
 
-		static Value* CreateAtom(unsigned short);
-		static Value* CreateAtom(UCString);
-		static Value* CreateBool(bool);
-		static Value* CreateColor(unsigned long);
-		static Value* CreateColor(unsigned long, unsigned long, unsigned char);
-		static Value* CreateColor(unsigned long, unsigned long, unsigned long, unsigned char);
-		static Value* CreateCursor(HICON);
-		static Value* CreateCursor(UCString);
-		static Value* CreateDFCFill(unsigned int, unsigned int);
-		static Value* CreateDTBFill(UCString, int, int);
-		static Value* CreateElementList(DynamicArray<class Element*, 0>*);
-		static Value* CreateElementRef(class Element*);
-		static Value* CreateEncodedString(UCString);
-		static Value* CreateExpression(Expression*);
-		static Value* CreateFill(const class Fill &);
-		static Value* CreateGraphic(HBITMAP, unsigned char, unsigned int, bool, bool, bool);
-		static Value* CreateGraphic(HENHMETAFILE, HENHMETAFILE);
-		static Value* CreateGraphic(HICON, bool, bool, bool);
-		static Value* CreateGraphic(UCString, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool);
-		static Value* CreateGraphic(UCString, unsigned short, unsigned short, HINSTANCE, bool, bool);
-		static Value* CreateInt(int);
-		static Value* CreateLayout(class Layout*);
-		static Value* CreatePoint(int, int);
-		static Value* CreateRect(int, int, int, int);
-		static Value* CreateSize(int, int);
-		static Value* CreateString(UCString, HINSTANCE);
-		static Value* CreateStyleSheet(StyleSheet*);
+		static Value* WINAPI CreateAtom(unsigned short);
+		static Value* WINAPI CreateAtom(UCString);
+		static Value* WINAPI CreateBool(bool);
+		static Value* WINAPI CreateColor(unsigned long);
+		static Value* WINAPI CreateColor(unsigned long, unsigned long, unsigned char);
+		static Value* WINAPI CreateColor(unsigned long, unsigned long, unsigned long, unsigned char);
+		static Value* WINAPI CreateCursor(HICON);
+		static Value* WINAPI CreateCursor(UCString);
+		static Value* WINAPI CreateDFCFill(unsigned int, unsigned int);
+		static Value* WINAPI CreateDTBFill(UCString, int, int);
+		static Value* WINAPI CreateElementList(DynamicArray<class Element*, 0>*);
+		static Value* WINAPI CreateElementRef(class Element*);
+		static Value* WINAPI CreateEncodedString(UCString);
+		static Value* WINAPI CreateExpression(Expression*);
+		static Value* WINAPI CreateFill(const struct Fill &);
+		static Value* WINAPI CreateGraphic(HBITMAP, unsigned char, unsigned int, bool, bool, bool);
+		static Value* WINAPI CreateGraphic(HENHMETAFILE, HENHMETAFILE);
+		static Value* WINAPI CreateGraphic(HICON, bool, bool, bool);
+		static Value* WINAPI CreateGraphic(UCString, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool);
+		static Value* WINAPI CreateGraphic(UCString, unsigned short, unsigned short, HINSTANCE, bool, bool);
+		static Value* WINAPI CreateInt(int);
+		static Value* WINAPI CreateLayout(class Layout*);
+		static Value* WINAPI CreatePoint(int, int);
+		static Value* WINAPI CreateRect(int, int, int, int);
+		static Value* WINAPI CreateSize(int, int);
+		static Value* WINAPI CreateString(UCString, HINSTANCE);
+		static Value* WINAPI CreateStyleSheet(StyleSheet*);
 
 		bool GetBool();
-		class Cursor* GetCursor();
+		struct Cursor* GetCursor();
 		class Element* GetElement();
 		DynamicArray<class Element*, 0>* GetElementList();
 		class Expression* GetExpression();
-		const class Fill* GetFill();
-		class Graphic* GetGraphic();
-		void* GetImage();
+		const Fill* GetFill();
+		struct Graphic* GetGraphic();
+		void* GetImage(bool);
 		int GetInt();
 		class Layout* GetLayout();
-		const LPPOINT GetPoint();
-		const LPRECT GetRect();
+		POINT const * GetPoint();
+		RECT const * GetRect();
 		int GetRefCount() const;
-		const LPSIZE GetSize();
+		SIZE const * GetSize();
 		UCString GetString();
 		StyleSheet* GetStyleSheet();
 		int GetType() const;
 
 		unsigned short GetAtom();
-		static Value* GetAtomZero();
-		static Value* GetBoolFalse();
-		static Value* GetBoolTrue();
-		static Value* GetColorTrans();
-		static Value* GetCursorNull();
-		static Value* GetElListNull();
-		static Value* GetElementNull();
-		static Value* GetExprNull();
-		static Value* GetIntZero();
-		static Value* GetLayoutNull();
-		static Value* GetNull();
-		static Value* GetPointZero();
-		static Value* GetRectZero();
-		static Value* GetSheetNull();
-		static Value* GetSizeZero();
-		static Value* GetStringNull();
-		static Value* GetUnavailable();
-		static Value* GetUnset();
+		static Value* WINAPI GetAtomZero();
+		static Value* WINAPI GetBoolFalse();
+		static Value* WINAPI GetBoolTrue();
+		static Value* WINAPI GetColorTrans();
+		static Value* WINAPI GetCursorNull();
+		static Value* WINAPI GetElListNull();
+		static Value* WINAPI GetElementNull();
+		static Value* WINAPI GetExprNull();
+		static Value* WINAPI GetIntZero();
+		static Value* WINAPI GetLayoutNull();
+		static Value* WINAPI GetNull();
+		static Value* WINAPI GetPointZero();
+		static Value* WINAPI GetRectZero();
+		static Value* WINAPI GetSheetNull();
+		static Value* WINAPI GetSizeZero();
+		static Value* WINAPI GetStringNull();
+		static Value* WINAPI GetUnavailable();
+		static Value* WINAPI GetUnset();
 
 		bool IsEqual(Value*);
 		void Release();
 		UString ToString(UString, unsigned int) const;
 	private:
 		void _ZeroRelease();
-		static long StrDupW(UCString, UString*);
+		static long WINAPI StrDupW(UCString, UString*);
 	};
 
-	class UILIB_API ValueProvider : public PatternProvider<ValueProvider, IValueProvider, 12>
+	class UILIB_API ValueProvider 
+		: public PatternProvider<ValueProvider, IValueProvider, 12>
+		, public IValueProvider
 	{
 	public:
 		ValueProvider(void);

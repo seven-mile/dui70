@@ -6,6 +6,7 @@
 #include <oleacc.h>
 #include <Commctrl.h>
 #include <UIAutomationCore.h>
+#include <UIAutomationCoreApi.h>
 #include <DbgHelp.h>
 #include <XmlLite.h>
 
@@ -119,8 +120,13 @@
 
 //UnknownElement
 
+UILIB_API void WINAPI DumpDuiTree(DirectUI::Element *, int);
+UILIB_API void WINAPI DumpDuiProperties(DirectUI::Element *);
+
 namespace DirectUI
 {
+	extern UILIB_API unsigned long g_dwElSlot;
+
 	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider);
 	HRESULT WINAPI UnInitProcessPriv(unsigned short*unk1);
 	HRESULT WINAPI InitThread(int iDontKnow);

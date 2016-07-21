@@ -3,8 +3,7 @@
 namespace DirectUI
 {
 	class UILIB_API ScrollViewer
-		: public Element
-		, public BaseScrollViewer
+		: public BaseScrollViewer
 	{
 	public:
 		ScrollViewer(ScrollViewer const &);

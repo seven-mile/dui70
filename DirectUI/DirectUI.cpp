@@ -1,7 +1,19 @@
 #include "DirectUI.h"
 
+
+void WINAPI DumpDuiTree(DirectUI::Element *, int)
+{
+}
+
+void WINAPI DumpDuiProperties(DirectUI::Element *)
+{
+}
+
+
 namespace DirectUI
 {
+	unsigned long g_dwElSlot;
+
 	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider)
 	{
 		return 0;
@@ -439,12 +451,12 @@ namespace DirectUI
 
 	}
 
-	unsigned long WINAPI RefcountBase::AddRef()
+	long RefcountBase::AddRef()
 	{
 		return 0;
 	}
 
-	unsigned long WINAPI RefcountBase::Release()
+	long RefcountBase::Release()
 	{
 		return 0;
 	}
@@ -475,11 +487,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	UID Button::Click()
+	UID WINAPI Button::Click()
 	{
 		return UID();
 	}
-	UID Button::Context()
+	UID WINAPI Button::Context()
 	{
 		return UID();
 	}
@@ -501,7 +513,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	IClassInfo* Button::GetClassInfoPtr()
+	IClassInfo* WINAPI Button::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
@@ -517,7 +529,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	long Button::Register()
+	long WINAPI Button::Register()
 	{
 		return 0;
 	}
@@ -525,18 +537,18 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void Button::SetClassInfoPtr(IClassInfo*)
+	void WINAPI Button::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 	long Button::SetPressed(bool)
 	{
 		return 0;
 	}
-	const PropertyInfo* Button::CapturedProp()
+	const PropertyInfo* WINAPI Button::CapturedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo* Button::PressedProp()
+	const PropertyInfo* WINAPI Button::PressedProp()
 	{
 		return nullptr;
 	}
@@ -560,7 +572,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::Create(unsigned int, Element* parent, unsigned long*, Element** out)
+	long WINAPI Element::Create(unsigned int, Element* parent, unsigned long*, Element** out)
 	{
 		return 0;
 	}
@@ -572,9 +584,61 @@ namespace DirectUI
 	{
 		return false;
 	}
-	long Element::UnRegister(IClassInfo**)
+	long WINAPI Element::UnRegister(IClassInfo**)
 	{
 		return 0;
+	}
+	Element * Element::GetParent(void)
+	{
+		return nullptr;
+	}
+	RECT const * Element::GetPadding(Value **)
+	{
+		return nullptr;
+	}
+	bool Element::GetOverhang(void)
+	{
+		return false;
+	}
+	Element * Element::GetMouseWithinChild(void)
+	{
+		return nullptr;
+	}
+	bool Element::GetMouseWithin(void)
+	{
+		return false;
+	}
+	bool Element::GetMouseFocused(void)
+	{
+		return false;
+	}
+	SIZE const * Element::GetMinSize(Value **)
+	{
+		return nullptr;
+	}
+	RECT const * Element::GetMargin(Value **)
+	{
+		return nullptr;
+	}
+	POINT const * Element::GetLocation(Value **)
+	{
+		return nullptr;
+	}
+	int Element::GetLayoutPos(void)
+	{
+		return 0;
+	}
+	Layout * Element::GetLayout(Value **)
+	{
+		return nullptr;
+	}
+	Element * Element::GetKeyWithinChild(void)
+	{
+		return nullptr;
+	}
+	bool Element::GetKeyWithin(void)
+	{
+		return false;
 	}
 	UCString Element::GetContentStringAsDisplayed(Value**)
 	{
@@ -615,7 +679,7 @@ namespace DirectUI
 	void Element::Paint(HDC, RECT const*, RECT const*, RECT*, RECT*)
 	{
 	}
-	SIZE Element::GetContentSize(LPSIZE psizl, int, Surface*)
+	SIZE Element::GetContentSize(int, int, Surface*)
 	{
 		return SIZE();
 	}
@@ -635,7 +699,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long WINAPI Element::AddRef()
+	unsigned long WINAPI Element::AddRef()
 	{
 		return 0;
 	}
@@ -1156,10 +1220,10 @@ namespace DirectUI
 	{
 		return false;
 	}
-	void Element::InitDefaultFontSize()
+	void WINAPI Element::InitDefaultFontSize()
 	{
 	}
-	UID Element::KeyboardNavigate()
+	UID WINAPI Element::KeyboardNavigate()
 	{
 		return UID();
 	}
@@ -1213,7 +1277,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	bool Element::IsValidValue(const PropertyInfo*, Value*)
+	bool WINAPI Element::IsValidValue(const PropertyInfo*, Value*)
 	{
 		return false;
 	}
@@ -1257,11 +1321,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::Register()
+	long WINAPI Element::Register()
 	{
 		return 0;
 	}
-	unsigned long Element::Release()
+	unsigned long WINAPI Element::Release()
 	{
 		return 0;
 	}
@@ -1388,7 +1452,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void Element::SetClassInfoPtr(IClassInfo*)
+	void WINAPI Element::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 	long Element::SetCompositedText(bool)
@@ -1563,7 +1627,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long Element::SortChildren(int(WINAPI*)(void const*, void const*))
+	long Element::SortChildren(int(*)(void const*, void const*))
 	{
 		return 0;
 	}
@@ -1656,6 +1720,134 @@ namespace DirectUI
 	{
 		return false;
 	}
+	int Element::GetIndex(void)
+	{
+		return 0;
+	}
+	Element * Element::GetImmediateChild(Element *)
+	{
+		return nullptr;
+	}
+	unsigned short Element::GetID(void)
+	{
+		return 0;
+	}
+	bool Element::GetHighDPI(void)
+	{
+		return false;
+	}
+	int Element::GetHeight(void)
+	{
+		return 0;
+	}
+	int Element::GetForegroundStdColor(void)
+	{
+		return 0;
+	}
+	DirectUI::Fill const * Element::GetForegroundColor(Value **)
+	{
+		return nullptr;
+	}
+	int Element::GetFontWeight(void)
+	{
+		return 0;
+	}
+	int Element::GetFontStyle(void)
+	{
+		return 0;
+	}
+	int Element::GetFontSize(void)
+	{
+		return 0;
+	}
+	int Element::GetFontQuality(void)
+	{
+		return 0;
+	}
+	unsigned short const * Element::GetFontFace(Value **)
+	{
+		return nullptr;
+	}
+	unsigned short const * Element::GetFont(Value **)
+	{
+		return nullptr;
+	}
+	CRITICAL_SECTION * Element::GetFactoryLock(void)
+	{
+		return nullptr;
+	}
+	SIZE const * Element::GetExtent(Value **)
+	{
+		return nullptr;
+	}
+	long Element::GetEncodedContentString(unsigned short *, unsigned int)
+	{
+		return 0;
+	}
+	bool Element::GetEnabled(void)
+	{
+		return false;
+	}
+	int Element::GetDPI(void)
+	{
+		return 0;
+	}
+	HGADGET Element::GetDisplayNode(void)
+	{
+		return HGADGET();
+	}
+	int Element::GetDirection(void)
+	{
+		return 0;
+	}
+	SIZE const * Element::GetDesiredSize(void)
+	{
+		return nullptr;
+	}
+	DeferCycle * Element::GetDeferObject(void)
+	{
+		return nullptr;
+	}
+	unsigned short const * Element::GetContentString(Value **)
+	{
+		return nullptr;
+	}
+	int Element::GetContentAlign(void)
+	{
+		return 0;
+	}
+	int Element::GetColorize(void)
+	{
+		return 0;
+	}
+	bool Element::GetClickablePoint(POINT *)
+	{
+		return false;
+	}
+	IClassInfo * Element::GetClassInfoPtr(void)
+	{
+		return nullptr;
+	}
+	unsigned short const * Element::GetClass(Value **)
+	{
+		return nullptr;
+	}
+	DynamicArray<Element*, 0>* Element::GetChildren(Value **)
+	{
+		return nullptr;
+	}
+	RECT const * Element::GetBorderThickness(Value **)
+	{
+		return nullptr;
+	}
+	int Element::GetBorderStyle(void)
+	{
+		return 0;
+	}
+	int Element::GetBorderStdColor(void)
+	{
+		return 0;
+	}
 	IClassInfo* Element::GetClassInfoW()
 	{
 		return nullptr;
@@ -1668,7 +1860,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	HRESULT Element::GetElementProviderImpl(ElementProvider**)
+	HRESULT Element::GetElementProviderImpl(InvokeHelper *, ElementProvider * *)
 	{
 		return E_NOTIMPL;
 	}
@@ -1807,6 +1999,11 @@ namespace DirectUI
 		return 0;
 	}
 
+	unsigned int Element::GetCommonDrawTextFlags(int)
+	{
+		return 0;
+	}
+
 	IClassInfo* Element::s_pClassInfo;
 
 	ElementWithHWND::ElementWithHWND(const ElementWithHWND &)
@@ -1823,11 +2020,11 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return*this;
 	}
-	long ElementWithHWND::Create(Element*, unsigned long*, Element**)
+	long WINAPI ElementWithHWND::Create(Element*, unsigned long*, Element**)
 	{
 		return 0;
 	}
-	IClassInfo* ElementWithHWND::GetClassInfoPtr()
+	IClassInfo* WINAPI ElementWithHWND::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
@@ -1835,11 +2032,11 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	long ElementWithHWND::Register()
+	long WINAPI ElementWithHWND::Register()
 	{
 		return 0;
 	}
-	void ElementWithHWND::SetClassInfoPtr(IClassInfo*)
+	void WINAPI ElementWithHWND::SetClassInfoPtr(IClassInfo*)
 	{
 	}
 
@@ -1911,7 +2108,7 @@ namespace DirectUI
 	void DUIXmlParser::SetParseErrorCallback(ParseErrorCallback, void*)
 	{
 	}
-	void DUIXmlParser::SetUnknownAttrCallback(bool(*)(UCString, void*), void*)
+	void DUIXmlParser::SetUnknownAttrCallback(bool(WINAPI *)(UCString, void*), void*)
 	{
 	}
 	long DUIXmlParser::SetPreprocessedXML(UCString, HINSTANCE, HINSTANCE)
@@ -1956,7 +2153,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long DUIXmlParser::CreateLayout(const ParserTools::ExprNode*, long(*)(int, int*, Value**))
+	long DUIXmlParser::CreateLayout(const ParserTools::ExprNode*, long(WINAPI*)(int, int*, Value**))
 	{
 		return 0;
 	}
@@ -1980,11 +2177,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long DUIXmlParser::GetPropValPairInfo(IXmlReader*, IClassInfo*, UCString, UCString, PropertyInfo**, Value**)
+	long DUIXmlParser::GetPropValPairInfo(IXmlReader*, IClassInfo*, UCString, UCString, PropertyInfo const**, Value**)
 	{
 		return 0;
 	}
-	long DUIXmlParser::GetPropValPairInfo(LINEINFO, IClassInfo*, UCString, UCString, const PropertyInfo**, Value**)
+	long DUIXmlParser::GetPropValPairInfo(LINEINFO, IClassInfo*, UCString, UCString, PropertyInfo const**, Value**)
 	{
 		return 0;
 	}
@@ -1992,7 +2189,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long DUIXmlParser::GetXmlLiteDll(HINSTANCE*)
+	long WINAPI DUIXmlParser::GetXmlLiteDll(HINSTANCE*)
 	{
 		return 0;
 	}
@@ -2004,7 +2201,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	bool DUIXmlParser::IsThemeClassName(const ParserTools::ExprNode*)
+	bool WINAPI DUIXmlParser::IsThemeClassName(const ParserTools::ExprNode*)
 	{
 		return false;
 	}
@@ -2192,11 +2389,11 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	int DUIXmlParser::QuerySysMetric(int)
+	int WINAPI DUIXmlParser::QuerySysMetric(int)
 	{
 		return 0;
 	}
-	UCString DUIXmlParser::QuerySysMetricStr(int, UString, unsigned int)
+	UCString WINAPI DUIXmlParser::QuerySysMetricStr(int, UString, unsigned int)
 	{
 		return UString();
 	}
@@ -2244,6 +2441,21 @@ namespace DirectUI
 	{
 	}
 
+	template<typename T>
+	DUIXmlParser::FunctionDefinition<T> & DUIXmlParser::FunctionDefinition<T>::operator=(const DUIXmlParser::FunctionDefinition<T> &)
+	{
+		// TODO: 在此处插入 return 语句
+		return *this;
+	}
+
+	DUIXmlParser::FunctionDefinition<unsigned long> const* const DUIXmlParser::s_fdClr = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdFill = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdGraphic = NULL;
+	DUIXmlParser::FunctionDefinition<int> const* const DUIXmlParser::s_fdInt = NULL;
+	DUIXmlParser::FunctionDefinition<RECT> const* const DUIXmlParser::s_fdRect = NULL;
+	DUIXmlParser::FunctionDefinition<Value*> const* const DUIXmlParser::s_fdString = NULL;
+
+
 	NativeHWNDHost::NativeHWNDHost(const NativeHWNDHost &)
 	{
 	}
@@ -2262,7 +2474,7 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return*this;
 	}
-	UINT NativeHWNDHost::AsyncDestroyMsg()
+	UINT WINAPI NativeHWNDHost::AsyncDestroyMsg()
 	{
 		return 0;
 	}
@@ -2554,7 +2766,7 @@ namespace DirectUI
 		return *this;
 	}
 
-	const AccessibleButton::ACCESSIBLEROLE * AccessibleButton::FindAccessibleRole(int)
+	const AccessibleButton::ACCESSIBLEROLE * WINAPI AccessibleButton::FindAccessibleRole(int)
 	{
 		return nullptr;
 	}
@@ -3352,7 +3564,7 @@ namespace DirectUI
 	void ClassInfoBase::AssertPIZeroRef() const
 	{
 	}
-	bool ClassInfoBase::ClassExist(IClassInfo **, const PropertyInfo * const *, unsigned int, IClassInfo *, HINSTANCE, UCString, bool)
+	bool WINAPI ClassInfoBase::ClassExist(IClassInfo **, const PropertyInfo * const *, unsigned int, IClassInfo *, HINSTANCE, UCString, bool)
 	{
 		return false;
 	}
@@ -3471,7 +3683,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	IClassInfo * BaseScrollViewer::GetClassInfoPtr()
+	IClassInfo * WINAPI BaseScrollViewer::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
@@ -3526,11 +3738,11 @@ namespace DirectUI
 	void BaseScrollViewer::OnListenedInput(Element *, InputEvent *)
 	{
 	}
-	long BaseScrollViewer::Register()
+	long WINAPI BaseScrollViewer::Register()
 	{
 		return 0;
 	}
-	void BaseScrollViewer::SetClassInfoPtr(IClassInfo *)
+	void WINAPI BaseScrollViewer::SetClassInfoPtr(IClassInfo *)
 	{
 	}
 	long BaseScrollViewer::SetPinning(int)
@@ -3561,31 +3773,31 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	const PropertyInfo * BaseScrollViewer::PinningProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::PinningProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::XBarVisibilityProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::XBarVisibilityProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::XOffsetProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::XOffsetProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::XScrollableProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::XScrollableProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::YBarVisibilityProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::YBarVisibilityProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::YOffsetProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::YOffsetProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * BaseScrollViewer::YScrollableProp()
+	const PropertyInfo * WINAPI BaseScrollViewer::YScrollableProp()
 	{
 		return nullptr;
 	}
@@ -3793,9 +4005,9 @@ namespace DirectUI
 	CallstackTracker::IMGHLPFN_LOAD * CallstackTracker::s_ImageHlpFuncList;
 	int CallstackTracker::s_fInitFailed;
 	void * CallstackTracker::s_hProcess;
-	struct HINSTANCE__ * CallstackTracker::s_hinstImageHlp;
-	struct HINSTANCE__ * CallstackTracker::s_hinstNtDll;
-	struct API_VERSION * (__stdcall* CallstackTracker::s_pfnImagehlpApiVersionEx)(struct API_VERSION *);
+	HINSTANCE CallstackTracker::s_hinstImageHlp;
+	HINSTANCE CallstackTracker::s_hinstNtDll;
+	API_VERSION * (__stdcall* CallstackTracker::s_pfnImagehlpApiVersionEx)(API_VERSION *);
 	unsigned short(__stdcall* CallstackTracker::s_pfnRtlCaptureStackBackTrace)(unsigned long, unsigned long, void * *, unsigned long *);
 	int(__stdcall* CallstackTracker::s_pfnSymFromAddr)(void *, unsigned __int64, unsigned __int64 *, SYMBOL_INFO *);
 	int(__stdcall* CallstackTracker::s_pfnSymGetModuleInfo64)(void *, unsigned __int64, IMAGEHLP_MODULE64 *);
@@ -3856,6 +4068,7 @@ namespace DirectUI
 	}
 
 	IClassInfo * CCAVI::s_pClassInfo;
+
 
 	CCBase::CCBase(const CCBase &)
 	{
@@ -5426,7 +5639,7 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return *this;
 	}
-	unsigned long EventManager::AddRectangleChange(Element *, bool, bool)
+	long EventManager::AddRectangleChange(Element *, bool, bool)
 	{
 		return 0;
 	}
@@ -5444,11 +5657,11 @@ namespace DirectUI
 	void EventManager::DestroyListener(Element *)
 	{
 	}
-	unsigned long EventManager::EndDefer(Element *)
+	long EventManager::EndDefer(Element *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::EventListener(Element *, Event *)
+	long EventManager::EventListener(Element *, Event *)
 	{
 		return 0;
 	}
@@ -5456,113 +5669,119 @@ namespace DirectUI
 	{
 		return false;
 	}
-	unsigned long EventManager::FireStructureChangedEvent(Element *, StructureChangeType)
+	long EventManager::FireStructureChangedEvent(Element *, StructureChangeType)
 	{
 		return 0;
 	}
-	unsigned long EventManager::GetBool(VARIANT *, Value *)
+	long EventManager::GetBool(VARIANT *, Value *)
 	{
 		return 0;
 	}
 	void EventManager::GetExpandCollapseState(VARIANT *)
 	{
 	}
-	unsigned long EventManager::GetInt(VARIANT *, Value *)
+	long EventManager::GetInt(VARIANT *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::GetString(VARIANT *, Value *)
+	long EventManager::GetString(VARIANT *, Value *)
 	{
 		return 0;
 	}
 	void EventManager::GetToggleState(VARIANT *)
 	{
 	}
-	unsigned long EventManager::HandleAccChange(Element *, IRawElementProviderSimple *, Value *, Value *)
+	long EventManager::HandleAccChange(Element *, IRawElementProviderSimple *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleAccDesc(Element *, IRawElementProviderSimple *, Value *, Value *)
+	long EventManager::HandleAccDesc(Element *, IRawElementProviderSimple *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, void(__stdcall *)(VARIANT *))
+	long EventManager::HandleAccPatternChange(Element *, IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *, void(__stdcall *)(VARIANT *))
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleAccRoleEvent(IRawElementProviderSimple *, Value *, Value *)
+	long EventManager::HandleAccRoleEvent(IRawElementProviderSimple *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleAccStateChange(IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *)
+	long EventManager::HandleAccStateChange(IRawElementProviderSimple *, unsigned int, unsigned int, int, VARIANT *, VARIANT *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleBoolProp(Element *, bool(__stdcall *)(Element *), IRawElementProviderSimple *, int, Value *, Value *)
+	long EventManager::HandleBoolProp(Element *, bool(__stdcall *)(Element *), IRawElementProviderSimple *, int, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleChildrenEvent(Element *, Value *, Value *)
+	long EventManager::HandleChildrenEvent(Element *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleRangeValue(Element *, IRawElementProviderSimple *, Value *, Value *)
+	long EventManager::HandleRangeValue(Element *, IRawElementProviderSimple *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleScrollPos(Element *, IRawElementProviderSimple *, Value *, Value *)
+	long EventManager::HandleScrollPos(Element *, IRawElementProviderSimple *, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleSelectedChange(IRawElementProviderSimple *, Value *)
+	long EventManager::HandleSelectedChange(IRawElementProviderSimple *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleStringProp(IRawElementProviderSimple *, int, Value *, Value *)
+	long EventManager::HandleStringProp(IRawElementProviderSimple *, int, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::HandleVisibilityChange(Element *, unsigned int)
+	long EventManager::HandleVisibilityChange(Element *, unsigned int)
 	{
 		return 0;
 	}
-	unsigned long EventManager::Init()
+	long WINAPI EventManager::Init()
 	{
 		return 0;
 	}
-	unsigned long EventManager::OnToolTip(Element *, unsigned unsigned long)
+	long WINAPI EventManager::OnToolTip(Element *, unsigned long)
 	{
 		return 0;
 	}
-	unsigned long EventManager::PropertyChangingListener(Element *, const PropertyInfo *, bool *)
+	long WINAPI EventManager::PropertyChangingListener(Element *, const PropertyInfo *, bool *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::PropertyListener(Element *, const PropertyInfo *, int, Value *, Value *)
+	long WINAPI EventManager::PropertyListener(Element *, const PropertyInfo *, int, Value *, Value *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseChildRemovedEvent(const ElementRuntimeId *, Element *)
+	long WINAPI EventManager::RaiseChildRemovedEvent(const ElementRuntimeId &, Element *)
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseGeometryEventWorker(RectangleChange *, bool, bool, bool, bool)
+	long WINAPI EventManager::RaiseGeometryEventWorker(RectangleChange *, bool, bool, bool, bool)
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseGeometryEvents()
+	long WINAPI EventManager::RaiseGeometryEvents()
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseStructureChangedEvent(Element *, StructureChangeType)
+	UiaArray<int> * EventManager::g_pArrayPropertyEvent;
+	bool EventManager::g_fWantAnyEvent;
+	unsigned int * EventManager::g_eventRegisteredMap;
+	CRITICAL_SECTION EventManager::g_cs;
+	int const EventManager::cChangeBulk=0;
+
+	long WINAPI EventManager::RaiseStructureChangedEvent(Element *, StructureChangeType)
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseStructureEvents()
+	long EventManager::RaiseStructureEvents()
 	{
 		return 0;
 	}
-	unsigned long EventManager::RaiseVisibilityEvents()
+	long WINAPI EventManager::RaiseVisibilityEvents()
 	{
 		return 0;
 	}
@@ -6008,7 +6227,7 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return *this;
 	}
-	long XHost::Create(IXElementCP *, XHost **)
+	long WINAPI XHost::Create(IXElementCP *, XHost **)
 	{
 		return 0;
 	}
@@ -6039,7 +6258,7 @@ namespace DirectUI
 	void XHost::ShowWindow(int)
 	{
 	}
-	LRESULT XHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	LRESULT WINAPI XHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return LRESULT();
 	}
@@ -6113,7 +6332,7 @@ namespace DirectUI
 	{
 		return false;
 	}
-	UID HWNDElement::CompositionChange()
+	UID WINAPI HWNDElement::CompositionChange()
 	{
 		return UID();
 	}
@@ -6132,22 +6351,22 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	bool HWNDElement::FindShortcut(unsigned short, Element *, Element **, int *, int *, int)
+	bool WINAPI HWNDElement::FindShortcut(unsigned short, Element *, Element **, int *, int *, int)
 	{
 		return false;
 	}
 	void HWNDElement::FlushWorkingSet()
 	{
 	}
-	IClassInfo * HWNDElement::GetClassInfoPtr()
+	IClassInfo * WINAPI HWNDElement::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
-	HWNDElement * HWNDElement::GetFocusedHWNDElement()
+	HWNDElement * WINAPI HWNDElement::GetFocusedHWNDElement()
 	{
 		return nullptr;
 	}
-	Element * HWNDElement::GetKeyFocusedElement()
+	Element * WINAPI HWNDElement::GetKeyFocusedElement()
 	{
 		return nullptr;
 	}
@@ -6171,11 +6390,11 @@ namespace DirectUI
 	{
 		return false;
 	}
-	long HWNDElement::Register()
+	long WINAPI HWNDElement::Register()
 	{
 		return 0;
 	}
-	void HWNDElement::SetClassInfoPtr(IClassInfo *)
+	void WINAPI HWNDElement::SetClassInfoPtr(IClassInfo *)
 	{
 	}
 	void HWNDElement::SetFocus(bool)
@@ -6202,7 +6421,7 @@ namespace DirectUI
 	void HWNDElement::ShowUIState(bool, bool)
 	{
 	}
-	UID HWNDElement::ThemeChange()
+	UID WINAPI HWNDElement::ThemeChange()
 	{
 		return UID();
 	}
@@ -6213,7 +6432,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	__int64 HWNDElement::StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	long WINAPI HWNDElement::StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		return 0;
 	}
@@ -6221,7 +6440,7 @@ namespace DirectUI
 	{
 		return LRESULT();
 	}
-	bool HWNDElement::FindShortcutRecursive(unsigned short, Element *, Element **, int *, int *, int)
+	bool WINAPI HWNDElement::FindShortcutRecursive(unsigned short, Element *, Element **, int *, int *, int)
 	{
 		return false;
 	}
@@ -6351,38 +6570,38 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long HWNDHost::Create(unsigned int, unsigned int, Element *, unsigned long *, Element ** pOut)
+	long WINAPI HWNDHost::Create(unsigned int, unsigned int, Element *, unsigned long *, Element ** pOut)
 	{
 		return 0;
 	}
-	long HWNDHost::Create(Element *, unsigned long *, Element ** pOut)
+	long WINAPI HWNDHost::Create(Element *, unsigned long *, Element ** pOut)
 	{
 		return 0;
 	}
-	const PropertyInfo * HWNDHost::BackgroundOwnerIDProp()
+	const PropertyInfo * WINAPI HWNDHost::BackgroundOwnerIDProp()
 	{
 		return nullptr;
 	}
-	IClassInfo * HWNDHost::GetClassInfoPtr()
+	IClassInfo * WINAPI HWNDHost::GetClassInfoPtr()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * HWNDHost::OptimizeMoveProp()
+	const PropertyInfo * WINAPI HWNDHost::OptimizeMoveProp()
 	{
 		return nullptr;
 	}
-	long HWNDHost::Register()
+	long WINAPI HWNDHost::Register()
 	{
 		return 0;
 	}
-	void HWNDHost::SetClassInfoPtr(IClassInfo *)
+	void WINAPI HWNDHost::SetClassInfoPtr(IClassInfo *)
 	{
 	}
-	const PropertyInfo * HWNDHost::ThemeChangedProp()
+	const PropertyInfo * WINAPI HWNDHost::ThemeChangedProp()
 	{
 		return nullptr;
 	}
-	const PropertyInfo * HWNDHost::TransparentProp()
+	const PropertyInfo * WINAPI HWNDHost::TransparentProp()
 	{
 		return nullptr;
 	}
@@ -6454,10 +6673,10 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void HWNDHost::AttachCtrlSubclassProc(HWND)
+	void WINAPI HWNDHost::AttachCtrlSubclassProc(HWND)
 	{
 	}
-	__int64 HWNDHost::CtrlSubclassProc(HWND, unsigned int, unsigned __int64, __int64)
+	long WINAPI HWNDHost::CtrlSubclassProc(HWND, unsigned int, unsigned int, long)
 	{
 		return 0;
 	}
@@ -6552,7 +6771,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void HWNDHost::GetSinkRect(const LPRECT, LPRECT)
+	void HWNDHost::GetSinkRect(RECT const *, LPRECT)
 	{
 	}
 	bool HWNDHost::HaveWin32Focus()
@@ -6569,7 +6788,7 @@ namespace DirectUI
 	{
 	}
 
-	unsigned int const * HWNDHost::g_rgMouseMap[3];
+	unsigned int const (* HWNDHost::g_rgMouseMap)[3];
 
 	IClassInfo* HWNDHost::s_pClassInfo;
 
@@ -6713,7 +6932,9 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	void InvokeHelper::OnInvoke(InvokeArgs *)
+	unsigned int const InvokeHelper::s_uInvokeHelperMsg=0;
+
+	void InvokeHelper::OnInvoke(InvokeHelper::InvokeArgs *)
 	{
 	}
 
@@ -6740,6 +6961,9 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
+
+	UiaArray<InvokeHelper *> * InvokeManager::g_pArrayInvokeHelper;
+	CRITICAL_SECTION InvokeManager::g_cs;
 
 	InvokeProvider::InvokeProvider(void)
 	{
@@ -7608,7 +7832,7 @@ namespace DirectUI
 	int Schema::TreeControlType;
 	int Schema::TreeItemControlType;
 	long(__stdcall* Schema::UiaHostProviderFromHwnd)(HWND, IRawElementProviderSimple * *);
-	int(__stdcall* Schema::UiaLookupId)(enum AutomationIdentifierType, GUID const *);
+	int(__stdcall* Schema::UiaLookupId)(AutomationIdentifierType, GUID const *);
 	long(__stdcall* Schema::UiaRaiseAutomationEvent)(IRawElementProviderSimple *, int);
 	long(__stdcall* Schema::UiaRaiseAutomationPropertyChangedEvent)(IRawElementProviderSimple *, int, VARIANT, VARIANT);
 	long(__stdcall* Schema::UiaRaiseStructureChangedEvent)(IRawElementProviderSimple *, enum StructureChangeType, int *, int);
@@ -7623,13 +7847,13 @@ namespace DirectUI
 	int Schema::WindowWindowOpenedEvent;
 
 	Schema::RoleMap const * const Schema::_roleMapping=NULL;
-	struct ControlInfo const * const Schema::g_controlInfoTable = NULL;
-	struct EventInfo const * const Schema::g_eventInfoTable = NULL;
-	struct EventMap const * const Schema::g_eventMapping = NULL;
-	bool g_fInited=false;
-	struct PatternInfo const * const Schema::g_patternInfoTable = NULL;
-	struct PatternMap const * const Schema::g_patternMapping = NULL;
-	struct PropertyInfo const * const Schema::g_propertyInfoTable = NULL;
+	Schema::ControlInfo const * const Schema::g_controlInfoTable = NULL;
+	Schema::EventInfo const * const Schema::g_eventInfoTable = NULL;
+	Schema::EventMap const * const Schema::g_eventMapping = NULL;
+	bool Schema::g_fInited;
+	Schema::PatternInfo const * const Schema::g_patternInfoTable = NULL;
+	Schema::PatternMap const * const Schema::g_patternMapping = NULL;
+	Schema::PropertyInfo const * const Schema::g_propertyInfoTable = NULL;
 
 
 	void NavReference::Init(Element *, RECT *)
@@ -7762,6 +7986,11 @@ namespace DirectUI
 	{
 	}
 	template<class X, class Y, int i>
+	ProviderProxyCall PatternProvider<X, Y, i>::GetProxyCreator(void)
+	{
+		return ProviderProxyCall();
+	}
+	template<class X, class Y, int i>
 	long PatternProvider<X, Y, i>::DoInvoke(int, ...)
 	{
 		return 0;
@@ -7778,11 +8007,11 @@ namespace DirectUI
 		// TODO: 在此处插入 return 语句
 		return *this;
 	}
-	long XResourceProvider::Create(XResourceProvider ** pOut)
+	long WINAPI XResourceProvider::Create(XResourceProvider ** pOut)
 	{
 		return 0;
 	}
-	long XResourceProvider::Create(HINSTANCE, UCString, UCString, UCString, XResourceProvider ** pOut)
+	long WINAPI XResourceProvider::Create(HINSTANCE, UCString, UCString, UCString, XResourceProvider ** pOut)
 	{
 		return 0;
 	}
@@ -8665,6 +8894,8 @@ namespace DirectUI
 		return nullptr;
 	}
 
+	IClassInfo * ScrollViewer::s_pClassInfo;
+
 	SelectionProvider::SelectionProvider(void)
 	{
 
@@ -9035,6 +9266,8 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
+
+	IClassInfo * StyledScrollViewer::s_pClassInfo;
 
 	TableProvider::TableProvider(void)
 	{
@@ -9535,35 +9768,35 @@ namespace DirectUI
 	void Value::AddRef()
 	{
 	}
-	Value * Value::CreateAtom(unsigned short)
+	Value * WINAPI Value::CreateAtom(unsigned short)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateAtom(UCString)
+	Value * WINAPI Value::CreateAtom(UCString)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateBool(bool)
+	Value * WINAPI Value::CreateBool(bool)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateColor(unsigned long)
+	Value * WINAPI Value::CreateColor(unsigned long)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateColor(unsigned long, unsigned long, unsigned char)
+	Value * WINAPI Value::CreateColor(unsigned long, unsigned long, unsigned char)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateColor(unsigned long, unsigned long, unsigned long, unsigned char)
+	Value * WINAPI Value::CreateColor(unsigned long, unsigned long, unsigned long, unsigned char)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateCursor(HICON)
+	Value * WINAPI Value::CreateCursor(HICON)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateCursor(UCString)
+	Value * WINAPI Value::CreateCursor(UCString)
 	{
 		return nullptr;
 	}
@@ -9571,75 +9804,75 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	Value * Value::CreateDTBFill(UCString, int, int)
+	Value * WINAPI Value::CreateDTBFill(UCString, int, int)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateElementList(DynamicArray<class Element*, 0>*)
+	Value * WINAPI Value::CreateElementList(DynamicArray<class Element*, 0>*)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateElementRef(Element *)
+	Value * WINAPI Value::CreateElementRef(Element *)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateEncodedString(UCString)
+	Value * WINAPI Value::CreateEncodedString(UCString)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateExpression(Expression *)
+	Value * WINAPI Value::CreateExpression(Expression *)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateFill(const Fill &)
+	Value * WINAPI Value::CreateFill(const Fill &)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateGraphic(HBITMAP, unsigned char, unsigned int, bool, bool, bool)
+	Value * WINAPI Value::CreateGraphic(HBITMAP, unsigned char, unsigned int, bool, bool, bool)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateGraphic(HENHMETAFILE, HENHMETAFILE)
+	Value * WINAPI Value::CreateGraphic(HENHMETAFILE, HENHMETAFILE)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateGraphic(HICON, bool, bool, bool)
+	Value * WINAPI Value::CreateGraphic(HICON, bool, bool, bool)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateGraphic(UCString, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool)
+	Value * WINAPI Value::CreateGraphic(UCString, unsigned char, unsigned int, unsigned short, unsigned short, HINSTANCE, bool, bool)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateGraphic(UCString, unsigned short, unsigned short, HINSTANCE, bool, bool)
+	Value * WINAPI Value::CreateGraphic(UCString, unsigned short, unsigned short, HINSTANCE, bool, bool)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateInt(int)
+	Value * WINAPI Value::CreateInt(int)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateLayout(Layout *)
+	Value * WINAPI Value::CreateLayout(Layout *)
 	{
 		return nullptr;
 	}
-	Value * Value::CreatePoint(int, int)
+	Value * WINAPI Value::CreatePoint(int, int)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateRect(int, int, int, int)
+	Value * WINAPI Value::CreateRect(int, int, int, int)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateSize(int, int)
+	Value * WINAPI Value::CreateSize(int, int)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateString(UCString, HINSTANCE)
+	Value * WINAPI Value::CreateString(UCString, HINSTANCE)
 	{
 		return nullptr;
 	}
-	Value * Value::CreateStyleSheet(StyleSheet *)
+	Value * WINAPI Value::CreateStyleSheet(StyleSheet *)
 	{
 		return nullptr;
 	}
@@ -9671,7 +9904,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	void * Value::GetImage()
+	void * Value::GetImage(bool)
 	{
 		return nullptr;
 	}
@@ -9683,11 +9916,11 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	const LPPOINT Value::GetPoint()
+	POINT const * Value::GetPoint()
 	{
 		return LPPOINT();
 	}
-	const LPRECT Value::GetRect()
+	RECT const * Value::GetRect()
 	{
 		return LPRECT();
 	}
@@ -9695,7 +9928,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	const LPSIZE Value::GetSize()
+	SIZE const * Value::GetSize()
 	{
 		return LPSIZE();
 	}
@@ -9715,75 +9948,75 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	Value * Value::GetAtomZero()
+	Value * WINAPI Value::GetAtomZero()
 	{
 		return nullptr;
 	}
-	Value * Value::GetBoolFalse()
+	Value * WINAPI Value::GetBoolFalse()
 	{
 		return nullptr;
 	}
-	Value * Value::GetBoolTrue()
+	Value * WINAPI Value::GetBoolTrue()
 	{
 		return nullptr;
 	}
-	Value * Value::GetColorTrans()
+	Value * WINAPI Value::GetColorTrans()
 	{
 		return nullptr;
 	}
-	Value * Value::GetCursorNull()
+	Value * WINAPI Value::GetCursorNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetElListNull()
+	Value * WINAPI Value::GetElListNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetElementNull()
+	Value * WINAPI Value::GetElementNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetExprNull()
+	Value * WINAPI Value::GetExprNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetIntZero()
+	Value * WINAPI Value::GetIntZero()
 	{
 		return nullptr;
 	}
-	Value * Value::GetLayoutNull()
+	Value * WINAPI Value::GetLayoutNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetNull()
+	Value * WINAPI Value::GetNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetPointZero()
+	Value * WINAPI Value::GetPointZero()
 	{
 		return nullptr;
 	}
-	Value * Value::GetRectZero()
+	Value * WINAPI Value::GetRectZero()
 	{
 		return nullptr;
 	}
-	Value * Value::GetSheetNull()
+	Value * WINAPI Value::GetSheetNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetSizeZero()
+	Value * WINAPI Value::GetSizeZero()
 	{
 		return nullptr;
 	}
-	Value * Value::GetStringNull()
+	Value * WINAPI Value::GetStringNull()
 	{
 		return nullptr;
 	}
-	Value * Value::GetUnavailable()
+	Value * WINAPI Value::GetUnavailable()
 	{
 		return nullptr;
 	}
-	Value * Value::GetUnset()
+	Value * WINAPI Value::GetUnset()
 	{
 		return nullptr;
 	}
@@ -9801,7 +10034,7 @@ namespace DirectUI
 	void Value::_ZeroRelease()
 	{
 	}
-	long Value::StrDupW(UCString, UString *)
+	long WINAPI Value::StrDupW(UCString, UString *)
 	{
 		return 0;
 	}
@@ -10145,6 +10378,12 @@ namespace DirectUI
 	{
 		return 0;
 	}
+
+	unsigned int const XElement::s_uButtonFocusChangeMsg=0;
+	unsigned int const XElement::s_uNavigateOutMsg=0;
+	unsigned int const XElement::s_uUnhandledSyscharMsg=0;
+
+
 	UID XElement::UnhandledSyschar(void)
 	{
 		return UID();
@@ -10338,7 +10577,7 @@ namespace DirectUI
 		return 0;
 	}
 
-	long ElementProvider::DoInvokeArgs(int, class ProviderProxy* (__cdecl*)(Element*), char*)
+	long ElementProvider::DoInvokeArgs(int, ProviderProxyCall, char*)
 	{
 		return 0;
 	}
@@ -10411,7 +10650,7 @@ namespace DirectUI
 	}
 
 	HRESULT STDMETHODCALLTYPE ElementProvider::get_BoundingRectangle(
-		/* [retval][out] */ __RPC__out struct UiaRect *pRetVal)
+		/* [retval][out] */ __RPC__out UiaRect *pRetVal)
 	{
 		return 0;
 	}
@@ -10540,7 +10779,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	long ElementProxy::SetString(VARIANT *, UCString(DirectUI::Element::*)(Value * *))
+	long ElementProxy::SetString(VARIANT *, UCString(Element::*)(Value * *))
 	{
 		return 0;
 	}
@@ -10576,7 +10815,7 @@ namespace DirectUI
 	{
 		return 0;
 	}
-	unsigned long __stdcall ElementProviderManager::Init()
+	long __stdcall ElementProviderManager::Init()
 	{
 		return 0;
 	}
@@ -10584,6 +10823,10 @@ namespace DirectUI
 	{
 
 	}
+
+	CRITICAL_SECTION ElementProviderManager::g_cs;
+	UiaArray<class ElementProvider *> * ElementProviderManager::g_pArrayPprv;
+
 
 	DUIFactory::DUIFactory(HWND)
 	{

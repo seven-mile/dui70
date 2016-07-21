@@ -5,6 +5,7 @@ namespace DirectUI
 
 	class UILIB_API ExpandCollapseProvider
 		: public PatternProvider<ExpandCollapseProvider, IExpandCollapseProvider,1>
+		, public IExpandCollapseProvider
 	{
 	public:
 		ExpandCollapseProvider(void);
@@ -43,10 +44,13 @@ namespace DirectUI
 		ExpandCollapseProxy & operator=(ExpandCollapseProxy const &);
 
 		static ExpandCollapseProxy * __stdcall Create(Element *);
+		static bool __stdcall IsPatternSupported(Element *);
+		
 		//1
 		virtual long DoMethod(int, char *);
+
+
 	protected:
-		static bool __stdcall IsPatternSupported(Element *);
 		//2
 		virtual void Init(Element *);
 	};

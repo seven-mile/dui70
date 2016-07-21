@@ -39,10 +39,10 @@ namespace DirectUI
 		virtual HWND GetHWND();
 
 		//11
-		virtual void OnThemeChanged(class ThemeChangedEvent*);
+		virtual void OnThemeChanged(ThemeChangedEvent*);
 
 		//12
-		virtual void OnNoChildWithShortcutFound(class KeyboardEvent*);
+		virtual void OnNoChildWithShortcutFound(KeyboardEvent*);
 
 		//13
 		virtual void OnGetDlgCode(LPMSG, LRESULT*);
@@ -54,19 +54,19 @@ namespace DirectUI
 		//16
 		virtual bool CanSetFocus();
 
-		static UID CompositionChange();
+		static UID WINAPI CompositionChange();
 		static HRESULT WINAPI Create(HWND, bool, unsigned int, Element*, unsigned long*, Element**pOut);
 		//17
 		virtual long CreateStyleParser(DUIXmlParser**);
 		void DelayActivateTooltip();
 		Element* ElementFromPoint(LPPOINT);
-		static bool FindShortcut(unsigned short, Element*, Element**, int*, int*, int);
+		static bool WINAPI FindShortcut(unsigned short, Element*, Element**, int*, int*, int);
 		void FlushWorkingSet();
-		static IClassInfo* GetClassInfoPtr();
+		static IClassInfo* WINAPI GetClassInfoPtr();
 
-		static HWNDElement* GetFocusedHWNDElement();
+		static HWNDElement* WINAPI GetFocusedHWNDElement();
 
-		static Element* GetKeyFocusedElement();
+		static Element* WINAPI GetKeyFocusedElement();
 		unsigned short GetUIState();
 		bool GetWrapKeyboardNavigate();
 		long Initialize(HWND, bool, unsigned int, Element*, unsigned long*);
@@ -74,8 +74,8 @@ namespace DirectUI
 		bool IsLastElement(Element*);
 
 
-		static long Register();
-		static void SetClassInfoPtr(IClassInfo*);
+		static long WINAPI Register();
+		static void WINAPI SetClassInfoPtr(IClassInfo*);
 
 		void SetFocus(bool);
 		void SetParentSizeControl(bool);
@@ -84,17 +84,17 @@ namespace DirectUI
 		bool ShowAccel(void);
 		bool ShowFocus(void);
 		void ShowUIState(bool, bool);
-		static UID ThemeChange();
+		static UID WINAPI ThemeChange();
 
 		void ToggleUIState(bool, bool);
 		static const PropertyInfo* WINAPI WrapKeyboardNavigateProp();
 
-		static __int64 StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		static long WINAPI StaticWndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
 		//18
 		virtual LRESULT WndProc(HWND, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	protected:
-		static bool FindShortcutRecursive(unsigned short, Element*, Element**, int*, int*, int);
+		static bool WINAPI FindShortcutRecursive(unsigned short, Element*, Element**, int*, int*, int);
 
 	private:
 		static IClassInfo* s_pClassInfo;
@@ -102,6 +102,7 @@ namespace DirectUI
 
 	class UILIB_API HWNDElementProvider
 		: public ElementProvider
+		, public IRawElementProviderFragmentRoot
 	{
 	public:
 		HWNDElementProvider(void);
@@ -117,6 +118,7 @@ namespace DirectUI
 
 		virtual ProviderProxyCall GetProxyCreator(void);
 
+		//IRawElementProviderFragmentRoot
 		//1
 		virtual long __stdcall ElementProviderFromPoint(double, double, IRawElementProviderFragment * *);
 		//2

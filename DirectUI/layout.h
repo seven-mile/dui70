@@ -205,7 +205,7 @@ namespace DirectUI
 
 		static long __stdcall Create(int, int *, Value * *);
 		static long __stdcall InternalCreate(int, int, int, int *, Layout * *);
-		class CellInfo * GetCellInfo(int);
+		CellInfo * GetCellInfo(int);
 		void Initialize(int, int, int, int *);
 
 		virtual void DoLayout(Element *, int, int);

@@ -20,7 +20,7 @@ namespace DirectUI
 		long Initialize(unsigned int, Element *, unsigned long *);
 
 		virtual IClassInfo * GetClassInfoW(void);
-		virtual void OnInput(class InputEvent *);
+		virtual void OnInput(struct InputEvent *);
 	private:
 		static void __stdcall _RepeatButtonActionCallback(struct GMA_ACTIONINFO *);
 		static IClassInfo * s_pClassInfo;

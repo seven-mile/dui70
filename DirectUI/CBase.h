@@ -6,7 +6,7 @@ namespace DirectUI
 	{
 	public:
 		CCBase(const CCBase &);
-		CCBase(unsigned long, UCString);
+		CCBase(unsigned long v1 =0, UCString v2=NULL);
 		CCBase & operator=(const CCBase &);
 
 		virtual ~CCBase(void);

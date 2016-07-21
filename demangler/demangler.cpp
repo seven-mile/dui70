@@ -8,22 +8,9 @@
 
 int main(int argc, char* argv[])
 {
-	DWORD Type = UNDNAME_COMPLETE;
 
 	if (argc != 2)
 	{
-
-		if (argc == 3)
-		{
-			++argv;
-
-			if (strcmpi(*argv, ".name") == 0)
-			{
-				Type = UNDNAME_NAME_ONLY;
-				goto Start;
-			}
-		}
-
 		return 1;
 	}
 
@@ -45,8 +32,18 @@ Start:
 	while (fgets(line, 2048, file)) {
 		line[strlen(line) - 1] = '\0';
 
-		if (UnDecorateSymbolName(line, demangled, 2048, Type))
+		printf("%s\t", line);
+
+		if (UnDecorateSymbolName(line, demangled, 2048, UNDNAME_COMPLETE))
+			printf("%s\t", demangled);
+		else
+			printf("\t");
+
+		if (UnDecorateSymbolName(line, demangled, 2048, UNDNAME_NAME_ONLY))
 			printf("%s\n", demangled);
+		else
+			printf("\n");
+
 	}
 
 	fclose(file);

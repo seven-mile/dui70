@@ -7,10 +7,117 @@ namespace DirectUI
 		// ??
 	};
 
-
+	//32位数据结构大小 0x80
 	class UILIB_API Element
 	{
 	public:
+		//0 虚表指针
+		//_vftable_
+
+		//0x4
+		UINT32 v4;
+
+		//0x8
+		UINT32 v5;
+
+		//0xC
+		UINT32 v13;
+
+		//0x10
+		UINT32 v1;
+
+		//0x14
+		UINT32 v7;
+
+		//0x18
+		UINT32 v11;
+
+		//0x1C
+		UINT32 v12;
+
+		//0x20
+		byte v30[4];
+
+		//0x24
+		UINT32 v6;
+
+		//0x28
+		UINT32 v14;
+
+		//0x2C
+		UINT32 v15;
+
+		//0x30
+		UINT32 v16;
+
+		//0x34
+		UINT32 v17;
+
+		//0x38
+		UINT32 v18;
+
+		//0x3C
+		UINT32 v19;
+
+		//0x40
+		UINT32 v20;
+
+		//0x44
+		UINT32 v21;
+
+		//0x48
+		UINT32 v22;
+
+		//0x4C
+		UINT32 v23;
+
+		//0x50
+		UINT32 v24;
+
+		//0x54
+		UINT32 v25;
+
+		//0x58
+		UINT32 v26;
+
+		//0x5C
+		UINT32 v27;
+
+		//0x60
+		UINT32 v60;
+
+		//0x64
+		UINT8 v64;
+
+		//0x65
+		UINT8 v10;
+
+		//0x66
+		UINT8 v66;
+
+		//0x67
+		UINT8 v8;
+
+		//0x68
+		UINT8 v9;
+
+		//0x69
+		//4对齐上移0x6C
+
+		//0x6C
+		UINT32 v29;
+
+		//0x70
+
+		byte v31[0x78-0x70];
+
+		//0x78
+		UINT32 v2;
+
+		//0x7C
+		UINT32 v3;
+
+
 		Element();
 		Element(const Element&);
 		//0
@@ -399,15 +506,15 @@ namespace DirectUI
 		int _SetNeedsLayout(unsigned int);
 		void _StartOptimizedLayoutQ(void);
 		static void WINAPI _TransferGroupFlags(Element*, int);
-		struct tagSIZE _UpdateDesiredSize(int, int, Surface*);
+		SIZE _UpdateDesiredSize(int, int, Surface*);
 		void _UpdateLayoutPosition(int, int);
 		void _UpdateLayoutSize(int, int);
 		static PropertyInfo const * __stdcall EnabledProp();
 		int GetAlpha(void);
 		int GetAnimation(void);
-		struct Fill const * GetBackgroundColor(Value * *);
+		Fill const * GetBackgroundColor(Value * *);
 		int GetBackgroundStdColor(void);
-		struct Fill const * GetBorderColor(Value * *);
+		Fill const * GetBorderColor(Value * *);
 	protected:
 		//24
 		virtual void _SelfLayoutDoLayout(int, int);

@@ -2,6 +2,7 @@
 
 namespace DirectUI
 {
+	//32位结构体大小 0x94
 	class UILIB_API HWNDElement : public ElementWithHWND
 	{
 	public:

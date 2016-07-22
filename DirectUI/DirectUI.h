@@ -13,7 +13,7 @@
 #if	defined(DIRECTUI_EXPORTS)
 #define UILIB_API __declspec(dllexport)
 #else
-#define UILIB_API 
+#define UILIB_API __declspec(dllimport)
 #endif
 
 #include "types.h"
@@ -129,7 +129,7 @@ namespace DirectUI
 
 	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider);
 	HRESULT WINAPI UnInitProcessPriv(unsigned short*unk1);
-	HRESULT WINAPI InitThread(int iDontKnow);
+	EXTERN_C HRESULT WINAPI InitThread(int iDontKnow);
 	void WINAPI UnInitThread();
 
 	int WINAPI CreateDUIWrapper(Element*,class XProvider**);

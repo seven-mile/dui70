@@ -21,25 +21,45 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	InitProcessPriv(8, NULL, 1, true);
 	InitThread(2);
-	DuiNavigate;
+	
 	RegisterAllControls();
+
+	auto TT = sizeof(Element);
+	TT = sizeof(HWNDElement);
+
+
+	NativeHWNDHost* pwnd;
+
+
+	NativeHWNDHost::Create(L"Microsoft DirectUI Test", NULL, NULL, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, WS_EX_WINDOWEDGE, WS_OVERLAPPEDWINDOW | WS_VISIBLE, 0,&pwnd);
+	
+	//pwnd->Initialize();
+
+
 	DUIXmlParser* pParser;
 
 	DUIXmlParser::Create(&pParser, NULL, NULL, NULL, NULL);
 
+
 	//IDR_UIFILE1
-	auto hr=pParser->SetXMLFromResource(IDR_UIFILE1, hInstance,(HINSTANCE)0);
+	auto hr=pParser->SetXMLFromResource(IDR_UIFILE1, hInstance,(HINSTANCE)hInstance);
 
-	HelloWorldWindow wnd;
-	Button* Temp;
+	unsigned long Temp;
+	Element* Temp2;
 
-	hr=Button::Create((Element*)NULL,NULL,(Element**)&Temp);
+	HWNDElement::Create(pwnd->GetHWND(),true,0,NULL,&Temp,(Element**)&Temp2);
 
-	wnd.ShowWindow(SW_SHOW);
+	Element* pWizardMain;
+	pParser->CreateElement(L"WizardMain", Temp2,NULL,NULL,(Element**)&pWizardMain);
+
+	pWizardMain->SetVisible(true);
+	pWizardMain->EndDefer(Temp);
+	pwnd->Host(pWizardMain);
 
 
+	pwnd->ShowWindow(SW_SHOW);
 
-	auto pElement= wnd.GetElement();
+
 
 	StartMessagePump();
 

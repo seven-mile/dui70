@@ -6,22 +6,45 @@ namespace DirectUI
 	{
 	public:
 		//0
-		virtual void OnListenerAttach(class Element*) = 0;
+		virtual void OnListenerAttach(class Element* elem) = 0;
 		//1
-		virtual void OnListenerDetach(class Element*) = 0;
-		//2
-		virtual bool OnPropertyChanging(const struct PropertyInfo*, int, class Value*, class Value*) = 0;
+		virtual void OnListenerDetach(class Element* elem) = 0;
+		//2 returns false to cancel
+		virtual bool OnPropertyChanging(class Element* elem, const struct PropertyInfo *prop, int unk, class Value *before, class Value *after) = 0;
 		//3
-		virtual void OnListenedPropertyChanged(class Element*, const struct PropertyInfo*, int, class Value*, class Value*) = 0;
+		virtual void OnListenedPropertyChanged(class Element* elem, const struct PropertyInfo *prop, int type, class Value *before, class Value *after) = 0;
 		//4
-		virtual void OnListenedEvent(class Element*, struct Event*) = 0;
+		virtual void OnListenedEvent(class Element* elem, struct Event *event) = 0;
 		//5
-		virtual void OnListenedInput(class Element*, struct InputEvent*) = 0;
+		virtual void OnListenedInput(class Element* elem, struct InputEvent *event) = 0;
 	};
 
 	struct IClassInfo
 	{
-	public:
+		IClassInfo();
+		IClassInfo(const IClassInfo&) = delete;
+		IClassInfo&operator=(const IClassInfo&) = delete;
+
+		virtual LONG AddRef(void) = 0;
+		virtual LONG Release(void) = 0;
+		virtual HRESULT CreateInstance(Element *,ULONG *,Element * *) = 0;
+		virtual struct PropertyInfo * EnumPropertyInfo(UINT) = 0;
+		virtual struct PropertyInfo * GetByClassIndex(UINT) = 0;
+		virtual UINT GetPICount(void) = 0;
+		virtual UINT GetGlobalIndex(void) = 0;
+		virtual IClassInfo * GetBaseClass(void) = 0;
+		virtual UCString GetName(void) = 0;
+		virtual bool IsValidProperty(struct PropertyInfo const *) = 0;
+		virtual bool IsSubclassOf(IClassInfo *) = 0;
+		virtual void Destroy(void) = 0;
+		virtual HINSTANCE GetModule(void) = 0;
+		virtual bool IsGlobal(void) = 0;
+		virtual void AddChild(void) = 0;
+		virtual void RemoveChild(void) = 0;
+		virtual UINT GetChildren(void) = 0;
+		virtual void AssertPIZeroRef(void) = 0;
+
+		virtual ~IClassInfo();
 	};
 
 	struct UILIB_API IDataEntry

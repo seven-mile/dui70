@@ -13,7 +13,7 @@ namespace DirectUI
 {
 	unsigned long g_dwElSlot;
 
-	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char unk2, bool bEnableUIAutomationProvider)
+	HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short*unk1, char bInitAllControls, bool bEnableUIAutomationProvider)
 	{
 		return 0;
 	}
@@ -471,7 +471,7 @@ namespace DirectUI
 	}
 	Button & Button::operator=(const Button &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return*this;
 	}
 	long Button::Initialize(unsigned int, Element*, unsigned long*)
@@ -564,7 +564,7 @@ namespace DirectUI
 	}
 	Element & Element::operator=(const Element &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return*this;
 	}
 	long Element::Initialize(unsigned int, Element*, unsigned long*)
@@ -2016,7 +2016,7 @@ namespace DirectUI
 	}
 	ElementWithHWND & ElementWithHWND::operator=(const ElementWithHWND &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return*this;
 	}
 	long WINAPI ElementWithHWND::Create(Element*, unsigned long*, Element**)
@@ -2052,7 +2052,7 @@ namespace DirectUI
 	}
 	DUIXmlParser & DUIXmlParser::operator=(const DUIXmlParser &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return*this;
 	}
 	long DUIXmlParser::Create(DUIXmlParser**, GetSheetCallback, void* sheetParam, ParseErrorCallback, void* parseErrorParam)
@@ -2443,7 +2443,7 @@ namespace DirectUI
 	template<typename T>
 	DUIXmlParser::FunctionDefinition<T> & DUIXmlParser::FunctionDefinition<T>::operator=(const DUIXmlParser::FunctionDefinition<T> &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -2470,7 +2470,7 @@ namespace DirectUI
 	}
 	NativeHWNDHost & NativeHWNDHost::operator=(const NativeHWNDHost &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return*this;
 	}
 	UINT WINAPI NativeHWNDHost::AsyncDestroyMsg()
@@ -2727,7 +2727,7 @@ namespace DirectUI
 	}
 	AccessibleButton & AccessibleButton::operator=(const AccessibleButton &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HRESULT AccessibleButton::Create(Element *, unsigned long *, Element **)
@@ -2781,7 +2781,7 @@ namespace DirectUI
 	}
 	AutoButton & AutoButton::operator=(const AutoButton &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	AutoButton::~AutoButton()
@@ -2825,7 +2825,7 @@ namespace DirectUI
 	}
 	AutoLock & AutoLock::operator=(const AutoLock &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	AutoLock::~AutoLock()
@@ -2840,7 +2840,7 @@ namespace DirectUI
 	}
 	AutoThread & AutoThread::operator=(const AutoThread &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HRESULT AutoThread::Init()
@@ -2853,7 +2853,7 @@ namespace DirectUI
 	}
 	AutoVariant & AutoVariant::operator=(const AutoVariant &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	AutoVariant::~AutoVariant()
@@ -2871,7 +2871,7 @@ namespace DirectUI
 	}
 	BorderLayout & BorderLayout::operator=(const BorderLayout &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long BorderLayout::Create(int, int *, Value **)
@@ -2918,7 +2918,7 @@ namespace DirectUI
 
 	Layout & Layout::operator=(const Layout &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -3016,7 +3016,7 @@ namespace DirectUI
 	}
 	FillLayout & FillLayout::operator=(FillLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HRESULT FillLayout::Create(int, int *, Value **)
@@ -3053,7 +3053,7 @@ namespace DirectUI
 	}
 	GridLayout & GridLayout::operator=(GridLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long GridLayout::Create(int, int, Layout **)
@@ -3106,7 +3106,7 @@ namespace DirectUI
 	}
 	FlowLayout & FlowLayout::operator=(FlowLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long FlowLayout::Create(int, int *, Value **)
@@ -3155,7 +3155,7 @@ namespace DirectUI
 	}
 	RowLayout & RowLayout::operator=(RowLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long RowLayout::Create(int, unsigned int, unsigned int, Layout **)
@@ -3197,7 +3197,7 @@ namespace DirectUI
 	}
 	NineGridLayout & NineGridLayout::operator=(NineGridLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long NineGridLayout::Create(int, int *, Value **)
@@ -3245,7 +3245,7 @@ namespace DirectUI
 	}
 	ShellBorderLayout & ShellBorderLayout::operator=(ShellBorderLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ShellBorderLayout::Create(int, int *, Value **)
@@ -3287,7 +3287,7 @@ namespace DirectUI
 	}
 	TableLayout & TableLayout::operator=(TableLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long TableLayout::Create(int, int *, Value **)
@@ -3328,7 +3328,7 @@ namespace DirectUI
 	}
 	VerticalFlowLayout & VerticalFlowLayout::operator=(VerticalFlowLayout const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HRESULT VerticalFlowLayout::Create(int, int *, Value **)
@@ -3374,7 +3374,7 @@ namespace DirectUI
 	}
 	AnimationStrip & AnimationStrip::operator=(const AnimationStrip &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	AnimationStrip::~AnimationStrip()
@@ -3501,7 +3501,7 @@ namespace DirectUI
 	}
 	ClassInfoBase & ClassInfoBase::operator=(ClassInfoBase const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void ClassInfoBase::AddRef()
@@ -3585,7 +3585,7 @@ namespace DirectUI
 	}
 	BaseScrollBar & BaseScrollBar::operator=(BaseScrollBar const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -3658,7 +3658,7 @@ namespace DirectUI
 	}
 	BaseScrollViewer & BaseScrollViewer::operator=(BaseScrollViewer const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long BaseScrollViewer::Initialize(Element *, unsigned long *)
@@ -3816,7 +3816,7 @@ namespace DirectUI
 	}
 	Bind & Bind::operator=(const Bind &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	Bind::~Bind(void)
@@ -3880,7 +3880,7 @@ namespace DirectUI
 	}
 	Browser & Browser::operator=(const Browser &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	Browser::~Browser(void)
@@ -3953,7 +3953,7 @@ namespace DirectUI
 	}
 	CallstackTracker & CallstackTracker::operator=(CallstackTracker const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	int CallstackTracker::CaptureCallstackFrames(void)
@@ -4024,7 +4024,7 @@ namespace DirectUI
 	}
 	CCAVI & CCAVI::operator=(const CCAVI &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCAVI::~CCAVI(void)
@@ -4077,7 +4077,7 @@ namespace DirectUI
 	}
 	CCBase & CCBase::operator=(const CCBase &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCBase::~CCBase(void)
@@ -4175,7 +4175,7 @@ namespace DirectUI
 	}
 	CCBaseCheckRadioButton & CCBaseCheckRadioButton::operator=(const CCBaseCheckRadioButton &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCBaseCheckRadioButton::~CCBaseCheckRadioButton(void)
@@ -4227,7 +4227,7 @@ namespace DirectUI
 	}
 	CCBaseScrollBar & CCBaseScrollBar::operator=(const CCBaseScrollBar &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCBaseScrollBar::~CCBaseScrollBar(void)
@@ -4363,7 +4363,7 @@ namespace DirectUI
 	}
 	CCCheckBox & CCCheckBox::operator=(const CCCheckBox &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCCheckBox::~CCCheckBox(void)
@@ -4415,7 +4415,7 @@ namespace DirectUI
 	}
 	CCCommandLink & CCCommandLink::operator=(CCCommandLink const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCCommandLink::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4485,7 +4485,7 @@ namespace DirectUI
 	}
 	CCSysLink & CCSysLink::operator=(CCSysLink const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCSysLink::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4540,7 +4540,7 @@ namespace DirectUI
 	}
 	CheckBoxGlyph & CheckBoxGlyph::operator=(CheckBoxGlyph const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CheckBoxGlyph::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4591,7 +4591,7 @@ namespace DirectUI
 	}
 	CCHScrollBar & CCHScrollBar::operator=(const CCHScrollBar &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCHScrollBar::~CCHScrollBar(void)
@@ -4638,7 +4638,7 @@ namespace DirectUI
 	}
 	Clipper & Clipper::operator=(Clipper const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Clipper::Create(Element *, unsigned long *, Element **)
@@ -4687,7 +4687,7 @@ namespace DirectUI
 	}
 	CCListBox & CCListBox::operator=(CCListBox const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCListBox::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4745,7 +4745,7 @@ namespace DirectUI
 	}
 	CCListView & CCListView::operator=(CCListView const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCListView::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4793,7 +4793,7 @@ namespace DirectUI
 	}
 	Combobox & Combobox::operator=(Combobox const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Combobox::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4884,7 +4884,7 @@ namespace DirectUI
 	}
 	CCProgressBar & CCProgressBar::operator=(CCProgressBar const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCProgressBar::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -4930,7 +4930,7 @@ namespace DirectUI
 	}
 	CCPushButton & CCPushButton::operator=(const CCPushButton &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	CCPushButton::~CCPushButton(void)
@@ -5039,7 +5039,7 @@ namespace DirectUI
 	}
 	CCRadioButton & CCRadioButton::operator=(CCRadioButton const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	PropertyInfo const * CCRadioButton::AutoGroupingProp(void)
@@ -5100,7 +5100,7 @@ namespace DirectUI
 	}
 	CCTrackBar & CCTrackBar::operator=(CCTrackBar const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCTrackBar::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -5204,7 +5204,7 @@ namespace DirectUI
 	}
 	CCTreeView & CCTreeView::operator=(CCTreeView const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCTreeView::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -5285,7 +5285,7 @@ namespace DirectUI
 	}
 	CCVScrollBar & CCVScrollBar::operator=(CCVScrollBar const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long CCVScrollBar::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -5329,7 +5329,7 @@ namespace DirectUI
 	}
 	DialogElement & DialogElement::operator=(DialogElement const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	const PropertyInfo * DialogElement::ButtonClassAcceptsEnterKeyProp(void)
@@ -5468,7 +5468,7 @@ namespace DirectUI
 	}
 	DuiNavigate & DuiNavigate::operator=(DuiNavigate const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -5483,7 +5483,7 @@ namespace DirectUI
 	}
 	Edit & Edit::operator=(Edit const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Edit::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -5635,7 +5635,7 @@ namespace DirectUI
 
 	EventManager & EventManager::operator=(EventManager const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long EventManager::AddRectangleChange(Element *, bool, bool)
@@ -5808,7 +5808,7 @@ namespace DirectUI
 	}
 	Expandable & Expandable::operator=(Expandable const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Expandable::Create(Element *, unsigned long *, Element **)
@@ -5888,7 +5888,7 @@ namespace DirectUI
 	}
 	ExpandCollapseProxy & ExpandCollapseProxy::operator=(ExpandCollapseProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	ExpandCollapseProxy * ExpandCollapseProxy::Create(Element *)
@@ -5918,7 +5918,7 @@ namespace DirectUI
 	}
 	Expando & Expando::operator=(Expando const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Expando::Register(void)
@@ -5981,7 +5981,7 @@ namespace DirectUI
 	}
 	ExpandoButtonGlyph & ExpandoButtonGlyph::operator=(ExpandoButtonGlyph const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ExpandoButtonGlyph::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -6030,7 +6030,7 @@ namespace DirectUI
 	}
 	FontCache & FontCache::operator=(FontCache const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long FontCache::InitProcess(void)
@@ -6056,7 +6056,7 @@ namespace DirectUI
 	}
 	FontCheckOut & FontCheckOut::operator=(FontCheckOut const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -6103,7 +6103,7 @@ namespace DirectUI
 	}
 	GridProxy & GridProxy::operator=(GridProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	GridProxy * GridProxy::Create(Element *)
@@ -6184,7 +6184,7 @@ namespace DirectUI
 	}
 	GridItemProxy & GridItemProxy::operator=(GridItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	GridItemProxy * GridItemProxy::Create(Element *)
@@ -6223,7 +6223,7 @@ namespace DirectUI
 	}
 	XHost & XHost::operator=(XHost const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long WINAPI XHost::Create(IXElementCP *, XHost **)
@@ -6273,7 +6273,7 @@ namespace DirectUI
 	}
 	HWNDElement & HWNDElement::operator=(const HWNDElement &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void HWNDElement::OnPropertyChanged(const PropertyInfo *, int, Value *, Value *)
@@ -6493,7 +6493,7 @@ namespace DirectUI
 	}
 	HWNDElementProxy & HWNDElementProxy::operator=(HWNDElementProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HWNDElementProxy * HWNDElementProxy::Create(HWNDElement *)
@@ -6524,7 +6524,7 @@ namespace DirectUI
 	}
 	HWNDHost & HWNDHost::operator=(const HWNDHost &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HWNDHost::~HWNDHost()
@@ -6802,7 +6802,7 @@ namespace DirectUI
 	}
 	Proxy & Proxy::operator=(Proxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Proxy::SyncCallback(HGADGET__ *, void *, EventMsg *)
@@ -6821,7 +6821,7 @@ namespace DirectUI
 	}
 	ProviderProxy & ProviderProxy::operator=(ProviderProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	ProviderProxy::ProviderProxy(void)
@@ -6839,7 +6839,7 @@ namespace DirectUI
 	}
 	IProvider & IProvider::operator=(IProvider const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -6851,7 +6851,7 @@ namespace DirectUI
 	}
 	ISBLeak & ISBLeak::operator=(ISBLeak const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -6863,7 +6863,7 @@ namespace DirectUI
 	}
 	IXProviderCP & IXProviderCP::operator=(IXProviderCP const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -6875,7 +6875,7 @@ namespace DirectUI
 	}
 	IXElementCP & IXElementCP::operator=(IXElementCP const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -6887,7 +6887,7 @@ namespace DirectUI
 	}
 	IDataEngine & IDataEngine::operator=(IDataEngine const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	IDataEngine::~IDataEngine(void)
@@ -6902,7 +6902,7 @@ namespace DirectUI
 	}
 	StyleSheet & StyleSheet::operator=(StyleSheet const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long StyleSheet::Create(StyleSheet **)
@@ -6939,7 +6939,7 @@ namespace DirectUI
 
 	InvokeManager & InvokeManager::operator=(InvokeManager const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void InvokeManager::Close(void)
@@ -6999,7 +6999,7 @@ namespace DirectUI
 	}
 	InvokeProxy & InvokeProxy::operator=(InvokeProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	InvokeProxy * InvokeProxy::Create(Element *)
@@ -7020,7 +7020,7 @@ namespace DirectUI
 
 	LinkedListNode & LinkedListNode::operator=(LinkedListNode const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -7032,7 +7032,7 @@ namespace DirectUI
 	}
 	LinkedList & LinkedList::operator=(LinkedList const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void LinkedList::Add(LinkedListNode *)
@@ -7057,7 +7057,7 @@ namespace DirectUI
 	}
 	Macro & Macro::operator=(Macro const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Macro::Create(Element *, unsigned long *, Element **)
@@ -7153,7 +7153,7 @@ namespace DirectUI
 	}
 	CritSecLock & CritSecLock::operator=(CritSecLock const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void CritSecLock::Unlock()
@@ -7162,7 +7162,7 @@ namespace DirectUI
 
 	Expression & Expression::operator=(Expression const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void Expression::Destroy(void)
@@ -7180,7 +7180,7 @@ namespace DirectUI
 	}
 	Surface & Surface::operator=(Surface const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	Surface::EType Surface::GetSurfaceType(unsigned int)
@@ -7203,7 +7203,7 @@ namespace DirectUI
 	}
 	DCSurface & DCSurface::operator=(DCSurface const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	HDC DCSurface::GetHDC(void)
@@ -7223,7 +7223,7 @@ namespace DirectUI
 	}
 	ResourceModuleHandles & ResourceModuleHandles::operator=(ResourceModuleHandles const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ResourceModuleHandles::GetHandle(unsigned short const *, HINSTANCE *)
@@ -7244,7 +7244,7 @@ namespace DirectUI
 	}
 	Movie & Movie::operator=(Movie const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Movie::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -7455,7 +7455,7 @@ namespace DirectUI
 	}
 	Navigator & Navigator::operator=(Navigator const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	UID Navigator::ActionInitiated(void)
@@ -7517,7 +7517,7 @@ namespace DirectUI
 	}
 	NavigatorSelectionItemProxy & NavigatorSelectionItemProxy::operator=(NavigatorSelectionItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long NavigatorSelectionItemProxy::DoMethod(int, char *)
@@ -7541,7 +7541,7 @@ namespace DirectUI
 	}
 	NavScoring & NavScoring::operator=(NavScoring const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	int NavScoring::TrackScore(Element *, Element *)
@@ -7564,7 +7564,7 @@ namespace DirectUI
 	}
 	Page & Page::operator=(Page const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Page::Create(Element *, unsigned long *, Element **)
@@ -7604,7 +7604,7 @@ namespace DirectUI
 	}
 	Pages & Pages::operator=(Pages const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Pages::Create(Element *, unsigned long *, Element **)
@@ -7654,7 +7654,7 @@ namespace DirectUI
 
 	Schema & Schema::operator=(Schema const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Schema::CreatePatternProvider(Pattern, ElementProvider *, IUnknown **)
@@ -7860,7 +7860,7 @@ namespace DirectUI
 	}
 	NavReference & NavReference::operator=(NavReference const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -7876,7 +7876,7 @@ namespace DirectUI
 	}
 	Progress & Progress::operator=(Progress const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Progress::Create(Element *, unsigned long *, Element **)
@@ -7956,7 +7956,7 @@ namespace DirectUI
 	}
 	ProgressRangeValueProxy & ProgressRangeValueProxy::operator=(ProgressRangeValueProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ProgressRangeValueProxy::DoMethod(int, char *)
@@ -8003,7 +8003,7 @@ namespace DirectUI
 	}
 	XResourceProvider & XResourceProvider::operator=(const XResourceProvider &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long WINAPI XResourceProvider::Create(XResourceProvider ** pOut)
@@ -8041,7 +8041,7 @@ namespace DirectUI
 	}
 	PText & PText::operator=(PText const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long PText::Create(Element *, unsigned long *, Element **)
@@ -8091,7 +8091,7 @@ namespace DirectUI
 
 	PushButton & PushButton::operator=(PushButton const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -8169,7 +8169,7 @@ namespace DirectUI
 	}
 	RadioButtonGlyph & RadioButtonGlyph::operator=(RadioButtonGlyph const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long RadioButtonGlyph::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -8266,7 +8266,7 @@ namespace DirectUI
 	}
 	RangeValueProxy & RangeValueProxy::operator=(RangeValueProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	RangeValueProxy * RangeValueProxy::Create(Element *)
@@ -8299,7 +8299,7 @@ namespace DirectUI
 	}
 	RefPointElement & RefPointElement::operator=(RefPointElement const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	PropertyInfo const * RefPointElement::ActualReferencePointProp(void)
@@ -8375,7 +8375,7 @@ namespace DirectUI
 	}
 	RepeatButton & RepeatButton::operator=(RepeatButton const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long RepeatButton::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -8426,7 +8426,7 @@ namespace DirectUI
 	}
 	Repeater & Repeater::operator=(Repeater const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Repeater::Create(Element *, unsigned long *, Element **)
@@ -8527,7 +8527,7 @@ namespace DirectUI
 	}
 	ScrollProxy & ScrollProxy::operator=(ScrollProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	ScrollProxy * ScrollProxy::Create(Element *)
@@ -8606,7 +8606,7 @@ namespace DirectUI
 	}
 	ScrollBar & ScrollBar::operator=(ScrollBar const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ScrollBar::Create(Element *, unsigned long *, Element **)
@@ -8769,7 +8769,7 @@ namespace DirectUI
 	}
 	ScrollBarRangeValueProxy & ScrollBarRangeValueProxy::operator=(ScrollBarRangeValueProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ScrollBarRangeValueProxy::DoMethod(int, char *)
@@ -8817,7 +8817,7 @@ namespace DirectUI
 	}
 	ScrollItemProxy & ScrollItemProxy::operator=(ScrollItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	ScrollItemProxy * ScrollItemProxy::Create(Element *)
@@ -8848,7 +8848,7 @@ namespace DirectUI
 	}
 	ScrollViewer & ScrollViewer::operator=(ScrollViewer const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long ScrollViewer::Create(Element *, unsigned long *, Element **)
@@ -8940,7 +8940,7 @@ namespace DirectUI
 	}
 	SelectionProxy & SelectionProxy::operator=(SelectionProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	SelectionProxy * SelectionProxy::Create(Element *)
@@ -9012,7 +9012,7 @@ namespace DirectUI
 	}
 	SelectionItemProxy & SelectionItemProxy::operator=(SelectionItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	SelectionItemProxy * SelectionItemProxy::Create(Element *)
@@ -9043,7 +9043,7 @@ namespace DirectUI
 	}
 	Selector & Selector::operator=(Selector const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Selector::Create(Element *, unsigned long *, Element **)
@@ -9116,7 +9116,7 @@ namespace DirectUI
 	}
 	SelectorNoDefault & SelectorNoDefault::operator=(SelectorNoDefault const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long SelectorNoDefault::Create(Element *, unsigned long *, Element **)
@@ -9165,7 +9165,7 @@ namespace DirectUI
 	}
 	SelectorSelectionProxy & SelectorSelectionProxy::operator=(SelectorSelectionProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long SelectorSelectionProxy::DoMethod(int, char *)
@@ -9189,7 +9189,7 @@ namespace DirectUI
 	}
 	SelectorSelectionItemProxy & SelectorSelectionItemProxy::operator=(SelectorSelectionItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long SelectorSelectionItemProxy::DoMethod(int, char *)
@@ -9224,7 +9224,7 @@ namespace DirectUI
 	}
 	StyledScrollViewer & StyledScrollViewer::operator=(StyledScrollViewer const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long StyledScrollViewer::Create(Element *, unsigned long *, Element **)
@@ -9314,7 +9314,7 @@ namespace DirectUI
 	}
 	TableProxy & TableProxy::operator=(TableProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	TableProxy * TableProxy::Create(Element *)
@@ -9375,7 +9375,7 @@ namespace DirectUI
 	}
 	TableItemProxy & TableItemProxy::operator=(TableItemProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	TableItemProxy * TableItemProxy::Create(Element *)
@@ -9407,7 +9407,7 @@ namespace DirectUI
 	}
 	TaskPage & TaskPage::operator=(TaskPage const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	TaskPage::operator struct _PSP*(void)
@@ -9551,7 +9551,7 @@ namespace DirectUI
 	}
 	TextGraphic & TextGraphic::operator=(TextGraphic const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long TextGraphic::Create(Element *, unsigned long *, Element **)
@@ -9608,7 +9608,7 @@ namespace DirectUI
 	}
 	Thumb & Thumb::operator=(Thumb const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Thumb::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -9690,7 +9690,7 @@ namespace DirectUI
 	}
 	ToggleProxy & ToggleProxy::operator=(ToggleProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	ToggleProxy * ToggleProxy::Create(Element *)
@@ -9726,7 +9726,7 @@ namespace DirectUI
 	}
 	UnknownElement & UnknownElement::operator=(UnknownElement const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long UnknownElement::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -9761,7 +9761,7 @@ namespace DirectUI
 
 	Value & Value::operator=(const Value &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void Value::AddRef()
@@ -10092,7 +10092,7 @@ namespace DirectUI
 
 	ValueProxy & ValueProxy::operator=(ValueProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 
@@ -10141,7 +10141,7 @@ namespace DirectUI
 	}
 	Viewer & Viewer::operator=(Viewer const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long Viewer::Create(Element *, unsigned long *, Element **)
@@ -10263,7 +10263,7 @@ namespace DirectUI
 	}
 	XBaby & XBaby::operator=(XBaby const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	void XBaby::CacheParser(DUIXmlParser *)
@@ -10366,7 +10366,7 @@ namespace DirectUI
 	}
 	XElement & XElement::operator=(XElement const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long XElement::Create(unsigned int, Element *, unsigned long *, Element **)
@@ -10470,7 +10470,7 @@ namespace DirectUI
 	}
 	XProvider & XProvider::operator=(XProvider const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long XProvider::Create(Element *, IXProviderCP *, XProvider **)
@@ -10686,7 +10686,7 @@ namespace DirectUI
 		return 0;
 	}
 
-	//1 ´Ëº¯ÊıËÆºõÉùÃ÷²»ÕıÈ·
+	//1 æ­¤å‡½æ•°ä¼¼ä¹å£°æ˜ä¸æ­£ç¡®
 	ProviderProxyCall ElementProvider::GetProxyCreator()
 	{
 		return NULL;
@@ -10836,7 +10836,7 @@ namespace DirectUI
 	}
 	DUIFactory & DUIFactory::operator=(DUIFactory const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long DUIFactory::CreateParser(void)
@@ -10881,7 +10881,7 @@ namespace DirectUI
 	}
 	BrowserSelectionProxy & BrowserSelectionProxy::operator=(BrowserSelectionProxy const &)
 	{
-		// TODO: ÔÚ´Ë´¦²åÈë return Óï¾ä
+		// TODO: åœ¨æ­¤å¤„æ’å…¥ return è¯­å¥
 		return *this;
 	}
 	long BrowserSelectionProxy::DoMethod(int, char *)
@@ -10917,4 +10917,104 @@ namespace DirectUI
 	{
 		return *this;
 	}
+
+	//HRESULT CClassFactory::Create(unsigned int, Element *, unsigned long *, Element * *) {
+	//	return S_OK;
+	//}
+
+	//HRESULT CClassFactory::Register(IClassInfo *) {
+	//	return S_OK;
+	//}
+
+	PropertyInfo * WINAPI RichText::BaselineProp(void) { return 0; }
+  IClassInfo * WINAPI RichText::GetClassInfoPtr(void) { return 0; }
+  PropertyInfo * WINAPI RichText::LineSpacingProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::OverhangOffsetProp(void) { return 0; }
+  HRESULT RichText::SetMaxLineCount(UINT) { return S_OK; }
+  PropertyInfo * WINAPI RichText::TypographyProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::AliasedRenderingProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::ColorFontPaletteIndexProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::ConstrainLayoutProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::DisableAccTextExtendProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::FontColorRunsProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::FontSizeRunsProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::FontWeightRunsProp(void) { return 0; }
+  HRESULT RichText::GetColorFontPaletteIndex(void) { return S_OK; }
+  HRESULT RichText::GetConstrainLayout(void) { return S_OK; }
+  PropertyInfo * WINAPI RichText::LocaleProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::MapRunsToClustersProp(void) { return 0; }
+  void RichText::OnEvent(DirectUI::Event *) {}
+  void RichText::Paint(HDC__ *,tagRECT const *,tagRECT const *,tagRECT *,tagRECT *) {}
+  PropertyInfo * WINAPI RichText::TypographyRunsProp(void) { return 0; }
+  PropertyInfo * WINAPI RichText::VerticalScriptProp(void) { return 0; }
+  HRESULT RichText::_EnsureLeadDrawOffsetIsSet(void) { return S_OK; }
+  HRESULT RichText::_FlushDWrite(void) { return S_OK; }
+  HRESULT RichText::_PrepareTextRender(void) { return S_OK; }
+  HRESULT RichText::_SetAcceleratorAccentIfAppropriate(void) { return S_OK; }
+  HRESULT RichText::_SetTypographyInternal(void) { return S_OK; }
+  HRESULT RichText::SetConstrainLayout(int) { return S_OK; }
+  HRESULT RichText::GetShortcutChar(void) { return S_OK; }
+  HRESULT RichText::SetAliasedRendering(bool) { return S_OK; }
+  HRESULT RichText::SetBaseline(int) { return S_OK; }
+  HRESULT RichText::SetColorFontPaletteIndex(int) { return S_OK; }
+  HRESULT RichText::SetDisableAccTextExtend(bool) { return S_OK; }
+  HRESULT RichText::SetFontColorRuns(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetFontSizeRuns(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetFontWeightRuns(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetLineSpacing(int) { return S_OK; }
+  HRESULT RichText::SetLocale(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetMapRunsToClusters(bool) { return S_OK; }
+  HRESULT RichText::SetOverhangOffset(int) { return S_OK; }
+  HRESULT RichText::SetTypography(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetTypographyRuns(USHORT const *) { return S_OK; }
+  HRESULT RichText::SetVerticalScript(bool) { return S_OK; }
+  RichText::RichText(void) {}
+  HRESULT RichText::CreateCache(UINT,struct IDUIRichTextCache * *) { return S_OK; }
+  SIZE RichText::GetContentSize(int,int,DirectUI::Surface *) { return {}; }
+  HRESULT RichText::GetFactory(void) { return S_OK; }
+  HRESULT RichText::GetFontColorRuns(DirectUI::Value * *) { return S_OK; }
+  HRESULT RichText::GetForegroundColorRef(ULONG *) { return S_OK; }
+  HRESULT RichText::GetLineCount(void) { return S_OK; }
+  HRESULT RichText::GetTrimmedLineCount(void) { return S_OK; }
+  HRESULT RichText::GetVerticalScript(void) { return S_OK; }
+  HRESULT RichText::Initialize(DirectUI::Element *,ULONG *) { return S_OK; }
+  void RichText::OnHosted(DirectUI::Element *) {}
+  void RichText::OnPropertyChanged(DirectUI::PropertyInfo const *,int,DirectUI::Value *,DirectUI::Value *) {}
+  HRESULT RichText::SetCache(ULONG, struct IDUIRichTextCache *) { return S_OK; }
+  HRESULT RichText::SetDWriteFontCollection(IDWriteFontCollection *) { return S_OK; }
+  HRESULT RichText::SetDWriteTextLayout(IDWriteTextLayout *) { return S_OK; }
+  HRESULT RichText::StopUsingCache(void) { return S_OK; }
+  HRESULT RichText::_AdjustRangeForPathJoinCharacters(DWRITE_TEXT_RANGE *) { return S_OK; }
+  HRESULT RichText::_ApplyDrawTextFlags(void) { return S_OK; }
+  HRESULT RichText::_ApplyIntratextFormatting(void) { return S_OK; }
+  HRESULT RichText::_BuildRenderStringForDWrite(USHORT const *,USHORT,bool) { return S_OK; }
+  HRESULT RichText::_CreateDWriteLayout(tagRECT const *,DirectUI::Value *) { return S_OK; }
+  HRESULT RichText::_EnsureTextFormat(void) { return S_OK; }
+  HRESULT RichText::_GetDWFontSize(float,bool) { return S_OK; }
+  HRESULT RichText::_GetDWFontWeight(void) { return S_OK; }
+  HRESULT RichText::_GetDWMetrics(DWRITE_TEXT_METRICS *) { return S_OK; }
+  HRESULT RichText::_GetDWOverhangMetrics(DWRITE_OVERHANG_METRICS *) { return S_OK; }
+  HRESULT RichText::_GetDefaultOverhang(void) { return S_OK; }
+  HRESULT RichText::_GetMinSizeWidth(void) { return S_OK; }
+  HRESULT RichText::_GetScaledOverhangOffset(void) { return S_OK; }
+  HRESULT RichText::_InitDWrite(void) { return S_OK; }
+  HRESULT RichText::_PaintStringContentDWrite(HDC__ *,tagRECT const *,tagRECT const *,DirectUI::Value *) { return S_OK; }
+  HRESULT RichText::_SetFontColorRun(USHORT const *,DWRITE_TEXT_RANGE) { return S_OK; }
+  HRESULT RichText::_SetFontSizeRun(USHORT const *,DWRITE_TEXT_RANGE) { return S_OK; }
+  HRESULT RichText::_SetFontSizeRunsInternal(void) { return S_OK; }
+  HRESULT RichText::_SetFontWeightRun(USHORT const *,DWRITE_TEXT_RANGE) { return S_OK; }
+  HRESULT RichText::_SetFontWeightRunsInternal(void) { return S_OK; }
+  HRESULT RichText::_SetLineSpacingInternal(void) { return S_OK; }
+  HRESULT RichText::_SetRangedStringRunsWithValue(USHORT const *,enum StringRunStyles) { return S_OK; }
+  HRESULT RichText::_SetStrikethrough(void) { return S_OK; }
+  HRESULT RichText::_SetTypographyRun(USHORT const *,DWRITE_TEXT_RANGE) { return S_OK; }
+  HRESULT RichText::_SetTypographyRunsInternal(void) { return S_OK; }
+  HRESULT RichText::_SetUnderline(void) { return S_OK; }
+  HRESULT RichText::_UpdateRangeForClusterMetrics(DWRITE_TEXT_RANGE *) { return S_OK; }
+
+
+	UID WINAPI TouchButton::Click(void) {
+		return UID();
+	}
+
 }

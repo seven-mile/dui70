@@ -7,7 +7,7 @@ namespace DirectUI
 	public:
 		Bind(const Bind &);
 		Bind(void);
-		Bind & Bind::operator=(const Bind &);
+		Bind & operator=(const Bind &);
 		virtual ~Bind(void);
 
 		static const PropertyInfo * __stdcall ConnectProp(void);

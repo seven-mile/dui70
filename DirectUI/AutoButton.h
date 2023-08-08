@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	//所有虚函数均是重载，无需调整顺序
+	//鎵�鏈夎櫄鍑芥暟鍧囨槸閲嶈浇锛屾棤闇�璋冩暣椤哄簭
 	class UILIB_API AutoButton :public AccessibleButton
 	{
 	public:

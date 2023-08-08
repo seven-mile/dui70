@@ -2,6 +2,30 @@
 
 namespace DirectUI
 {
+
+	enum class ValueType : int {
+    Unavailable = -2,
+    Unset = -1,
+    Null = 0,
+    Int = 1,
+    Bool = 2,
+    Element = 3,
+    Ellist = 4,
+    String = 5,
+    Point = 6,
+    Size = 7,
+    Rect = 8,
+    Color = 9,
+    Layout = 10,
+		Graphic = 11,
+    Sheet = 12,
+    Expr = 13,
+		Atom = 14,
+    Cursor = 15,
+		Float = 18,
+		DblList = 19,
+	};
+
 	class UILIB_API Value
 	{
 	public:

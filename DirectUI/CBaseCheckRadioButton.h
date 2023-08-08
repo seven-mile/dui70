@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	//此类无新增虚函数
+	//姝ょ被鏃犳柊澧炶櫄鍑芥暟
 	class UILIB_API CCBaseCheckRadioButton : public CCPushButton
 	{
 	public:

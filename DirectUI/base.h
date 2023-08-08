@@ -152,7 +152,7 @@ namespace DirectUI
 		int GetYOffset();
 		bool GetYScrollable();
 
-		//第二个类虚函数表
+		//绗簩涓被铏氬嚱鏁拌〃
 		//0
 		virtual void OnListenerAttach(Element*);
 		//1

@@ -19,35 +19,36 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
+    <CodePage>936</CodePage>
     <ProjectGuid>{0B7DE49A-33C6-41B1-A9CE-D353031F8454}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>DirectUI</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -72,18 +73,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>dui70</TargetName>
-    <OutDir>$(SolutionDir)$(Configuration)\dui</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>dui70</TargetName>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+    <TargetName>dui70</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Dui\</OutDir>
+    <TargetName>dui70</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -171,6 +176,7 @@
     <ClInclude Include="CBaseCheckRadioButton.h" />
     <ClInclude Include="CBaseScrollBar.h" />
     <ClInclude Include="CCheckBox.h" />
+    <ClInclude Include="CClassFactory.h" />
     <ClInclude Include="CCSysLink.h" />
     <ClInclude Include="CheckBoxGlyph.h" />
     <ClInclude Include="Clipper.h" />
@@ -226,6 +232,7 @@
     <ClInclude Include="RefPointElement.h" />
     <ClInclude Include="RepeatButton.h" />
     <ClInclude Include="Repeater.h" />
+    <ClInclude Include="RichText.h" />
     <ClInclude Include="Scroll.h" />
     <ClInclude Include="ScrollBar.h" />
     <ClInclude Include="ScrollItem.h" />
@@ -243,6 +250,7 @@
     <ClInclude Include="TextGraphic.h" />
     <ClInclude Include="Thumb.h" />
     <ClInclude Include="Toggle.h" />
+    <ClInclude Include="TouchButton.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="UnknownElement.h" />
     <ClInclude Include="Value.h" />

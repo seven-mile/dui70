@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	//此类所有虚函数继承自父类，无需额外调整
+	//姝ょ被鎵�鏈夎櫄鍑芥暟缁ф壙鑷埗绫伙紝鏃犻渶棰濆璋冩暣
 	class UILIB_API AnimationStrip :public Element
 	{
 	public:

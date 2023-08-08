@@ -23,7 +23,7 @@ namespace DirectUI
 		bool GetHasShield(void);
 		bool GetOverrideButtonBackground(void);
 
-		//¸¸ÀàĞéº¯ÊıÖØÔØ
+		//çˆ¶ç±»è™šå‡½æ•°é‡è½½
 		virtual long DefaultAction(void);
 		virtual IClassInfo * GetClassInfoW(void);
 		virtual SIZE GetContentSize(int, int, Surface *);

@@ -291,11 +291,11 @@ namespace DirectUI
 		long SetPreprocessedXML(UCString, HINSTANCE, HINSTANCE);
 		void SetUnavailableIcon(HICON);
 
-		HRESULT SetXML(UCString szXML, HINSTANCE hModule, HINSTANCE/*0x10000000 ×÷ÓÃÎ´Öª*/);
+		HRESULT SetXML(UCString szXML, HINSTANCE hModule, HINSTANCE/*0x10000000 ä½œç”¨æœªçŸ¥*/);
 
-		//Æä×ÊÔ´±ØÐëÔÚ"UIFILE"ÀàÐÍÖÐ
-		HRESULT SetXMLFromResource(UINT uID, HINSTANCE hModule, HINSTANCE/*0x10000000 ×÷ÓÃÎ´Öª*/);
-		HRESULT SetXMLFromResource(UCString szID, HINSTANCE hModule, HINSTANCE/*0x10000000 ×÷ÓÃÎ´Öª*/);
+		//å…¶èµ„æºå¿…é¡»åœ¨"UIFILE"ç±»åž‹ä¸­
+		HRESULT SetXMLFromResource(UINT uID, HINSTANCE hModule, HINSTANCE/*0x10000000 ä½œç”¨æœªçŸ¥*/);
+		HRESULT SetXMLFromResource(UCString szID, HINSTANCE hModule, HINSTANCE/*0x10000000 ä½œç”¨æœªçŸ¥*/);
 
 		long UpdateSheets(Element*);
 		void _DestroyTables();

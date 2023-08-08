@@ -25,6 +25,9 @@
     <Filter Include="头文件\DirectUI\Layout">
       <UniqueIdentifier>{d8f4322e-6b5e-4c36-a495-3eb52c04f3d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\DirectUI\Touch">
+      <UniqueIdentifier>{c168b95e-9307-420f-8ed8-3206008e9919}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectUI.h">
@@ -320,6 +323,15 @@
     </ClInclude>
     <ClInclude Include="BrowserSelection.h">
       <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CClassFactory.h">
+      <Filter>头文件\DirectUI</Filter>
+    </ClInclude>
+    <ClInclude Include="RichText.h">
+      <Filter>头文件\DirectUI\Touch</Filter>
+    </ClInclude>
+    <ClInclude Include="TouchButton.h">
+      <Filter>头文件\DirectUI\Touch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

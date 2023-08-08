@@ -93,7 +93,8 @@ namespace DirectUI
 
 	struct InputEvent
 	{
-
+		Element *target;
+		EventID event_id;
 	};
 
 	struct RectangleChange

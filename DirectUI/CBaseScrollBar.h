@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	//此类虚函数全部来自父
+	//姝ょ被铏氬嚱鏁板叏閮ㄦ潵鑷埗
 	class UILIB_API CCBaseScrollBar
 		: public CCBase
 		, public BaseScrollBar

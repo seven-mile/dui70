@@ -1,10 +1,11 @@
 #pragma once
 
+using EventID = void*;
 
 class UID
 {
 public:
-	LPCSTR szID;
+	EventID *pId;
 };
 
 struct GMA_ACTIONINFO

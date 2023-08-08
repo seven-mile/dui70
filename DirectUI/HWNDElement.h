@@ -2,7 +2,7 @@
 
 namespace DirectUI
 {
-	//32Î»½á¹¹Ìå´óĞ¡ 0x94
+	//32ä½ç»“æ„ä½“å¤§å° 0x94
 	class UILIB_API HWNDElement : public ElementWithHWND
 	{
 	public:
@@ -35,7 +35,7 @@ namespace DirectUI
 		virtual long GetAccessibleImpl(IAccessible**);
 
 
-		//HWNDElement ĞÂÔöº¯Êı
+		//HWNDElement æ–°å¢å‡½æ•°
 		//10
 		virtual HWND GetHWND();
 
@@ -130,7 +130,7 @@ namespace DirectUI
 
 	};
 
-	//´ËÀà´æÔÚÎÊÌâ£¬¿´Ğé±í3ÓĞ¸ö£¬µ«ÊÇµ¼³öÖ»ÓĞ2¸ö£¬¹ÖÒì¡­¡­
+	//æ­¤ç±»å­˜åœ¨é—®é¢˜ï¼Œçœ‹è™šè¡¨3æœ‰ä¸ªï¼Œä½†æ˜¯å¯¼å‡ºåªæœ‰2ä¸ªï¼Œæ€ªå¼‚â€¦â€¦
 	class UILIB_API HWNDElementProxy : public IProxy
 	{
 	public:

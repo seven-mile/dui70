@@ -23,7 +23,7 @@ namespace DirectUI
 		void SetNotifyHandler(BOOL (WINAPI*)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plResult, void* pUserData), void* pUserData);
 		long SetWinStyle(int);
 
-		//∏∏¿‡∏∏∫Ø ˝÷ÿ‘ÿ
+		//Áà∂Á±ªÁà∂ÂáΩÊï∞ÈáçËΩΩ
 		virtual void OnPropertyChanged(PropertyInfo const *, int, Value *, Value *);
 		virtual HWND CreateHWND(HWND);
 		virtual long DefaultAction(void);

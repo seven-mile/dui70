@@ -7,11 +7,11 @@ namespace DirectUI
 		// ??
 	};
 
-	//32Î»Êı¾İ½á¹¹´óĞ¡ 0x80
+	//32ä½æ•°æ®ç»“æ„å¤§å° 0x80
 	class UILIB_API Element
 	{
 	public:
-		//0 Ğé±íÖ¸Õë
+		//0 è™šè¡¨æŒ‡é’ˆ
 		//_vftable_
 
 		//0x4
@@ -102,7 +102,7 @@ namespace DirectUI
 		UINT8 v9;
 
 		//0x69
-		//4¶ÔÆëÉÏÒÆ0x6C
+		//4å¯¹é½ä¸Šç§»0x6C
 
 		//0x6C
 		UINT32 v29;
@@ -636,7 +636,7 @@ private:
 
 	};
 
-	//´ËÀàµÄÉùÃ÷ºÜ¿ÉÄÜ´íÎó
+	//æ­¤ç±»çš„å£°æ˜å¾ˆå¯èƒ½é”™è¯¯
 	class UILIB_API ElementProvider
 		: public RefcountBase
 		, public IRawElementProviderSimple
@@ -704,7 +704,7 @@ private:
 			/* [in] */ EVENTID eventId,
 			/* [in] */ __RPC__in SAFEARRAY * propertyIDs);
 
-		//1 ´Ëº¯ÊıËÆºõÉùÃ÷²»ÕıÈ·
+		//1 æ­¤å‡½æ•°ä¼¼ä¹å£°æ˜ä¸æ­£ç¡®
 		virtual ProviderProxyCall GetProxyCreator();
 		//2
 		virtual volatile const Element* GetElement();

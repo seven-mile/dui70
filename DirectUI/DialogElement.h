@@ -30,7 +30,7 @@ namespace DirectUI
 		long SetHandleEnterKey(bool);
 		long SetRegisteredDefaultButton(Element *);
 
-		//»ùÀà
+		//åŸºç±»
 		virtual void OnDestroy(void);
 		virtual void OnGetDlgCode(MSG *, LRESULT *);
 		virtual void OnInput(InputEvent *);

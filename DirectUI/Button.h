@@ -16,7 +16,7 @@ namespace DirectUI
 
 		static UID WINAPI Click();
 		static UID WINAPI Context();
-		//ElementÀàº¯ÊıÖØĞ´
+		//Elementç±»å‡½æ•°é‡å†™
 		//0
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
 		//1
@@ -31,7 +31,7 @@ namespace DirectUI
 		bool GetCaptured();
 		static IClassInfo* WINAPI GetClassInfoPtr();
 		bool GetPressed();
-		//Button ĞÂÔöĞéº¯Êı
+		//Button æ–°å¢è™šå‡½æ•°
 		//0
 		virtual bool OnLostDialogFocus(class DialogElement*);
 		//1

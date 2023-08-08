@@ -118,6 +118,11 @@
 #include "XProvider.h"
 #include "BrowserSelection.h"
 
+#include "RichText.h"
+#include "TouchButton.h"
+
+#include "CClassFactory.h"
+
 //UnknownElement
 
 UILIB_API void WINAPI DumpDuiTree(DirectUI::Element *, int);
@@ -176,7 +181,7 @@ namespace DirectUI
 	LPVOID WINAPI EnableAnimations();
 	void WINAPI FlushThemeHandles(unsigned int);
 
-	//´Ëº¯Êı½öµ÷ÓÃDebugBreak£¬½«³ÌĞòÖĞ¶Ï
+	//æ­¤å‡½æ•°ä»…è°ƒç”¨DebugBreakï¼Œå°†ç¨‹åºä¸­æ–­
 	void WINAPI ForceDebugBreak();
 
 	DWORD WINAPI GetElementDataEntry(int a1);
@@ -185,20 +190,20 @@ namespace DirectUI
 
 	HRESULT WINAPI GetThemeHandle(LPCWSTR, void **);
 
-	//´Ëº¯Êıµ÷ÓÃSysAllocString£¬²¢·µ»ØppStr
+	//æ­¤å‡½æ•°è°ƒç”¨SysAllocStringï¼Œå¹¶è¿”å›ppStr
 	HRESULT WINAPI HrSysAllocString(OLECHAR *psz, BSTR* ppStr);
 
-	//´Ëº¯ÊıÓÃÓÚ¸´ÖÆlpString×Ö·û´®£¬²¢·µ»ØppStr
+	//æ­¤å‡½æ•°ç”¨äºå¤åˆ¶lpStringå­—ç¬¦ä¸²ï¼Œå¹¶è¿”å›ppStr
 	HRESULT WINAPI HStrDup(LPCWSTR lpString, LPCWSTR* ppStr);
 
-	//´Ëº¯ÊıÊÇ¿ÕÊµÏÖ£¬ÎŞÈÎºÎ×÷ÓÃ
+	//æ­¤å‡½æ•°æ˜¯ç©ºå®ç°ï¼Œæ— ä»»ä½•ä½œç”¨
 	BOOL WINAPI InitPreprocessor();
 
 	HRESULT WINAPI SetDefAction(Element *a1, _In_  DWORD dwRole);
 
 	BOOL WINAPI UiaHideOnGetObject(_In_ HWND hWnd, int a2, int a3);
 
-	//µ÷ÓÃRemoveProp ·µ»Ø¾Ù¸ö¾ä±ú
+	//è°ƒç”¨RemoveProp è¿”å›ä¸¾ä¸ªå¥æŸ„
 	HANDLE WINAPI UiaOnDestroySink(_In_ HWND hWnd);
 	HRESULT WINAPI UiaOnGetObject(void* *a1, int a2, InvokeHelper *a3, int a4, int a5);
 	BOOL WINAPI UiaOnToolTip(Element *, DWORD);

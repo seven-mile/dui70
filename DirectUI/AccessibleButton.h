@@ -13,7 +13,7 @@ namespace DirectUI
 
 		static HRESULT WINAPI Create(Element*, unsigned long*, Element**);
 		static IClassInfo* WINAPI GetClassInfoPtr();
-		//Buttonº¯ÊıÖØĞ´
+		//Buttonå‡½æ•°é‡å†™
 		//0
 		virtual void OnPropertyChanged(const PropertyInfo*, int, Value*, Value*);
 		//1

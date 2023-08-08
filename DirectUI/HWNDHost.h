@@ -32,7 +32,7 @@ namespace DirectUI
 		static const PropertyInfo* WINAPI ThemeChangedProp();
 		static const PropertyInfo* WINAPI TransparentProp();
 
-		//父类重载
+		//鐖剁被閲嶈浇
 		virtual IClassInfo* GetClassInfoW();
 		virtual long GetAccessibleImpl(IAccessible**);
 		virtual bool GetKeyFocused();
@@ -86,7 +86,7 @@ namespace DirectUI
 		bool GetStaticColor(HDC, HBRUSH*);
 		int GetThemeChanged();
 		bool IsMoveDeferred();
-		//父类重载
+		//鐖剁被閲嶈浇
 		virtual void OnHosted(Element*);
 		virtual void OnUnHosted(Element*);
 		//

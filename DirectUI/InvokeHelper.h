@@ -59,7 +59,7 @@ namespace DirectUI
 		virtual unsigned long __stdcall Release(void);
 	};
 
-	//推测DoMethod 以及Init 来自一个纯虚类……，但是目前没有直接证据
+	//鎺ㄦ祴DoMethod 浠ュ強Init 鏉ヨ嚜涓�涓函铏氱被鈥︹�︼紝浣嗘槸鐩墠娌℃湁鐩存帴璇佹嵁
 	class UILIB_API InvokeProxy
 	{
 	public:

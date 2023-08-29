@@ -5498,7 +5498,7 @@ namespace DirectUI
 	{
 		return nullptr;
 	}
-	UID Edit::Enter(void)
+	UID WINAPI Edit::Enter(void)
 	{
 		return UID();
 	}

@@ -14,9 +14,9 @@ namespace DirectUI
 		//3
 		virtual void OnListenedPropertyChanged(class Element* elem, const struct PropertyInfo *prop, int type, class Value *before, class Value *after) = 0;
 		//4
-		virtual void OnListenedEvent(class Element* elem, struct Event *event) = 0;
-		//5
 		virtual void OnListenedInput(class Element* elem, struct InputEvent *event) = 0;
+		//5
+		virtual void OnListenedEvent(class Element* elem, struct Event *event) = 0;
 	};
 
 	struct IClassInfo

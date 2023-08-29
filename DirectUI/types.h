@@ -1,12 +1,21 @@
 #pragma once
 
-using EventID = void*;
-
 class UID
 {
 public:
-	EventID *pId;
+	// user defined ctor
+	// to enable correct return by outptr sematics
+	// https://learn.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-170#return-values
+	UID() { }
+
+	void *value{};
 };
+
+inline bool operator==(UID id, UID( (*__stdcall ev)(void))) {
+	UID z;
+	auto p = ev();
+	return id.value == p.value;
+}
 
 struct GMA_ACTIONINFO
 {

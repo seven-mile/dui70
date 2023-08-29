@@ -339,6 +339,9 @@
                     bordercolor="gray">
         <element layout="BorderLayout()" contentalign="topcenter" padding="rect(6rp, 16rp, 6rp, 16rp)">
           <modernprogressring layoutpos="top" minsize="size(50rp, 50rp)" id="Atom(SXWizardLoadingProgress)" />
+          <edit accessible="true" margin="rect(16rp,16rp,16rp,16rp)" layoutpos="top"
+                  accrole="text"  id="Atom(SXWizardEditBox)" active="mouse | keyboard"
+                  themedborder="true" />
           <element layout="BorderLayout()" contentalign="wrapleft">
             <richtext layoutpos="bottom" accessible="true" margin="rect(0rp,16rp,0rp,16rp)"
                   accrole="text"  id="Atom(SXWizardContentBox)" active="mouse | keyboard"

@@ -55,13 +55,13 @@ struct LogListener : public IElementListener {
 };
 
 
-struct InputListener : public IElementListener {
+struct EventListener : public IElementListener {
 
-	using handler_t = std::function<void(Element*, InputEvent*)>;
+	using handler_t = std::function<void(Element*, Event*)>;
 
 	handler_t f;
 
-	InputListener(handler_t f) : f(f) { }
+	EventListener(handler_t f) : f(f) { }
 
 	void OnListenerAttach(Element *elem) override { }
 	void OnListenerDetach(Element *elem) override { }
@@ -69,10 +69,10 @@ struct InputListener : public IElementListener {
 		return true;
 	}
 	void OnListenedPropertyChanged(Element *elem, const PropertyInfo*prop, int type, Value*v1, Value*v2) override { }
-	void OnListenedEvent(Element*elem, struct Event*ev) override { }
-	void OnListenedInput(Element*elem, struct InputEvent*iev) override {
+	void OnListenedEvent(Element*elem, struct Event*iev) override {
 		f(elem, iev);
 	}
+	void OnListenedInput(Element*elem, struct InputEvent*ev) override { }
 };
 
 std::wstring to_string(ValueType type) {
@@ -209,7 +209,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	auto *accept_btn = (Button *)pWizardMain->FindDescendent(StrToID((UCString)L"SXWizardDefaultButton"));
 	auto *reject_btn = (Button *)pWizardMain->FindDescendent(StrToID((UCString)L"SXWizardAlternateButton"));
 
-	auto *edit_box = (Edit *)pWizardMain->FindDescendent(StrToID((UCString)L"SXWizardContentBox"));
+	auto *edit_box = (Edit *)pWizardMain->FindDescendent(StrToID((UCString)L"SXWizardEditBox"));
 
 	auto *prog = pWizardMain->FindDescendent(StrToID((UCString)L"SXWizardLoadingProgress"));
 
@@ -219,26 +219,24 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	int btn_count = 0;
 
-	InputListener accept_listener([&](Element*elem, InputEvent*iev) {
-	  if (iev->event_id == *TouchButton::Click().pId) {
+	EventListener click_listener([&](Element*elem, Event*ev) {
+		if (ev->flag != GMF_BUBBLED)
+			return;
+	  if (ev->type == TouchButton::Click) {
 			btn_count++;
 			hr = title_elem->SetContentString((UCString)std::format(L"Clicked {} times", btn_count).c_str());
 			THROW_IF_FAILED(hr);
 			prog->SetVisible(true);
 		}
-	});
-	hr = accept_btn->AddListener(&accept_listener);
-	THROW_IF_FAILED(hr);
-
-	InputListener reject_listener([&](Element*elem, InputEvent*iev) {
-	  if (iev->event_id == *TouchButton::Click().pId) {
-			btn_count--;
-			title_elem->SetContentString((UCString)std::format(L"Clicked {} times", btn_count).c_str());
-			THROW_IF_FAILED(hr);
+		if (ev->type == Edit::Enter) {
 			prog->SetVisible(false);
+			Value *txt;
+			edit_box->GetContentString(&txt);
+      hr = title_elem->SetContentString((UCString)std::format(L"Entered: {}", (LPCWSTR)txt->GetString()).c_str());
+      THROW_IF_FAILED(hr);
 		}
 	});
-	hr = reject_btn->AddListener(&reject_listener);
+	hr = pWizardMain->AddListener(&click_listener);
 	THROW_IF_FAILED(hr);
 
 	DumpDuiTree(pWizardMain, 0);

@@ -12,7 +12,7 @@
 #include <functional>
 #include <sstream>
 
-#include "..\DirectUI\DirectUI.h"
+#include <DirectUI.h>  // generated aggregate (tools/dui-pipeline/emit_headers.py)
 
 #include <detours/detours.h>
 

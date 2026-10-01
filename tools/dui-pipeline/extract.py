@@ -315,10 +315,17 @@ def pe_info(path):
         if off + 28 > len(data):
             break
         typ = struct.unpack_from("<I", data, off + 12)[0]
-        ptr_raw = struct.unpack_from("<I", data, off + 24)[0]
         if typ != 2:  # IMAGE_DEBUG_TYPE_CODEVIEW
             continue
-        p = rva2off(ptr_raw)
+        # AddressOfRawData(+20) is an RVA; PointerToRawData(+24) is a file offset.
+        # Go through the section table (rva2off) for the canonical mapping. The two
+        # coincide when the image happens to map RSDS into a file-offset-equal slot
+        # (dui70 26100/28000), but differ on Win10-era builds (1507/1607/2004), where
+        # treating ptr_raw as an RVA lands in the wrong section and the RSDS header
+        # is never found (parsing ptr_raw as a file offset worked there only by luck
+        # of coincidental section alignment).
+        a_rva = struct.unpack_from("<I", data, off + 20)[0]
+        p = rva2off(a_rva)
         if p is None or data[p:p + 4] != b"RSDS":
             continue
         guid = data[p + 4:p + 20]

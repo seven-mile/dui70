@@ -1,0 +1,300 @@
+<!--
+  source: %SYSTEMROOT%\System32\fontext.dll
+  resource: UIFILE / "8000" / lang 1033
+  size: 7602 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft" />
+<Element overhang="false" background="argb(0,0,0,0)" />
+<NavigateButton overhang="false" background="argb(0,0,0,0)" />
+<CCPushButton 
+transparent="true" 
+accessible="true"
+minsize="size(76rp,23rp)" 
+font="gtf(CONTROLPANELSTYLE,14,0)" 
+margin="rect(6rp,0rp,0rp,0rp)" 
+/>
+<CCCheckBox 
+transparent="true" 
+accessible="true" 
+font="gtf(CONTROLPANELSTYLE,6,0)"
+foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"
+background="themeable(dtb(CONTROLPANEL,2,0),window)"
+/>
+<ComboBox 
+transparent="true" 
+accessible="true" 
+font="gtf(CONTROLPANELSTYLE,14,0)"
+/>
+<CCRadioButton 
+transparent="true" 
+accessible="true" 
+font="gtf(CONTROLPANELSTYLE,6,0)"
+foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"
+background="themeable(dtb(CONTROLPANEL,2,0),window)"
+/>
+<CCSysLink 
+transparent="true" 
+accessible="true" 
+font="gtf(CONTROLPANELSTYLE,6,0)"
+foreground='gtc(CONTROLPANELSTYLE,6,0,3803)'
+background='themeable(dtb(CONTROLPANEL,2,0), window)'
+/>
+<Edit
+transparent="true"
+themedborder="true"
+width="120rp"
+accessible="true"
+accrole="text"
+height="20rp"
+font="gtf(CONTROLPANELSTYLE,6,0)"
+foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"
+/>
+<if class="cp_topbox" >
+<Element 
+accessible="true" 
+accrole="client"
+background="themeable(dtb(CONTROLPANEL,2,0),window)"
+/>
+</if>
+<if class="cp_hub_frame" >
+<Element
+padding="rect(13rp,1rp,1rp,10rp)"
+/>
+</if>
+<if class="cp_spoke_frame" >
+<Element
+padding="rect(0rp,19rp,0rp,10rp)"
+/>
+</if>
+<if class="cp_help_glyph" >
+<Button 
+height="18rp"
+width="18rp"
+content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))"
+padding="rect(1rp,1rp,1rp,1rp)" 
+cursor="hand"
+accRole="link"
+accdefaction="click"
+accState="0x00100000"
+tooltip="true"
+/>
+<if keyfocused="true">
+<Button
+contentalign="focusrect"
+/>
+</if>
+</if>
+<if class="cp_content_pane" >
+<Element 
+width="600rp"
+padding="rect(10rp,0rp,10rp,0rp)"
+background="themeable(dtb(CONTROLPANEL,2,0),window)"
+/>
+</if>
+<if class="cp_content_instruction" >
+<Element 
+contentalign="wrapleft" 
+foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" 
+font="gtf(CONTROLPANELSTYLE, 5, 0)" 
+accessible="true" 
+accRole="statictext"
+/>
+</if>
+<if class="cp_content_v_spacer" >
+<Element 
+height="7rp"
+/>
+</if>
+<if class="cp_content_text" >
+<Element 
+font="gtf(CONTROLPANELSTYLE, 6, 0)" 
+foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" 
+contentalign="wrapleft" 
+accessible="true" 
+accRole="statictext"
+/>
+<PText 
+font="gtf(CONTROLPANELSTYLE, 6, 0)" 
+foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" 
+contentalign="wrapleft" 
+accessible="true" 
+accRole="statictext"
+/>
+</if>
+<if class="cp_content_title_text" >
+<Element 
+font="gtf(CONTROLPANELSTYLE, 19, 0)" 
+foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" 
+contentalign="wrapleft" 
+accessible="true" 
+accRole="statictext"
+/>
+</if>
+<if class="cp_help_link" >
+<Button 
+accessible="true"
+accRole="link"
+accdefaction="click"
+foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,1)"
+overhang="false"
+/>
+<Element 
+accessible="true"
+accRole="link"
+accdefaction="click"
+foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,1)"
+overhang="false"
+/>
+<if keyfocused="true">
+<Button
+contentalign="wrapleft | focusrect"
+/>
+<Element
+contentalign="wrapleft | focusrect"
+/>
+</if>
+<if enabled="false">
+<Button 
+foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,4)"
+/>
+<Element 
+foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,4)"
+/>
+</if>
+<if mousefocused="true">
+<Button 
+cursor="hand"
+foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,2)"
+/>
+<Element 
+cursor="hand"
+foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" 
+font="gtf(CONTROLPANELSTYLE,7,2)"
+/>
+</if>
+</if>
+<if class="cp_content_link" >
+<Button 
+accessible="true"
+accRole="link" 
+accdefaction="click"
+foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,1)"
+overhang="false"
+/>
+<Element 
+accessible="true"
+accRole="link" 
+accdefaction="click"
+foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,1)"
+overhang="false"
+/>
+<if keyfocused="true">
+<Button
+contentalign="wrapleft | focusrect"
+/>
+<Element
+contentalign="wrapleft | focusrect"
+/>
+</if>
+<if enabled="false">
+<Button 
+foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,4)"
+/>
+<Element 
+foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,4)"
+/>
+</if>
+<if mousefocused="true">
+<Button 
+cursor="hand"
+foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,2)"
+/>
+<Element 
+cursor="hand"
+foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" 
+font="gtf(CONTROLPANELSTYLE,10,2)"
+/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element
+background="themeable(dtb(CONTROLPANEL,2,0),window)"
+foreground="gtc(CONTROLPANELSTYLE,9,0,3803)"
+font="gtf(CONTROLPANELSTYLE, 9, 0)"
+padding="rect(0rp,0rp,2rp,0rp)"
+contentalign="wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="cp_content_divider_line">
+<Element
+height="1rp" 
+width="565rp" 
+background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"
+/>
+</if>
+<if class="cp_content_banner_box">
+<Element
+padding="rect(7rp,7rp,7rp,7rp)"
+background="themeable(dtb(CONTROLPANEL,18,0),window)"
+borderthickness="rect(1rp,1rp,1rp,1rp)"
+bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"
+/>
+</if>
+<if class="cp_command_sink" >
+<Element 
+layoutpos="bottom" 
+background="themeable(dtb(CONTROLPANEL,12,0),window)" 
+/>
+</if>
+<if class="cp_command_float" >
+<Element 
+layoutpos="top" 
+background="themeable(dtb(CONTROLPANEL,13,0),window)" 
+/>
+</if>
+<if class="cp_command_button_box" >
+<Element 
+padding="rect(0rp,10rp,10rp,10rp)"
+width="600rp"
+/> 
+</if>
+</style>
+</Stylesheets>
+<Element resid="FolderLayout" sheet="cp_style" layout="borderlayout()" accessible="true" >
+<Element class="cp_topbox" layout="borderlayout()" layoutpos="client" >
+<InfoPane id="atom(InfoPane)" ModuleID="InfoPane" sheet="genericlayoutstyle" layoutpos="top" />
+<Element layout="borderlayout()" layoutpos="bottom" sheet="genericlayoutstyle">
+<TemplateBackground id="atom(PreviewContainer)" height="90rp" layoutpos="bottom" layout="filllayout()">
+<TemplateBackground id="atom(PreviewShineLayer)"/>
+<PreviewBackground id="atom(BackgroundClear)" background="ARGB(0, 0, 0, 0)" layout="borderlayout()">
+<PreviewThumbnail ModuleID="PreviewThumbnailModule" MaxThumbSize="256" layoutpos="Left"/>
+<Element layoutpos="Client" layout="filllayout()">
+<PreviewMetadata ReadOnly="true" ModuleID="PreviewMetadataModule" layoutpos="Client" />
+</Element>
+</PreviewBackground>
+<Sizer id="atom(PreviewPaneSizer)" sizingtarget="atom(PreviewContainer)" FramePersistType="2" SlidesUpAndDown="true" layoutpos="top" DownOrRightGrowsTarget="false" InitialVisibility="false"/>
+</TemplateBackground>
+</Element>
+<Element sheet="genericlayoutstyle" layout="filllayout()" layoutpos="Client">
+<ViewHost id="atom(clientviewhost)" layout="borderlayout()">
+</ViewHost>
+</Element>
+</Element>
+</Element>
+</duixml>

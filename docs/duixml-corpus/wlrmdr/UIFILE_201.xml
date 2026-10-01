@@ -1,0 +1,15 @@
+<!--
+  source: %SYSTEMROOT%\System32\wlrmdr.exe
+  resource: UIFILE / "201" / lang 1033
+  size: 321 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<duixml>
+<RichText resid="WlrmdrRoot" id="atom(ModalDialogElement)" accessible="true" accrole="statictext" contentalign="endellipsis|wrapleft" sheet="DialogStyle"/>
+<stylesheets>
+<style resid="DialogStyle">
+<RichText font="resstr(1002)"/>
+</style>
+</stylesheets>
+</duixml>

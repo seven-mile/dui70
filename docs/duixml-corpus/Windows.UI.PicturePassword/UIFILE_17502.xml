@@ -1,0 +1,196 @@
+<!--
+  source: %SYSTEMROOT%\System32\Windows.UI.PicturePassword.dll
+  resource: UIFILE / "17502" / lang 1033
+  size: 9060 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="main" layoutpos="client" sheet="PicturePasswordStyles" layout="borderlayout()" accessible="true" background="20042" behaviors="PVL::AnimationTrap()" active="mouse|keyboard">
+		<element id="atom(snapViewer)" layoutpos="client" layout="borderlayout()">
+			<element id="atom(snapViewerContent)" layoutpos="client" layout="borderlayout()">
+				<element id="atom(clientPanel)" layoutpos="client" layout="borderlayout()">
+					<element id="atom(ProgressRing)" layoutpos="none" layout="flowlayout(1, 2, 2, 2)" padding="rect(0rp,0rp,357rp,0rp)">
+						<ModernProgressRing width="40rp" height="40rp" accname="Progress indicator" accrole="progressbar" visible="true" foreground="20256" />
+					</element>
+					<viewer id="atom(teachingContentViewer)" layoutpos="none">
+						<element id="atom(teachingContent)" layout="filllayout()" direction="0">
+							<element id="atom(teachingBackground)" />
+							<element layout="verticalflowlayout(0,2,2,2)">
+								<element id="atom(teachingAnimationSizingContainer)" layout="borderlayout()">
+									<Movie id="atom(teachingAnimation)" layoutpos="client" SmoothingMode="high" repeat="true" AutoStart="true" AutoStop="false" />
+								</element>
+							</element>
+						</element>
+					</viewer>
+					<TouchScrollViewer id="atom(bgViewer)" layoutpos="none" active="mouse|pointer" xscrollable="true" yscrollable="true" XBarVisibility="never" YBarVisibility="never" accessible="true" accrole="graphic" direction="0">
+						<element active="mouse|pointer" layout="verticalflowlayout(0,2,2,2)">
+							<element id="atom(bgContainerImage)" layout="borderlayout()" active="mouse|pointer">
+								<element id="atom(bgVisual)" layoutpos="client" active="mouse|pointer" />
+								<element id="atom(bgResponse)" layoutpos="none" background="20575" accessible="true" accrole="graphic" />
+							</element>
+						</element>
+					</TouchScrollViewer>
+				</element>
+				<element layoutpos="left" layout="borderlayout()" width="357rp" padding="rect(33rp,48rp,31rp,48rp)">
+					<element id="atom(leftPanel)" layoutpos="client" layout="borderlayout()" behaviors="PVL::EnsureLayered()">
+						<TouchScrollViewer id="atom(teachingPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse" enabled="false">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerText)" content="resstr(17503)" active="pointer|mouse" />
+									<richtext class="info" content="resstr(17552)" active="pointer|mouse" />
+									<richtext class="moreinfo" content="resstr(17553)" active="pointer|mouse" />
+									<element class="overhangPadding" margin="rect(0rp,25rp,0rp,0rp)" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+										<touchbutton class="default" id="atom(selectBgButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17504)" />
+									</element>
+								</element>
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(imageConfirmationPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse" enabled="false">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerTextEnroll)" content="resstr(17567)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextUpdate)" layoutpos="none" content="resstr(17562)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextRelearn)" layoutpos="none" content="resstr(17512)" active="pointer|mouse" />
+									<richtext id="atom(postSelectionInfo)" class="info" content="resstr(17513)" active="pointer|mouse" />
+									<richtext id="atom(reviewInfo)" class="info" layoutpos="none" content="resstr(17557)" active="pointer|mouse" />
+									<element class="overhangPadding" margin="rect(0rp,25rp,0rp,0rp)" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+										<touchbutton id="atom(acceptBgButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17514)" />
+										<touchbutton id="atom(syncedBgButton)" layoutpos="none" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17536)" />
+										<touchbutton id="atom(reselectBgButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17515)" />
+									</element>
+									<richtext class="info" id="atom(reviewText)" layoutpos="none" content="resstr(17573)" active="pointer|mouse" />
+									<element class="overhangPadding" margin="rect(0rp,20rp,0rp,0rp)" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+										<touchbutton id="atom(reviewButton)" layoutpos="none" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17538)" />
+									</element>
+								</element>
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(gestureMismatchStopPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerText)" content="resstr(17581)" active="pointer|mouse" />
+									<richtext id="atom(stopPanelEnrollInfo)" class="info" content="resstr(17579)" active="pointer|mouse" />
+									<richtext id="atom(stopPanelRelearnInfo)" class="info" layoutpos="none" content="resstr(17586)" active="pointer|mouse" />
+									<element class="overhangPadding" margin="rect(0rp,20rp,0rp,0rp)" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+										<touchbutton id="atom(tryAgainButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17580)" />
+									</element>
+								</element>
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton id="atom(startOverButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17526)" />
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(relearnGesturePanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerText)" content="resstr(17571)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextMismatch)" layoutpos="none" content="resstr(17570)" active="pointer|mouse" />
+									<richtext class="info" id="atom(reviewInstructions)" content="resstr(17540)" active="pointer|mouse" />
+									<richtext class="info" id="atom(reviewErrorInstructions)" layoutpos="none" content="resstr(17541)" active="pointer|mouse" />
+									<richtext class="moreinfo" id="atom(reviewErrorInstructions2)" layoutpos="none" content="resstr(17572)" active="pointer|mouse" />
+								</element>
+								<PicturePasswordProgress id="atom(PicturePasswordProgress)" layoutpos="top" padding="rect(0rp,20rp,0rp,0rp)" active="pointer|mouse" />
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton enabled="false" id="atom(startOverButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17526)" />
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(gestureEntryPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerTextEnroll)" content="resstr(17568)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextUpdate)" layoutpos="none" content="resstr(17562)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextRelearn)" layoutpos="none" content="resstr(17561)" active="pointer|mouse" />
+									<richtext class="info" content="resstr(17516)" active="pointer|mouse" />
+									<richtext class="moreinfo" content="resstr(17517)" active="pointer|mouse" />
+								</element>
+								<PicturePasswordProgress id="atom(PicturePasswordProgress)" layoutpos="top" padding="rect(0rp,20rp,0rp,0rp)" active="pointer|mouse" />
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton enabled="false" id="atom(startOverButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17526)" />
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(gestureConfirmationPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerTextEnroll)" content="resstr(17569)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextUpdate)" layoutpos="none" content="resstr(17562)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextRelearn)" layoutpos="none" content="resstr(17561)" active="pointer|mouse" />
+									<richtext class="info" id="atom(confirmationInstructions)" content="resstr(17524)" active="pointer|mouse" />
+								</element>
+								<PicturePasswordProgress id="atom(PicturePasswordProgress)" layoutpos="top" padding="rect(0rp,20rp,0rp,0rp)" active="pointer|mouse" />
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton id="atom(startOverButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17526)" />
+									<touchbutton id="atom(cancelButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17530)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(enrollmentConfirmationPanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerTextEnroll)" content="resstr(17574)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextUpdate)" layoutpos="none" content="resstr(17562)" active="pointer|mouse" />
+									<richtext class="leftPaneHeader" id="atom(headerTextRelearn)" layoutpos="none" content="resstr(17561)" active="pointer|mouse" />
+									<richtext class="info" id="atom(doneText)" content="resstr(17531)" active="pointer|mouse" />
+								</element>
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton class="default" id="atom(okButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17582)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+						<TouchScrollViewer id="atom(enrollmentFailurePanel)" layoutpos="none" behaviors="PVL::ImplicitAnimation()" active="pointer|mouse" xscrollable="false" yscrollable="true" YBarVisibility="always" interactionmode="TranslateY|Inertia" accessible="true" accrole="pane">
+							<element id="atom(panelContent)" layout="borderlayout()" active="pointer|mouse">
+								<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" active="pointer|mouse">
+									<richtext class="leftPaneHeader" id="atom(headerText)" content="resstr(17550)" active="pointer|mouse" />
+									<richtext class="info" content="resstr(17551)" active="pointer|mouse" />
+								</element>
+								<element layoutpos="bottom" layout="flowlayout(1,0,1)" padding="rect(0rp,40rp,0rp,0rp)" active="pointer|mouse">
+									<touchbutton id="atom(okButton)" active="mouse|keyboard|pointer|nosyncfocus" content="resstr(17539)" />
+								</element>
+							</element>
+						</TouchScrollViewer>
+					</element>
+				</element>
+			</element>
+		</element>
+	</element>
+	<element resid="ProgressControl" sheet="PicturePasswordStyles" id="atom(progressContainer)" layout="flowlayout()" accessible="true" accrole="statictext" accname="resstr(17518)">
+		<richtext class="progressNumber" content="resstr(17564)" />
+		<richtext class="progressNumber" content="resstr(17565)" />
+		<richtext class="progressNumber" content="resstr(17566)" />
+	</element>
+	<stylesheets>
+		<style resid="PicturePasswordStyles" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+			<element foreground="20256" />
+			<touchbutton margin="rect(20rp,20rp,0rp,0rp)" />
+			<richtext overhangoffset="15rp" />
+			<if class="overhangPadding">
+				<element padding="rect(15rp,0rp,0rp,0rp)" />
+			</if>
+			<if class="leftPaneHeader">
+				<richtext font="resstr(17543)" contentalign="wrapleft" accessible="true" accrole="statictext" />
+			</if>
+			<if class="info">
+				<richtext font="resstr(17544)" contentalign="wrapleft" padding="rect(0rp,40rp,0rp,0rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="moreinfo">
+				<richtext font="resstr(17544)" contentalign="wrapleft" padding="rect(0rp,20rp,0rp,0rp)" accessible="true" accrole="statictext" />
+			</if>
+			<if class="progressNumber">
+				<richtext margin="rect(15rp,0rp,15rp,0rp)" font="resstr(17545)" contentalign="middlecenter" />
+				<if selected="false">
+					<richtext foreground="20114" />
+				</if>
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

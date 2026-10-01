@@ -1,0 +1,28 @@
+<!--
+  source: %SYSTEMROOT%\System32\Narrator.exe
+  resource: UIFILE / "10003" / lang 1033
+  size: 1860 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="main" layout="borderlayout()" layoutpos="client" sheet="NarratorFindStyle" accessible="true" accrole="pane" padding="rect(5rp, 5rp, 5rp, 5rp)">
+<element id="atom(SearchLabel)" content="resstr(1387)" class="Content" visible="true" accessible="true" accrole="statictext" layoutpos="top"/>
+<edit id="atom(SearchBox)" accname="resstr(1388)" class="Content" visible="true" accessible="true" accrole="text" active="keyboard|mouse" borderthickness="rect(0,0,0,0)" themedborder="true" height="28rp" layout="borderlayout()" layoutpos="top" margin="rect(12rp,5rp,12rp,5rp)" shortcut="83"/> 
+<CCCheckBox id="atom(CaseSensitivityCheckBox)" content="resstr(1392)" class="Content" visible="true" accessible="true" accrole="checkbutton" layoutpos="top" padding="rect(0, 5rp, 0rp, 5rp)" shortcut="67"/> 
+<element layout="borderlayout()" layoutpos="top">
+<CCPushButton id="atom(FindPreviousButton)" content="resstr(1390)" class="Content" visible="true" accessible="true" accrole="pushbutton" active="keyboard|mouse" width="200rp" layoutpos="left" shortcut="80"/> 
+<CCPushButton id="atom(FindNextButton)" content="resstr(1389)" class="Content" visible="true" accessible="true" accrole="pushbutton" active="keyboard|mouse" width="200rp" layoutpos="right" selected="true" shortcut="78"/> 
+</element>
+<element layout="borderlayout()" layoutpos="top" margin="rect(0, 5rp, 0, 0)">
+<CCPushButton id="atom(CancelButton)" content="resstr(1391)" class="Content" visible="true" accessible="true" accrole="pushbutton" active="keyboard|mouse" width="200rp" layoutpos="right"/>
+</element>
+</element>
+<stylesheets>
+<style resid="NarratorFindStyle">
+<element background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<if class="Content">
+<element font="CaptionFont;120%;Normal;None" contentalign="wrapleft"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

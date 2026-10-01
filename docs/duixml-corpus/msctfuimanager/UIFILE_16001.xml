@@ -1,0 +1,322 @@
+<!--
+  source: %SYSTEMROOT%\System32\msctfuimanager.dll
+  resource: UIFILE / "16001" / lang 1033
+  size: 8151 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element
+resid="main"
+active="inactive"
+class="CandidateView"
+layout="filllayout()"
+minsize="size(96rp,40rp)"
+sheet="VerticalCandidatePaneStyle"
+>
+<CVerticalCandidatePane
+id="atom(CandidatePane)"
+layout="borderlayout()">
+<element
+accessible="true"
+accname="resstr(16018, library(msctfuimanager.dll))"
+accrole="client"
+layout="filllayout()"
+layoutpos="client"
+visible="true">
+<CShortcutList
+id="atom(CShortcutList)"
+class="CShortcutList"
+layout="borderlayout()"
+visible="true" />
+<CCandidateList
+id="atom(CCandidateList)"
+accessible="true"
+accname="resstr(16019, library(msctfuimanager.dll))"
+accrole="list"
+layout="filllayout()"
+layoutpos="client"
+height="220rp"
+visible="true">
+<TouchScrollViewer
+id="atom(CCandidateList.ScrollViewer)"
+active="Pointer | Mouse | nosyncfocus"
+layout="ninegridlayout()"
+layoutpos="top"
+sheet="ScrollViewerStyle"
+XScrollable="false"
+YScrollable="true"
+YBarVisibility="asneeded"
+InteractionMode="TranslateY | Inertia"
+SnapMode="Single" >
+<ItemList
+id="atom(CCandidateList.ScrollViewer.Items)"
+active="mouse | pointer | nosyncfocus"
+layout="gridlayout(-1,1)"
+layoutpos="nineclient"
+sheet="VerticalCandidatePaneItemsStyle"
+visible="true" />   
+</TouchScrollViewer>
+</CCandidateList>  
+</element>
+<RichText
+id="atom(CandidatePaneCommentString)"
+contentalign="middleleft"
+layoutpos="none"
+padding="rect(12rp,8rp,0rp,8rp)"
+bordercolor="ImmersiveSystemAccent"
+borderthickness="rect(0rp,1rp,0rp,0rp)"
+foreground="ImmersiveControlDarkSelectSecondaryTextPressed"
+content="resstr(16034, library(msctfuimanager.dll))"
+font="resstr(16024)" /> 
+</CVerticalCandidatePane>
+</element>
+<CCandidateItem
+id="atom(item)"
+resid="CCandidateItem"
+active="mouse | pointer | nosyncfocus"
+class="CCandidateItem"
+height="28rp"
+layout="borderlayout()"
+layoutpos="client"
+visible="true"
+accessible="false"
+accrole="listitem"
+padding="rect(40rp,0rp,10rp,0rp)"
+tooltip="false" behaviors="DUI70::ContextMenuBehavior(cm_invokingpoint)">
+<TouchButton
+active="inactive"
+id="atom(CandidateItemText)"
+class="CandidateItemText"
+padding="rect(0rp,0rp,0rp,0rp)"
+contentalign="middleleft | endellipsis"
+height="28rp"
+layoutpos="client"
+visible="true"
+colorfontpaletteindex="0"/>
+</CCandidateItem>
+<CCandidateItem
+id="atom(item)"
+resid="CCandidateItemWithComment"
+active="mouse | pointer | nosyncfocus"
+class="CCandidateItem"
+height="28rp"
+layout="borderlayout()"
+layoutpos="client"
+visible="true"
+accessible="false"
+accrole="listitem"
+padding="rect(40rp,0rp,10rp,0rp)"
+tooltip="false" behaviors="DUI70::ContextMenuBehavior(cm_invokingpoint)">
+<TouchButton
+active="inactive"
+id="atom(CandidateItemText)"
+class="CandidateItemText"
+padding="rect(0rp,0rp,0rp,0rp)"
+contentalign="middleleft | endellipsis"
+height="28rp"
+layoutpos="left"
+visible="true"
+colorfontpaletteindex="0" />
+<TouchButton
+id="atom(CandidateItemComment)"
+active="inactive"
+contentalign="middleleft"
+class="CandidateItemComment"
+height="28rp"
+layout="borderlayout()"
+layoutpos="right"
+padding="rect(4rp,0rp,0rp,0rp)"
+visible="true"
+width="256rp" >
+<Viewer
+id="atom(CandidateItemCommentViewer)"
+visible="true">
+<Element
+layout="borderlayout()"
+visible="true">
+<RichText
+id="atom(CandidateItemCommentString)"
+contentalign="middleleft"
+class="CandidateItemCommentString"
+height="28rp"
+padding="rect(0rp,0rp,14rp,0rp)"
+visible="true" />
+<RichText
+id="atom(CandidateItemCommentString.Repeat)"
+contentalign="middleleft"
+class="CandidateItemCommentString"
+height="28rp"
+padding="rect(80rp,0rp,14rp,0rp)"
+visible="false" />
+</Element>
+</Viewer>
+</TouchButton>
+</CCandidateItem>
+<CCandidateItem
+id="atom(item)"
+resid="CCandidateItemGhost"
+class="CCandidateItem"
+sheet="VerticalCandidatePaneGhostsStyle"
+height="28rp"
+layout="borderlayout()"
+layoutpos="client"
+visible="true"
+accessible="false"
+accrole="listitem"
+padding="rect(40rp,0rp,24rp,0rp)">
+</CCandidateItem>
+<element
+id="atom(ShortcutItemContainer)"
+resid="ShortcutItemContainer"
+height="28rp"
+layout="filllayout()"
+layoutpos="top"
+padding="rect(12rp,0rp,0rp,0rp)"
+visible="true">
+<CShortcutItem
+id="atom(CShortcutItem)"
+accessible="true"
+accrole="pushbutton"
+active="keyboard | nosyncfocus"
+contentalign="middlecenter"
+class="CShortcutItem"
+layoutpos="client"
+height="20rp"
+width="20rp"
+visible="true"/>
+</element>
+<stylesheets>
+<style resid="VerticalCandidatePaneStyle">
+<if class="CandidateView">
+<element
+background="ImmersiveControlLightSelectPopupBackgroundRest"
+bordercolor="ImmersiveSystemAccent"
+borderthickness="rect(1rp,1rp,1rp,1rp)"/>
+</if>
+<if class="CShortcutItem">
+<CShortcutItem
+font="resstr(16025)" 
+background="argb(0,0,0,0)"
+foreground="ImmersiveControlDarkSelectSecondaryTextPressed" />
+</if>
+<if class="CShortcutList">
+<CShortcutList
+background="argb(0,0,0,0)"
+layoutpos="left"/>
+<if visible="false">
+<CShortcutList
+layoutpos="none"/>
+</if>
+</if>
+</style>
+<style resid="ScrollViewerStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if class="ScrollViewer">
+<if vertical="true">
+<TouchScrollBar
+accessible="true"
+width="12rp"
+accrole="scrollbar"
+layoutpos="nineright"/>
+</if>
+<if vertical="false">
+<TouchScrollBar
+accessible="true"
+accrole="scrollbar"
+layoutpos="none"/>
+</if>
+<Viewer
+layoutpos="nineclient"/>
+</if>
+<if class="Thumb_Mouse">
+<if id="atom(Thumb)">
+<Thumb width="12rp" minsize="size(0,12rp)"/>
+</if>
+</if>
+<if class="Line">
+<if id="atom(LineUp)">
+<TouchRepeatButton height="12rp"/>
+</if>
+<if id="atom(LineDown)">
+<TouchRepeatButton height="12rp"/>
+</if>
+</if>
+<if class="Line_Arrow">
+<if id="atom(LineUp_Arrow)">
+<InternalRichText linespacing="12rp" baseline="11rp"/>
+</if>
+<if id="atom(LineDown_Arrow)">
+<InternalRichText linespacing="12rp" baseline="11rp"/>
+</if>
+</if>
+</style>
+<style resid="VerticalCandidatePaneItemsStyle">
+<if class="CCandidateItem">
+<CCandidateItem
+background="ImmersiveControlLightSelectPopupBackgroundRest"/>
+<if mousefocused="true">
+<CCandidateItem
+background="ImmersiveSystemAccentLight3"/>
+</if>
+<if selected="true">
+<CCandidateItem
+background="ImmersiveSystemAccent"/>
+<if mousefocused="true" pressed="false">
+<CCandidateItem
+background="ImmersiveSystemAccentLight1"/>
+</if>
+</if>
+<if pressed="true">
+<CCandidateItem
+background="ImmersiveSystemAccentDark1"/>
+<if selected="true">
+<CCandidateItem
+background="ImmersiveSystemAccentDark3"/>
+</if>
+</if>
+</if>
+<if class="CandidateItemText">
+<TouchButton
+background="argb(0,0,0,0)"
+font="resstr(16023)" 
+linespacing="18rp"/>
+foreground="ImmersiveControlLightSelectPopupTextRest"/>
+<if selected="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextSelected"/>
+</if>
+<if pressed="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextPressed"/>
+</if>
+</if>
+<if class="CandidateItemComment">
+<TouchButton
+background="argb(0,0,0,0)"
+foreground="ImmersiveControlDarkSelectSecondaryTextPressed"
+layoutpos="right" />
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlDarkSelectSecondaryTextHighlighted" />
+</if>
+<if selected="true">
+<TouchButton foreground="ImmersiveControlDarkSelectSecondaryTextHighlighted" />
+</if>
+<if pressed="true">
+<TouchButton foreground="ImmersiveControlDarkSelectHighlightedSecondaryTextPressed" />
+</if>
+<if visible="false">
+<TouchButton layoutpos="none" />
+</if>
+</if>
+<if class="CandidateItemCommentString">
+<RichText layoutpos="left"
+font="resstr(16024)"
+linespacing="14rp"/>
+<if visible="false">
+<RichText layoutpos="none" />
+</if>
+</if>
+</style>
+<style resid="VerticalCandidatePaneGhostsStyle">
+<CCandidateItem
+background="ImmersiveControlLightSelectPopupBackgroundRest"/>
+</style>
+</stylesheets>
+</duixml>

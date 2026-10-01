@@ -56,6 +56,7 @@ if (-not $VcpkgRoot) {
     $candidates = @($env:VCPKG_ROOT, $env:VCPKG_INSTALLATION,
                     (Join-Path $env:LOCALAPPDATA 'vcpkg'),
                     (Join-Path $env:USERPROFILE 'vcpkg'),
+                    'C:\Local\Tools\vcpkg',
                     'C:\vcpkg')
     foreach ($cand in $candidates) {
         if ($cand -and (Test-Path (Join-Path $cand $probe))) { $VcpkgRoot = $cand; break }
@@ -76,6 +77,13 @@ $detoursLib = Join-Path $VcpkgRoot "installed\$detoursPkg\lib"
 
 if (-not $Lib) { $Lib = Join-Path $repo '.local\build\lib\dui70.lib' }
 if (-not $OutDir) { $OutDir = Join-Path $repo ".local\build\acceptance-$arch" }
+# Resolve caller-supplied relative paths against the repo root so cl/pdb
+# never see a doubled relative prefix like .local\x\.local\x\UITest.pdb.
+# Defaults above are already rooted; only join relative caller input.
+if (-not [System.IO.Path]::IsPathRooted($Lib))    { $Lib = Join-Path $repo $Lib }
+if (-not [System.IO.Path]::IsPathRooted($OutDir)) { $OutDir = Join-Path $repo $OutDir }
+$Lib = [System.IO.Path]::GetFullPath($Lib)
+$OutDir = [System.IO.Path]::GetFullPath($OutDir)
 $LibDir = Split-Path -Parent $Lib
 New-Item -ItemType Directory -Force -Path $OutDir | Out-Null
 

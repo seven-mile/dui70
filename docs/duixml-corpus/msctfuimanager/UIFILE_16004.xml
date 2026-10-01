@@ -1,0 +1,37 @@
+<!--
+  source: %SYSTEMROOT%\System32\msctfuimanager.dll
+  resource: UIFILE / "16004" / lang 1033
+  size: 1712 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<TipWindowPanel resid="TipWindowPanel.Layout" id="atom(TipWindowPanel.Layout)" layoutpos="none" layout="borderlayout()" sheet="TipWindowStyle">
+<Element id="atom(TipWindowPanel.ButtonContainer)" layoutpos="client" layout="flowlayout(0, 0, 0, 2)" >
+<TouchButton id="atom(TipWindowPanel.Button)" contentalign="wrapleft" active="mouse | pointer | nosyncfocus" accessible="true" accrole="pushbutton" />
+</Element>
+<Element layoutpos="right" id="atom(TipWindowPanel.LinkContainter)" layout="borderlayout()">
+<TouchHyperlink id="atom(TipWindowPanel.Hyperlink)" layoutpos="top" active="mouse | pointer | nosyncfocus" accessible="true" accrole="pushbutton" />
+</Element>
+</TipWindowPanel>
+<stylesheets>
+<style resid="TipWindowStyle">
+<Element font="10pt;;;Microsoft YaHei UI" />
+<if id="atom(TipWindowPanel.Layout)">
+<TipWindowPanel bordercolor="ImmersiveSystemAccent" borderthickness="rect(1rp,0rp,1rp,1rp)" padding="rect(5rp, 4rp, 5rp, 4rp)" />
+</if>
+<if id="atom(TipWindowPanel.ButtonContainer)">
+<Element margin="rect(5rp,0rp,10rp,0rp)" />
+</if>
+<TouchButton foreground="ImmersiveFilesAppPickerButtonTextDisabled"/>
+<TouchHyperlink margin="rect(10rp,0rp,5rp,0rp)" foreground="ImmersiveControlLightLinkRest"/>
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextHover"/>
+<TouchHyperlink foreground="ImmersiveFilesAppPickerButtonTextDisabled" />
+</if>
+<if pressed="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextPressed" background="ImmersiveControlLightSelectPopupBackgroundPressed" />
+<TouchHyperlink foreground="ImmersiveControlLightLinkPressed" />
+</if>
+</style>
+</stylesheets>
+</duixml>

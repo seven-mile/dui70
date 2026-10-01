@@ -9,17 +9,10 @@
 
 namespace DirectUI
 {
-    class Value;
+    class DUIXmlParser;
     class Element;
-    class HWNDElement;
-    class NativeHWNDHost;
-    class TouchButton;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class TouchCheckBox;
-    class XProvider;
+    class StyleSheet;
+    class Value;
 
     class DUIXmlParser
     {
@@ -42,11 +35,11 @@ namespace DirectUI
         virtual ~DUIXmlParser(void);
         DUIXmlParser& operator=(DUIXmlParser const&);
         long CopySheets(DynamicArray<class Value*, 0>**);
-        static long Create(DUIXmlParser**, Value* (__cdecl*)(unsigned short const*, void*), void*, void (__cdecl*)(unsigned short const*, unsigned short const*, int, void*), void*);
+        static long Create(DUIXmlParser**, Value* (__cdecl *)(unsigned short const*, void*), void*, void (__cdecl *)(unsigned short const*, unsigned short const*, int, void*), void*);
         long CreateElement(unsigned short const*, Element*, Element*, unsigned long*, Element**);
         void Destroy(void);
         void EnableDesignMode(void);
-        auto GetGetSheetCallback(void) -> Value* (__cdecl*)(unsigned short const*, void*);
+        auto GetGetSheetCallback(void) -> Value* (__cdecl *)(unsigned short const*, void*);
         HINSTANCE__* GetHInstance(void);
         bool GetOverrideScaleFactor(float*) const;
         HINSTANCE__* GetResourceHInstance(void);
@@ -57,14 +50,14 @@ namespace DirectUI
         long LookupElement(LINEINFO, unsigned short const*, HINSTANCE__*, IClassInfo**);
         void SetDefaultHInstance(HINSTANCE__*);
         void SetDynamicScaling(DynamicScaleParsing);
-        void SetGetSheetCallback(Value* (__cdecl*)(unsigned short const*, void*), void*);
+        void SetGetSheetCallback(Value* (__cdecl *)(unsigned short const*, void*), void*);
         void SetOverrideScaleFactor(float);
-        void SetParseErrorCallback(void (__cdecl*)(unsigned short const*, unsigned short const*, int, void*), void*);
+        void SetParseErrorCallback(void (__cdecl *)(unsigned short const*, unsigned short const*, int, void*), void*);
         long SetPreprocessedXML(unsigned short const*, HINSTANCE__*, HINSTANCE__*);
         void SetRootWindowForTheming(HWND__*);
         void SetScaleFactor(float);
         void SetUnavailableIcon(HICON__*);
-        void SetUnknownAttrCallback(bool (__cdecl*)(unsigned short const*, void*), void*);
+        void SetUnknownAttrCallback(bool (__cdecl *)(unsigned short const*, void*), void*);
         long SetXML(unsigned short const*, HINSTANCE__*, HINSTANCE__*);
         long SetXMLFromResource(unsigned int, HINSTANCE__*, HINSTANCE__*);
         long SetXMLFromResource(unsigned int, unsigned short const*, HINSTANCE__*, HINSTANCE__*);
@@ -77,7 +70,7 @@ namespace DirectUI
 
         protected:
         long AddRulesToStyleSheet(IXmlReader*, StyleSheet*, unsigned short const*, DynamicArray<struct XMLParserCond, 0>*, DynamicArray<unsigned short*, 0>*);
-        long CreateLayout(ParserTools::ExprNode const*, long (__cdecl*)(int, int*, Value**));
+        long CreateLayout(ParserTools::ExprNode const*, long (__cdecl *)(int, int*, Value**));
         long CreateStyleSheet(IXmlReader*, unsigned short const*, StyleSheet**);
         long CreateXmlReader(IXmlReader**);
         long CreateXmlReaderFromHGLOBAL(void*, IXmlReader**);

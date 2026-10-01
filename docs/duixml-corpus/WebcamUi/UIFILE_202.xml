@@ -1,0 +1,72 @@
+<!--
+  source: %SYSTEMROOT%\System32\WebcamUi.dll
+  resource: UIFILE / "202" / lang 1033
+  size: 4636 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="DefaultSettingsLayout" layout="filllayout()">
+		<CameraSettingsPage id="atom(idWebcamSettings)" sheet="defaultSheet" visible="true" layout="borderlayout()">
+			<RichText id="atom(idNoMoreSettingsText)" class="clsNoMoreSettingsText" layoutpos="none" content="resstr(546, library(WebcamUi.dll))" />
+			<TouchScrollViewer id="atom(idWebcamSettingsTsv)" xscrollable="false" yscrollable="true" layoutpos="client" xbarvisibility="never" ybarvisibility="asneeded" InteractionMode="TranslateY|Inertia" active="mouse|pointer" accessible="true" accrole="pane">
+				<element id="atom(idWebcamSettingsControls)" class="clsWebcamSettingsControls" layout="borderlayout()" active="mouse|keyboard|pointer|nosyncfocus">
+					<element id="atom(idBrightnessSection)" class="clsBrightnessSection" layout="verticalflowlayout(0, 0, 0, 0)" active="pointer">
+						<RichText class="clsSwitchSliderLabel" content="resstr(538, library(WebcamUi.dll))" active="pointer" />
+						<TouchSwitch id="atom(idBrightnessAutoBtn)" active="mouse|keyboard|pointer" accessible="true" accname="Brightness Auto/Manual switch" accdesc="Brightness Auto/Manual switch" />
+						<TouchSlider id="atom(idBrightnessVal)" IsVertical="false" active="mouse|keyboard|pointer" accessible="true" accname="Brightness Manual Selector" accdesc="Brightness Manual Selector" />
+					</element>
+					<element id="atom(idContrastSection)" class="clsContrastSection" layout="verticalflowlayout(0, 0, 0, 0)" active="pointer">
+						<RichText class="clsSwitchSliderLabel" content="resstr(539, library(WebcamUi.dll))" active="pointer" />
+						<TouchSwitch id="atom(idContrastAutoBtn)" active="mouse|keyboard|pointer" accessible="true" accname="Contrast Auto/Manual switch" accdesc="Contrast Auto/Manual switch" />
+						<TouchSlider id="atom(idContrastVal)" IsVertical="false" active="mouse|keyboard|pointer" accessible="true" accname="Contrast Manual Selector" accdesc="Contrast Manual Selector" />
+					</element>
+					<element id="atom(idFlickerSection)" class="clsFlickerSection" layout="borderlayout()" active="pointer">
+						<RichText id="atom(idFlickerTxt)" class="clsTouchSelectLabel" content="resstr(1054)" active="pointer" />
+						<touchselect id="atom(idFlickerVal)" class="clsFlickerVal" accessible="true" accname="resstr(1055)" accdesc="resstr(1056)" />
+					</element>
+					<element id="atom(idFocusSection)" class="clsSection" layout="verticalflowlayout(0, 0, 0, 0)" active="pointer">
+						<RichText class="clsSwitchSliderLabel" content="resstr(540, library(WebcamUi.dll))" active="pointer" />
+						<TouchSwitch id="atom(idFocusAutoBtn)" active="mouse|keyboard|pointer" accessible="true" accname="Focus Auto/Manual switch" accdesc="Focus Auto/Manual switch" />
+						<TouchSlider id="atom(idFocusVal)" IsVertical="false" active="mouse|keyboard|pointer" accessible="true" accname="Focus Manual Selector" accdesc="Focus Manual Selector" />
+					</element>
+					<element id="atom(idExposureSection)" class="clsSection" layout="verticalflowlayout(0, 0, 0, 0)" active="pointer">
+						<RichText class="clsSwitchSliderLabel" content="resstr(541, library(WebcamUi.dll))" active="pointer" />
+						<TouchSwitch id="atom(idExposureAutoBtn)" active="mouse|keyboard|pointer" accessible="true" accname="Exposure Auto/Manual switch" accdesc="Exposure Auto/Manual switch" />
+						<TouchSlider id="atom(idExposureVal)" IsVertical="false" active="mouse|keyboard|pointer" accessible="true" accname="Exposure Manual Selector" accdesc="Exposure Manual Selector" />
+					</element>
+				</element>
+			</TouchScrollViewer>
+		</CameraSettingsPage>
+	</element>
+	<stylesheets>
+		<style resid="defaultSheet" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+			<if class="clsNoMoreSettingsText">
+				<RichText font="resstr(620, library(WebcamUi.dll))" foreground="20348" constrainlayout="narrow" contentalign="wrapleft" padding="rect(20rp,6rp,20rp,0rp)" />
+			</if>
+			<if class="clsWebcamSettingsControls">
+				<element width="340rp" padding="rect(20rp,0rp,20rp,0rp)" />
+			</if>
+			<if class="clsBrightnessSection">
+				<element layoutpos="top" padding="rect(0rp,0rp,0rp,0rp)" />
+			</if>
+			<if class="clsContrastSection">
+				<element layoutpos="top" padding="rect(0rp,0rp,0rp,0rp)" />
+			</if>
+			<if class="clsFlickerSection">
+				<element layoutpos="top" padding="rect(0rp,0rp,0rp,30rp)" />
+			</if>
+			<if class="clsFlickerVal">
+				<touchselect width="225rp" />
+			</if>
+			<if class="clsSection">
+				<element layoutpos="top" padding="rect(0rp,0rp,0rp,0rp)" />
+			</if>
+			<if class="clsTouchSelectLabel">
+				<RichText font="resstr(600, library(WebcamUi.dll))" foreground="20349" layoutpos="top" margin="rect(0rp,0rp,0rp,5rp)" />
+			</if>
+			<if class="clsSwitchSliderLabel">
+				<RichText font="resstr(600, library(WebcamUi.dll))" foreground="20349" layoutpos="top" />
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

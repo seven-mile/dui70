@@ -1,0 +1,80 @@
+<!--
+  source: %SYSTEMROOT%\System32\ProximityUxHost.exe
+  resource: UIFILE / "1101" / lang 1033
+  size: 4311 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="TapToSend_Send" id="atom(eRoot)" layout="borderlayout()" layoutpos="top" sheet="TapToSendStyle" accessible="true" accrole="pane">
+<element layoutpos="top" layout="filllayout()">
+<element layout="borderlayout()">
+<richtext id="atom(eSendContentTitle)" layoutpos="top" class="staticsecondarytext"/>
+<richtext id="atom(eSendContentDescription)" layoutpos="top" class="staticsecondarytext"/>
+</element>
+<richtext id="atom(eDone)" visible="false" content="resstr(1616)" class="staticprimarytext"/>
+<richtext id="atom(eCanceled)" visible="false" content="resstr(1617)" class="staticprimarytext"/>
+<richtext id="atom(eError)" visible="false" content="resstr(3006, library(proximityuxhost.exe))" class="errortext"/>
+</element>
+<element id="atom(eProgressPane)" layoutpos="top" layout="filllayout()">
+<richtext id="atom(eInstructions)" visible="false" content="resstr(1605)" class="staticprimarytext"/>
+<richtext id="atom(eWaiting)" visible="false" contentalign="topleft|wrapleft" content="resstr(1607)" class="staticprimarytext"/>
+<element id="atom(eProgressBarAligner)" layout="borderlayout()" background="argb(0,0,0,0)">
+<ModernProgressBar id="atom(eProgressBar)" layoutpos="top" visible="false" maximum="100" determinate="false"/>
+</element>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<TouchButton id="atom(eCancelButton)" layoutpos="right" visible="false" content="resstr(1608)"/>
+</element>
+</element>
+<element resid="TapToSend_Receive" id="atom(eRoot)" layout="borderlayout()" layoutpos="top" sheet="TapToSendStyle" accessible="true" accrole="pane">
+<element id="atom(eReceiveTextContainer)" layoutpos="top" layout="filllayout()">
+<richtext id="atom(eReceiveConnecting)" visible="true" content="resstr(1614)" class="staticsecondarytext"/>
+<richtext id="atom(eReceivingDescription)" visible="false" content="resstr(1615)" class="staticsecondarytext"/>
+<richtext id="atom(eReceiveFinishing)" visible="false" content="resstr(1618)" class="staticsecondarytext"/>
+<richtext id="atom(eDone)" visible="false" content="resstr(1616)" class="staticprimarytext"/>
+<richtext id="atom(eCanceled)" visible="false" content="resstr(1617)" class="staticprimarytext"/>
+<richtext id="atom(eError)" visible="false" content="resstr(3006, library(proximityuxhost.exe))" class="errortext"/>
+</element>
+<element id="atom(eReceiveProgressBarAligner)" layout="borderlayout()" layoutpos="top" background="argb(0,0,0,0)">
+<ModernProgressBar id="atom(eProgressBar)" layoutpos="top" visible="false" maximum="100" determinate="false"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<TouchButton id="atom(eCancelButton)" layoutpos="right" visible="false" content="resstr(1608)"/>
+</element>
+</element>
+<stylesheets>
+<style resid="TapToSendStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<richtext constrainlayout="narrow" baseline="15rp" linespacing="20rp"/>
+<if class="staticprimarytext">
+<richtext font="resstr(3101, library(proximityuxhost.exe))" foreground="ImmersiveSaturatedPrimaryText" contentAlign="wrapleft" accessible="true" accrole="statictext"/>
+</if>
+<if class="staticsecondarytext">
+<richtext font="resstr(3101, library(proximityuxhost.exe))" foreground="ImmersiveSaturatedSecondaryText" contentalign="middleleft|endellipsis" accessible="true" accrole="statictext"/>
+</if>
+<if class="errortext">
+<richtext font="resstr(3100, library(proximityuxhost.exe))" foreground="ImmersiveSaturatedPrimaryText" contentalign="wrapleft" accessible="true" accrole="statictext"/>
+</if>
+<if id="atom(eRoot)">
+<element padding="rect(40rp,5rp,40rp,0rp)"/>
+</if>
+<if id="atom(eSendContentDescription)">
+<richtext padding="rect(0,0,0,20rp)"/>
+</if>
+<if id="atom(eProgressBarAligner)">
+<element padding="rect(0,10rp,0,0)"/>
+</if>
+<if id="atom(eReceiveProgressBarAligner)">
+<element padding="rect(0,25rp,0,20rp)"/>
+</if>
+<if id="atom(eProgressBar)">
+<ModernProgressBar foreground="ImmersiveControlDarkProgressForeground" background="ImmersiveControlDarkProgressBackground"/>
+</if>
+<if id="atom(eCancelButton)">
+<TouchButton contentalign="middlecenter" minsize="size(90rp, 32rp)"/>
+<if keyfocused="true">
+<TouchButton contentalign="middlecenter|focusrect"/>
+</if>
+</if>
+</style>
+</stylesheets>
+</duixml>

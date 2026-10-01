@@ -1,0 +1,30 @@
+<!--
+  source: %SYSTEMROOT%\System32\SysResetErr.exe
+  resource: UIFILE / "1500" / lang 1033
+  size: 462 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+<element resid="main"
+layout="verticalflowlayout(0,0,0,0)"
+active="keyboard"
+layoutpos="top"
+MinSize ="size(90rp, 350rp)"
+>
+<element
+content="resstr(1601)"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"
+font="12;light;None;Segoe UI" 
+/>
+<element
+content=" "
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"
+font="12;light;None;Segoe UI" 
+/>
+</element>
+</duixml>

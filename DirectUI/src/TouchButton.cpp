@@ -5,13 +5,12 @@
 // decorated names of the real dui70.dll exports.
 
 #include "TouchButton.h"
-#include "Interfaces.h"
 
 namespace DirectUI
 {
 
 TouchButton::TouchButton(void)
-{}
+{ }
 
 TouchButton::~TouchButton(void)
 {}
@@ -132,37 +131,5 @@ PropertyInfo const* TouchButton::ShowKeyFocusProp(void)
 
 PropertyInfo const* TouchButton::TreatRightMouseButtonAsLeftProp(void)
 { return nullptr; }
-
-bool TouchButton::_FinishClick(TouchButton::ClickDevice a0, unsigned int a1, unsigned int a2, tagPOINT*a3)
-{ return 0; }
-
-void TouchButton::_OnKeyboardEvent(KeyboardEvent*a0)
-{}
-
-void TouchButton::_OnMouseEvent(MouseEvent*a0)
-{}
-
-void TouchButton::_OnPointerEvent(PointerEvent*a0)
-{}
-
-bool TouchButton::_StartClick(TouchButton::ClickDevice a0)
-{ return 0; }
-
-void TouchButton::_SyncDefaultEnterHandling(TouchHWNDElement*a0)
-{}
-
-bool TouchButton::_TriggerRightClick(unsigned int a0, tagPOINT*a1)
-{ return 0; }
-
-void TouchButton::_UpdateAccState(bool a0, bool a1)
-{}
-
-bool TouchButton::_UpdateClick(TouchButton::ClickDevice a0, bool a1)
-{ return 0; }
-
-UID TouchButton::_UpdateFocusVisibility(void)
-{ return UID(); }
-
-IClassInfo* TouchButton::s_pClassInfo = nullptr;
 
 } // namespace DirectUI

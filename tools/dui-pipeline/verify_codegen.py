@@ -5,9 +5,21 @@ verify_codegen.py -- stub-TU modname fidelity self-check.
 
 Builds every generated stub TU with cl.exe (/std:c++20 /Zc:wchar_t- /c /EHsc),
 extracts the decorated names via dumpbin /symbols, and diffs them against
-the real dui70.dll export set (pinned/exports.json).
+the real dui70.dll export set.
 
-Per contract the target set is: every EXPORTED symbol of the target classes.
+Per contract the target set is: every EXPORTED symbol of the target classes
+(from pinned/symbols.json is_exported, in DirectUI scope). Template
+specialization classes ('PatternProvider<...>', 'FunctionDefinition<int>')
+are matched via their exact mangled names from the symbol table, not by
+string-patching the class name.
+
+Routing:
+  * FunctionDefinition<T> and ACCESSIBLEROLE are nested in a host class;
+    their exports are verified against the HOST class's TU
+    (DUIXmlParser.cpp / AccessibleButton.cpp).
+  * 'default ctor closure' (??_F...) exports cannot be written in C++;
+    classes carrying them have a companion <class>_ctor_closure.asm which
+    is assembled with ml64 and merged into the symbol set.
 
 Also asserts extern "C" purity: no obj may contain a C++-decorated name
 for the plain C API exports.
@@ -37,6 +49,15 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from emit_headers import (  # noqa: E402
+    in_directui_scope,
+    is_duixml_nested,
+    is_nested_pseudo_class,
+    nested_host_of,
+    safe_name,
+)
 
 
 def _find_toolchain(vcbin_arg: str | None, sdk_arg: str | None) -> tuple[Path, Path, Path]:
@@ -122,11 +143,12 @@ DEFAULT_OBJ = REPO / ".local" / "build" / "verify-obj"
 
 
 class Toolchain:
-    """Resolved compiler layout: cl/dumpbin binaries + include roots."""
+    """Resolved compiler layout: cl/dumpbin/ml64 binaries + include roots."""
 
     def __init__(self, vcbin: Path, vcinc: Path, sdkinc: Path):
         self.cl = vcbin / "cl.exe"
         self.dumpbin = vcbin / "dumpbin.exe"
+        self.ml64 = vcbin / "ml64.exe"
         self.vcinc = vcinc
         self.sdkinc = sdkinc
         for b in (self.cl, self.dumpbin):
@@ -152,6 +174,15 @@ def compile_tu(tc: Toolchain, src: Path, obj_dir: Path, inc: Path) -> tuple[int,
     return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
 
 
+def assemble_asm(tc: Toolchain, asm: Path, obj_dir: Path) -> tuple[int, str]:
+    """ml64 companion assembly for ??_F ctor-closure symbols."""
+    obj_dir.mkdir(parents=True, exist_ok=True)
+    obj = obj_dir / (asm.stem + ".obj")
+    cmd = [tc.ml64, "/nologo", "/c", f"/Fo{obj}", str(asm)]
+    proc = run(cmd)
+    return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
+
+
 def obj_symbols(tc: Toolchain, obj: Path) -> set[str]:
     proc = run([tc.dumpbin, "/nologo", "/symbols", str(obj)])
     names = set()
@@ -160,6 +191,17 @@ def obj_symbols(tc: Toolchain, obj: Path) -> set[str]:
         if m:
             names.add(m.group(1))
     return names
+
+
+def class_target_set(symbols: list, cls: str) -> set[str]:
+    """All real-export mangled names attributed to a class (DirectUI scope).
+    Uses the symbol table directly so template specialization classes match
+    exactly (their '@<class>@DirectUI@@" text form never appears in the
+    mangled name)."""
+    return {s["mangled"] for s in symbols
+            if s.get("class") == cls
+            and s.get("is_exported")
+            and in_directui_scope(s)}
 
 
 def main(argv=None) -> int:
@@ -186,33 +228,61 @@ def main(argv=None) -> int:
     if args.classes:
         classes = [c.strip() for c in args.classes.split(",") if c.strip()]
 
-    # real export set from pinned/exports.json (name field)
-    exports = json.loads((args.pinned / "exports.json").read_text(encoding="utf-8"))
-    real = {e["name"] for e in exports["exports"]}
+    symbols = json.loads((args.pinned / "symbols.json").read_text(encoding="utf-8"))["symbols"]
 
     report = []
     total_match = total = 0
     all_ok = True
+    tu_done: dict[str, set[str]] = {}   # tu-stem -> merged symbol set
 
-    for cls in classes:
-        # compile
-        src = args.src / f"{cls}.cpp"
+    def tu_symbols(stem: str) -> set[str]:
+        """Compile (once) the TU for stem plus its companion .asm files,
+        return the merged External symbol set."""
+        if stem in tu_done:
+            return tu_done[stem]
+        src = args.src / f"{stem}.cpp"
         if not src.exists():
-            report.append(f"## {cls}: MISSING TU {src}")
-            all_ok = False
-            continue
+            tu_done[stem] = set()
+            return tu_done[stem]
         rc, out = compile_tu(tc, src, args.objdir, args.inc)
         if rc != 0:
-            report.append(f"## {cls}: COMPILE FAILED (rc={rc})")
+            report.append(f"## {stem}: COMPILE FAILED (rc={rc})")
             report.append("```")
             report.append(out[:4000])
             report.append("```")
             all_ok = False
-            continue
-        got = obj_symbols(tc, args.objdir / f"{cls}.obj")
+            tu_done[stem] = set()
+            return tu_done[stem]
+        got = obj_symbols(tc, args.objdir / f"{stem}.obj")
+        for suffix in ("_ctor_closure", "_own_vftable"):
+            asm = args.src / f"{stem}{suffix}.asm"
+            if asm.exists():
+                arc, aout = assemble_asm(tc, asm, args.objdir)
+                if arc != 0:
+                    report.append(f"## {stem}: ASM FAILED (rc={arc})")
+                    report.append("```")
+                    report.append(aout[:2000])
+                    report.append("```")
+                    all_ok = False
+                else:
+                    got |= obj_symbols(tc, args.objdir / f"{stem}{suffix}.obj")
+        tu_done[stem] = got
+        return got
 
-        # target set: ALL real exports of this class (contract semantics)
-        cls_real = {n for n in real if f"@{cls}@DirectUI@@" in n}
+    for cls in classes:
+        # which TU carries this class's exports?
+        if is_duixml_nested(cls) or is_nested_pseudo_class(cls):
+            stem = safe_name(nested_host_of(cls) if is_nested_pseudo_class(cls)
+                             else "DUIXmlParser")
+        else:
+            stem = safe_name(cls)
+        got = tu_symbols(stem)
+        if not got and not (args.src / f"{stem}.cpp").exists():
+            report.append(f"## {cls}: MISSING TU {args.src / (stem + '.cpp')}")
+            all_ok = False
+            continue
+
+        cls_real = class_target_set(symbols, cls)
         cls_match = cls_real & got
 
         n, nm = len(cls_real), len(cls_match)
@@ -223,11 +293,16 @@ def main(argv=None) -> int:
             all_ok = False
         report.append(
             f"## {cls}: real-export match {nm}/{n} [{status}]"
+            + (f" (TU {stem})" if stem != safe_name(cls) else "")
         )
         if nm != n:
             report.append("### missing real exports:")
             for m in sorted(cls_real - got):
                 report.append(f"  - {m}")
+
+    # the extern "C" API TU (plain-name exports) -- always compiled so the
+    # purity/completeness check below sees its symbol set
+    capi_syms = tu_symbols("CApi")
 
     pct = 100.0 * total_match / total if total else 0.0
     summary = (
@@ -235,29 +310,45 @@ def main(argv=None) -> int:
         f"({pct:.2f}%)  {'**100% ACHIEVED**' if pct == 100 else '**NOT 100%**'}"
     )
 
-    # extern "C" purity check: no obj may contain a C++-decorated name for
-    # the plain C API exports (e.g. ?InitProcessPriv@DirectUI@@...)
-    capi_names = ("InitProcessPriv", "UnInitProcessPriv", "InitThread",
-                  "RegisterAllControls", "StartMessagePump", "StrToID")
+    # extern "C" purity + completeness: the 86 plain-name C exports must be
+    # (a) never emitted as C++-decorated namespace-level functions, and
+    # (b) ALL present as plain definitions across the stub TUs (CApi.cpp).
+    # Note: a plain C name (e.g. InitThread) can coexist with a same-named
+    # CLASS MEMBER (FontCache::InitThread) in the real DLL — those are
+    # distinct exports. Only decorated names resolving to namespace-level
+    # functions (DirectUI::InitThread) violate the rule.
+    export_names = {e["name"] for e in json.loads(
+        (args.pinned / "exports.json").read_text(encoding="utf-8"))["exports"]
+        if not e["name"].startswith("?")}
     capi_bad = []
-    capi_plain = 0
-    for cls in classes:
-        obj = args.objdir / f"{cls}.obj"
-        if not obj.exists():
-            continue
-        for nm in obj_symbols(tc, obj):
-            if nm.startswith("?") and any(n in nm for n in capi_names):
-                capi_bad.append(f"{cls}: {nm}")
-            elif nm in capi_names:
-                capi_plain += 1
+    capi_plain = set()
+    for stem, got in tu_done.items():
+        for nm in got:
+            if nm.startswith("?") and any(
+                    re.match(r"\?" + re.escape(n) + r"@", nm) for n in export_names):
+                # violation only in namespace-level form (?Name@DirectUI@@YA...);
+                # same-named class members (?InitThread@FontCache@...) are
+                # distinct legitimate exports.
+                if re.match(r"\?(?:" + "|".join(map(re.escape, export_names)) + r")"
+                            r"@DirectUI@@YA", nm):
+                    capi_bad.append(f"{stem}: {nm}")
+            elif nm in export_names:
+                capi_plain.add(nm)
+    capi_missing = export_names - capi_plain
+    if capi_missing:
+        all_ok = False
+        report.append(f"## extern-C completeness: FAIL ({len(capi_missing)} plain-name "
+                      f"exports not defined by any stub TU)")
+        for m in sorted(capi_missing):
+            report.append(f"  - {m}")
     if capi_bad:
         all_ok = False
         report.append(f"## extern-C purity: FAIL ({len(capi_bad)} decorated)")
         for b in capi_bad:
             report.append(f"  - {b}")
-    else:
+    if not capi_bad and not capi_missing:
         report.append(f"## extern-C purity: OK (no decorated C-API symbols; "
-                      f"{capi_plain} plain-name refs)")
+                      f"all {len(export_names)} plain-name exports defined)")
     text = "\n".join([summary, ""] + report) + "\n"
     print(text)
     if args.report:

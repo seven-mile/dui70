@@ -1,0 +1,17 @@
+<!--
+  source: %SYSTEMROOT%\System32\osk.exe
+  resource: UIFILE / "200" / lang 1033
+  size: 509 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="main" layout="filllayout()">
+<element id="atom(SoftKeyboardNav)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardPred)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardClearUI)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardNumPad)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardMain)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardAux)" layoutpos="absolute"/>
+<element id="atom(SoftKeyboardMenu)" layoutpos="absolute"/>
+</element>
+</duixml>

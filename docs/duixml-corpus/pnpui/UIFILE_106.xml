@@ -1,0 +1,25 @@
+<!--
+  source: %SYSTEMROOT%\System32\pnpui.dll
+  resource: UIFILE / "106" / lang 1033
+  size: 631 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element id="atom(taskdialogroot)" sheet="common" resid="main" layout="borderLayout()">
+<element id="atom(ItemImage)" layoutpos="left" padding="rect(20rp,5rp,5rp,5rp)"/>
+<element class="atom(ItemTile)" layout="verticalflowlayout(0,0,0,0)" layoutpos="client" height="48rp" sheet="ssTaskDialogRoot">
+<element id="atom(ItemName)"/>
+<element id="atom(CertName)"/>
+</element>
+</element>
+<stylesheets>
+<style resid="ssTaskDialogRoot">
+<if id="atom(ItemName)">
+<element font="gtf(TEXTSTYLE, 2, 0)"/>
+</if>
+<if id="atom(CertName)">
+<element font="gtf(TEXTSTYLE, 2, 0)"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

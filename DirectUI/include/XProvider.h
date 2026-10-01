@@ -9,19 +9,15 @@
 
 #include "Interfaces.h"
 
+#include "Interfaces.h"
+
 namespace DirectUI
 {
-    class Value;
     class DUIXmlParser;
     class Element;
-    class HWNDElement;
-    class NativeHWNDHost;
-    class TouchButton;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class TouchCheckBox;
+    class IXElementCP;
+    class IXProviderCP;
+    class XProvider;
 
     class XProvider
         : public IXProvider

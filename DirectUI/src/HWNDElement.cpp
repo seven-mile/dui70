@@ -11,10 +11,10 @@ namespace DirectUI
 {
 
 HWNDElement::HWNDElement(HWNDElement const&a0)
-{}
+{ }
 
 HWNDElement::HWNDElement(void)
-{}
+{ }
 
 HWNDElement::~HWNDElement(void)
 {}

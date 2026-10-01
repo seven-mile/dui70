@@ -1,0 +1,25 @@
+<!--
+  source: %SYSTEMROOT%\System32\CloudNotifications.exe
+  resource: UIFILE / "10" / lang 1033
+  size: 1096 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="LowStorageNotificationsDialog" sheet="CloudSystemDialog" layout="flowlayout()" accessible="true" accrole="pane">
+		<RichText id="atom(WarningText)" class="dialog_text" layoutpos="top" />
+		<TouchHyperLink id="atom(PCSettingsLink)" class="notifications_link" content="resstr(114)" accname="resstr(114)" />
+	</element>
+	<stylesheets>
+		<style resid="CloudSystemDialog" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+			<if class="dialog_text">
+				<RichText contentalign="wrapleft" accessible="true" accrole="statictext" margin="rect(0rp, 0rp, 0rp, 10rp)" />
+			</if>
+			<if class="notifications_link">
+				<TouchHyperLink cursor="hand" contentalign="topleft | wrapleft | endellipsis" accdefaction="click" />
+				<if keyfocused="true">
+					<TouchHyperLink contentalign="topleft | wrapleft | endellipsis | focusrect" />
+				</if>
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

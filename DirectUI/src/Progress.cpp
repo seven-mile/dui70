@@ -11,10 +11,10 @@ namespace DirectUI
 {
 
 Progress::Progress(Progress const&a0)
-{}
+{ }
 
 Progress::Progress(void)
-{}
+{ }
 
 Progress::~Progress(void)
 {}

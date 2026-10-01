@@ -1,0 +1,172 @@
+<!--
+  source: %SYSTEMROOT%\System32\sdcpl.dll
+  resource: UIFILE / "23" / lang 1033
+  size: 10913 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+</stylesheets>
+<element resid="informationsectiontitle" layoutpos="top" layout="filllayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<element layout="borderlayout()" padding="rect(0rp,2rp,0rp,5rp)">
+<element class="cp_content_divider_line" width="1rp"/>
+</element>
+<element layout="flowlayout()">
+<element id="atom(Title)" class="cp_content_divider_header" content="Heres a divder with header"/>
+</element>
+</element>
+<element resid="UpgradeRestore" layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<macro expand="informationsectiontitle">
+<bind connect="Title" content="resstr(2506)"/>
+</macro>
+<element layoutpos="top" layout="borderlayout()" padding="rect(20rp,0rp,0rp,0rp)">
+<element layout="flowlayout()" layoutpos="top">
+<element class="cp_content_text" content="resstr(209)"/>
+<button id="atom(RestoreUpgradeHelpLink)" class="cp_content_link" active="mouse|keyboard" content="resstr(208)" shortcut="auto" accdefaction="click"/>
+</element>
+<NavigateButton id="atom(ForeignRestoreLink)" padding="rect(0rp,10rp,0rp,0rp)" layoutpos="top" layout="borderlayout()" cursor="hand" shellexecute="%windir%\\system32\\sdclt.exe" shellexecuteparams="/foreignrestore" shellexecuteverb="runas">
+<element layout="flowlayout()" layoutpos="left" accessible="false">
+<button class="cp_nav_img" layoutpos="left" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))" active="mouse" accrole="graphic" accname="Security Shield Icon" accessible="true"/>
+<button class="cp_content_link" active="mouse|keyboard" content="resstr(203)" shortcut="auto" accdefaction="click"/>
+</element>
+</NavigateButton>
+</element>
+</element>
+</element>
+<element resid="ForeignRestore" layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<macro expand="informationsectiontitle">
+<bind connect="Title" content="resstr(2506)"/>
+</macro>
+<element layoutpos="top" layout="borderlayout()" padding="rect(20rp,0rp,0rp,0rp)">
+<element id="atom(ForeignRestoreInfo)" class="cp_content_text" padding="rect(0rp,0rp,0rp,10rp)" content="resstr(2552)" layoutpos="top"/>
+<NavigateButton id="atom(ForeignRestoreLink)" layoutpos="top" layout="borderlayout()" cursor="hand" shellexecute="%windir%\\system32\\sdclt.exe" shellexecuteparams="/foreignrestore" shellexecuteverb="runas">
+<element layout="flowlayout()" layoutpos="left" accessible="false">
+<button class="cp_nav_img" layoutpos="left" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))" active="mouse" accrole="graphic" accname="Security Shield Icon" accessible="true"/>
+<button class="cp_content_link" active="mouse|keyboard" content="resstr(203)" shortcut="auto" accdefaction="click"/>
+</element>
+</NavigateButton>
+</element>
+</element>
+</element>
+<element resid="NormalRestore" layoutpos="top" layout="borderlayout()" padding="rect(0rp,0rp,0rp,10rp)">
+<macro expand="informationsectiontitle">
+<bind connect="Title" content="resstr(2506)"/>
+</macro>
+<element layoutpos="top" layout="borderlayout()" padding="rect(20rp,0rp,0rp,0rp)">
+<element layoutpos="client" layout="borderlayout()" padding="rect(0rp,0rp,10rp,0rp)"> 
+<element id="atom(RestoreInfo)" padding="rect(0rp,5rp,0rp,0rp)" layoutpos="top" class="cp_content_text" content="resstr(2516)"/>
+<NavigateButton id="atom(AdvancedRestoreLink)" padding="rect(0rp,3rp,0rp,0rp)" layoutpos="top" layout="borderlayout()" cursor="hand" shellexecute="%windir%\\system32\\sdclt.exe" shellexecuteparams="/restorewizardadmin" shellexecuteverb="runas">
+<element layout="flowlayout()" layoutpos="top" accessible="false">
+<button class="cp_nav_img" layoutpos="left" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))" active="mouse" accrole="graphic" accname="Security Shield Icon" accessible="true"/>
+<button class="cp_content_link" active="mouse|keyboard" content="resstr(205)" shortcut="auto" accdefaction="click"/>
+</element>
+</NavigateButton>
+<NavigateButton id="atom(ForeignRestoreLink)" padding="rect(0rp,5rp,0rp,0rp)" layoutpos="top" layout="borderlayout()" cursor="hand" shellexecute="%windir%\\system32\\sdclt.exe" shellexecuteparams="/foreignrestore" shellexecuteverb="runas">
+<element layout="flowlayout()" layoutpos="top" accessible="false">
+<button class="cp_nav_img" layoutpos="left" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))" active="mouse" accrole="graphic" accname="Security Shield Icon" accessible="true"/>
+<button class="cp_content_link" active="mouse|keyboard" content="resstr(203)" shortcut="auto" accdefaction="click"/>
+</element>
+</NavigateButton> 
+</element>
+<element layoutpos="right" layout="borderlayout()" padding="rect(0rp,0rp,10rp,0rp)">
+<NavigateButton layoutpos="top" padding="rect(10rp,0rp,0rp,0rp)" layout="borderlayout()" shellexecute="%windir%\\system32\\sdclt.exe" shellexecuteparams="/restorewizard">
+<CCPushButton id="atom(UserRestoreButton)" layoutpos="top" content="resstr(206)" shortcut="auto" accessible="true"/>
+</NavigateButton> 
+</element>
+</element>
+</element>
+</duixml>

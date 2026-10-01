@@ -9,17 +9,12 @@
 
 namespace DirectUI
 {
+    class Element;
+    class ElementProvider;
+    class Layout;
+    struct NavReference;
+    class StyleSheet;
     class Value;
-    class DUIXmlParser;
-    class HWNDElement;
-    class NativeHWNDHost;
-    class TouchButton;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class TouchCheckBox;
-    class XProvider;
 
     class Element
     {
@@ -41,7 +36,7 @@ namespace DirectUI
         static PropertyInfo const* AccessibleProp(void);
         static PropertyInfo const* ActiveProp(void);
         long Add(Element*);
-        long Add(Element*, int (__cdecl*)(void const*, void const*));
+        long Add(Element*, int (__cdecl *)(void const*, void const*));
         virtual long Add(Element**, unsigned int);
         virtual long AddBehavior(IDuiBehavior*);
         long AddListener(IElementListener*);
@@ -186,7 +181,7 @@ namespace DirectUI
         float GetTreeAlphaLevel(void);
         virtual long GetUIAElementProvider(_GUID const&, void**);
         virtual Element* GetUiaFocusDelegate(void);
-        Value* GetValue(PropertyInfo const* (__cdecl*)(void), int, UpdateCache*);
+        Value* GetValue(PropertyInfo const* (__cdecl *)(void), int, UpdateCache*);
         Value* GetValue(PropertyInfo const*, int, UpdateCache*);
         bool GetVisible(void);
         int GetWidth(void);
@@ -274,7 +269,7 @@ namespace DirectUI
         long RemoveAll(void);
         virtual long RemoveBehavior(IDuiBehavior*);
         void RemoveListener(IElementListener*);
-        long RemoveLocalValue(PropertyInfo const* (__cdecl*)(void));
+        long RemoveLocalValue(PropertyInfo const* (__cdecl *)(void));
         long RemoveLocalValue(PropertyInfo const*);
         static PropertyInfo const* ScaleFactorProp(void);
         static PropertyInfo const* SelectedProp(void);
@@ -352,7 +347,7 @@ namespace DirectUI
         long SetTextGlowSize(int);
         long SetTooltip(bool);
         long SetTooltipMaxWidth(int);
-        long SetValue(PropertyInfo const* (__cdecl*)(void), int, Value*);
+        long SetValue(PropertyInfo const* (__cdecl *)(void), int, Value*);
         long SetValue(PropertyInfo const*, int, Value*);
         long SetVisible(bool);
         long SetWidth(int);
@@ -364,7 +359,7 @@ namespace DirectUI
         long ShiftChild(unsigned int, unsigned int);
         static PropertyInfo const* ShortcutProp(void);
         static PropertyInfo const* SizeInLayoutProp(void);
-        long SortChildren(int (__cdecl*)(void const*, void const*));
+        long SortChildren(int (__cdecl *)(void const*, void const*));
         void StartDefer(unsigned long*);
         void StopAnimation(unsigned int);
         DeferCycle* TestDeferObject(void);
@@ -408,11 +403,11 @@ namespace DirectUI
         static void _FlushLayout(Element*, DeferCycle*);
         static void _InvalidateCachedDSConstraints(Element*);
         void _OnFontPropChanged(Value*);
-        long _RemoveLocalValue(PropertyInfo const* (__cdecl*)(void), bool);
+        long _RemoveLocalValue(PropertyInfo const* (__cdecl *)(void), bool);
         long _RemoveLocalValue(PropertyInfo const*, bool);
         virtual void _SelfLayoutDoLayout(int, int);
         virtual tagSIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
-        long _SetValue(PropertyInfo const* (__cdecl*)(void), int, Value*, bool);
+        long _SetValue(PropertyInfo const* (__cdecl *)(void), int, Value*, bool);
         long _SetValue(PropertyInfo const*, int, Value*, bool);
 
         private:
@@ -437,7 +432,7 @@ namespace DirectUI
         void _InheritProperties(void);
         void _PostEvent(Event*, int);
         long _PostSourceChange(void);
-        long _PreSourceChange(PropertyInfo const* (__cdecl*)(void), int, Value*, Value*);
+        long _PreSourceChange(PropertyInfo const* (__cdecl *)(void), int, Value*, Value*);
         long _PreSourceChange(PropertyInfo const*, int, Value*, Value*);
         long _SetRelPixRect(PropertyInfo const*, int, int, int, int);
         long _SetRelPixValue(PropertyInfo const*, int);

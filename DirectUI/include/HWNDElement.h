@@ -11,16 +11,10 @@
 
 namespace DirectUI
 {
-    class Value;
     class DUIXmlParser;
-    class NativeHWNDHost;
-    class TouchButton;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class TouchCheckBox;
-    class XProvider;
+    class Element;
+    class HWNDElement;
+    class Value;
 
     class HWNDElement
         : public Element

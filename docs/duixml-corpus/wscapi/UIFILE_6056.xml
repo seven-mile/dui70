@@ -1,0 +1,237 @@
+<!--
+  source: %SYSTEMROOT%\System32\wscapi.dll
+  resource: UIFILE / "6056" / lang 1033
+  size: 6619 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element 
+resid="main" 
+id="atom(ImmersiveOpenWithFlyout)" 
+layout="borderlayout()" 
+sheet="ImmersiveOpenWithStyle" 
+accessible="true"
+accrole="pane" 
+behaviors = "PVL::AnimationTrap()" 
+accname="resstr(337)">
+<element id="atom(CurrentProductBlock)" layout="borderlayout()" layoutpos="top">
+<RichText
+layoutpos="top"
+active="inactive"
+accessible="true"
+accrole="statictext"
+content="resstr(340)"
+accname="resstr(340)"/>
+<element
+layoutpos="top"
+id="atom(DefaultAppSeparator)"
+class="LineSeparator"
+layout="ShellBorderLayout()">
+<element
+layoutpos="top"
+class="LineSeparatorStroke"/>
+</element>
+<Button  
+id="atom(CurrentProductButton)"
+layoutpos="top"
+accessible="true" 
+accrole="listitem"
+active="keyboard|mouse|pointer|nosyncfocus"
+behaviors="PVL::ImplicitAnimation()"
+layout="borderlayout()"
+tooltip="true"
+accdesc="">
+<element id="atom(TileContent)" layout="borderlayout()" layoutpos="client">
+<element id="atom(IconContent)" layout="borderlayout()" layoutpos="left">
+<element id="atom(IconBackground)" layout="filllayout()" layoutpos="top">
+<element id="atom(ProductBlockIcon)" accessible="true" accrole="graphic"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="left">
+<RichText 
+id="atom(ProductBlockGuid)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockName)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockDescription)"
+accessible="true" 
+accrole="statictext"
+enabled="false"
+layoutpos="top" 
+content="resstr(339)"
+accname="resstr(339)"/>
+</element>
+</element>
+</Button>
+</element>
+<element id="atom(NewProductBlock)" layout="borderlayout()" layoutpos="top">
+<RichText 
+layoutpos="top"
+active="inactive"
+accessible="true"
+accrole="statictext"
+content="resstr(341)"
+accname="resstr(341)"/>
+<element
+layoutpos="top"
+id="atom(DefaultAppSeparator)"
+class="LineSeparator"
+layout="ShellBorderLayout()">
+<element
+layoutpos="top"
+class="LineSeparatorStroke"/>
+</element>
+<Button  
+id="atom(InboxProductButton)"
+layoutpos="top"
+accessible="true" 
+accrole="listitem"
+active="keyboard|mouse|pointer|nosyncfocus"
+behaviors="PVL::ImplicitAnimation()"
+layout="borderlayout()"
+tooltip="true"
+accdesc="">
+<element id="atom(TileContent)" layout="borderlayout()" layoutpos="client">
+<element id="atom(IconContent)" layout="borderlayout()" layoutpos="left">
+<element id="atom(IconBackground)" layout="filllayout()" layoutpos="top">
+<element id="atom(ProductBlockIcon)" accessible="true" accrole="graphic"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="left">
+<RichText 
+id="atom(ProductBlockGuid)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockName)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockDescription)"
+accessible="true" 
+accrole="statictext"
+enabled="false"
+layoutpos="top" 
+content="resstr(339)"
+accname="resstr(339)"/>
+</element>
+</element>
+</Button>
+<Button  
+id="atom(OutboxProductButton)"
+layoutpos="top"
+accessible="true" 
+accrole="listitem"
+active="keyboard|mouse|pointer|nosyncfocus"
+behaviors="PVL::ImplicitAnimation()"
+layout="borderlayout()"
+tooltip="true"
+accdesc="">
+<element id="atom(TileContent)" layout="borderlayout()" layoutpos="client">
+<element id="atom(IconContent)" layout="borderlayout()" layoutpos="left">
+<element id="atom(IconBackground)" layout="filllayout()" layoutpos="top">
+<element id="atom(ProductBlockIcon)" accessible="true" accrole="graphic"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="left">
+<RichText 
+id="atom(ProductBlockGuid)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockName)"
+accessible="true" 
+accrole="statictext" 
+layoutpos="top" />
+<RichText 
+id="atom(ProductBlockDescription)"
+accessible="true" 
+accrole="statictext"
+enabled="false"
+layoutpos="top" 
+content="resstr(342)"
+accname="resstr(342)"/>
+</element>
+</element>
+</Button>
+</element>
+<element 
+padding="rect(0rp,15rp,24rp,20rp)"
+layoutpos="top"
+layout="borderlayout()">
+<TouchButton 
+MinSize="size(150rp, 0rp)"
+id="atom(ConfirmButton)"
+layoutpos="right"
+accessible="true"
+active="mouse|keyboard|pointer"
+content="resstr(6032)"
+accname="resstr(6032)"/>
+</element>
+</element>
+<stylesheets>
+<style resid="ImmersiveOpenWithStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if id="atom(ImmersiveOpenWithFlyout)">
+<element background="ImmersiveLightBackground" width="390rp"/>
+</if>
+<RichText
+foreground="ImmersiveLightPrimaryText"
+font="resstr(344)"
+contentalign="topleft | wrapleft | endellipsis"
+constrainlayout="narrow"
+margin="rect(0rp,0rp,0rp,0rp)"
+padding="rect(17rp,16rp,20rp,0rp)"/>
+<if class="TitleText">
+<RichText font="resstr(343)"/>
+</if>
+<element background="ImmersiveControlTransparent" />
+<Button foreground="ImmersiveLightPrimaryText" background="argb(0,0,0,0)" MinSize ="size(0rp, 50rp)" padding="rect(24rp,5rp,17rp,5rp)"/>
+<if mousefocused="true">
+<Button foreground="ImmersiveLightHoverPrimaryText" background="ImmersiveLightHoverBackground"/>
+</if>
+<if id="atom(ProductBlockIcon)">
+<element width="32rp" height="32rp"/>
+</if>
+<if id="atom(IconContent)">
+<element width="40rp" height="40rp"/>
+</if>
+<if id="atom(IconBackground)">
+<element width="40rp" height="40rp" padding="rect(4rp,4rp,4rp,4rp)" background="ImmersiveSaturatedBackground"/>
+</if>
+<if id="atom(ProductBlockName)">
+<RichText background="ImmersiveControlTransparent" constrainlayout="narrow" font="resstr(344)" padding="rect(12rp,0rp,0rp,0rp)" contentalign="wrapleft|endellipsis" />
+</if>
+<if id="atom(ProductBlockDescription)">
+<RichText 
+background="ImmersiveControlTransparent" 
+constrainlayout="narrow" 
+font="resstr(345)"
+padding="rect(12rp,0rp,0rp,0rp)" 
+contentalign="wrapleft|endellipsis"
+foreground = "gtc(CONTROLPANELSTYLE, 10, 4, 3803)"/>
+</if>
+<if class="LineSeparator">
+<Element
+background="argb(0,0,0,0)"
+padding="rect(17rp,0,17rp,0)"
+margin="rect(0,6rp,0,2rp)"/>
+</if>
+<if class="LineSeparatorStroke">
+<Element 
+background="ImmersiveLightDivider"
+height="1rp"
+accessible="true"
+accrole="separator"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

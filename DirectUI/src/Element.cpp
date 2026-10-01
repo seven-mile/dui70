@@ -11,10 +11,10 @@ namespace DirectUI
 {
 
 Element::Element(Element const&a0)
-{}
+{ }
 
 Element::Element(void)
-{}
+{ }
 
 Element::~Element(void)
 {}
@@ -64,7 +64,7 @@ PropertyInfo const* Element::ActiveProp(void)
 long Element::Add(Element*a0)
 { return 0; }
 
-long Element::Add(Element*a0, int (__cdecl* a1)(void const*, void const*))
+long Element::Add(Element*a0, int (__cdecl * a1)(void const*, void const*))
 { return 0; }
 
 long Element::Add(Element**a0, unsigned int a1)
@@ -508,7 +508,7 @@ long Element::GetUIAElementProvider(_GUID const&a0, void**a1)
 Element* Element::GetUiaFocusDelegate(void)
 { return nullptr; }
 
-Value* Element::GetValue(PropertyInfo const* (__cdecl* a0)(void), int a1, UpdateCache*a2)
+Value* Element::GetValue(PropertyInfo const* (__cdecl * a0)(void), int a1, UpdateCache*a2)
 { return nullptr; }
 
 Value* Element::GetValue(PropertyInfo const*a0, int a1, UpdateCache*a2)
@@ -787,7 +787,7 @@ long Element::RemoveBehavior(IDuiBehavior*a0)
 void Element::RemoveListener(IElementListener*a0)
 {}
 
-long Element::RemoveLocalValue(PropertyInfo const* (__cdecl* a0)(void))
+long Element::RemoveLocalValue(PropertyInfo const* (__cdecl * a0)(void))
 { return 0; }
 
 long Element::RemoveLocalValue(PropertyInfo const*a0)
@@ -1027,7 +1027,7 @@ long Element::SetTooltip(bool a0)
 long Element::SetTooltipMaxWidth(int a0)
 { return 0; }
 
-long Element::SetValue(PropertyInfo const* (__cdecl* a0)(void), int a1, Value*a2)
+long Element::SetValue(PropertyInfo const* (__cdecl * a0)(void), int a1, Value*a2)
 { return 0; }
 
 long Element::SetValue(PropertyInfo const*a0, int a1, Value*a2)
@@ -1063,7 +1063,7 @@ PropertyInfo const* Element::ShortcutProp(void)
 PropertyInfo const* Element::SizeInLayoutProp(void)
 { return nullptr; }
 
-long Element::SortChildren(int (__cdecl* a0)(void const*, void const*))
+long Element::SortChildren(int (__cdecl * a0)(void const*, void const*))
 { return 0; }
 
 void Element::StartDefer(unsigned long*a0)
@@ -1198,13 +1198,13 @@ void Element::_PostEvent(Event*a0, int a1)
 long Element::_PostSourceChange(void)
 { return 0; }
 
-long Element::_PreSourceChange(PropertyInfo const* (__cdecl* a0)(void), int a1, Value*a2, Value*a3)
+long Element::_PreSourceChange(PropertyInfo const* (__cdecl * a0)(void), int a1, Value*a2, Value*a3)
 { return 0; }
 
 long Element::_PreSourceChange(PropertyInfo const*a0, int a1, Value*a2, Value*a3)
 { return 0; }
 
-long Element::_RemoveLocalValue(PropertyInfo const* (__cdecl* a0)(void), bool a1)
+long Element::_RemoveLocalValue(PropertyInfo const* (__cdecl * a0)(void), bool a1)
 { return 0; }
 
 long Element::_RemoveLocalValue(PropertyInfo const*a0, bool a1)
@@ -1228,7 +1228,7 @@ long Element::_SetRelPixRect(PropertyInfo const*a0, int a1, int a2, int a3, int 
 long Element::_SetRelPixValue(PropertyInfo const*a0, int a1)
 { return 0; }
 
-long Element::_SetValue(PropertyInfo const* (__cdecl* a0)(void), int a1, Value*a2, bool a3)
+long Element::_SetValue(PropertyInfo const* (__cdecl * a0)(void), int a1, Value*a2, bool a3)
 { return 0; }
 
 long Element::_SetValue(PropertyInfo const*a0, int a1, Value*a2, bool a3)

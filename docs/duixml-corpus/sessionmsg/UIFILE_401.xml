@@ -1,0 +1,16 @@
+<!--
+  source: %SYSTEMROOT%\System32\sessionmsg.exe
+  resource: UIFILE / "401" / lang 1033
+  size: 314 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="DialogStyle">
+<RichText font="resstr(301)"/>
+</style>
+</stylesheets>
+<RDMessageDialog resid="main" layout="filllayout()" sheet="DialogStyle">
+<RichText id="atom(idContent)" contentalign="wrapleft" accessible="true" accrole="statictext"/>
+</RDMessageDialog>
+</duixml>

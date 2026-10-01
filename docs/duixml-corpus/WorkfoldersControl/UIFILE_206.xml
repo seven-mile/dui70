@@ -1,0 +1,354 @@
+<!--
+  source: %SYSTEMROOT%\System32\WorkfoldersControl.dll
+  resource: UIFILE / "206" / lang 1033
+  size: 18363 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+<style resid="expando_style">
+<AccessibleButton accessible="true"/>
+<Element background="argb(0,0,0,0)" contentalign="endellipsis" overhang="false"/>
+<Viewer background="argb(0,0,0,0)"/>
+<Button contentalign="endellipsis" accessible="true"/>
+<if class="expando_button">
+<Button height="themeable(gtmet(TaskDialog,13,0,2417),'21rp')" width="themeable(gtmet(TaskDialog,13,0,2416),'19rp')" margin="themeable(gtmar(TaskDialog,20,0,3602),rect(0rp,0rp,10rp,0rp))"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+<if selected="true">
+<Button background="themeable(dtb(TaskDialog,13,4),dfc(3,0x0000))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog,13,5),dfc(3,0x0000))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog,13,6),dfc(3,0x0000))"/>
+</if>
+</if>
+<if selected="false">
+<Button background="themeable(dtb(TaskDialog,13,1),dfc(3,0x0001))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog,13,2),dfc(3,0x0001))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog,13,3),dfc(3,0x0001))"/>
+</if>
+</if>
+</if>
+<if class="expando_list_button">
+<Button height="themeable(gtmet(TaskDialog, 13, 0, 2417), '21rp')" width="themeable(gtmet(TaskDialog, 13, 0, 2416), '19rp')"/>
+<if selected="false">
+<button background="dtb(Explorer::TreeView, 2, 1)"/>
+<if mousefocused="true">
+<button background="dtb(Explorer::TreeView, 4, 1)"/>
+</if>
+<if pressed="true">
+<button background="dtb(Explorer::TreeView, 4, 1)"/>
+</if>
+</if>
+<if selected="true">
+<button background="dtb(Explorer::TreeView, 2, 2)"/>
+<if mousefocused="true">
+<button background="dtb(Explorer::TreeView, 4, 2)"/>
+</if>
+<if pressed="true">
+<button background="dtb(Explorer::TreeView, 4, 2)"/>
+</if>
+</if>
+</if>
+<if class="expando_title">
+<Element font="gtf(CONTROLPANELSTYLE,5,0)" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)"/>
+</if>
+<if class="expando_label">
+<Element font="gtf(CONTROLPANELSTYLE, 9, 0)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)"/>
+</if>
+<if class="expando_gradient">
+<Element width="0rp"/>
+</if>
+<if class="green_gradient">
+<Element width="21rp" background="gradient(rgb(22,118,20),rgb(66,179,62),1)"/>
+</if>
+<if class="green_gradient_hc">
+<Element width="21rp" background="activecaption"/>
+</if>
+<if class="yellow_gradient">
+<Element width="21rp" background="themeable(gradient(rgb(242,177,0),rgb(255,206,73),0), activecaption)"/>
+</if>
+<if class="yellow_gradient_hc">
+<Element width="21rp" background="window"/>
+</if>
+<if class="red_gradient">
+<Element width="21rp" background="gradient(rgb(172,1,0),rgb(222,1,0),1)"/>
+</if>
+<if class="red_gradient_hc">
+<Element width="21rp" background="activecaption"/>
+</if>
+<if class="blue_gradient">
+<Element width="21rp" background="themeable(gradient(rgb(7,63,110),rgb(20,120,153),1), window)"/>
+</if>
+<if class="blue_gradient_hc">
+<Element width="21rp" background="window"/>
+</if>
+</style>
+<style resid="capacity_style">
+<Element contentalign="endellipsis" overhang="false"/>
+<if class="capacity_size">
+<Element font="resstr(864)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="capacity_label">
+<Element font="resstr(865)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" accessible="true" accRole="statictext"/>
+</if>
+</style>
+</stylesheets>
+<Element resid="StatusElementMacro" layout="borderlayout()">
+<StatusElement layoutpos="top" layout="borderlayout()" sheet="cp_style" id="atom(StatusElement)">
+<Element layoutpos="top" layout="borderlayout()">
+<Element layoutpos="top" padding="rect(27rp,9rp,27rp,9rp)" class="cp_content_text" id="atom(StatusDescription)"/>
+<Element layout="flowlayout()" layoutpos="top" padding="rect(27rp,0rp,27rp,9rp)" id="atom(ApplyPolicies)">
+<Button class="cp_nav_img" padding="rect(0rp,0rp,6rp,0rp)" active="inactive" accessible="true" accrole="graphic" accname="Administrative privileges required icon" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))"/>
+<Button class="cp_help_link" id="atom(ApplyPoliciesButton)" content="resstr(845)"/>
+</Element>
+<Element layoutpos="top" width="600rp" class="cp_content_divider_line"/>
+</Element>
+<Element layoutpos="top" padding="rect(27rp,14rp,27rp,9rp)" layout="tablelayout(0,0,
+0,0,-50,
+0,0,-50)">
+<Element class="cp_content_text" id="atom(GhostingPolicyHeading)" content="resstr(869)"/>
+<CCCheckBox id="atom(GhostingCheckbox)" content="resstr(870)"/>
+</Element>
+<Element layoutpos="top" padding="rect(27rp,9rp,27rp,0rp)" layout="tablelayout(0,0,
+0,0,-50,
+0,0,-50)">
+<Element class="cp_content_text" id="atom(MeteredHeading)" content="resstr(848)"/>
+<CCCheckBox id="atom(MeteredCheckboxMetered)" content="resstr(849)"/>
+</Element>
+<Element layoutpos="top" padding="rect(27rp,4rp,27rp,0rp)" layout="tablelayout(0,0,
+0,0,-50,
+0,0,-50)">
+<Element/>
+<CCCheckBox id="atom(MeteredCheckboxRoaming)" content="resstr(850)"/>
+</Element>
+<Element layoutpos="top" padding="rect(27rp,14rp,27rp,9rp)" layout="tablelayout(0,0,
+0,0,-50,
+0,0,-50)">
+<Element class="cp_content_text" id="atom(ItAdminHeading)" content="resstr(846)"/>
+<Button class="cp_help_link" content="resstr(847)" id="atom(ItAdminButton)"/>
+</Element>
+<Element layoutpos="top" padding="rect(27rp,14rp,27rp,9rp)" layout="tablelayout(0,0,
+0,0,-50,
+0,0,-50)">
+<Element class="cp_content_text" id="atom(AboutDevicesHeading)" content="resstr(867)"/>
+<Button class="cp_help_link" content="resstr(868)" id="atom(AboutDevicesButton)"/>
+</Element>
+</StatusElement>
+</Element>
+<Element resid="StatusExpandoMacro" layout="borderlayout()">
+<Status_Expando layoutpos="top" layout="borderlayout()" sheet="cp_style" id="atom(Status_Expando)">
+<Expando layoutpos="top" layout="borderlayout()" accessible="true" id="atom(StatusSection_expando)">
+<Macro layoutpos="top" expand="ExpandoBar" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+<Element layoutpos="top" layout="borderlayout()" id="atom(clipper)">
+<Element layoutpos="top" layout="borderlayout()" borderthickness="rect(1rp,0rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)">
+<Macro layoutpos="top" expand="StatusElementMacro"/>
+</Element>
+</Element>
+</Expando>
+</Status_Expando>
+</Element>
+<Element resid="ListElementMacro" layout="borderlayout()">
+<ListElement layoutpos="top" layout="borderlayout()" sheet="cp_style" id="atom(ListElement)">
+<Element layoutpos="top" layout="borderlayout()"> 
+<CCListViewEx id="atom(ErrorFileListView)" layoutpos="top" height="200rp" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)" accessible="true" accrole="list"/>
+<CCPushButton layoutpos="right" margin="rect(0rp,7rp,0rp,0rp)" content="resstr(863)" id="atom(ErrorFileButton)" shortcut="auto" accessible="true"/>
+</Element>
+</ListElement>
+</Element>
+<Element resid="ListExpandoMacro" layout="borderlayout()">
+<List_Expando layoutpos="top" layout="borderlayout()" sheet="cp_style" id="atom(List_Expando)">
+<Expando layoutpos="top" layout="borderlayout()" accessible="true" id="atom(ListSection_expando)">
+<Macro layoutpos="top" expand="ExpandoBar" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+<Element layoutpos="top" layout="borderlayout()" id="atom(clipper)">
+<Element layoutpos="top" layout="borderlayout()" padding="rect(9rp,9rp,9rp,9rp)" borderthickness="rect(1rp,0rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)">
+<Macro layoutpos="top" margin="rect(0rp,11rp,0rp,0rp)" expand="ListElementMacro"/>
+</Element>
+</Element>
+</Expando>
+</List_Expando>
+</Element>
+<Element resid="PageHeader" layout="borderlayout()" sheet="cp_style">
+<Element layoutpos="top" padding="rect(0rp,18rp,0rp,0rp)" class="cp_content_instruction" id="atom(PageHeaderTitle)"/>
+</Element>
+<Element resid="PageFooter" layout="borderlayout()" sheet="cp_style">
+<Element layoutpos="bottom" layout="flowlayout(0,2,2)" class="cp_command_sink">
+<Element layout="flowlayout(0,2,1)" class="cp_command_button_box">
+<Viewer>
+<CCPushButton id="atom(PageFooterOkay)" content="resstr(21)" shortcut="auto" accessible="true"/>
+</Viewer>
+<Viewer margin="rect(7rp,0rp,0rp,0rp)">
+<CCPushButton id="atom(PageFooterCancel)" content="resstr(22)" shortcut="auto" accessible="true"/>
+</Viewer>
+</Element>
+</Element>
+</Element>
+<Element resid="PageDivider" layout="flowlayout(0,2)" sheet="cp_style">
+<Element class="cp_content_divider_header" id="atom(PageDividerLabel)"/>
+<Element width="600rp" class="cp_content_divider_line"/>
+</Element>
+<Element resid="ExpandoBar" sheet="expando_style" layout="tablelayout(0,0,
+0,0,20rp,
+0,2,-100
+)">
+<Element class="expando_gradient" id="atom(ExpandoBarGradient)" height="30rp"/>
+<AccessibleButton layout="tablelayout(0,0,
+0,0,-80,
+1,0,-20,
+1,0,25)" padding="rect(7rp,4rp,7rp,4rp)" class="expando_bar" id="atom(arrow)" accessible="true" accrole="outlinebutton" accname="Toggle expando state" accdesc="Show or hide the expando.">
+<Element layout="flowlayout()">
+<ModernProgressRing layoutpos="none" margin="rect(11rp,0rp,11rp,0rp)" id="atom(ExpandoBarProgress)" accname="Progress indicator" width="20rp" height="20rp"/>
+<Element margin="rect(11rp,0rp,11rp,0rp)" class="expando_title" id="atom(ExpandoBarTitle)" accessible="true" accrole="statictext"/>
+</Element>
+<Element margin="rect(0rp,0rp,0rp,0rp)" class="expando_title" id="atom(ExpandoBarStatus)"/>
+<Viewer>
+<Button class="expando_button" active="inactive"/>
+</Viewer>
+</AccessibleButton>
+</Element>
+<Element resid="ExpandoLine" layout="borderlayout()" sheet="expando_style">
+<AccessibleButton layoutpos="top" layout="flowlayout(0,2)" padding="rect(3rp,3rp,3rp,3rp)" class="expando_bar" id="atom(arrow)" accrole="pushbutton">
+<Viewer>
+<Button class="expando_list_button" active="inactive"/>
+</Viewer>
+<Element margin="rect(7rp,0rp,0rp,0rp)" class="expando_label" id="atom(ExpandoLineLabel)"/>
+<Element margin="rect(3rp,0rp,3rp,0rp)" width="600rp" height="1rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</AccessibleButton>
+</Element>
+<Element resid="InfoBox" layout="borderlayout()" sheet="cp_style">
+<Element layoutpos="top" padding="rect(7rp,7rp,7rp,7rp)" layout="borderlayout()" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)">
+<Viewer layoutpos="left" layout="borderlayout()">
+<Element layoutpos="top" content="icon(81,16,16,library(imageres.dll))"/>
+</Viewer>
+<Element layoutpos="top" margin="rect(7rp,0rp,0rp,0rp)" class="cp_content_text" id="atom(InfoText)"/>
+</Element>
+</Element>
+<Element resid="WarningBox" layout="borderlayout()" sheet="cp_style">
+<Element layoutpos="top" padding="rect(7rp,7rp,7rp,7rp)" layout="borderlayout()" class="cp_content_banner_box">
+<Viewer layoutpos="left" layout="borderlayout()">
+<Element layoutpos="top" content="icon(84,16,16,library(imageres.dll))"/>
+</Viewer>
+<Element layoutpos="top" margin="rect(7rp,0rp,0rp,0rp)" class="cp_content_text" id="atom(WarningBoxText)"/>
+</Element>
+</Element>
+<GetLocalFolder resid="main" layout="borderlayout()" sheet="cp_style" class="cp_topbox">
+<ScrollViewer layoutpos="client" sheet="common" xscrollable="false">
+<Element layout="flowlayout(0,0,2)" sheet="cp_style" class="cp_spoke_frame">
+<FocusIndicator id="atom(FocusIndicator)" firsttabtarget="atom(PageFooterOkay)"/>
+<Element layoutpos="top" layout="borderlayout()" class="cp_content_pane" id="atom(ContentPane)">
+<Macro layoutpos="top" expand="PageHeader">
+<Bind connect="PageHeaderTitle" content="resstr(603)"/>
+</Macro>
+<Element layoutpos="top" margin="rect(0rp,7rp,0rp,0rp)" class="cp_content_text" content="resstr(604)"/>
+<Element layoutpos="top" margin="rect(0rp,40rp,0rp,0rp)" class="cp_content_text" content="resstr(605)"/>
+<Element layoutpos="top" margin="rect(0rp,14rp,0rp,0rp)" id="atom(ChosenUserFolder)" class="cp_content_text" content="resstr(606)"/>
+<Element layoutpos="top" margin="rect(0rp,7rp,0rp,0rp)" layout="borderlayout()">
+<CCPushButton layoutpos="left" margin="rect(0rp,14rp,0rp,0rp)" width="40rp" id="atom(ChangeFolderButton)" content="resstr(607)" shortcut="auto" accessible="true"/>
+</Element>
+<CCCheckBox layoutpos="top" margin="rect(0rp,14rp,0rp,0rp)" class="cp_content_text" id="atom(EnableGhostingCheckbox)" content="resstr(611)" shortcut="auto" accessible="true"/>
+</Element>
+</Element>
+</ScrollViewer>
+<Macro layoutpos="bottom" expand="PageFooter">
+<Bind connect="PageFooterOkay" content="resstr(608)"/>
+</Macro>
+</GetLocalFolder>
+</duixml>

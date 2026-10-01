@@ -11,25 +11,14 @@
 
 namespace DirectUI
 {
+    class Element;
     class Value;
-    class DUIXmlParser;
-    class HWNDElement;
-    class NativeHWNDHost;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class TouchCheckBox;
-    class XProvider;
 
     class TouchButton
         : public Element
     {
     public:
-        enum ClickDevice
-        {
-            ClickDevice_None = 0,
-        };
+        enum ClickDevice { ClickDevice_None = 0 };
 
         TouchButton(void);
         virtual ~TouchButton(void);
@@ -72,19 +61,6 @@ namespace DirectUI
         long SetTreatRightMouseButtonAsLeft(bool);
         static PropertyInfo const* ShowKeyFocusProp(void);
         static PropertyInfo const* TreatRightMouseButtonAsLeftProp(void);
-
-        private:
-        bool _FinishClick(TouchButton::ClickDevice, unsigned int, unsigned int, tagPOINT*);
-        void _OnKeyboardEvent(KeyboardEvent*);
-        void _OnMouseEvent(MouseEvent*);
-        void _OnPointerEvent(PointerEvent*);
-        bool _StartClick(TouchButton::ClickDevice);
-        void _SyncDefaultEnterHandling(TouchHWNDElement*);
-        bool _TriggerRightClick(unsigned int, tagPOINT*);
-        void _UpdateAccState(bool, bool);
-        bool _UpdateClick(TouchButton::ClickDevice, bool);
-        static UID _UpdateFocusVisibility(void);
-        static IClassInfo* s_pClassInfo;
     };
 
 } // namespace DirectUI

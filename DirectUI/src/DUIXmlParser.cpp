@@ -10,10 +10,10 @@ namespace DirectUI
 {
 
 DUIXmlParser::DUIXmlParser(DUIXmlParser const&a0)
-{}
+{ }
 
 DUIXmlParser::DUIXmlParser(void)
-{}
+{ }
 
 DUIXmlParser::~DUIXmlParser(void)
 {}
@@ -27,13 +27,13 @@ long DUIXmlParser::AddRulesToStyleSheet(IXmlReader*a0, StyleSheet*a1, unsigned s
 long DUIXmlParser::CopySheets(DynamicArray<class Value*, 0>**a0)
 { return 0; }
 
-long DUIXmlParser::Create(DUIXmlParser**a0, Value* (__cdecl* a1)(unsigned short const*, void*), void*a2, void (__cdecl* a3)(unsigned short const*, unsigned short const*, int, void*), void*a4)
+long DUIXmlParser::Create(DUIXmlParser**a0, Value* (__cdecl * a1)(unsigned short const*, void*), void*a2, void (__cdecl * a3)(unsigned short const*, unsigned short const*, int, void*), void*a4)
 { return 0; }
 
 long DUIXmlParser::CreateElement(unsigned short const*a0, Element*a1, Element*a2, unsigned long*a3, Element**a4)
 { return 0; }
 
-long DUIXmlParser::CreateLayout(ParserTools::ExprNode const*a0, long (__cdecl* a1)(int, int*, Value**))
+long DUIXmlParser::CreateLayout(ParserTools::ExprNode const*a0, long (__cdecl * a1)(int, int*, Value**))
 { return 0; }
 
 long DUIXmlParser::CreateStyleSheet(IXmlReader*a0, unsigned short const*a1, StyleSheet**a2)
@@ -54,7 +54,7 @@ void DUIXmlParser::Destroy(void)
 void DUIXmlParser::EnableDesignMode(void)
 {}
 
-auto DUIXmlParser::GetGetSheetCallback(void) -> Value* (__cdecl*)(unsigned short const*, void*)
+auto DUIXmlParser::GetGetSheetCallback(void) -> Value* (__cdecl *)(unsigned short const*, void*)
 { return nullptr; }
 
 HINSTANCE__* DUIXmlParser::GetHInstance(void)
@@ -291,13 +291,13 @@ void DUIXmlParser::SetDefaultHInstance(HINSTANCE__*a0)
 void DUIXmlParser::SetDynamicScaling(DynamicScaleParsing a0)
 {}
 
-void DUIXmlParser::SetGetSheetCallback(Value* (__cdecl* a0)(unsigned short const*, void*), void*a1)
+void DUIXmlParser::SetGetSheetCallback(Value* (__cdecl * a0)(unsigned short const*, void*), void*a1)
 {}
 
 void DUIXmlParser::SetOverrideScaleFactor(float a0)
 {}
 
-void DUIXmlParser::SetParseErrorCallback(void (__cdecl* a0)(unsigned short const*, unsigned short const*, int, void*), void*a1)
+void DUIXmlParser::SetParseErrorCallback(void (__cdecl * a0)(unsigned short const*, unsigned short const*, int, void*), void*a1)
 {}
 
 void DUIXmlParser::SetParseState(_DUI_PARSE_STATE a0)
@@ -315,7 +315,7 @@ void DUIXmlParser::SetScaleFactor(float a0)
 void DUIXmlParser::SetUnavailableIcon(HICON__*a0)
 {}
 
-void DUIXmlParser::SetUnknownAttrCallback(bool (__cdecl* a0)(unsigned short const*, void*), void*a1)
+void DUIXmlParser::SetUnknownAttrCallback(bool (__cdecl * a0)(unsigned short const*, void*), void*a1)
 {}
 
 long DUIXmlParser::SetXML(unsigned short const*a0, HINSTANCE__*a1, HINSTANCE__*a2)

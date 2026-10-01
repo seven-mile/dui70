@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 PushButton::PushButton(PushButton&&a0)
-{}
+{ }
 
 PushButton::PushButton(PushButton const&a0)
-{}
+{ }
 
 PushButton::PushButton(void)
-{}
+{ }
 
 PushButton::~PushButton(void)
 {}

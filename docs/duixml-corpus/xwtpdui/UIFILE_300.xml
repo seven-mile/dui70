@@ -1,0 +1,128 @@
+<!--
+  source: %SYSTEMROOT%\System32\xwtpdui.dll
+  resource: UIFILE / "300" / lang 1033
+  size: 5324 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+    <element resid="xwtpdui.main"
+             ID="atom(xwtpdui.dialogroot)"
+             Layout="borderlayout()">
+
+        <element ID="atom(xwtpdui.header)"
+                 Layout="flowlayout()"
+                 Sheet="xwtpdui.header" >
+            <element ID="atom(xwtpdui.headertitle)" />
+        </element>
+
+        <element ID="atom(xwtpdui.content)" 
+                 Layout="filllayout()"
+                 Sheet="xwtpdui.content"
+                 >
+            <browser ID="atom(xwtpdui.contentarea)" 
+                     Layout="filllayout()">
+                <pages ID="atom(Panes)"
+                       Layout="filllayout()"
+                       LayoutPos="client"/>
+            </browser>
+        </element>
+
+        <element ID="atom(xwtpdui.commandarea)" 
+                 Layout="borderlayout()"
+                 Sheet="xwtpdui.commandarea" >
+            <element ID="atom(xwtpdui.commandareapadding)" 
+                     Layout="borderlayout()" >
+                <element Layout="flowlayout()" 
+                         LayoutPos="right">
+                    <!--
+                     In order for DUI to calculate CCpushbutton size, the
+                     CCPushButton seems to need to have a content at initialization.
+                     These values will be changed later, however.
+                     -->
+                    <!--@SUPPRESS_ATTRIBUTES loc.id-->
+                    <CCpushbutton ID="atom(xwtpdui.backbutton)"
+                                  Content="&amp;Back"/>
+                    <!--@SUPPRESS_ATTRIBUTES loc.id-->
+                    <CCpushbutton ID="atom(xwtpdui.nextbutton)"
+                                  Content="&amp;Next"
+                                  Selected="true"/>
+                    <!--@SUPPRESS_ATTRIBUTES loc.id-->
+                    <CCpushbutton ID="atom(xwtpdui.finishbutton)"
+                                  Content="&amp;Finish"/>
+                    <!--@SUPPRESS_ATTRIBUTES loc.id-->
+                    <CCpushbutton ID="atom(xwtpdui.cancelbutton)"
+                                  Content="Cancel"
+                                  Shortcut="none"  />
+                </element>
+            </element>
+        </element>
+
+    </element>
+
+    <!-- Dummy page as default template for dialog handler only pages --> 
+    <element resid="xwtpdui.dummypage"
+             layout="filllayout()"
+             layoutpos="client"
+             />
+
+    <stylesheets>
+
+        <style resid="xwtpdui.header">
+            <if id="atom(xwtpdui.header)">
+                <element Background     = "themeable(dtb(AeroWizard, 2, 0), threedface)"
+                         BorderColor    = "threedshadow"
+                         BorderThickness= "themeable(rect(0rp, 0rp, 0rp, 0rp), rect(1rp, 1rp, 1rp, 0rp))"
+                         LayoutPos      = "top"
+                         Padding        = "themeable(rect(10rp, 15rp, 10rp, 15rp), rect(10rp, 15rp, 10rp, 15rp))" />
+
+                <if selected="true">
+                    <element Padding    = "themeable(rect(5rp, 0rp, 5rp, 0rp), rect(5rp, 0rp, 5rp, 0rp))" />
+                </if>
+
+            </if>
+
+            <if id="atom(xwtpdui.headertitle)">
+                <element Background     = "argb(0, 0, 0, 0)"
+                         ContentAlign   = "WrapLeft"
+                         Font           = "gtf(AeroWizardStyle, 2, 0)"
+                         Foreground     = "gtc(AeroWizardStyle, 2, 0, 3803)"
+                         LayoutPos      = "top"
+                         Overhang       = "false"
+                         Padding        = "rect(0rp, 0rp, 0rp, 0rp)" />
+            </if>
+        </style>
+
+        <style resid="xwtpdui.content">
+            <if id="atom(xwtpdui.content)">
+                <element Background     = "themeable(dtb(AeroWizard, 3, 0), threedface)"
+                         BorderColor    = "threedshadow"
+                         BorderThickness= "themeable(rect(0rp, 0rp, 0rp, 0rp), rect(1rp, 0rp, 1rp, 1rp))"
+                         LayoutPos      = "client"
+                         Padding        = "themeable(rect(10rp, 5rp, 10rp, 15rp), rect(10rp, 5rp, 10rp, 15rp))" />
+
+                <if selected="true">
+                    <element Padding    = "themeable(rect(0rp, 0rp, 0rp, 0rp), rect(0rp, 0rp, 0rp, 0rp))" />
+                </if>
+            </if>
+        </style>
+
+        <style resid="xwtpdui.commandarea">
+            <if id="atom(xwtpdui.commandarea)">
+                <element Background     = "themeable(dtb(AeroWizard, 4, 0), threedface)"
+                         LayoutPos      = "bottom"
+                         Padding        = "themeable(gtmar(AeroWizard, 4, 0, 3602), rect(10rp, 9rp, 10rp, 9rp))" />
+            </if>
+
+            <CCpushbutton Font          = "gtf(AeroWizardStyle, 5, 0)"
+                          Height        = "themeable(gtmet(AeroWizard, 5, 0, 2417), 23rp)"
+                          Margin        = "rect(7rp, 0rp, 0rp, 0rp)" />
+
+            <if id="atom(xwtpdui.commandareapadding)">
+                <element Background     = "argb(0, 0, 0, 0)"
+                         LayoutPos      = "top" />
+            </if>
+        </style>
+
+    </stylesheets>
+
+</duixml>

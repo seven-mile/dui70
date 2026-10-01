@@ -11,10 +11,10 @@ namespace DirectUI
 {
 
 Button::Button(Button const&a0)
-{}
+{ }
 
 Button::Button(void)
-{}
+{ }
 
 Button::~Button(void)
 {}

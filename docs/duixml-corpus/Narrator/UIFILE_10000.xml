@@ -1,0 +1,47 @@
+<!--
+  source: %SYSTEMROOT%\System32\Narrator.exe
+  resource: UIFILE / "10000" / lang 1033
+  size: 2525 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="main" layout="borderlayout()" layoutpos="client" sheet="s" accessible="true">
+<element layout="borderlayout()" layoutpos="top" margin="rect(12rp,5rp,12rp,5rp)">
+<SearchBox id="atom(Search)" active="keyboard|mouse" absorbsshortcut="true" borderthickness="rect(0,0,0,0)" themedborder="true" height="28rp" accessible="true" accname="resstr(1309)" margin="rect(0rp,0rp,10rp,0rp)" font="CaptionFont;120%;Normal;None"/>
+</element>
+<scrollviewer id="atom(listscrollviewer)" layoutpos="client" sheet="common" xscrollable="false" accname="resstr(1309)" accessible="true" accrole="list">
+<SearchList id="atom(listviewer)" layoutpos="client" sheet="s" layout="borderlayout()" accessible="true">
+</SearchList>
+</scrollviewer>
+<element layout="borderlayout()" layoutpos="bottom">
+<element layout="flowlayout(0,0,0,2)" layoutpos="top" padding="rect(0,10rp,0,10rp)">
+<element content="resstr(1600)" layoutpos="left" class="Content"/>
+<ComboBoxEx id="atom(scoping)" layoutpos="left" width="350rp" accessible="true" accname="resstr(1602)" sheet="common" font="CaptionFont;120%;Normal;None"/>
+</element>
+<CCPushButton content="resstr(1603)" layoutpos="client" visible="true" id="atom(closebutton)" active="keyboard|mouse" font="CaptionFont;120%;Normal;None"/>
+</element>
+</element>
+<stylesheets>
+<style resid="s">
+<element background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<if class="subentry">
+<element accrole="text" font="CaptionFont;120%;Normal;None" background="argb(0,0,0,0)" contentalign="wrapleft"/>
+</if>
+<if class="entry">
+<SearchListEntry layoutpos="top" accrole="listitem" accessible="true" accdefaction="click" foreground="buttontext" background="window" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)" borderthickness="rect(1rp,1rp,1rp,1rp)" padding="rect(12rp,5rp,12rp,5rp)"/>
+<if keyfocused="true">
+<SearchListEntry contentalign="wrapleft | focusrect" foreground="highlighttext" background="highlight" font="CaptionFont;120%;Normal;None"/>
+</if>
+<if mousefocused="true">
+<SearchListEntry cursor="hand" foreground="highlighttext" background="highlight" font="CaptionFont;120%;Normal;None"/>
+</if>
+</if>
+<if class="Content">
+<element font="CaptionFont;120%;Normal;None" background="argb(0,0,0,0)" contentalign="wrapleft"/>
+</if>
+<if class="title">
+<element accessible="true" accrole="statictext" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" layoutpos="top" contentalign="wrapleft"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

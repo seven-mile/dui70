@@ -1,0 +1,58 @@
+<!--
+  source: %SYSTEMROOT%\System32\DXP.dll
+  resource: UIFILE / "901" / lang 1033
+  size: 2558 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="FolderLayout" layout="borderlayout()" sheet="DxpLayoutStyle">
+<DeviceBrandingModule id="atom(DeviceBrandingModuleContainer)" layoutpos="top" background="argb(0,0,0,0)"/>
+<WebBrowserModule id="atom(idWebBrowser)" layoutpos="Client" layout="BorderLayout()" HostedSiteTask="true"/>
+</element>
+<element resid="WebBrowserStatus" id="atom(WebBrowserStatus)" height="23rp" layout="borderlayout()" layoutpos="bottom" foreground="WindowText" background="buttonface">
+<element layoutpos="top" height="1rp" background="threedshadow"/>
+<element layoutpos="top" height="1rp" background="threedhighlight"/>
+<element layoutpos="top" height="2rp" background="buttonface"/>
+<element layoutpos="bottom" height="2rp" background="buttonface"/>
+<button id="atom(idSecurityInfoButton)" padding="rect(4rp,0,5rp,1rp)" tooltip="true" layoutpos="right" sheet="AccessibleButtonStyle" accessible="true" accname="resstr(2225,library(dxp.dll))" accdesc="resstr(2215,library(dxp.dll))" content="icon(103,'16rp','16rp',1,1,library(dxp.dll))" enabled="false"/>
+<element layoutpos="client" layout="tablelayout(0,100,
+0,0,-50,
+0,0, -10,
+0,0, -40)">
+<element layout="tablelayout(0,0,
+0,0, -100,
+1,0, 5rp)">
+<element id="atom(idsProgressInfoText)" padding="rect(6rp,0,0,0)" accessible="true" accrole="StaticText" accname="resstr(2226,library(dxp.dll))" accdesc="resstr(2216,library(dxp.dll))"/>
+<element height="23rp" width="1rp" background="threedshadow"/>
+</element>
+<element layout="borderlayout()">
+<element layoutpos="left" layout="borderlayout()" id="atom(idSecurityInfoProgressHost)">
+<CCProgressBar id="atom(idSecurityInfoProgress)" padding="rect(4rp,0,4rp,1rp)" layoutpos="left"/>
+</element>
+</element>
+<element layout="borderlayout()">
+<element layoutpos="left" height="23rp" width="1rp" background="threedshadow"/>
+<element id="atom(idSecurityInfoText)" padding="rect(4rp,0,0,0)" layoutpos="left" accessible="true" accrole="StaticText" accname="resstr(2227,library(dxp.dll))"/>
+</element>
+</element>
+</element>
+<stylesheets>
+<style resid="AccessibleButtonStyle">
+<if mousefocused="true">
+<button cursor="hand"/>
+</if>
+<button background="argb(0,0,0,0)"/>
+<if enabled="true">
+<if mousefocused="true">
+<button background="themeable(dtb(explorer::listview, 1, 3), buttonface)"/>
+</if>
+<if KeyFocused="true">
+<button background="themeable(dtb(explorer::listview, 1, 3), buttonface)"/>
+</if>
+</if>
+</style> 
+<style resid="DxpLayoutStyle">
+<element font="gtf(TEXTSTYLE, 4, 0)"/>
+</style>
+</stylesheets>
+</duixml>

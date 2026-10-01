@@ -1,0 +1,27 @@
+<!--
+  source: %SYSTEMROOT%\System32\InputSwitch.dll
+  resource: UIFILE / "104" / lang 1033
+  size: 1537 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="ConsentUXFlyout" id="atom(ConsentUXFlyout)" layout="borderlayout()" sheet="ConsentUXStyle" accessible="true" accrole="pane" behaviors="PVL::AnimationTrap()" accname="resstr(2202)">
+<RichText id="atom(HeadText)" active="inactive" accessible="true" accrole="statictext" layoutpos="top" padding="rect(20rp,25rp,20rp,0rp)" margin="rect(0rp,0rp,0rp,20rp)" content="resstr(2202)" accname="resstr(2202)"/>
+<TouchScrollViewer id="atom(ConsentUXListScrollViewer)" AllowArrowOut="true" layoutpos="client" InteractionMode="TranslateY|Inertia" YScrollable="false" XScrollable="false" xbarvisibility="never" YBarVisibility="AsNeeded" accessible="true" accrole="pane" active="mouse|pointer">
+<element id="atom(InputMethodsListContainer)" behaviors="PVL::ImplicitAnimation()" layoutpos="client" layout="borderlayout()" active="pointer" accessible="true" accrole="list">
+<ItemList id="atom(InputMethodsList)" behaviors="PVL::ImplicitAnimation()" active="pointer" layoutpos="none" accrole="list" accessible="true" layout="gridlayout(-1, 1)"/>
+</element>
+</TouchScrollViewer>
+</element>
+<stylesheets>
+<style resid="ConsentUXStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if id="atom(ConsentUXFlyout)">
+<element background="ImmersiveLightBackground" width="364rp"/>
+</if>
+<RichText foreground="ImmersiveLightPrimaryText" font="resstr(2203)" contentalign="topleft | wrapleft | endellipsis"/>
+<if class="ScrollViewer">
+<viewer layoutpos="ninefill"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

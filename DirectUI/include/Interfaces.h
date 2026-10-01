@@ -145,21 +145,8 @@ namespace DirectUI
         virtual void AssertPIZeroRef(void) = 0;                       // 17
     };
 
-    // IXProviderCP / IXElementCP: connection-point interfaces used by
-    // XProvider (vtable slot order from the DirectUI interfaces).
-    class IXProviderCP
-    {
-    public:
-        virtual long CreateDUICP(HWNDElement*, HWND, HWND, Element**, DUIXmlParser**) = 0;
-        virtual long CreateParserCP(DUIXmlParser**) = 0;
-        virtual void DestroyCP(void) = 0;
-    };
-
-    class IXElementCP
-    {
-    public:
-        virtual HWND GetNotificationSinkHWND(void) = 0;
-    };
+    // IXProviderCP / IXElementCP are REAL exported classes now --
+    // see their generated headers (IXProviderCP.h / IXElementCP.h).
 
     // IXProvider: the abstract interface XProvider implements.
     // Slot order: IUnknown first (QI/AddRef/Release), then the

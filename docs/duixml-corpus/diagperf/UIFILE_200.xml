@@ -1,0 +1,120 @@
+<!--
+  source: %SYSTEMROOT%\System32\diagperf.dll
+  resource: UIFILE / "200" / lang 1033
+  size: 5883 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="DialogSS">
+<if class="resolver_title" >
+<element 
+font="gtf(TEXTSTYLE, 3, 0)" 
+contentalign="wrapleft" 
+accessible="true" 
+accRole="statictext"
+/>
+</if>
+<if class="resolver_text" >
+<element 
+font="gtf(TEXTSTYLE, 4, 0)" 
+contentalign="wrapleft" 
+accessible="true" 
+accRole="statictext"
+/>
+</if>
+</style>
+</stylesheets>
+<element resid="main" sheet="DialogSS" layout="borderLayout()" accessible="true" accrole="grouping" accname="PerfRootcauses">
+<element class="atom(ItemTile)" layout="verticalflowlayout(0,0,0,0)" layoutpos="client" margin="rect(10rp,0,0,0)">
+<element id="atom(Rootcause1)" layout="borderLayout()" visible="false" layoutpos="none" padding="rect(0,10rp,0,0)" accessible="true" accrole="grouping" accname="Rootcause">
+<element id="atom(Image1)" layoutpos="left" padding="rect(70rp,5rp,10rp,5rp)" />
+<element layout="verticalflowlayout(0,0,0,0)" layoutpos="client" >
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)">
+<element class="resolver_title" content="resstr(180)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(FriendlyName1)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)">
+<element class="resolver_title" content="resstr(181)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(Name1)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(182)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(CompanyName1)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" id="atom(DeviceInfo1)" visible="false" layoutpos="none" >
+<element class="resolver_title" content="resstr(183)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DeviceName1)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(184)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DateReported1)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(185)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(TotalTime1)" />
+</element>
+</element>
+</element>
+<element id="atom(Rootcause2)" layout="borderLayout()" visible="false"  layoutpos="none" padding="rect(0,13rp,0,0)" accessible="true" accrole="grouping" accname="Rootcause">
+<element id="atom(Image2)" layoutpos="left" padding="rect(70rp,5rp,10rp,5rp)" />
+<element layout="verticalflowlayout(0,0,0,0)" layoutpos="client" >
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)">
+<element class="resolver_title" content="resstr(180)"  />
+<element class="resolver_text"  content="resstr(186)" id="atom(FriendlyName2)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(181)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(Name2)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(182)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(CompanyName2)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)"  id="atom(DeviceInfo2)" visible="false" layoutpos="none" >
+<element class="resolver_title" content="resstr(183)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DeviceName2)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(184)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DateReported2)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(185)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(TotalTime2)" />
+</element>
+</element>
+</element>
+<element id="atom(Rootcause3)" layout="borderLayout()" visible="false" layoutpos="none"  padding="rect(0,13rp,0,0)" accessible="true" accrole="grouping" accname="Rootcause">
+<element id="atom(Image3)" layoutpos="left" padding="rect(70rp,5rp,10rp,5rp)" />
+<element layout="verticalflowlayout(0,0,0,0)" layoutpos="client" >
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)">
+<element class="resolver_title" content="resstr(180)"  />
+<element class="resolver_text"  content="resstr(186)" id="atom(FriendlyName3)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(181)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(Name3)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(182)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(CompanyName3)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)"  id="atom(DeviceInfo3)" visible="false" layoutpos="none" >
+<element class="resolver_title" content="resstr(183)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DeviceName3)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(184)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(DateReported3)" />
+</element>
+<element layout="tablelayout(0,0, 0, 0, 90, 0, 0,-100)" >
+<element class="resolver_title" content="resstr(185)" />
+<element class="resolver_text"  content="resstr(186)" id="atom(TotalTime3)" />
+</element> 
+</element>
+</element>
+<element class="resolver_text"  id="atom(SubInstruction)"  content="SubInstruction goes here " padding="rect(0,15rp,0,0)" />
+</element>
+</element>
+</duixml>

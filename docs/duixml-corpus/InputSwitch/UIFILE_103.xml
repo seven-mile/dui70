@@ -1,0 +1,43 @@
+<!--
+  source: %SYSTEMROOT%\System32\InputSwitch.dll
+  resource: UIFILE / "103" / lang 1033
+  size: 2061 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="main" layout="BorderLayout()" accessible="true">
+<element id="atom(TransparentRoot)" sheet="TransparentRoot" layoutpos="client" layout="BorderLayout()">
+<touchbutton resid="LangIndicator" id="atom(LangIndicator)" sheet="Indicator_Style" layout="borderlayout()" active="mouse|pointer|keyboard|nosyncfocus" accname="resstr(2100)">
+<element id="atom(TextContainer)" sheet="Abbreviation_style" layoutpos="client" layout="VerticalFlowLayout(0,2,2,2)">
+<richtext id="atom(LangName)" accessible="true" accrole="statictext"/>
+<richtext id="atom(KeyboardLayout)" accessible="true" accrole="statictext"/>
+</element>
+<element id="atom(IMEIconContainer)" layoutpos="none" layout="VerticalFlowLayout(0,2,2,2)">
+<element id="atom(IMEIcon)" accessible="true" accrole="statictext"/>
+</element>
+</touchbutton>
+<touchButton resid="IMEModeIndicator" id="atom(IMEModeIndicator)" sheet="Indicator_Style" layout="borderlayout()" active="mouse|pointer|keyboard|nosyncfocus" accname="resstr(2101)">
+<element id="atom(IMEModeIcon)" accessible="true" accrole="statictext" contentalign="middlecenter" layoutpos="client"/>
+</touchButton>
+</element>
+</element>
+<stylesheets>
+<style resid="TransparentRoot">
+<element background="rgb(0, 0, 1)"/>
+</style>
+<style resid="Abbreviation_style">
+<if id="atom(TextContainer)">
+<element font="resstr(2104)"/>
+</if>
+<if id="atom(LangName)">
+<richtext contentalign="middlecenter" font="resstr(2104)" padding="rect(0rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,0rp,0rp)" background="argb(0,0,0,0)"/>
+</if>
+<if id="atom(KeyboardLayout)">
+<richtext contentalign="topcenter" font="resstr(2105)" background="argb(0,0,0,0)" padding="rect(0rp,0rp,0rp,0rp)" width="50rp"/>
+</if>
+</style>
+<style resid="Indicator_Style">
+<touchbutton height="50rp" width="50rp" foreground="ImmersiveControlDarkButtonTextRest" background="ImmersiveControlDarkButtonBackgroundRest" padding="rect(0rp,0rp,0rp,0rp)" accessible="true" tooltip="true" accrole="pushbutton" accdefaction="press"/>
+</style>
+</stylesheets>
+</duixml>

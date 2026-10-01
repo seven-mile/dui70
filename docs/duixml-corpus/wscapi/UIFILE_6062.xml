@@ -1,0 +1,90 @@
+<!--
+  source: %SYSTEMROOT%\System32\wscapi.dll
+  resource: UIFILE / "6062" / lang 1033
+  size: 2213 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="NotificationDialog" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<if class="DialogText">
+<RichText
+background          = "argb(0,0,0,0)"
+contentalign        = "wrapleft | pathellipsis | wordellipsis"
+foreground          = "ImmersiveSaturatedPrimaryText"
+accessible          = "true"
+accrole             = "statictext"
+padding             = "rect(0rp,1rp,0rp,1rp)"
+font                =  "resstr(6027)"
+/>
+</if>     
+<if class="DialogTextHeader">
+<RichText
+background          = "argb(0,0,0,0)"
+contentalign        = "wrapleft | pathellipsis | wordellipsis"
+foreground          = "ImmersiveSaturatedPrimaryText"
+accessible          = "true"
+accrole             = "statictext"
+padding             = "rect(0rp,1rp,0rp,1rp)"
+font                =  "resstr(6057)"
+/>
+</if>     
+</style>
+</stylesheets>
+<element resid="main" 
+layout="verticalflowlayout(0,0,0,0)" 
+active="keyboard" 
+layoutpos="client"
+sheet="NotificationDialog">
+<RichText
+id="atom(NotificationDialog_Descrition_line_1)"
+content="resstr(6046)"
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<Element
+height="20rp"
+/>
+<RichText
+id="atom(NotificationDialog_Header_line_2)"
+content="resstr(6060)"
+class="DialogTextHeader"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<RichText
+id="atom(NotificationDialog_Descrition_line_2)"
+content="resstr(6047)"
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<Element
+height="20rp"
+/>
+<RichText
+id="atom(NotificationDialog_Header_line_3)"
+content="resstr(6061)"
+class="DialogTextHeader"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<RichText
+id="atom(NotificationDialog_Descrition_line_3)"
+content="resstr(6048)"
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<Element
+height="20rp"
+/>
+<touchhyperlink
+id="atom(advancedoptionssyslink)"
+content= "resstr(6043)"
+accessible="true"
+cursor="hand"
+accdesc="Purchase an app online"/>
+</element>
+</duixml>

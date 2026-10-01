@@ -1,0 +1,53 @@
+<!--
+  source: %SYSTEMROOT%\System32\phoneactivate.exe
+  resource: UIFILE / "7001" / lang 1033
+  size: 1391 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="PWL_style" base="ressheet(ImmersiveStyles, library(dui70.dll), dark)">
+<if class="norm_text">
+<RichText
+font="resstr(4002, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_label">
+<RichText
+font="resstr(4000, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_number">
+<RichText
+font="resstr(4001, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_touch_hyper_link">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis"
+accessible="true"
+cursor="hand"
+accdefaction="click"/>
+<if keyfocused="true">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis | focusrect"/>
+</if>
+</if>
+</style>
+</stylesheets>
+<Element resid="Compliance" id="atom(Compliance)" layout="borderlayout()" MinSize ="size(80rp, 490rp)" layoutpos="top">
+<Element layout="flowlayout()" id="atom(ChooseRegion)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Element layoutpos="top" height="40rp"/>
+<Richtext id="atom(ComplianceText)" class ="norm_text" layoutpos ="top" contentalign="wrapleft"/>
+</Element>
+</Element>
+</duixml>

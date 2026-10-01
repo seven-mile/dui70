@@ -1,0 +1,32 @@
+<!--
+  source: %SYSTEMROOT%\System32\RADCUI.dll
+  resource: UIFILE / "2100" / lang 1033
+  size: 1850 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+<element resid="main" id="atom(main)" layout="filllayout()" sheet="SubscribeWizardStyle" padding="rect(0rp, 0rp, 0rp, 96rp)" accessible="true" accrole="pane">
+<element id="atom(DialogMinimumHeightStabilizer)" height="250rp"/>
+<element id="atom(main_page)" layout="borderlayout()" visible="false">
+<TouchEdit2 id="atom(email_input)" layoutpos="top" accessible="true" accrole="text" accname="resstr(15801)" behaviors="Windows.UI.Popups::TouchEditContextMenu()" TextMode="PlainText" PromptText="resstr(15801)" PromptWithCaret="true"/>
+<element layoutpos="client" layout="filllayout()">
+<RichText id="atom(input_example)" content="resstr(15804)" visible="false" accessible="true" accrole="statictext"/>
+<RichText id="atom(status_message)" visible="false" content="resstr(15809)" accessible="true" accrole="statictext"/>
+<element id="atom(progress_pane)" visible="false" layout="borderlayout()">
+<RichText id="atom(progress_info_text)" accessible="true" accrole="statictext" content="resstr(15811)" layoutpos="top"/>
+<ModernProgressBar id="atom(progress_bar)" accessible="true" accrole="progressbar" determinate="false" layoutpos="top"/>
+</element>
+</element>
+</element>
+<RichText id="atom(error_page)" visible="false" content="resstr(TSW_IDS_MESSAGE_TOP_TEXT_SETUP_ERROR)" accessible="true" accrole="statictext"/>
+<RichText id="atom(success_page)" visible="false" content="resstr(15421)" accessible="true" accrole="statictext"/>
+</element>
+<stylesheets>
+<style resid="SubscribeWizardStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<RichText contentalign="topleft|wrapleft|endellipsis" foreground="ImmersiveLightPrimaryText" font="resstr(15812)"/>
+<TouchEdit2 margin="rect(5rp, 5rp, 5rp, 5rp)"/>
+<ModernProgressBar margin="rect(0rp, 30rp, 0rp, 30rp)"/>
+</style>
+</stylesheets>
+</duixml>

@@ -1,0 +1,11 @@
+<!--
+  source: %SYSTEMROOT%\System32\LicensingUI.exe
+  resource: UIFILE / "214" / lang 1033
+  size: 271 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element resid="kernelexpiration" id="atom(kernelexpiration)" layout="borderlayout()"  layoutpos="client">
+<Richtext id="atom(KernelExpirationText)" layoutpos ="top" accessible="true" accRole="statictext" contentalign="wrapleft"/>
+</Element>
+</duixml>

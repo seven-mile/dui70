@@ -1,0 +1,28 @@
+<!--
+  source: %SYSTEMROOT%\System32\DXP.dll
+  resource: UIFILE / "900" / lang 1033
+  size: 1477 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element resid="FolderLayout" layout="borderlayout()" sheet="DxpLayoutStyle">
+<DeviceBrandingModule id="atom(DeviceBrandingModuleContainer)" layoutpos="top" background="argb(0,0,0,0)"/>
+<element id="atom(idViewBorder)" layout="filllayout()" foreground="WindowText" background="Window" layoutpos="client">
+<element id="atom(idDefviewPage)" layout="borderlayout()" background="argb(0,0,0,0)" layoutpos="client" padding="rect(6rp,0,0,0)">
+<Element id="atom(ViewHostContainer)" layoutpos="Client" sheet="genericlayoutstyle" layout="filllayout()">
+<ViewHost id="atom(clientviewhost)" layout="borderlayout()">
+</ViewHost>
+</Element>
+</element>
+<element id="atom(idRevocationPage)" layout="flowlayout()" background="Window" layoutpos="client" visible="false">
+<element layoutpos="top" contentalign="wrapleft" content="resstr(2200,library(dxp.dll))" font="gtf(CONTROLPANELSTYLE,5,0)" foreground="themeable(gtc(CONTROLPANELSTYLE, 5, 0, 3803), highlight)" padding="rect(6rp, 8rp, 6rp, 8rp)" accessible="true" accrole="statictext"/>
+<element layoutpos="top" contentalign="wrapleft" content="resstr(2201,library(dxp.dll))" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="themeable(gtc(CONTROLPANELSTYLE, 6, 0, 3803), buttontext)" padding="rect(5rp, 10rp, 10rp, 10rp)" accessible="true" accrole="statictext"/>
+</element>
+</element>
+</Element>
+<stylesheets>
+<style resid="DxpLayoutStyle">
+<element font="gtf(TEXTSTYLE, 4, 0)"/>
+</style>
+</stylesheets>
+</duixml>

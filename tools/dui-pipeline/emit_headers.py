@@ -63,10 +63,32 @@ DIRECTUI_STRUCT_TYPES = {
     "ThemeChangedEvent": "fwd",
     "UpdateCache": "fwd",
 }
-# extra struct types referenced by the target class set
-EXTRA_STRUCT_TYPES = [
-    "IDialogElement", "IXBaby", "IXElementCP", "IXProviderCP",
-]
+# extra types referenced by the target class set. kind must match the real
+# DLL's mangling (PEAU=struct vs PEAV=class): IXElementCP/IXProviderCP are
+# real-exported connection-point CLASSES (PEAV); the rest are structs.
+EXTRA_FWD_TYPES = {
+    "IXBaby": "struct",
+    "IXElementCP": "class",
+    "IXProviderCP": "class",
+    "IXProvider": "struct",       # abstract consumer iface (Interfaces.h)
+    "CellInfo": "struct",          # TableLayout::GetCellInfo
+    "ElementRuntimeId": "struct",  # EventManager::RaiseChildRemovedEvent
+    "RectangleChange": "struct",   # EventManager::RaiseGeometryEventWorker
+}
+
+# Nested types of generated classes referenced cross-class in signatures:
+# 'DirectUI::Schema::Pattern' (enum) or 'DirectUI::AccessibleButton::
+# ACCESSIBLEROLE' (enum) etc. The HOST class declares them; referencing
+# classes see them qualified. kind: 'enum' | 'struct'
+NESTED_TYPE_HOSTS = {
+    "Schema": {"Pattern": "enum", "Event": "enum", "RoleMap": "struct",
+               "ControlInfo": "struct", "EventInfo": "struct", "EventMap": "struct",
+               "PatternInfo": "struct", "PatternMap": "struct", "PropertyInfo": "struct"},
+    "Surface": {"EType": "enum"},
+    "InvokeHelper": {"InvokeArgs": "struct"},
+    "TouchButton": {"ClickDevice": "enum"},
+}
+
 
 def make_banner(pin_hash12: str) -> str:
     return (
@@ -76,11 +98,240 @@ def make_banner(pin_hash12: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# minimal MSVC mangled-type decoder (for static data members whose PDB
+# return_type field carries only the RETURN type of a function pointer --
+# the full pointer shape lives in the decorated name: 0P6A<ret><args>ZEA)
+# ---------------------------------------------------------------------------
+
+_BASIC_TYPE_LETTERS = {
+    "H": "int", "I": "unsigned int", "J": "long", "K": "unsigned long",
+    "G": "unsigned short", "E": "unsigned char", "F": "unsigned short",
+    "M": "float", "N": "double", "X": "void", "_N": "bool", "D": "char",
+    "C": "signed char", "_K": "unsigned __int64", "_J": "__int64",
+    "_W": "wchar_t", "_S": "char16_t", "_U": "char32_t",
+}
+
+
+class MangledTypeParser:
+    """Parses the type portion of an MSVC decorated name (a strict subset:
+    basic types, pointers, struct/class/union/enum names with namespace
+    nesting and numeric back-references)."""
+
+    def __init__(self, text: str):
+        self.s = text
+        self.i = 0
+        self.fragments: list[str] = []   # back-reference table
+
+    def peek(self, n: int = 1) -> str:
+        return self.s[self.i:self.i + n]
+
+    def take(self, n: int = 1) -> str:
+        out = self.s[self.i:self.i + n]
+        self.i += n
+        return out
+
+    def _remember(self, frag: str) -> str:
+        self.fragments.append(frag)
+        return frag
+
+    def parse_type(self) -> str:
+        c = self.peek()
+        if c in ("P", "R", "Q"):
+            return self._parse_pointer()
+        if c == "A":
+            self.take()
+            inner = self.parse_type()
+            return self._remember(inner + "&")
+        if c == "_":
+            two = self.peek(2)
+            if two in _BASIC_TYPE_LETTERS:
+                self.take(2)
+                return self._remember(_BASIC_TYPE_LETTERS[two])
+            return "void*"
+        if c in _BASIC_TYPE_LETTERS:
+            self.take()
+            return self._remember(_BASIC_TYPE_LETTERS[c])
+        if c in ("U", "V"):
+            self.take()
+            name = self._parse_name()
+            self._remember(name)   # register the bare name for back-refs
+            kw = "struct" if c == "U" else "class"
+            return f"{kw} {name}"
+        if c == "T":
+            self.take()
+            name = self._parse_name()
+            return self._remember(f"union {name}")
+        if c == "W":
+            self.take()
+            self.take()  # '4'
+            name = self._parse_name()
+            return self._remember(f"enum {name}")
+        if c == "Y":
+            self.take()
+            digits = ""
+            while self.peek().isdigit():
+                digits += self.take()
+            rank = int(digits) if digits else 0
+            for _ in range(rank):
+                while self.peek().isdigit():
+                    self.take()
+            inner = self.parse_type()
+            return self._remember(inner)
+        if c == "$$":
+            self.take(2)
+            nxt = self.take()
+            if nxt == "C":
+                quals = ""
+                while self.peek() == "B":
+                    self.take()
+                    quals += " const"
+                inner = self.parse_type()
+                return self._remember(inner + quals)
+            if nxt == "T":
+                return self._remember("void")
+            return "void*"
+        if c.isdigit():
+            n = int(self.take())
+            if n < len(self.fragments):
+                return self.fragments[n]
+            return "void*"
+        return "void*"
+
+    def _parse_pointer(self) -> str:
+        is_ref = self.peek() == "R"
+        self.take()  # P/R/Q
+        # pointer qualifiers: E=__ptr64, F=__restrict, G=unaligned(?)
+        is_64 = False
+        while self.peek() in ("E", "F", "G"):
+            if self.peek() == "E":
+                is_64 = True
+            self.take()
+        # pointee cv-qualifier: A=none, B=const, C=volatile, D=const volatile
+        cv = self.take()
+        const_target = cv == "B"
+        inner = self.parse_type()
+        ptr = "&" if is_ref else ("*" if is_64 else "* __ptr32")
+        if const_target:
+            sep = "" if inner.endswith("*") or inner.endswith("&") else " "
+            return self._remember(f"{inner}{sep}const{ptr}")
+        return self._remember(inner + ptr)
+
+    def _parse_name(self) -> str:
+        """Name components until @@ (each component separated by @).
+        A bare digit (single or several, one component each) is a numeric
+        back-reference into the fragment table built from the whole
+        decorated name."""
+        parts = []
+        while True:
+            if self.peek() == "":
+                break
+            if self.peek() == "@":
+                self.take()
+                if self.peek() == "@":
+                    self.take()
+                    break
+                continue
+            if self.peek().isdigit():
+                # back-reference component(s): each digit is one component
+                d = self.take()
+                if int(d) < len(self.fragments):
+                    parts.append(self.fragments[int(d)])
+                continue
+            comp = ""
+            while self.peek() not in ("@", ""):
+                comp += self.take()
+            if comp:
+                parts.append(comp)
+            else:
+                break
+        parts = [p for p in parts if p]
+        return "::".join(reversed(parts)) if parts else ""
+
+
+def fnptr_shape_from_mangled(mang: str):
+    """Extract 'ret (__cdecl*)(args)' C++ type text from a static data
+    member decorated name whose type is a function pointer (0P6A...ZEA).
+    Returns None when the name does not carry a function-pointer type."""
+    mm = re.search(r"@@[012]P6A", mang)
+    if not mm:
+        return None
+    body = mang[mm.end():]
+    # seed the back-reference table with the symbol's own name components
+    # ('?member@Class@DirectUI@@...': numeric name back-refs index this
+    # shared fragment list, so '3' after ?x@CallstackTracker@DirectUI@@0P6A
+    # PEAUAPI_VERSION@@PEAU3@@ resolves to API_VERSION)
+    sm = re.match(r"^(\?\w+@\w+)@DirectUI@@", mang)
+    seed = re.findall(r"@(\w+)", sm.group(1)) if sm else []
+    p = MangledTypeParser(body)
+    p.fragments = [mang[1:].split("@", 1)[0]] + seed + ["DirectUI"]
+    ret = p.parse_type()
+    args = []
+    named_types = []   # struct/class/enum arg types (digits back-ref these)
+    if p.peek() == "X":
+        p.take()
+        if p.peek() == "@":
+            p.take()
+        if p.peek() != "Z":
+            args.append("void")
+    while p.peek() and p.peek() not in ("Z", "@"):
+        if p.peek().isdigit():
+            # argument back-reference: repeats the Nth registered arg type.
+            # MSVC registers every arg type EXCEPT basic single-letter
+            # types (H/I/J/K/...): pointers and named types get slots.
+            n = int(p.take())
+            if n < len(named_types):
+                args.append(named_types[n])
+            else:
+                args.append("void*")
+        else:
+            at = p.parse_type()
+            if at == "void" and p.peek() == "Z":
+                break
+            args.append(at)
+            if not re.fullmatch(r"(unsigned )?(char|short|int|long|float|double|bool|void|__int64|unsigned __int64|wchar_t)", at):
+                named_types.append(at)
+        if p.peek() == "@":
+            p.take()
+    return f"{ret} (__cdecl*)({', '.join(args) or 'void'})"
+
+
+def data_type_from_mangled(mang: str):
+    """Full C++ type text for a static data member from its decorated name
+    (used when the PDB return_type is wrong/incomplete). Handles pointer
+    const-ness (PAU vs PEAU) and basic types. Returns None for encodings
+    the mini-parser does not understand (templates etc.)."""
+    mm = re.match(r"^\?\w+@.+?@DirectUI@@([012])(.+)$", mang)
+    if not mm:
+        return None
+    body = mm.group(2)
+    # drop the trailing storage-class encoding: optional E (__ptr64 on the
+    # pointer itself) + A(plain)/B(const) -- e.g. '...PEAIEA' -> 'PEAI'
+    body = re.sub(r"(?:EA|EB|[AB])$", "", body)
+    if "$" in body:
+        return None  # template types: mini-parser does not handle them
+    # seed back-refs with the symbol's own name components
+    # ('?member@Class@DirectUI@@...': '@12@' resolves 1=Class, 2=DirectUI)
+    sm = re.match(r"^(\?\w+@\w+)@DirectUI@@", mang)
+    seed = re.findall(r"@(\w+)", sm.group(1)) if sm else []
+    seed = [mang[1:].split("@", 1)[0]] + seed + ["DirectUI"]
+    p = MangledTypeParser(body)
+    p.fragments = list(seed)
+    ty = p.parse_type()
+    if p.i < len(body) and body[p.i:] not in ("", "@"):
+        return None  # did not consume the whole type: unknown encoding
+    if "void*" in ty and not re.search(r"P[EB]?A?X", body):
+        # 'void*' is this parser's bail-out marker; only trust it when the
+        # mangled form really is a void pointer
+        return None
+    return ty
+
+
+# ---------------------------------------------------------------------------
 # undecorated-type-text -> C++ declaration text translation
 # ---------------------------------------------------------------------------
 
 FN_PTR_RE = re.compile(
-    r"^(?P<ret>.+?)\s*\(__cdecl\s*\*\)\s*\((?P<args>.*)\)$"
+    r"^(?P<ret>.+?)\s*\(__cdecl\s*(?P<class>(?:\w+::)*\w+::)?\*\)\s*\((?P<args>.*)\)$"
 )
 
 # Template-id like 'class DirectUI::DynamicArray<class DirectUI::Element *, 0>'
@@ -92,16 +343,19 @@ TEMPLATE_ID_RE = re.compile(
 
 class TypeTranslator:
     """Translates undecorated parameter/return type strings into C++ decl text
-    usable inside `namespace DirectUI`."""
+    usable inside `namespace DirectUI`. When keep_scope is set (global-scope
+    classes), 'DirectUI::' qualifications are PRESERVED."""
 
-    def __init__(self, target_classes):
+    def __init__(self, target_classes, keep_scope: bool = False):
         self.target_classes = set(target_classes)
+        self.keep_scope = keep_scope
 
     # -- helpers ----------------------------------------------------------
 
-    @staticmethod
-    def _strip_scope(text: str) -> str:
+    def _strip_scope(self, text: str) -> str:
         """Remove 'DirectUI::' qualifications (we are inside that namespace)."""
+        if self.keep_scope:
+            return text
         return re.sub(r"\bDirectUI::", "", text)
 
     @staticmethod
@@ -111,10 +365,17 @@ class TypeTranslator:
     def translate(self, text: str) -> str:
         """Translate one type string to C++ declaration syntax."""
         text = text.strip()
-        # function pointer: 'ret (__cdecl *)(args)'
+        # anonymous struct/class/union in an undecorated 'struct*' shape:
+        # the PDB sometimes loses the tag name (HINSTANCE-style handles).
+        # A bare 'struct'/'class'/'union' token renders as void*.
+        if re.fullmatch(r"(const\s+)?(struct|class|union)", text):
+            return "void*"
+        # function pointer: 'ret (__cdecl *)(args)' or member pointer
+        # 'ret (__cdecl Class::*)(args)'
         m = FN_PTR_RE.match(text)
         if m:
             ret = self.translate(m.group("ret"))
+            cls_qual = m.group("class") or ""
             args = m.group("args").strip()
             if args in ("", "void"):
                 arg_list = "void"
@@ -122,7 +383,7 @@ class TypeTranslator:
                 arg_list = ", ".join(
                     self.translate(a.strip()) for a in self._split_args(args)
                 )
-            return f"{ret} (__cdecl*)({arg_list})"
+            return f"{ret} (__cdecl {cls_qual}*)({arg_list})"
         # template-id: 'class DirectUI::DynamicArray<X, 0>'
         m = TEMPLATE_ID_RE.match(text)
         if m:
@@ -147,11 +408,14 @@ class TypeTranslator:
     def translate_def(self, text: str, name: str) -> str:
         """Translate one type string for a definition context, binding the
         parameter name. Function pointers get the name inside the (*name)
-        declarator."""
+        declarator. '...' (varargs) never takes a parameter name."""
         text = text.strip()
+        if text == "...":
+            return "..."
         m = FN_PTR_RE.match(text)
         if m:
             ret = self.translate(m.group("ret"))
+            cls_qual = m.group("class") or ""
             args = m.group("args").strip()
             if args in ("", "void"):
                 arg_list = "void"
@@ -159,7 +423,7 @@ class TypeTranslator:
                 arg_list = ", ".join(
                     self.translate(a.strip()) for a in self._split_args(args)
                 )
-            return f"{ret} (__cdecl* {name})({arg_list})"
+            return f"{ret} (__cdecl {cls_qual}* {name})({arg_list})"
         plain = self.translate(text)
         if plain.endswith("*") or plain.endswith("&"):
             return f"{plain}{name}"
@@ -185,6 +449,78 @@ class TypeTranslator:
 
 
 # ---------------------------------------------------------------------------
+# Class-name utilities
+# ---------------------------------------------------------------------------
+
+TPL_CLASS_RE = re.compile(r"^(\w+)<(.*)>$")
+
+
+def is_template_class(cls: str) -> bool:
+    """True for explicit-specialization class names like
+    'PatternProvider<class DirectUI::InvokeProvider, struct IInvokeProvider, 0>'."""
+    return bool(TPL_CLASS_RE.match(cls))
+
+
+def template_id(cls: str) -> str:
+    """C++ template-id text for a specialization class name, e.g.
+    'PatternProvider<class DirectUI::InvokeProvider, ...>' ->
+    'PatternProvider<InvokeProvider, IInvokeProvider, 0>'."""
+    m = TPL_CLASS_RE.match(cls)
+    if not m:
+        return cls
+    name, raw_args = m.group(1), m.group(2)
+    args = []
+    for a in split_template_args(raw_args):
+        a = a.strip()
+        if re.fullmatch(r"-?\d+", a):
+            args.append(a)  # non-type parameter
+        else:
+            # 'class DirectUI::Foo *' -> 'Foo*' (we are inside namespace DirectUI)
+            t = re.sub(r"^(class|struct|union)\s+DirectUI::", "", a)
+            t = re.sub(r"^(class|struct|union)\s+", "", t)
+            t = re.sub(r"\s*DirectUI::", "", t)
+            t = re.sub(r"\s*\*", "*", t)
+            args.append(t)
+    return f"{name}<{', '.join(args)}>"
+
+
+def split_template_args(text: str) -> list:
+    """Split template argument list on commas at depth 0 (respecting <>)."""
+    parts, depth, cur = [], 0, []
+    for ch in text:
+        if ch == "<":
+            depth += 1
+        elif ch == ">":
+            depth -= 1
+        if ch == "," and depth == 0:
+            parts.append("".join(cur))
+            cur = []
+        else:
+            cur.append(ch)
+    if cur:
+        parts.append("".join(cur))
+    return [p.strip() for p in parts if p.strip()]
+
+
+def safe_name(cls: str) -> str:
+    """Filesystem-safe header/stub name for a class. Template
+    specializations map to 'Name_arg1_arg2' style identifiers."""
+    if not is_template_class(cls):
+        return cls
+    m = TPL_CLASS_RE.match(cls)
+    name, raw_args = m.group(1), m.group(2)
+    parts = [name]
+    for a in split_template_args(raw_args):
+        a = re.sub(r"^(class|struct|union)\s+DirectUI::", "", a.strip())
+        a = re.sub(r"^(class|struct|union)\s+", "", a)
+        a = re.sub(r"DirectUI::", "", a)
+        a = re.sub(r"[^A-Za-z0-9_]", "_", a)
+        a = re.sub(r"_+", "_", a).strip("_")
+        parts.append(a)
+    return "_".join(parts)
+
+
+# ---------------------------------------------------------------------------
 # Symbol model helpers
 # ---------------------------------------------------------------------------
 
@@ -196,7 +532,13 @@ class TypeTranslator:
 #   static: C=private  K=protected  S=public
 #   virt:   E=private  M=protected  U=public
 # ('W'/'Y' letters are MI thunks, never present on target classes.)
-MANGLED_ACCESS_RE = re.compile(r"^\?\w+@\w+@DirectUI@@([A-Z])")
+# The access letter sits between '@DirectUI@@' and the calling convention.
+# Non-static member: <access> E [B if const] A <return type>, e.g. QEAA /
+# AEBA (private const). Static: <access> A <return type>, e.g. KAX
+# (protected static void). Template-class scopes embed '@DirectUI@@' inside
+# their arguments, so the calling-convention anchor is required to find
+# the OUTER scope's access letter.
+MANGLED_ACCESS_RE = re.compile(r"@DirectUI@@([ACEIKMSQU])E?[AB]?A")
 ACCESS_FROM_MANGLED = {
     "A": "private", "C": "private", "E": "private",
     "I": "protected", "K": "protected", "M": "protected",
@@ -212,7 +554,7 @@ DATA_ACCESS_FROM_MANGLED = {"0": "private", "1": "protected", "2": "public"}
 def access_of(sym: dict) -> str:
     """Recover the C++ access specifier from the mangled name.
 
-    For members, the letter after ?member@Class@DirectUI@@ encodes
+    For members, the letter after the class's @DirectUI@@ scope encodes
     access+virtual/static. For static data, the digit after the scope
     encodes access (0=private 1=protected 2=public)."""
     if sym.get("kind") == "data":
@@ -220,8 +562,13 @@ def access_of(sym: dict) -> str:
         if m:
             return DATA_ACCESS_FROM_MANGLED.get(m.group(1), "public")
         return "public"
-    m = MANGLED_ACCESS_RE.match(sym["mangled"])
+    m = MANGLED_ACCESS_RE.search(sym["mangled"])
     if not m:
+        # global-scope classes: ?member@Class@@<letters> (no DirectUI
+        # scope component; params may still reference DirectUI types)
+        g = re.match(r"^\?\w+@\w+@@([ACEIKMSQU])E?[AB]?A", sym["mangled"])
+        if g:
+            return ACCESS_FROM_MANGLED.get(g.group(1), "public")
         return "public"
     return ACCESS_FROM_MANGLED.get(m.group(1), "public")
 
@@ -250,7 +597,32 @@ def classify_scalar_dtor(sym: dict) -> bool:
     return sym["mangled"].startswith("??_E")
 
 
+def in_directui_scope(sym: dict) -> bool:
+    """The PDB 'class' attribution is name-only: symbols of nested
+    subsystems (e.g. ??1Movie@SWF@@ -- Flash dtor) carry class='Movie'
+    but live in a different scope. Real DirectUI members mangle with the
+    immediate parent scope @DirectUI@@; this filter rejects the rest."""
+    m = sym.get("mangled") or ""
+    cls = sym.get("class") or ""
+    if not m.startswith("?"):
+        return True
+    m2 = re.match(r"^\?\??\w+@" + re.escape(cls) + r"@([^@]+)@", m)
+    if not m2:
+        return True
+    return m2.group(1) == "DirectUI"
+
+
+def is_synth_member(sym: dict) -> bool:
+    """Compiler-synthesized members whose PDB 'member' names carry
+    backquotes: `vftable', `scalar deleting dtor', `default ctor closure',
+    `RTTI...'. None of them is expressible as a C++ member declaration."""
+    m = sym.get("member") or ""
+    return m.startswith("`") or (sym.get("mangled") or "").startswith("??_7")
+
+
 def is_callable(sym: dict) -> bool:
+    if is_synth_member(sym):
+        return False
     if sym.get("kind") not in CALLABLE_KINDS:
         # plain methods that merely USE template parameter types (e.g.
         # ?CreateElementList@Value@...DynamicArray@...) carry kind='template'
@@ -258,6 +630,11 @@ def is_callable(sym: dict) -> bool:
         if sym.get("kind") != "template":
             return False
     if classify_scalar_dtor(sym):
+        return False
+    # 'default ctor closure' (??_F...): compiler-synthesized, not writable
+    # in C++ source. The stub TUs materialize these via a companion MASM
+    # object (see emit_stub.py) so the export is still reproduced.
+    if sym["mangled"].startswith("??_F"):
         return False
     # True function templates (??$...) are skipped -- their instantiations
     # are compile-time and cannot be re-emitted from a declaration.
@@ -268,6 +645,8 @@ def is_callable(sym: dict) -> bool:
 
 def is_data(sym: dict) -> bool:
     if sym["mangled"].startswith("??$"):
+        return False
+    if is_synth_member(sym):
         return False
     return sym.get("kind") == "data"
 
@@ -281,6 +660,9 @@ class MemberDecl:
     def __init__(self, sym: dict, cls: str):
         self.sym = sym
         self.cls = cls
+        # ctor/dtor names use the specialization-id ('PatternProvider<...>')
+        # for template classes, the plain name otherwise
+        self.class_name = template_id(cls) if is_template_class(cls) else cls
         self.is_dtor = classify_dtor(sym)
         self.is_ctor = sym["kind"] == "ctor" and not self.is_dtor
 
@@ -290,9 +672,10 @@ class MemberDecl:
 
         return_type stores the complete shape, e.g.:
             'class DirectUI::Value * (__cdecl *)(unsigned short const *, void *)'
-        We detect that via the '(__cdecl *)' marker."""
+        We detect that via the '(__cdecl *)' marker (also member pointers
+        '(__cdecl Class::*)')."""
         ret = self.sym.get("return_type") or ""
-        if re.match(r"^(.*?)\s*\(__cdecl\s*\*\)\s*\((.*)\)$", ret.strip()):
+        if FN_PTR_RE.match(ret.strip()):
             return ret.strip()
         return None
 
@@ -301,10 +684,21 @@ class MemberDecl:
         name = s["member"]
         if self.is_ctor or self.is_dtor:
             if self.is_dtor:
-                name = "~" + self.cls
+                name = "~" + self.class_name
+            else:
+                name = self.class_name
             params = s.get("params") or []
             param_text = ", ".join(tr.translate(p) for p in params) or "void"
             sig = f"{name}({param_text})"
+        elif re.match(r"^operator\s+(struct\s+|class\s+|union\s+|enum\s+)?\w+(\s*\*)*\s*$", name) and (
+                re.sub(r"^(struct|class|union|enum)\s+", "", (s.get("return_type") or "").strip()) in
+                (re.sub(r"^(struct|class|union|enum)\s+", "", name[len("operator"):].strip()),)):
+            # conversion operator: 'operator int *' / 'operator struct _PSP *'
+            # with matching return_type -- no return type in the declaration
+            params = s.get("params") or []
+            param_text = ", ".join(tr.translate(p) for p in params) or "void"
+            conv = tr.translate(s["return_type"])
+            sig = f"operator {conv}({param_text})"
         else:
             params = s.get("params") or []
             param_text = ", ".join(tr.translate(p) for p in params) or "void"
@@ -353,36 +747,207 @@ def order_key(sym: dict):
 # ---------------------------------------------------------------------------
 
 
+# Classes whose exported symbols carry NO '@DirectUI@@' scope component
+# (the class lives at global scope in the real DLL, e.g.
+# ?Create@AcceleratorBehavior@@SAJ... -- DirectUI types appear as fully
+# qualified inside the signature instead). Their headers define the class
+# OUTSIDE namespace DirectUI.
+GLOBAL_SCOPE_CLASSES = {
+    "AcceleratorBehavior",
+    "CSafeElementProxy",
+}
+
+# Base classes that are ABSTRACT in the real DLL (their derived classes
+# export ??_7Derived@...@6B<Base>@@ base-subobject vftables, but the base
+# itself exports no vftable or virtuals). Their generated headers need at
+# least one pure virtual to make the base polymorphic, else the derived
+# classes emit no base-subobject vftable at all.
+POLYMORPHIC_BASE_CLASSES = {
+    "IProvider",
+}
+
+# Classes whose self-referencing mangled names use U (struct) rather than V
+# (class): ??0ISBLeak@DirectUI@@QEAA@AEBU01@@Z. Their declarations must use
+# the 'struct' tag or every member mangles with the wrong tag letter.
+# (Derived from the AEA/AEB/$$QEA + U01 self-references in symbols.json.)
+STRUCT_TAG_CLASSES = {
+    "IDataEngine",
+    "IDataEntry",
+    "ISBLeak",
+    "NavReference",
+    "NavScoring",
+}
+
+
+def is_duixml_nested(cls: str) -> bool:
+    """FunctionDefinition<T> specializations are NESTED inside
+    DUIXmlParser (mangled ?$FunctionDefinition@...@DUIXmlParser@DirectUI@@).
+    They get no separate header; DUIXmlParser.h declares the primary
+    template and its TU defines + explicitly instantiates operator=."""
+    return bool(re.match(r"^FunctionDefinition<", cls))
+
+
+def is_nested_pseudo_class(cls: str) -> bool:
+    """'Classes' that are really NESTED TYPES of a real class:
+    ACCESSIBLEROLE is a struct nested in AccessibleButton whose implicitly
+    generated operator= is exported (??4ACCESSIBLEROLE@AccessibleButton@...).
+    Such TUs are emitted inside the HOST class's TU, not standalone."""
+    return cls == "ACCESSIBLEROLE"
+
+
+def nested_host_of(cls: str) -> str:
+    return "AccessibleButton" if cls == "ACCESSIBLEROLE" else ""
+
+
+def referenced_class_types(cls: str, members: list, data_members: list,
+                           classes: list, base) -> list:
+    """DirectUI class names referenced by the member signatures of THIS
+    header (for targeted forward declarations). Template specializations
+    contribute their primary name; the class itself and its base are
+    excluded (base is #included, self is being defined)."""
+    names = set()
+    texts = []
+    for s in members + data_members:
+        texts.extend(s.get("params") or [])
+        if s.get("return_type"):
+            texts.append(s["return_type"])
+    for t in texts:
+        for m in re.finditer(r"DirectUI::(\w+)", t or ""):
+            names.add(m.group(1))
+    known = set(classes)
+    if base:
+        known = known - {base}
+    return sorted(n for n in names if n in known)
+
+
+# External (non-DirectUI-class) base interfaces and where they are
+# declared. Inheritance entries pointing here make the class header
+# include the provider of the complete interface definition.
+EXTERNAL_BASE_INCLUDES = {
+    "IElementListener": "Interfaces.h",
+    "IXProvider": "Interfaces.h",
+    "IDialogElement": "dui_abi_types.h",
+    "IRawElementProviderAdviseEvents": "UIAutomationCore.h",
+    "IRawElementProviderSimple": "UIAutomationCore.h",
+    "IRawElementProviderFragment": "UIAutomationCore.h",
+    "IRawElementProviderFragmentRoot": "UIAutomationCore.h",
+    "IRawElementProviderSimple2": "UIAutomationCore.h",
+    "IAccIdentity": "oleacc.h",
+    "IAccessible": "oleacc.h",
+    "IEnumVARIANT": "oleauto.h",
+    "IOleWindow": "oleidl.h",
+    "IServiceProvider": "servprov.h",
+}
+
+
+def nested_type_hosts_used(members: list, data_members: list, base) -> list:
+    """Host classes whose nested types are referenced in these signatures
+    (e.g. 'enum DirectUI::TouchButton::ClickDevice' by value)."""
+    hosts = set()
+    texts = []
+    for s in members + data_members:
+        texts.extend(s.get("params") or [])
+        if s.get("return_type"):
+            texts.append(s["return_type"])
+    for t in texts:
+        for m in re.finditer(r"(?:enum|struct|class|union)\s+DirectUI::(\w+)::(\w+)", t or ""):
+            host, nested = m.group(1), m.group(2)
+            if host in NESTED_TYPE_HOSTS and nested in NESTED_TYPE_HOSTS[host]:
+                hosts.add(host)
+    return sorted(hosts)
+
+
+def base_list(inheritance: dict, cls: str) -> list:
+    """Base classes of cls as a list (inheritance entries may be a single
+    name, a list, or absent)."""
+    v = inheritance.get(cls)
+    if not v:
+        return []
+    if isinstance(v, str):
+        return [v]
+    return [b for b in v if b]
+
+
 def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
-                        inheritance: dict, banner: str) -> str:
+                        inheritance: dict, banner: str,
+                        has_own_vftable: bool = False) -> str:
     """Render one class header file content."""
+    tpl = is_template_class(cls)
+    tid = template_id(cls) if tpl else cls
+    bases = base_list(inheritance, cls)
+    global_cls = cls in GLOBAL_SCOPE_CLASSES
+    if global_cls:
+        # members reference DirectUI types fully qualified; the class itself
+        # lives at global scope (no @DirectUI@@ in its mangled members)
+        tr = TypeTranslator(classes, keep_scope=True)
     lines = []
     lines.append(banner)
-    lines.append(f"// DirectUI::{cls} -- declarations derived from the real")
+    lines.append(f"// DirectUI::{tid} -- declarations derived from the real")
     lines.append("// dui70.dll export table + PDB publics.")
+    if global_cls:
+        lines.append("// NOTE: this class is exported at GLOBAL scope in the real DLL")
+        lines.append("//       (no @DirectUI@@ component in its decorated names).")
     lines.append("#pragma once")
     lines.append("")
     lines.append("#include <windows.h>")
     lines.append('#include "dui_abi_types.h"')
     lines.append("")
-    # include the base-class header (must be a complete type)
-    base = inheritance.get(cls)
-    if base and base in classes:
-        lines.append(f'#include "{base}.h"')
-        lines.append("")
+    # include the DirectUI base-class headers (must be complete types)
+    for b in bases:
+        if b in classes:
+            lines.append(f'#include "{safe_name(b)}.h"')
+            lines.append("")
+    for b in bases:
+        if b in EXTERNAL_BASE_INCLUDES:
+            provider = EXTERNAL_BASE_INCLUDES[b]
+            if provider.endswith(".h") and not provider.startswith("<"):
+                lines.append(f'#include "{provider}"')
+            else:
+                lines.append(f"#include <{provider}>")
+            lines.append("")
+    # explicit specializations: the template ARGUMENT types must be
+    # complete-enough to name (DirectUI provider classes get their header;
+    # UIA interfaces come from UIAutomationCore.h via dui_abi_types.h)
+    if is_template_class(cls):
+        for arg in split_template_args(TPL_CLASS_RE.match(cls).group(2)):
+            arg = arg.strip()
+            m = re.match(r"(?:class|struct)\s+(?:DirectUI::)?(\w+)$", arg)
+            if m and m.group(1) in classes:
+                lines.append(f'#include "{safe_name(m.group(1))}.h"')
+                lines.append("")
+    # headers of classes whose NESTED types this signature set uses by
+    # value (enum by value needs the complete host class)
+    for host in sorted(nested_type_hosts_used(members, data_members, None)):
+        if host != cls and host in classes:
+            lines.append(f'#include "{safe_name(host)}.h"')
+            lines.append("")
     if cls == "XProvider":
         # XProvider : IXProvider (abstract consumer interface)
         lines.append('#include "Interfaces.h"')
         lines.append("")
 
-    lines.append("namespace DirectUI")
-    lines.append("{")
-    # forward declarations for sibling generated classes
-    siblings = [c for c in classes if c != cls and c != base]
-    for sib in siblings:
-        lines.append(f"    class {sib};")
-    lines.append("")
+    # forward declarations for the DirectUI classes this header actually
+    # references (computed from the member signatures), not every sibling
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    fwd_kw = {n: ("struct" if n in STRUCT_TAG_CLASSES else "class") for n in fwd}
+    if global_cls:
+        # DirectUI fwd decls in their namespace; the class itself is global
+        if fwd:
+            lines.append("namespace DirectUI")
+            lines.append("{")
+            for name in fwd:
+                lines.append(f"    {fwd_kw[name]} {name};")
+            lines.append("} // namespace DirectUI")
+            lines.append("")
+    else:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            lines.append(f"    {fwd_kw[name]} {name};")
+        if fwd:
+            lines.append("")
 
     # Access is recovered from the mangled name (access_of); sections are
     # emitted in public -> protected -> private order (matches the old
@@ -392,16 +957,80 @@ def render_class_header(cls: str, members: list, data_members: list,
         acc = access_of(sym)
         sections.setdefault(acc, []).append(sym)
 
-    lines.append(f"    class {cls}")
-    if base:
-        lines.append(f"        : public {base}")
+    if tpl:
+        # explicit specialization: declare the primary template with the
+        # parameter shape it really has (derived from the specialization
+        # arguments), then the specialization itself
+        primary = TPL_CLASS_RE.match(cls).group(1)
+        n_args = len(split_template_args(TPL_CLASS_RE.match(cls).group(2)))
+        if primary == "PatternProvider":
+            params = "typename PROVIDER, typename INTERFACE, int ID"
+        elif primary == "SafeArrayAccessor":
+            params = "typename T"
+        else:
+            params = ", ".join(f"typename T{i}" for i in range(n_args))
+        lines.append(f"    template <{params}>")
+        lines.append(f"    class {primary};")
+        lines.append("")
+        lines.append("    template <>")
+    tag = "struct" if cls in STRUCT_TAG_CLASSES else "class"
+    lines.append(f"    {tag} {tid}")
+    if bases:
+        lines.append(f"        : public {', public '.join(bases)}")
     lines.append("    {")
     lines.append("    public:")
 
-    if cls == "TouchButton":
-        lines.append("        enum ClickDevice")
+    # nested types of this class referenced cross-class in signatures
+    # (e.g. Schema::Pattern, Surface::EType): declare them inside the host
+    if cls in NESTED_TYPE_HOSTS:
+        for nname, kind in sorted(NESTED_TYPE_HOSTS[cls].items()):
+            if kind == "enum":
+                lines.append(f"        enum {nname} {{ {nname}_None = 0 }};")
+            elif cls == "Schema":
+                # complete definition: the static lookup tables
+                # (g_*Table/_roleMapping) are const ARRAYS of these nested
+                # structs and array definitions need a complete type
+                lines.append(f"        struct {nname} {{ int _abi; }};")
+            else:
+                lines.append(f"        struct {nname};")
+        lines.append("")
+
+    if cls in POLYMORPHIC_BASE_CLASSES:
+        # abstract in the real DLL (derived classes export base-subobject
+        # vftables): one pure virtual makes this base polymorphic without
+        # adding any export of its own
+        lines.append("    public:")
+        lines.append("        virtual unsigned long AddRef(void) = 0;")
+        lines.append("")
+
+    if has_own_vftable and not any(
+        re.search(r"@DirectUI@@[EMU]E", s.get("mangled") or "") for s in members
+    ):
+        # vftable-only polymorphic class (ISBLeak / FontCache / StyleSheet /
+        # IXElementCP / IXProviderCP pattern): no virtual method is exported,
+        # so the real class's virtuals are inline (emitted only via the
+        # vtable slots). One inline virtual provides the ??_7 symbol.
+        lines.append("    public:")
+        lines.append(f"        virtual long On{cls[:24]}Virt(void) {{ return 0; }}")
+        lines.append("")
+
+    if cls == "CallstackTracker":
+        # IMGHLPFN_LOAD is really a dbghelp function-pointer typedef; the
+        # PDB reports it as a nested struct holding the loader procs.
+        # Define it minimally so the static array member is complete.
+        lines.append("        struct IMGHLPFN_LOAD { void* _proc; };")
+        lines.append("        struct STACK_SYMBOL_INFO { void* _sym; };")
+        lines.append("")
+
+    if cls == "AccessibleButton":
+        # ACCESSIBLEROLE is a nested struct whose implicitly-generated
+        # operator= (copy + move) IS a real export. Declare + define it
+        # out-of-line in the stub TU; the empty body keeps the object
+        # trivially copyable so the compiler exports the same operators.
+        lines.append("        struct ACCESSIBLEROLE")
         lines.append("        {")
-        lines.append("            ClickDevice_None = 0,")
+        lines.append("            ACCESSIBLEROLE& operator=(ACCESSIBLEROLE const&);")
+        lines.append("            ACCESSIBLEROLE& operator=(ACCESSIBLEROLE&&);")
         lines.append("        };")
         lines.append("")
 
@@ -446,16 +1075,17 @@ def render_class_header(cls: str, members: list, data_members: list,
             decl = md.full_decl(tr)
             lines.append(f"        {decl}")
         for dsym in data_syms:
-            lines.append(f"        {render_data_decl(dsym, tr)}")
+            lines.append(f"        {render_data_decl(dsym, tr, cls)}")
 
     lines.append("    };")
     lines.append("")
-    lines.append("} // namespace DirectUI")
-    lines.append("")
+    if not global_cls:
+        lines.append("} // namespace DirectUI")
+        lines.append("")
     return "\n".join(lines)
 
 
-def render_data_decl(sym: dict, tr: TypeTranslator) -> str:
+def render_data_decl(sym: dict, tr: TypeTranslator, cls: str = "") -> str:
     """static data member in-class declaration, e.g.
     'static IClassInfo* s_pClassInfo;'
 
@@ -466,14 +1096,49 @@ def render_data_decl(sym: dict, tr: TypeTranslator) -> str:
     ty = tr.translate(sym.get("return_type") or "")
     name = sym["member"]
     mang = sym["mangled"]
-    # s_fd* tables: the real symbol 1QBU...B encodes a const ARRAY
+    # function-pointer static members: the full pointer shape comes from
+    # the decorated name (PDB return_type holds only the RETURN type for
+    # these); bind the name into the declarator.
+    fn_shape = fnptr_shape_from_mangled(mang)
+    if fn_shape:
+        ret_t, rest = fn_shape.split(" (__cdecl*)", 1)
+        args = rest.rstrip(")").lstrip("(")
+        return f"static {ret_t} (__cdecl* {name})({args});"
+    # s_fd* tables and the Schema/AccessibleButton lookup tables: the real
+    # symbol 0/1QBU...B encodes a const ARRAY of nested structs
     # (llvm-undname prints 'const *const' for it). Declare as array [1].
     # Normalize the '*const' pointer-const noise away first.
-    if mang.startswith("?s_fd"):
+    if re.search(r"@@[012]Q[AB]U", mang):
         ty = re.sub(r"\s*const\s*\*\s*const\s*$", "", ty).strip()
         return f"static {ty} const {name}[1];"
-    # pointer-to-struct/class/union: 'PEAU'/'PEAV'/'PEAT' (or 'PEQ' const)
-    if re.search(r"@@[012]PE[QAUVT]", mang) and not ty.endswith("*"):
+    # multi-dimensional const arrays of built-ins, e.g. HWNDHost's
+    # g_rgMouseMap: 0QAY02$$CBIA. Encoding: Y<rank-2><bound-1 for each
+    # dimension except the first> -- the FIRST bound is not encoded, so
+    # [1][decoded...] reproduces the exact decorated name.
+    if re.search(r"@@[012]QAY\d+\$\$CB", mang):
+        mm = re.search(r"@@[012]QAY(\d+)", mang)
+        digits = mm.group(1)
+        bounds = [int(d) + 1 for d in digits[1:]] or [1]
+        brk = "[" + "][".join(str(b) for b in [1] + bounds) + "]"
+        return f"static {ty} {name}{brk};"
+    # pointer-to-struct/class/union: the mangled name is authoritative for
+    # BOTH the pointee tag and const-ness (PDB return_type can lose the
+    # pointer, change PAU->PEAU or say void* where the real type is a
+    # struct pointer). 0PAIA-style built-in pointers are handled below.
+    md = data_type_from_mangled(mang)
+    if md and (md.endswith("*") or md.endswith("* __ptr32")):
+        mty = re.sub(r"^(struct|class|union) ", "", md)
+        if mty.startswith("DirectUI::"):
+            mty = mty[len("DirectUI::"):]
+        # nested types (e.g. CallstackTracker::IMGHLPFN_LOAD): the short
+        # name is visible at class scope, where the declaration lives
+        if mty.startswith(f"{cls}::"):
+            mty = mty[len(cls) + 2:]
+        ty = mty
+    elif re.search(r"@@[012]P[AEHQ]?[QAUVT]", mang) and not ty.endswith("*"):
+        # template-id pointers (UiaArray<...>*) and other encodings the
+        # mini-parser skips: recover just the pointer-ness from the mangle
+        # (PDB return_type lost the star)
         ty = ty + "*"
     # 'int const' / 'long const' -> 'const int' style is equivalent;
     # keep the source order but put const first for style
@@ -498,6 +1163,17 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("#pragma once")
     lines.append("")
     lines.append("#include <windows.h>")
+    lines.append("#include <commctrl.h>       // _TREEITEM, tagNMCUSTOMDRAWINFO, _PSP")
+    lines.append("#include <commdlg.h>        // _PROPSHEETPAGEW")
+    lines.append("#include <UIAutomationCore.h>  // IRawElementProvider*, UiaRect, enums")
+    lines.append("#include <UIAutomationCoreApi.h>  // AutomationIdentifierType enum (Uia* fn-ptr args)")
+    lines.append("#include <directmanipulation.h> // IDirectManipulation* interfaces")
+    lines.append("#include <dwrite.h>         // DWRITE_TEXT_RANGE, IDWriteFactory, ...")
+    lines.append("#include <oleacc.h>         // IAccessible, IAccIdentity")
+    lines.append("#include <imagehlp.h>       // STACK_SYMBOL_INFO, API_VERSION, IMGHLPFN_LOAD")
+    lines.append("#include <inputscope.h>     // inputscope GUIDs (TouchEdit2)")
+    lines.append("#include <richedit.h>       // CHARRANGE (needed before tom.h)")
+    lines.append("#include <tom.h>            // ITextDocument (richedit tom)")
     lines.append("")
     lines.append("// UCString: the DirectUI string ABI is 'unsigned short const*'.")
     lines.append("// With /Zc:wchar_t- a 'const wchar_t*' parameter mangles")
@@ -505,16 +1181,27 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("typedef unsigned short const* UCString;")
     lines.append("")
     lines.append("// Global-scope declarations (mangle WITHOUT the DirectUI back-reference)")
-    lines.append("struct IAccessible;")
     lines.append("struct IDuiBehavior;")
     lines.append("struct ISharedBitmap;")
-    lines.append("struct IStream;")
-    lines.append("struct IUnknown;")
-    lines.append("struct IXmlReader;")
     lines.append("struct EventMsg;")
     lines.append("struct tagGMSG;         // not in windows.h")
     lines.append("struct HGADGET__;       // DECLARE_HANDLE(HGADGET) in the real headers")
     lines.append("typedef struct HGADGET__* HGADGET;")
+    lines.append("struct HDCONTEXT__;     // duser opaquely-declared handle type")
+    lines.append("typedef struct HDCONTEXT__* HDCONTEXT;")
+    lines.append("struct IXmlReader;      // xmllite reader (fwd suffices: ptr-only ABI)")
+    lines.append("class ITextServices;    // richedit (PEAV in the real DLL)")
+    lines.append("class ITextHost;        // richedit text host (PEAV)")
+    lines.append("struct GMA_ACTIONINFO;  // GraphicMatrixAnimation action (PEAU, GLOBAL)")
+    lines.append("struct GMA_ACTIONDESC;  // (PEAU, GLOBAL)")
+    lines.append("struct IDUIRichTextCache;  // RichText cache (PEAU, GLOBAL)")
+    lines.append("struct IDCompSurface;   // DComp surface (PEAU, GLOBAL)")
+    lines.append("")
+    lines.append("// DirectUI-private enums that mangle at GLOBAL scope (W4Name@@ without")
+    lines.append("// the @2@ namespace back-reference).")
+    lines.append("enum SemanticZoomToggleState { SemanticZoomToggleState_None = 0 };")
+    lines.append("enum TOUCHTOOLTIP_INPUT { TOUCHTOOLTIP_INPUT_None = 0 };")
+    lines.append("enum TOUCHTOOLTIP_OPTION_FLAGS { TOUCHTOOLTIP_OPTION_FLAGS_None = 0 };")
     lines.append("")
     lines.append("// UID: returned by value by several static event-id accessors.")
     lines.append("// Decorated name in the real DLL is VUID@@ (GLOBAL scope), so it is")
@@ -548,9 +1235,47 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("    struct ScaledSIZE { int w; int h; };")
     lines.append("    struct ScaledRECT { int l; int t; int r; int b; };")
     lines.append("")
-    lines.append("    // ---- enums inside DirectUI ----")
+    lines.append("    // ---- DirectUI-private enums (by-value ABI; enumerator sets are")
+    lines.append("    //      not exported -- single-member bodies keep them complete) ----")
     lines.append("    enum _DUI_PARSE_STATE { DUI_PARSE_STATE_None = 0 };")
     lines.append("    enum DynamicScaleParsing { DynamicScaleParsing_None = 0 };")
+    lines.append("    enum ActiveState { ActiveState_None = 0 };")
+    lines.append("    enum ClickDevice { ClickDevice_None = 0 };")
+    lines.append("    enum IHMState { IHMState_None = 0 };")
+    lines.append("    enum TouchEditFilteredKeyComboFlags { TouchEditFilteredKeyComboFlags_None = 0 };")
+    lines.append("    enum TouchEditKeyboardNavigationCapture { TouchEditKeyboardNavigationCapture_None = 0 };")
+    lines.append("    enum TouchEditPasswordRevealMode { TouchEditPasswordRevealMode_None = 0 };")
+    lines.append("    enum TouchEditTextMode { TouchEditTextMode_None = 0 };")
+    lines.append("    enum TouchHWNDElementFlags { TouchHWNDElementFlags_None = 0 };")
+    lines.append("    enum POPUPCHANGEEVENTTYPE { POPUPCHANGEEVENTTYPE_None = 0 };")
+    lines.append("    enum POPUPFIREEVENTTYPE { POPUPFIREEVENTTYPE_None = 0 };")
+    lines.append("    enum FUNCMODE { FUNCMODE_None = 0 };")
+    lines.append("    enum CheckedStateFlags { CheckedStateFlags_None = 0 };")
+    lines.append("")
+    lines.append("    // ---- DirectUI-private structs (pointer-only ABI: fwd suffices) ----")
+    lines.append("")
+    lines.append("    // IDialogElement: abstract mixin interface (real header: DialogElement")
+    lines.append("    // idiom); needs a definition because DialogElement/XBaby DERIVE from")
+    lines.append("    // it. Pure virtual so the derived class emits the base-subobject")
+    lines.append("    // vftable symbol (??_7D@...6BIDialogElement@@).")
+    lines.append("    struct __declspec(novtable) IDialogElement")
+    lines.append("    {")
+    lines.append("    public:")
+    lines.append("        virtual long OnDialogEvent(void) = 0;")
+    lines.append("    };")
+    lines.append("")
+    lines.append("    // ---- embedded-subsystem namespaces referenced by exported")
+    lines.append("    //      signatures (pointer-only: namespace + class fwd) ----")
+    lines.append("    namespace DuiBehaviorFilters { enum Flags { Flags_None = 0 }; }")
+    lines.append("    namespace SWF { class Bits; class SWF; class Tag;")
+    lines.append("                    class Fluster; class ColorTransformBrush;")
+    lines.append("                    class CommandTag; class Definition;")
+    lines.append("                    class Movie { public: struct DepthRange; };")
+    lines.append("                    namespace Shape { struct Action; struct LineSegment; }")
+    lines.append("                    namespace Types { enum BrushType { BrushType_None = 0 }; } }")
+    lines.append("    namespace Library { class Stream;")
+    lines.append("                        template <typename T> class SimpleVector; }")
+    lines.append("    namespace Gdiplus { class Brush; struct ColorMatrix; }")
     lines.append("")
     lines.append("    // ---- class forward declarations ----")
     for name in sorted(DIRECTUI_CLASS_TYPES):
@@ -562,11 +1287,8 @@ def render_abi_types_header(banner: str) -> str:
         if name in ("LINEINFO", "ScaledSIZE", "ScaledRECT"):
             continue
         lines.append(f"    struct {name};")
-    for name in sorted(EXTRA_STRUCT_TYPES):
-        lines.append(f"    struct {name};")
-    lines.append("")
-    lines.append("    // ---- enum for TouchCheckBox (W4CheckedStateFlags@2@) ----")
-    lines.append("    enum CheckedStateFlags { CheckedStateFlags_None = 0 };")
+    for name, kind in sorted(EXTRA_FWD_TYPES.items()):
+        lines.append(f"    {kind} {name};")
     lines.append("")
     lines.append("    // ---- ValueType: consumer-side knowledge (enum members are never")
     lines.append("    // exported; members transcribed from DirectUI Value.h). Used by")
@@ -607,6 +1329,12 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("    // type by several exported methods (CreateElementList etc.)")
     lines.append("    template <typename T, int N>")
     lines.append("    class DynamicArray;")
+    lines.append("")
+    lines.append("    // UiaArray<T>: exported static data members hold instances")
+    lines.append("    // (g_pArrayPprv, g_pArrayInvokeHelper). Pointer-size object;")
+    lines.append("    // the mangled data symbol only needs the template-id.")
+    lines.append("    template <typename T>")
+    lines.append("    class UiaArray { public: void* _storage; };")
     lines.append("")
     lines.append("} // namespace DirectUI")
     lines.append("")
@@ -778,21 +1506,8 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("        virtual void AssertPIZeroRef(void) = 0;                       // 17")
     lines.append("    };")
     lines.append("")
-    lines.append("    // IXProviderCP / IXElementCP: connection-point interfaces used by")
-    lines.append("    // XProvider (vtable slot order from the DirectUI interfaces).")
-    lines.append("    class IXProviderCP")
-    lines.append("    {")
-    lines.append("    public:")
-    lines.append("        virtual long CreateDUICP(HWNDElement*, HWND, HWND, Element**, DUIXmlParser**) = 0;")
-    lines.append("        virtual long CreateParserCP(DUIXmlParser**) = 0;")
-    lines.append("        virtual void DestroyCP(void) = 0;")
-    lines.append("    };")
-    lines.append("")
-    lines.append("    class IXElementCP")
-    lines.append("    {")
-    lines.append("    public:")
-    lines.append("        virtual HWND GetNotificationSinkHWND(void) = 0;")
-    lines.append("    };")
+    lines.append("    // IXProviderCP / IXElementCP are REAL exported classes now --")
+    lines.append("    // see their generated headers (IXProviderCP.h / IXElementCP.h).")
     lines.append("")
     lines.append("    // IXProvider: the abstract interface XProvider implements.")
     lines.append("    // Slot order: IUnknown first (QI/AddRef/Release), then the")
@@ -838,38 +1553,151 @@ def render_interfaces_header(banner: str) -> str:
     return "\n".join(lines)
 
 
+# Complete plain-name C API export table (86 entries, alphabetical).
+# The export table carries ONLY the undecorated name; on x64 there is one
+# calling convention, so any signature compiles to the same plain symbol.
+# Types are chosen to be harmless for stubs (pointer-friendly) and useful
+# for consumers: known shapes come from UITest usage and the public DirectUI
+# headers; unknown shapes use conservative (void*/int) parameter lists.
+C_API_DECLS = [
+    # -- color/brush enum helpers (CreateStyle value baking) --
+    "unsigned long WINAPI ARGBColorFromEnumI(int e);",
+    "unsigned long WINAPI BrushFromEnumI(int e);",
+    "unsigned long WINAPI ColorFromEnumI(int e);",
+    # -- animation control (UITest experiment consumers) --
+    "int  WINAPI IsAnimationsEnabled(void);",
+    "void WINAPI EnableAnimations(void);",
+    "void WINAPI DisableAnimations(void);",
+    "void WINAPI DUIStopPVLAnimation(void* element);",
+    # -- callstack tracking --
+    "void WINAPI DisableInitCallstackTracking(void);",
+    # -- DUI wrapper creation (DUser interop) --
+    "void* WINAPI CreateDUIWrapper(void);",
+    "void* WINAPI CreateDUIWrapperEx(unsigned short const* name, unsigned short const* info);",
+    "void* WINAPI CreateDUIWrapperFromResource(int resId, unsigned short const* name, void* module);",
+    "void* WINAPI CreateDUIWrapperTouchEx(unsigned short const* name, unsigned short const* info, void* module);",
+    # -- touch tooltip --
+    "long WINAPI CreateTouchTooltip(void* element, int flags, void** tooltip);",
+    # -- DUI70_* flat C API (scripting interop family) --
+    "void* WINAPI DUI70_DUIXmlParserCreate(void);",
+    "long  WINAPI DUI70_DUIXmlParserCreateElement(void* parser, void* parent, void** element);",
+    "void  WINAPI DUI70_DUIXmlParserDestroy(void* parser);",
+    "long  WINAPI DUI70_DUIXmlParserSetXMLFromResource(void* parser, int resId, void* module);",
+    "long  WINAPI DUI70_ElementAddListener(void* element, void* listener);",
+    "void  WINAPI DUI70_ElementDestroy(void* element);",
+    "long  WINAPI DUI70_ElementEndDefer(void* element);",
+    "void* WINAPI DUI70_ElementFindDescendent(void* element, int atom);",
+    "void* WINAPI DUI70_ElementGetChildren(void* element);",
+    "void* WINAPI DUI70_ElementGetRoot(void* element);",
+    "long  WINAPI DUI70_ElementRemoveListener(void* element, void* listener);",
+    "long  WINAPI DUI70_ElementSetAccRole(void* element, int role);",
+    "long  WINAPI DUI70_ElementSetAccessible(void* element, void* accessible);",
+    "long  WINAPI DUI70_ElementSetContentAlign(void* element, int align);",
+    "long  WINAPI DUI70_ElementSetContentString(void* element, unsigned short const* s);",
+    "long  WINAPI DUI70_ElementSetFont(void* element, unsigned short const* font);",
+    "long  WINAPI DUI70_ElementSetID(void* element, unsigned short const* id);",
+    "long  WINAPI DUI70_ElementSetLayoutPos(void* element, int pos);",
+    "long  WINAPI DUI70_ElementSetVisible(void* element, int visible);",
+    "long  WINAPI DUI70_ElementStartDefer(void* element);",
+    "int   WINAPI DUI70_IsTouchButtonClickEqual(int a, int b);",
+    "void* WINAPI DUI70_RichTextCreate(void);",
+    "long  WINAPI DUI70_RichTextSetConstrainLayout(void* richtext, int constrain);",
+    "void  WINAPI DUI70_ValueRelease(void* value);",
+    # -- shadow text --
+    "long WINAPI DUIDrawShadowText(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor);",
+    "long WINAPI DrawShadowTextEx(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor, void* opts);",
+    # -- object creation --
+    "long WINAPI DuiCreateObject(struct DirectUI::IClassInfo const* ci, void** out);",
+    "long WINAPI ElementFromGadget(void* gadget, struct DirectUI::Element** out);",
+    # -- theme handle cache --
+    "void WINAPI FlushThemeHandles(void);",
+    "void WINAPI PurgeThemeHandles(void);",
+    "void* WINAPI GetThemeHandle(int classId);",
+    # -- misc --
+    "void WINAPI ForceDebugBreak(void);",
+    "unsigned int WINAPI GetDesktopDPI(unsigned int* dpiX, unsigned int* dpiY);",
+    "void WINAPI SetDesktopDPIOverride(unsigned int dpiX, unsigned int dpiY);",
+    "unsigned int WINAPI GetScaleFactor(void);",
+    "long WINAPI GetElementDataEntry(void* gadget, void** out);",
+    "long WINAPI GetElementMacro(void* gadget, void** out);",
+    "void* WINAPI GetFontCache(void);",
+    "long WINAPI HStrDup(unsigned short const* s, unsigned short** out);",
+    "long WINAPI HrSysAllocString(unsigned short const* s, unsigned short** out);",
+    # -- process/thread init (UITest consumers) --
+    "long WINAPI InitProcessPriv(int duiVersion, unsigned short* unk1, char unk2, bool bEnableUIAutomationProvider);",
+    "long WINAPI UnInitProcessPriv(unsigned short* unk1);",
+    "long WINAPI InitThread(int iDontKnow);",
+    "void WINAPI UnInitThread(void);",
+    "void WINAPI SkipDLLUnloadInitChecks(void);",
+    # -- preprocessor / factories --
+    "long WINAPI InitPreprocessor(void);",
+    "long WINAPI PreprocessBuffer(void);",
+    "void WINAPI RegisterPVLBehaviorFactory(void);",
+    # -- string helpers --
+    "unsigned short* WINAPI MultiByteToUnicode(char const* s);",
+    "char* WINAPI UnicodeToMultiByte(unsigned short const* s);",
+    "unsigned short WINAPI StrToID(UCString resId);",
+    # -- queries --
+    "int WINAPI IsPalette(void);",
+    "int WINAPI IsUIAutomationProviderEnabled(void);",
+    # -- accessibility --
+    "void WINAPI NotifyAccessibilityEvent(void* element, int eventId);",
+    # -- message pump (UITest consumers) --
+    "int  WINAPI StartMessagePump(void);",
+    "void WINAPI StopMessagePump(void);",
+    # -- UIA sinks --
+    "void WINAPI UiaHideOnGetObject(void* element);",
+    "void WINAPI UiaOnDestroySink(void* element);",
+    "void* WINAPI UiaOnGetObject(void* element, unsigned int childId, void* riid);",
+    "void WINAPI UiaOnToolTip(void* element, int action);",
+    # -- control registration (UITest consumer: RegisterAllControls) --
+    "int WINAPI RegisterAllControls(void);",
+    "int WINAPI RegisterBaseControls(void);",
+    "int WINAPI RegisterBrowserControls(void);",
+    "int WINAPI RegisterCommonControls(void);",
+    "int WINAPI RegisterExtendedControls(void);",
+    "int WINAPI RegisterMacroControls(void);",
+    "int WINAPI RegisterMiscControls(void);",
+    "int WINAPI RegisterStandardControls(void);",
+    "int WINAPI RegisterXControls(void);",
+    # -- misc setters --
+    "void WINAPI SetDefAction(void* element, void* action);",
+    "void WINAPI AllowAllScalingPlateaus(void);",
+    # -- imaging --
+    "long WINAPI BlurBitmap(void* src, void* dst, unsigned int a2, unsigned int a3, unsigned int a4, unsigned int a5, float a6, float a7, void* a8);",
+    "long WINAPI ProcessAlphaBitmapI(void* a0, int a1, unsigned int a2, unsigned int a3, unsigned int a4, unsigned int a5, unsigned int a6, unsigned int a7, unsigned int a8, void* a9, void* a10);",
+]
+
+
 def render_extern_c_block() -> str:
-    """extern "C" declarations for the plain-named C API exports.
+    """extern "C" declarations for ALL 86 plain-name C API exports.
     The real DLL exports these as undecorated C symbols; declaring them
-    extern \"C\" produces exactly the same symbol shape for the linker.
-    Signatures come from UITest usage + the DirectUI headers (the export
-    table only carries the plain name)."""
+    extern "C" produces exactly the same symbol shape for the linker.
+    The export table carries only the names, so the parameter lists are
+    pipeline-recovered where known (UITest usage, public DirectUI headers)
+    and conservative elsewhere. Verification checks the NAME set (dumpbin
+    plain names vs declarations), not signatures."""
     lines = []
     lines.append("")
     lines.append("// ---------------------------------------------------------------------------")
-    lines.append("// extern \"C\" API -- plain-name exports of the real dui70.dll.")
-    lines.append("// Signatures from UITest usage + the DirectUI headers; the export table")
-    lines.append("// itself only carries the undecorated name.")
-    lines.append("// TODO: remaining ~80 plain-name exports (incl. DUI70_XXX-prefixed")
-    lines.append("// whose signatures are not yet recovered) are not declared here.")
+    lines.append('// extern "C" API -- the complete plain-name export set of the real')
+    lines.append("// dui70.dll (86 entries). Signatures are pipeline-recovered where known")
+    lines.append("// and conservative elsewhere; the export table itself only carries the")
+    lines.append('// undecorated names, which extern "C" reproduces exactly.')
     lines.append("// ---------------------------------------------------------------------------")
     lines.append('extern "C" {')
     lines.append("")
-    lines.append("HRESULT WINAPI InitProcessPriv(int duiVersion, unsigned short* unk1, char unk2, bool bEnableUIAutomationProvider);")
-    lines.append("HRESULT WINAPI UnInitProcessPriv(unsigned short* unk1);")
-    lines.append("HRESULT WINAPI InitThread(int iDontKnow);")
-    lines.append("int WINAPI RegisterAllControls();")
-    lines.append("int WINAPI StartMessagePump();")
-    lines.append("ATOM WINAPI StrToID(UCString resId);")
+    for d in C_API_DECLS:
+        lines.append(d)
     lines.append("")
-    lines.append("} // extern \"C\"")
+    lines.append('} // extern "C"')
 
     # Decorated free functions (real exports, global scope, C++ mangling).
     # DumpDuiTree is consumed by UITest.
     lines.append("")
     lines.append("// ---------------------------------------------------------------------------")
     lines.append("// Free functions -- decorated exports of the real dui70.dll")
-    lines.append("// (mangled ?Name@@YA...; NOT extern \"C\").")
+    lines.append('// (mangled ?Name@@YA...; NOT extern "C").')
     lines.append("// ---------------------------------------------------------------------------")
     lines.append("void __cdecl DumpDuiTree(DirectUI::Element* element, int depth);")
     return "\n".join(lines)
@@ -884,7 +1712,10 @@ def render_aggregate_header(classes: list, banner: str) -> str:
     lines.append('#include "dui_abi_types.h"')
     lines.append('#include "Interfaces.h"')
     for cls in classes:
-        lines.append(f'#include "{cls}.h"')
+        if is_duixml_nested(cls) or is_nested_pseudo_class(cls):
+            # nested in a host class: declared inside the host's header
+            continue
+        lines.append(f'#include "{safe_name(cls)}.h"')
     # extern "C" API block at the end (needs UCString from dui_abi_types.h)
     lines.append(render_extern_c_block())
     return "\n".join(lines)
@@ -921,15 +1752,32 @@ def main(argv=None) -> int:
 
     stats = {}
     for cls in classes:
+        if is_duixml_nested(cls):
+            # nested in DUIXmlParser: emitted by its header/TU, not standalone
+            continue
+        if is_nested_pseudo_class(cls):
+            # nested in a host class (e.g. AccessibleButton::ACCESSIBLEROLE):
+            # declared inside the host's header, no standalone file
+            continue
         members = [s for s in symbols
                    if s.get("class") == cls
+                   and s.get("is_exported")
+                   and in_directui_scope(s)
                    and is_callable(s)]
         data_members = [s for s in symbols
                         if s.get("class") == cls
+                        and s.get("is_exported")
+                        and in_directui_scope(s)
                         and is_data(s)]
+        has_own_vftable = any(
+            (s.get("mangled") or "").endswith(f"??_7{cls}@DirectUI@@6B@")
+            for s in symbols
+            if s.get("class") == cls and s.get("is_exported")
+        )
         content = render_class_header(cls, members, data_members, tr,
-                                      classes, inheritance, banner)
-        (out_dir / f"{cls}.h").write_text(content, encoding="utf-8", newline="\n")
+                                      classes, inheritance, banner,
+                                      has_own_vftable=has_own_vftable)
+        (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
 
     # shared prelude + interfaces + aggregate
@@ -937,9 +1785,11 @@ def main(argv=None) -> int:
     (out_dir / "Interfaces.h").write_text(render_interfaces_header(banner), encoding="utf-8", newline="\n")
     (out_dir / "DirectUI.h").write_text(render_aggregate_header(classes, banner), encoding="utf-8", newline="\n")
 
-    print(f"emit_headers: wrote {len(classes) + 3} files to {out_dir}")
+    print(f"emit_headers: wrote {len(stats) + 3} files to {out_dir}")
     for cls in classes:
-        s = stats[cls]
+        s = stats.get(cls)
+        if not s:
+            continue
         print(f"  {cls:<16} callables={s['methods']:4d} data={s['data']}")
     return 0
 

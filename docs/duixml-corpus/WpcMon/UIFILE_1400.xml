@@ -1,0 +1,16 @@
+<!--
+  source: %SYSTEMROOT%\System32\WpcMon.exe
+  resource: UIFILE / "1400" / lang 1033
+  size: 389 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<StyleSheets>
+<Style resid="style" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<RichText font="12;normal;none;Segoe UI"/>
+</Style>
+</StyleSheets>
+<ImmersiveDialog resid="main" Sheet="style" Layout="VerticalFlowLayout(0, 0, 0, 0)">
+<RichText id="atom(Content)" contentAlign="wrapLeft" accessible="true" accrole="statictext"/>
+</ImmersiveDialog>
+</duixml>

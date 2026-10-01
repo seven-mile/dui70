@@ -11,6 +11,17 @@
 #pragma once
 
 #include <windows.h>
+#include <commctrl.h>       // _TREEITEM, tagNMCUSTOMDRAWINFO, _PSP
+#include <commdlg.h>        // _PROPSHEETPAGEW
+#include <UIAutomationCore.h>  // IRawElementProvider*, UiaRect, enums
+#include <UIAutomationCoreApi.h>  // AutomationIdentifierType enum (Uia* fn-ptr args)
+#include <directmanipulation.h> // IDirectManipulation* interfaces
+#include <dwrite.h>         // DWRITE_TEXT_RANGE, IDWriteFactory, ...
+#include <oleacc.h>         // IAccessible, IAccIdentity
+#include <imagehlp.h>       // STACK_SYMBOL_INFO, API_VERSION, IMGHLPFN_LOAD
+#include <inputscope.h>     // inputscope GUIDs (TouchEdit2)
+#include <richedit.h>       // CHARRANGE (needed before tom.h)
+#include <tom.h>            // ITextDocument (richedit tom)
 
 // UCString: the DirectUI string ABI is 'unsigned short const*'.
 // With /Zc:wchar_t- a 'const wchar_t*' parameter mangles
@@ -18,16 +29,27 @@
 typedef unsigned short const* UCString;
 
 // Global-scope declarations (mangle WITHOUT the DirectUI back-reference)
-struct IAccessible;
 struct IDuiBehavior;
 struct ISharedBitmap;
-struct IStream;
-struct IUnknown;
-struct IXmlReader;
 struct EventMsg;
 struct tagGMSG;         // not in windows.h
 struct HGADGET__;       // DECLARE_HANDLE(HGADGET) in the real headers
 typedef struct HGADGET__* HGADGET;
+struct HDCONTEXT__;     // duser opaquely-declared handle type
+typedef struct HDCONTEXT__* HDCONTEXT;
+struct IXmlReader;      // xmllite reader (fwd suffices: ptr-only ABI)
+class ITextServices;    // richedit (PEAV in the real DLL)
+class ITextHost;        // richedit text host (PEAV)
+struct GMA_ACTIONINFO;  // GraphicMatrixAnimation action (PEAU, GLOBAL)
+struct GMA_ACTIONDESC;  // (PEAU, GLOBAL)
+struct IDUIRichTextCache;  // RichText cache (PEAU, GLOBAL)
+struct IDCompSurface;   // DComp surface (PEAU, GLOBAL)
+
+// DirectUI-private enums that mangle at GLOBAL scope (W4Name@@ without
+// the @2@ namespace back-reference).
+enum SemanticZoomToggleState { SemanticZoomToggleState_None = 0 };
+enum TOUCHTOOLTIP_INPUT { TOUCHTOOLTIP_INPUT_None = 0 };
+enum TOUCHTOOLTIP_OPTION_FLAGS { TOUCHTOOLTIP_OPTION_FLAGS_None = 0 };
 
 // UID: returned by value by several static event-id accessors.
 // Decorated name in the real DLL is VUID@@ (GLOBAL scope), so it is
@@ -61,9 +83,47 @@ namespace DirectUI
     struct ScaledSIZE { int w; int h; };
     struct ScaledRECT { int l; int t; int r; int b; };
 
-    // ---- enums inside DirectUI ----
+    // ---- DirectUI-private enums (by-value ABI; enumerator sets are
+    //      not exported -- single-member bodies keep them complete) ----
     enum _DUI_PARSE_STATE { DUI_PARSE_STATE_None = 0 };
     enum DynamicScaleParsing { DynamicScaleParsing_None = 0 };
+    enum ActiveState { ActiveState_None = 0 };
+    enum ClickDevice { ClickDevice_None = 0 };
+    enum IHMState { IHMState_None = 0 };
+    enum TouchEditFilteredKeyComboFlags { TouchEditFilteredKeyComboFlags_None = 0 };
+    enum TouchEditKeyboardNavigationCapture { TouchEditKeyboardNavigationCapture_None = 0 };
+    enum TouchEditPasswordRevealMode { TouchEditPasswordRevealMode_None = 0 };
+    enum TouchEditTextMode { TouchEditTextMode_None = 0 };
+    enum TouchHWNDElementFlags { TouchHWNDElementFlags_None = 0 };
+    enum POPUPCHANGEEVENTTYPE { POPUPCHANGEEVENTTYPE_None = 0 };
+    enum POPUPFIREEVENTTYPE { POPUPFIREEVENTTYPE_None = 0 };
+    enum FUNCMODE { FUNCMODE_None = 0 };
+    enum CheckedStateFlags { CheckedStateFlags_None = 0 };
+
+    // ---- DirectUI-private structs (pointer-only ABI: fwd suffices) ----
+
+    // IDialogElement: abstract mixin interface (real header: DialogElement
+    // idiom); needs a definition because DialogElement/XBaby DERIVE from
+    // it. Pure virtual so the derived class emits the base-subobject
+    // vftable symbol (??_7D@...6BIDialogElement@@).
+    struct __declspec(novtable) IDialogElement
+    {
+    public:
+        virtual long OnDialogEvent(void) = 0;
+    };
+
+    // ---- embedded-subsystem namespaces referenced by exported
+    //      signatures (pointer-only: namespace + class fwd) ----
+    namespace DuiBehaviorFilters { enum Flags { Flags_None = 0 }; }
+    namespace SWF { class Bits; class SWF; class Tag;
+                    class Fluster; class ColorTransformBrush;
+                    class CommandTag; class Definition;
+                    class Movie { public: struct DepthRange; };
+                    namespace Shape { struct Action; struct LineSegment; }
+                    namespace Types { enum BrushType { BrushType_None = 0 }; } }
+    namespace Library { class Stream;
+                        template <typename T> class SimpleVector; }
+    namespace Gdiplus { class Brush; struct ColorMatrix; }
 
     // ---- class forward declarations ----
     class DeferCycle;
@@ -94,13 +154,13 @@ namespace DirectUI
     struct ScaledInt;
     struct ThemeChangedEvent;
     struct UpdateCache;
-    struct IDialogElement;
+    struct CellInfo;
+    struct ElementRuntimeId;
     struct IXBaby;
-    struct IXElementCP;
-    struct IXProviderCP;
-
-    // ---- enum for TouchCheckBox (W4CheckedStateFlags@2@) ----
-    enum CheckedStateFlags { CheckedStateFlags_None = 0 };
+    class IXElementCP;
+    struct IXProvider;
+    class IXProviderCP;
+    struct RectangleChange;
 
     // ---- ValueType: consumer-side knowledge (enum members are never
     // exported; members transcribed from DirectUI Value.h). Used by
@@ -141,5 +201,11 @@ namespace DirectUI
     // type by several exported methods (CreateElementList etc.)
     template <typename T, int N>
     class DynamicArray;
+
+    // UiaArray<T>: exported static data members hold instances
+    // (g_pArrayPprv, g_pArrayInvokeHelper). Pointer-size object;
+    // the mangled data symbol only needs the template-id.
+    template <typename T>
+    class UiaArray { public: void* _storage; };
 
 } // namespace DirectUI

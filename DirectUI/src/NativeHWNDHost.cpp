@@ -10,10 +10,10 @@ namespace DirectUI
 {
 
 NativeHWNDHost::NativeHWNDHost(NativeHWNDHost const&a0)
-{}
+{ }
 
 NativeHWNDHost::NativeHWNDHost(void)
-{}
+{ }
 
 NativeHWNDHost::~NativeHWNDHost(void)
 {}

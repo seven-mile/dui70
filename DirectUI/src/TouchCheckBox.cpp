@@ -5,13 +5,12 @@
 // decorated names of the real dui70.dll exports.
 
 #include "TouchCheckBox.h"
-#include "Interfaces.h"
 
 namespace DirectUI
 {
 
 TouchCheckBox::TouchCheckBox(void)
-{}
+{ }
 
 TouchCheckBox::~TouchCheckBox(void)
 {}
@@ -69,19 +68,5 @@ long TouchCheckBox::SetToggleOnClick(bool a0)
 
 PropertyInfo const* TouchCheckBox::ToggleOnClickProp(void)
 { return nullptr; }
-
-long TouchCheckBox::_CreateAndAddGlyph(void)
-{ return 0; }
-
-long TouchCheckBox::_CreateAndAddLabel(void)
-{ return 0; }
-
-Element* TouchCheckBox::_GetLabel(void)
-{ return nullptr; }
-
-void TouchCheckBox::_UpdateAccState(bool a0, CheckedStateFlags a1)
-{}
-
-IClassInfo* TouchCheckBox::s_pClassInfo = nullptr;
 
 } // namespace DirectUI

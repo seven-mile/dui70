@@ -1,0 +1,358 @@
+<!--
+  source: %SYSTEMROOT%\System32\fhcpl.dll
+  resource: UIFILE / "201" / lang 1033
+  size: 20606 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="wuappstyle">
+<element background="argb(0,0,0,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" font="gtf(CONTROLPANELSTYLE,6,0)"/>
+<edit accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)"/>
+<PText accessible="true" accrole="statictext" background="argb(0,0,0,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" font="gtf(CONTROLPANELSTYLE,6,0)"/>
+<CCSysLink accessible="true" transparent="true" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" font="gtf(CONTROLPANELSTYLE,6,0)"/>
+<CCListView accessible="true" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)" font="gtf(CONTROLPANELSTYLE,6,0)"/>
+<CCListBox font="gtf(CONTROLPANELSTYLE, 6, 0)" accessible="true" acchelp="" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+<CCPushButton accessible="true"/>
+<CCRadioButton accessible="true" transparent="true" margin="rect(0,0,0,4rp)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" font="gtf(CONTROLPANELSTYLE,6,0)" background="themeable(dtb(CONTROLPANEL,2,0),Window)" shortcut="auto"/>
+<Combobox background="themeable(dtb(CONTROLPANEL,2,0), window)" font="gtf(CONTROLPANELSTYLE, 6, 0)" accessible="true" accrole="combobox" padding="rect(0rp,5rp,0rp,5rp)"/>
+<if keyfocused="true">
+<CCRadioButton contentalign="wrapleft | focusrect"/>
+</if>
+<if class="green_gradient">
+<element background="gradient(rgb(22,118,20),rgb(66,179,62),1)" width="20rp"/>
+</if>
+<if class="gray_gradient">
+<element background="themeable(gradient(rgb(160,160,160),rgb(226,226,226),1), Window)" width="20rp"/>
+</if>
+<if class="yellow_banner">
+<element background="themeable(dtb(CONTROLPANEL,18,0),Window)" bordercolor="themeable(gtc(ScrollBarStyle, 2, 0, 3821),buttonshadow)"/>
+</if>
+<if class="yellow_banner_inner">
+<element layoutpos="client"/>
+</if>
+<if class="green_gradient_hc">
+<element background="activecaption" width="20rp"/>
+</if>
+<if class="gray_gradient_hc">
+<element background="activecaption" width="20rp"/>
+</if>
+<if class="moduleborder1">
+<element borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="themeable(gtc(ScrollBarStyle, 2, 0, 3821),buttonshadow)"/>
+</if>
+<if class="moduleborder2">
+<element borderthickness="rect(1rp,0,1rp,1rp)" bordercolor="themeable(gtc(ScrollBarStyle, 2, 0, 3821),buttonshadow)" padding="rect(5rp,11rp,9rp,9rp)"/>
+</if>
+<if class="moduleinner1">
+<element layoutpos="client" padding="rect(3rp,3rp,3rp,3rp)"/>
+</if>
+<if class="wuapp_module_instruction">
+<PText contentalign="topleft | endellipsis" font="gtf(CONTROLPANELSTYLE,5,0)" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)"/>
+<element accessible="true" accrole="statictext" contentalign="topleft | endellipsis" font="gtf(CONTROLPANELSTYLE,5,0)" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)"/>
+</if>
+<if class="wuapp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE,5,0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="wuapp_content_divider_header_small">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE,4,0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if id="atom(ExpandoButtonImage)">
+<button height="themeable(gtmet(TaskDialog, 13, 0, 2417), '21rp')" width="themeable(gtmet(TaskDialog, 13, 0, 2416), '19rp')" background="themeable(dtb(TaskDialog, 13, 1), dfc(3, 0x0001))" margin="themeable(gtmar(TaskDialog, 20, 0, 3602), rect(0rp,0rp,10rp,0rp))"/>
+<if mousefocused="true">
+<button background="themeable(dtb(TaskDialog, 13, 2), dfc(3, 0x0001 | 0x1000))"/>
+</if>
+<if keyfocused="true">
+<button contentalign="focusrect"/>
+</if>
+<if pressed="true">
+<button background="themeable(dtb(TaskDialog, 13, 3), dfc(3, 0x0001 | 0x0200) )"/>
+</if>
+<if selected="true">
+<button background="themeable(dtb(TaskDialog, 13, 4),dfc(3, 0x0000))"/>
+<if mousefocused="true">
+<button background="themeable(dtb(TaskDialog, 13, 5), dfc(3, 0x0000 | 0x1000))"/>
+</if>
+<if pressed="true">
+<button background="themeable(dtb(TaskDialog, 13, 6), dfc(3, 0x0000| 0x0200))"/>
+</if>
+</if>
+</if>
+<if class="GroupButtonImage">
+<button width="-1" height="-1" background="argb(0,0,0,0)" content="themeable(dtb(LISTVIEW,8,1),dfc(3, 0x0001))" accessible="false"/>
+<if mousefocused="true">
+<button content="themeable(dtb(LISTVIEW,8,2),dfc(3, 0x0001 | 0x1000))"/>
+</if>
+<if keyfocused="true">
+<button contentalign="focusrect"/>
+</if>
+<if pressed="true">
+<button content="themeable(dtb(LISTVIEW,8,3),dfc(3, 0x0001 | 0x0200))"/>
+</if>
+<if selected="true">
+<button content="themeable(dtb(LISTVIEW,9,1),dfc(3,0x0000))"/>
+<if mousefocused="true">
+<button content="themeable(dtb(LISTVIEW,9,2),dfc(3, 0x0000 | 0x1000))"/>
+</if>
+<if pressed="true">
+<button content="themeable(dtb(LISTVIEW,9,3),dfc(3, 0x0000 | 0x0200))"/>
+</if>
+</if>
+</if>
+</style>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+</stylesheets>
+<HistoryVaultPage resid="main" id="atom(Hub)" layout="borderlayout()">
+<Element sheet="cp_style" class="cp_topbox" layout="borderlayout()" layoutpos="client" accname="resstr(9)">
+<ScrollViewer xscrollable="false" layoutpos="top" sheet="common" accrole="pane">
+<Element layout="borderlayout()" sheet="cp_style" class="cp_hub_frame">
+<Element layoutpos="top" layout="borderlayout()">
+<Viewer layoutpos="right">
+<Button class="cp_help_glyph" id="atom(helpHub)" accname="resstr(12)"/>
+</Viewer>
+</Element>
+<FocusIndicator id="atom(FocusIndicator)" firsttabtarget="atom(startLinks)"/>
+<Element id="atom(startLinks)" class="cp_content_pane" layoutpos="left" layout="borderlayout()">
+<Element layoutpos="top" layout="flowlayout()">
+<Element id="atom(hubInstruction)" class="cp_content_instruction" content="resstr(581)"/>
+</Element>
+<Element class="cp_content_v_spacer" layoutpos="top"/>
+<Element layoutpos="top" layout="flowlayout()">
+<Element id="atom(hubText)" class="cp_content_text" layoutpos="top" content="resstr(582)"/>
+</Element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<Element id="atom(infoBannerWin7)" layoutpos="none" layout="borderlayout()">
+<Element sheet="wuappstyle" layoutpos="top" layout="borderlayout()" class="yellow_banner">
+<Element class="moduleborder1" layoutpos="top" layout="borderlayout()">
+<Element class="moduleinner1" layoutpos="top" layout="flowlayout(0,0,0,0)">
+<Viewer class="cp_nav_img" layoutpos="top">
+<Element class="cp_nav_img" padding="rect(4rp,3rp,4rp,0)" layoutpos="top" content="icon(81,sysmetric(49),sysmetric(50),library(imageres.dll))"/>
+</Viewer>
+<Element layoutpos="top" layout="borderlayout()">
+<Element layoutpos="top" layout="flowlayout(1,2,0,2)" padding="rect(0,3rp,4rp,3rp)">
+<Element sheet="cp_style" class="cp_content_text" layoutpos="top" content="resstr(637)"/>
+</Element>
+<Element layoutpos="top" layout="flowlayout()">
+<NavigateButton layout="borderlayout()" layoutpos="top" navigationtargetroot="Microsoft.BackupAndRestore">
+<Button sheet="cp_style" class="cp_content_link" layoutpos="top" content="resstr(567)"/>
+</NavigateButton>
+</Element>
+</Element>
+</Element>
+</Element>
+</Element>
+<Element layoutpos="top" class="cp_content_v_spacer"/>
+</Element>
+<Element id="atom(infoBanner)" layoutpos="none" layout="borderlayout()">
+<Element sheet="wuappstyle" layoutpos="top" layout="borderlayout()" class="yellow_banner">
+<Element class="moduleborder1" layoutpos="top" layout="borderlayout()">
+<Element class="moduleinner1" layoutpos="top" layout="flowlayout(0,0,0,0)">
+<Viewer class="cp_nav_img" layoutpos="top">
+<Element class="cp_nav_img" padding="rect(4rp,3rp,4rp,0)" layoutpos="top" content="icon(81,sysmetric(49),sysmetric(50),library(imageres.dll))"/>
+</Viewer>
+<Element layoutpos="top" layout="borderlayout()">
+<Element layoutpos="top" layout="flowlayout(1,2,0,2)" padding="rect(0,3rp,4rp,3rp)">
+<Element id="atom(infoBannerText)" sheet="cp_style" class="cp_content_text"/>
+</Element>
+<Element layoutpos="top" layout="flowlayout()">
+<NavigateButton layout="borderlayout()" layoutpos="top" navigationtargetroot="Microsoft.BitLockerDriveEncryption">
+<Button id="atom(infoBannerBitlockerMismatchLink)" sheet="cp_style" class="cp_content_link" layoutpos="top" content="resstr(610)"/>
+</NavigateButton>
+<NavigateButton layout="borderlayout()" layoutpos="top" navigationtargetrelative="SelectDisk">
+<Button id="atom(infoBannerChooseNetworkLocationLink)" sheet="cp_style" class="cp_content_link" layoutpos="top" content="resstr(575)"/>
+</NavigateButton>
+<Button id="atom(infoBannerCredentialsLink)" sheet="cp_style" class="cp_content_link" layoutpos="top"/>
+<NavigateButton layout="borderlayout()" layoutpos="top" navigationtargetrelative="SelectDisk">
+<Button id="atom(infoBannerUnknownErrorLink)" sheet="cp_style" class="cp_content_link" layoutpos="top" content="resstr(632)"/>
+</NavigateButton>
+<NavigateButton id="atom(wrapperInfoBannerTurnOnNetworkDiscovery)" layout="borderlayout()" layoutpos="top">
+<Button id="atom(shieldTurnOnNetworkDiscovery)" padding="rect(0rp,0rp,6rp,0rp)" layoutpos="left" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))" active="mouse" cursor="hand" accrole="graphic" accname="Administrative privileges required icon" accessible="true"/>
+<Button id="atom(infoBannerTurnOnNetworkDiscoveryLink)" sheet="cp_style" class="cp_content_link" layoutpos="left" content="resstr(634)"/>
+</NavigateButton>
+</Element>
+</Element>
+</Element>
+</Element>
+</Element>
+<Element layoutpos="top" class="cp_content_v_spacer"/>
+</Element>
+<Element id="atom(infoBanner2)" layoutpos="none" layout="borderlayout()">
+<Element sheet="wuappstyle" layoutpos="top" layout="borderlayout()" class="yellow_banner">
+<Element class="moduleborder1" layoutpos="top" layout="borderlayout()">
+<Element class="moduleinner1" layoutpos="top" layout="flowlayout(0,0,0,0)">
+<Viewer class="cp_nav_img" layoutpos="top">
+<Element class="cp_nav_img" padding="rect(4rp,3rp,4rp,0)" layoutpos="top" content="icon(81,sysmetric(49),sysmetric(50),library(imageres.dll))"/>
+</Viewer>
+<Element layoutpos="top" layout="borderlayout()">
+<Element layoutpos="top" layout="flowlayout(1,2,0,2)" padding="rect(0,3rp,4rp,3rp)">
+<Element id="atom(infoBannerText2)" sheet="cp_style" class="cp_content_text"/>
+</Element>
+</Element>
+</Element>
+</Element>
+</Element>
+<Element layoutpos="top" class="cp_content_v_spacer"/>
+</Element>
+<Element sheet="wuappstyle" layoutpos="top" layout="borderlayout()">
+<Element id="atom(hubProfileBannerIcon)" layoutpos="top" layout="borderlayout()">
+<Element class="moduleborder1" layoutpos="top" layout="borderlayout()">
+<Element layoutpos="client" layout="borderlayout()">
+<Element id="atom(hubGradientBar)" layoutpos="left" class="green_gradient"/>
+<Element class="moduleinner1" layoutpos="client" layout="flowlayout(0,0,0,2)">
+<Element id="atom(statusText)" class="wuapp_module_instruction"/>
+</Element>
+</Element>
+</Element>
+</Element>
+<Element id="atom(detailsPane)" layout="ninegridlayout()" class="moduleborder2">
+<Element id="atom(protectionLabel)" layoutpos="ninetopleft" padding="rect(0,7rp,17rp,0)" sheet="cp_style" class="cp_content_text" content="resstr(588)"/>
+<Element id="atom(protectionText)" sheet="cp_style" class="cp_content_text" padding="rect(0,7rp,0,0)"/>
+<Element id="atom(locationLabel)" layoutpos="nineleft" padding="rect(0,7rp,17rp,0)" sheet="cp_style" class="cp_content_text" content="resstr(589)"/>
+<Element id="atom(targetWrapper)" layout="borderlayout()" padding="rect(0,7rp,0,0)">
+<Element layoutpos="top" layout="flowlayout(0)">
+<Element id="atom(locationIcon)" padding="rect(0,0,17rp,0)"/>
+<Element layout="borderlayout()">
+<Element id="atom(locationText)" sheet="cp_style" class="cp_content_text" layoutpos="top"/>
+<Element id="atom(locationAvailableSpace)" sheet="cp_style" class="cp_content_text" layoutpos="top"/>
+<Element id="atom(disconnectedText)" sheet="cp_style" class="cp_content_text" layoutpos="none" content="resstr(604)"/>
+<Element id="atom(accessDeniedText)" sheet="cp_style" class="cp_content_text" layoutpos="none" content="resstr(629)"/>
+<Element id="atom(unknownText)" sheet="cp_style" class="cp_content_text" layoutpos="none" content="resstr(630)"/>
+<Element id="atom(lockedText)" sheet="cp_style" class="cp_content_text" layoutpos="none" content="resstr(608)"/>
+</Element>
+</Element>
+</Element>
+<Element id="atom(backupStatus)" layoutpos="none" layout="borderlayout()">
+<Element layoutpos="top" layout="borderlayout()" padding="rect(0,7rp,0,0)" sheet="cp_style">
+<Element id="atom(lastRunText)" class="cp_content_text" layoutpos="none"/>
+</Element>
+<Element layoutpos="top" layout="flowlayout()" sheet="cp_style">
+<Button id="atom(runNowLink)" class="cp_content_link" layoutpos="none" content="resstr(627)"/>
+<Button id="atom(stopLink)" class="cp_content_link" layoutpos="none" content="resstr(628)"/>
+</Element>
+</Element>
+<Element id="atom(rehydrationStatus)" layoutpos="none" layout="borderlayout()">
+<Element layoutpos="top" layout="borderlayout()" padding="rect(0,7rp,0,0)" sheet="cp_style">
+<Element id="atom(rehydrationProgress)" class="cp_content_text" layoutpos="top"/>
+</Element>
+<Element layoutpos="top" layout="flowlayout()" sheet="cp_style">
+<Button id="atom(cancelRehydrationLink)" class="cp_content_link" layoutpos="top" content="resstr(633)"/>
+</Element>
+</Element>
+</Element>
+</Element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<Element layoutpos="top" layout="borderlayout()">
+<element id="atom(reassociateTextSection)" layoutpos="client" layout="verticalflowlayout()">
+<CCCheckBox id="atom(reassociationCheckBox)" selected="false" content="resstr(613)" layoutpos="none"/>
+<Element id="atom(autoReassociateText)" class="cp_content_text" content="resstr(612)" layoutpos="none"/>
+<Element id="atom(forceReassociateText)" class="cp_content_text" content="resstr(0x25b)" layoutpos="none"/>
+</element>
+<viewer layoutpos="right">
+<element layout="flowlayout()">
+<CCPushButton id="atom(enableProtection)" sheet="cp_style" layoutpos="none" content="resstr(577)"/>
+<CCPushButton id="atom(disableProtection)" sheet="cp_style" layoutpos="none" content="resstr(576)"/>
+</element>
+</viewer>
+</Element>
+<Element class="cp_content_v_spacer" layoutpos="top"/>
+<Element id="atom(reassociateSection)" layoutpos="none" layout="borderlayout()">
+<Element id="atom(reassociateListHeader)" sheet="cp_style" class="cp_content_text" layoutpos="top" content="resstr(614)"/>
+<Element class="cp_content_v_spacer" layoutpos="top"/>
+<CCListView id="atom(reassociateListView)" accessible="true" accrole="list" accname="resstr(615)" accDesc="resstr(616)" active="mouse|keyboard" shortcut="auto" layoutpos="top" height="100rp"/>
+</Element>
+</Element>
+</Element>
+</ScrollViewer>
+</Element>
+</HistoryVaultPage>
+</duixml>

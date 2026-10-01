@@ -11,10 +11,10 @@ namespace DirectUI
 {
 
 Edit::Edit(Edit const&a0)
-{}
+{ }
 
 Edit::Edit(void)
-{}
+{ }
 
 Edit::~Edit(void)
 {}

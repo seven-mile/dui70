@@ -1,0 +1,204 @@
+<!--
+  source: %SYSTEMROOT%\System32\msctfuimanager.dll
+  resource: UIFILE / "16000" / lang 1033
+  size: 10478 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="CandidateList.Layout" id="atom(CandidateList.Layout)" sheet="CandidateListStyle" accname="resstr(16011, library(msctfuimanager.dll))" layout="borderlayout()" active="inactive">
+<element id="atom(CandidateList.CandidatesArea)" layoutpos="client" layout="borderlayout()">
+<TouchButton id="atom(CandidateList.PrevButton)" layoutpos="absolute" x="0rp" y="0rp" accessible="true" accname="resstr(16013, library(msctfuimanager.dll))" accrole="pushbutton" active="mouse | nosyncfocus" sheet="ActionButtonStyle"/>
+<TouchScrollViewer id="atom(CandidateList.ScrollViewer)" layout="borderlayout()" layoutpos="client" YScrollable="false" XScrollable="true" XBarVisibility="never" InteractionMode="TranslateX | Inertia" active="Pointer | Mouse | nosyncfocus" SnapMode="Single">
+<element id="atom(CandidateList.ViewerContents)" layoutpos="client" layout="flowlayout()" active="pointer | nosyncfocus">
+<element id="atom(CandidateList.CandidatesPagePreviousPrevious)" active="pointer | nosyncfocus" layoutpos="absolute" x="0rp" y="0rp" layout="flowlayout(0,0,0,2)" sheet="CandidatePageStyle"/>
+<element id="atom(CandidateList.CandidatesPagePrevious)" active="pointer | nosyncfocus" layoutpos="absolute" x="0rp" y="0rp" layout="flowlayout(0,0,0,2)" sheet="CandidatePageStyle"/>
+<element id="atom(CandidateList.CandidatesPageCurrent)" active="pointer | nosyncfocus" layoutpos="absolute" x="0rp" y="0rp" layout="flowlayout(0,0,0,2)" sheet="CandidatePageStyle"/>
+<element id="atom(CandidateList.CandidatesPageNext)" active="pointer | nosyncfocus" layoutpos="absolute" x="0rp" y="0rp" layout="flowlayout(0,0,0,2)" sheet="CandidatePageStyle"/>
+<element id="atom(CandidateList.CandidatesPageNextNext)" active="pointer | nosyncfocus" layoutpos="absolute" x="0rp" y="0rp" layout="flowlayout(0,0,0,2)" sheet="CandidatePageStyle"/>
+</element>
+</TouchScrollViewer>
+<element id="atom(CandidateList.AboveViewerContents)" layoutpos="absolute" x="0rp" y="0rp" visible="false"/>
+<TouchButton id="atom(CandidateList.NextButton)" layoutpos="absolute" x="0rp" y="0rp" accessible="true" accname="resstr(16014, library(msctfuimanager.dll))" accrole="pushbutton" active="mouse | nosyncfocus" sheet="ActionButtonStyle"/>
+<RichText id="atom(CandidateList.LayoutHelper)" layoutpos="none"/>
+<element id="atom(CandidateList.PendingPlaceholder)" layoutpos="none" accname="resstr(16012, library(msctfuimanager.dll))"/>
+</element>
+</element>
+<element resid="CandidateList.CandidateItem" id="atom(CandidateList.CandidateItem)" layout="filllayout()" sheet="CandidateItemStyle">
+<CandidateButton id="atom(CandidateList.CandidateButton)" AccLocalizedControlType="CANDIDATELIST_CANDIDATE_ACCCONTROLTYPE" active="mouse | pointer | nosyncfocus" 
+accessible="true" contentalign="middlecenter | endellipsis" accrole="pushbutton" sheet="CandidateButtonStyle" tooltip="false" behaviors="DUI70::ContextMenuBehavior(cm_invokingpoint)"
+layout="flowlayout(0,2,2,2)" typography="ss20=1,kern=1,dlig=1,liga=1">
+<ModernProgressRing id="atom(CandidateList.CandidateButton.ProgressRing)" layoutpos="none" sheet="CandidateButtonStyle"/>
+</CandidateButton>
+</element>
+<stylesheets>
+<style resid="CandidateListStyle">
+<element background="ImmersiveControlLightSelectPopupBackgroundRest"/>
+<if id="atom(CandidateList.Layout)">
+<element bordercolor="ImmersiveSystemAccent" borderthickness="rect(1rp,1rp,1rp,1rp)"/>
+</if>
+<if id="atom(CandidateList.ViewerContents)">
+<element height="44rp"/>
+</if>
+<if id="atom(CandidateList.AboveViewerContents)">
+<element height="44rp"/>
+</if>
+</style>
+<style resid="CandidatePageStyle">
+<element visible="false" height="44rp" background="ImmersiveControlLightSelectPopupBackgroundRest"/>
+</style>
+<style resid="CandidateItemStyle">
+<element minsize="size(53rp,44rp)"/>
+</style>
+<style resid="CandidateButtonStyle">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextRest" background="ImmersiveControlLightSelectPopupBackgroundRest" height="44rp" padding="rect(12rp,0rp,12rp,0rp)" colorfontpaletteindex="0"/>
+<ModernProgressRing height="20rp" width="20rp" />
+<if ButtonFocusStyle="Active">
+<if mousefocused="true">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextHover" background="ImmersiveSystemAccentLight3"/>
+</if>
+<if selected="true">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextSelected" background="ImmersiveSystemAccent"/>
+<if mousefocused="true" pressed="false">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextSelected" background="ImmersiveSystemAccentLight1"/>
+</if>
+</if>
+<if pressed="true">
+<CandidateButton foreground="ImmersiveHardwareDarkCandidateControlTextPressed" background="ImmersiveSystemAccentDark1"/>
+<if selected="true">
+<CandidateButton foreground="ImmersiveHardwareDarkCandidateControlTextPressed" background="ImmersiveSystemAccentDark3"/>
+</if>
+</if>             
+</if>
+<if ButtonFocusStyle="Implied">
+<if selected="true">
+<CandidateButton foreground="ImmersiveControlLightSelectHighlightSelected" background="ImmersiveControlLightSelectPopupBackgroundRest"/>
+</if>
+<if mousefocused="true">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextHover" background="ImmersiveSystemAccentLight3"/>
+</if>
+<if pressed="true">
+<CandidateButton foreground="ImmersiveControlLightSelectPopupTextPressed" background="ImmersiveSystemAccentDark1"/>
+</if>              
+</if>
+<if class="CloudCandidateAccent">
+<CandidateButton foreground="ImmersiveControlLightLinkRest" />
+<ModernProgressRing foreground="ImmersiveControlLightLinkRest" />
+</if>
+<if class="CloudCandidateDisabled">
+<CandidateButton foreground="ImmersiveControlLightLinkDisabled" />
+</if>
+<if class="CandidatePinned">
+<CandidateButton foreground="ImmersiveControlLightLinkRest" />
+</if>
+</style>
+<style resid="ActionButtonStyle">
+<TouchButton
+foreground="ImmersiveControlLightScrollbarButtonGlyphRest"
+background="ImmersiveControlLightScrollbarButtonRest"
+bordercolor="ImmersiveControlLightSelectBackgroundPressed"
+width="22rp" height="36rp"
+font="16pt;normal;none;Segoe MDL2 Assets"
+contentalign="middlecenter"
+linespacing="22rp"
+baseline="21rp"
+borderthickness="rect(1rp,1rp,1rp,1rp)"
+x="0rp" y="3rp"/>
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightScrollbarButtonGlyphHover" background="ImmersiveControlLightScrollbarButtonHover" bordercolor="ImmersiveControlLightScrollbarButtonGlyphHover"/>
+</if>
+<if pressed="true">
+<TouchButton foreground="ImmersiveControlLightScrollbarButtonGlyphPressed" background="ImmersiveControlLightScrollbarButtonPressed" bordercolor="ImmersiveControlLightScrollbarButtonGlyphPressed"/>
+</if>
+</style>  
+</stylesheets>
+<CHorizontalCandidatePane resid="main" layoutpos="top" layout="borderlayout()" contentalign="middleleft" >
+<Element id="atom(CandidateListContainer)"
+layoutpos="top"
+layout="borderlayout()">
+<CandidateList  id="atom(CandidateList)"
+layoutpos="left"
+layout="filllayout()"
+metadatavisible="true"
+maxcandidates="9"
+NumbersVisible="true"
+RealizeAllViewPages="true"
+StartAnimationEarly="true"
+height="44rp"
+HasPagingButtonBorder="false"
+CandidatePaddingWidth="13"
+CandidateMinWidth="24"
+MaxCandidateMargin="0"/>
+</Element>
+<Element id="atom(CloudConsentBar)" sheet="CloudConsent" layoutpos="none" layout="borderlayout()" >
+<Element id="atom(CloudConsentButtonContainer)" layoutpos="client" layout="flowlayout(0, 0, 2, 2)" >
+<TouchButton id="atom(CloudConsentButton)" sheet="CloudConsent" content="resstr(16032, library(msctfuimanager.dll))" active="mouse | pointer | nosyncfocus" accessible="true" accrole="pushbutton" />
+</Element>
+<TouchHyperlink id="atom(CloudConsentHyperlink)" sheet="CloudConsent" layoutpos="right" content="resstr(16033, library(msctfuimanager.dll))" active="mouse | pointer | nosyncfocus" accessible="true" accrole="pushbutton" />
+</Element>
+</CHorizontalCandidatePane>
+<TouchButton
+resid="ShowSymbolViewActionButton"
+id ="atom(ShowSymbolViewActionButton)"
+layoutpos="right"
+sheet="ShowSymbolViewActionButtonStyle"
+height="44rp" width="44rp"
+content="&#xE76E;"
+font="13.5;Regular;;Segoe MDL2 Assets"
+active="mouse | pointer | nosyncfocus" accessible="true" accrole="pushbutton"
+tooltip="true"
+accname="resstr(16103, library(msctfuimanager.dll))"
+accdesc="resstr(16145, library(msctfuimanager.dll))"/>
+<stylesheets>
+<style resid="CloudConsent">
+<Element fontsize="10pt" />
+<if id="atom(CloudConsentBar)">
+<Element bordercolor="ImmersiveSystemAccent" borderthickness="rect(1rp,0rp,1rp,1rp)" padding="rect(5rp, 4rp, 5rp, 4rp)" />
+</if>
+<if id="atom(CloudConsentButtonContainer)">
+<Element margin="rect(5rp,0rp,10rp,0rp)" />
+</if>
+<TouchHyperlink margin="rect(10rp,0rp,5rp,0rp)" foreground="ImmersiveControlLightLinkRest" />
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextHover" background="ImmersiveControlLightSelectPopupBackgroundHover" />
+<TouchHyperlink foreground="ImmersiveControlLightLinkHover" />
+</if>
+<if pressed="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextPressed" background="ImmersiveControlLightSelectPopupBackgroundPressed" />
+<TouchHyperlink foreground="ImmersiveControlLightLinkPressed" />
+</if>
+</style>
+<style resid="ShowSymbolViewActionButtonStyle">
+<TouchButton
+fontsize="14pt"
+contentalign="middlecenter"
+ColorFontPaletteIndex="0"
+bordercolor="ImmersiveSystemAccent"
+borderthickness="rect(0rp,1rp,1rp,1rp)"/>
+<if mousefocused="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextHover"
+background="ImmersiveSystemAccentLight3"/>
+</if>
+<if selected="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccent"/>
+<if mousefocused="true" pressed="false">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccentLight1"/>
+</if>
+</if>
+<if pressed="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextPressed"
+background="ImmersiveSystemAccentDark1"/>
+<if selected="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextPressed"
+background="ImmersiveSystemAccentDark3"/>
+</if>
+</if>
+</style>
+</stylesheets>
+</duixml>

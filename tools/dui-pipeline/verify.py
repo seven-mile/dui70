@@ -106,6 +106,38 @@ REGRESSION_TARGETS = [
     ("DUIXmlParser", "SetUnknownAttrCallback"),
 ]
 
+# 生成器**刻意注入**的合成符号白名单（A4 的 precision 判定需要豁免它们）。
+#
+# 这些名字在真实 dui70.dll 里**不存在**，但它们是"让真实存在的 ??_7 vftable
+# 导出得以落地"的必要手段：C++ 里一个类只有含虚函数才会实例化 vftable，而
+# 部分真实类的虚函数全部内联（不出现在符号表），所以生成器必须注入一个锚点
+# 虚函数，才能让编译器吐出那个**确实是真实导出**的 ??_7 符号。
+#
+# 因此它们不是"生成错误"，而是"为达成 ABI 目标而付出的合成代价"。A4 是
+# precision 断言，天然无法区分"刻意合成"与"生成漏改名"，故在此显式豁免。
+#
+# 分两组：
+#   (1) vftable 锚点：emit_headers.py 对"有自有 vftable、但没有任何导出虚方法"
+#       的类注入 `virtual long On<Class>Virt(void) { return 0; }`
+#       （ISBLeak / FontCache / StyleSheet / IXElementCP / IXProviderCP 形态）。
+#   (2) 多态基类合成 ctor：emit_headers.py 的 POLYMORPHIC_BASE_CLASSES 对抽象
+#       基类注入纯虚 `AddRef`，使其子类能导出基类子对象 vftable；纯虚类的
+#       ctor 由编译器合成，故这两个 ??0 名字是副产物。
+#
+# 维护要求：新增豁免必须逐条列出**完整修饰名**（不要用类名通配），
+# 否则白名单会掩盖真实的保真缺陷。
+SYNTHETIC_ANCHORS = {
+    # (1) vftable 锚点 —— 对应 ??_7 是真实导出
+    "?OnFontCacheVirt@FontCache@DirectUI@@UEAAJXZ",
+    "?OnISBLeakVirt@ISBLeak@DirectUI@@UEAAJXZ",
+    "?OnIXElementCPVirt@IXElementCP@DirectUI@@UEAAJXZ",
+    "?OnIXProviderCPVirt@IXProviderCP@DirectUI@@UEAAJXZ",
+    "?OnStyleSheetVirt@StyleSheet@DirectUI@@UEAAJXZ",
+    # (2) 多态基类（抽象接口）的编译器合成 ctor
+    "??0IDialogElement@DirectUI@@QEAA@XZ",
+    "??0IElementListener@DirectUI@@QEAA@XZ",
+}
+
 
 def configure(pinned: str | None = None, out: str | None = None,
               report: str | None = None) -> None:
@@ -689,8 +721,13 @@ def build_tree_fingerprint() -> tuple[float, int]:
     而报"编译失败"，但单独复跑就 PASS。这是**竞态**而非真实缺陷；
     若不检测，会产生假 FAIL。
 
-    监视 pinned/ 与 OUT（生成物），排除本脚本自己的临时目录。
+    监视 pinned/ 与 OUT（生成物），排除本脚本自己的临时目录，以及
+    **A5 运行 UITest.exe 时它自己写出的探针日志** —— 后者是本脚本自身的
+    行为（不是"他人写入"），若计入会让守卫每次全量跑都误报。
     """
+    # A5 验收运行 UITest 时由被测程序写出的探针产物（见 UITest/UITest.cpp）。
+    # 它们是本脚本自身运行的副作用，不属于"并发写入"。
+    self_outputs = {"anim-experiment.log", "duser-call-counts.txt"}
     newest, count = -1.0, 0
     for root in (PINNED, OUT, os.path.join(BUILD, "lib"),
                  os.path.join(BUILD, "acceptance-x64")):
@@ -704,6 +741,8 @@ def build_tree_fingerprint() -> tuple[float, int]:
             if os.path.abspath(dp).startswith(os.path.abspath(SCRATCH)):
                 continue
             for f in files:
+                if f in self_outputs or f.endswith(".g.txt"):
+                    continue
                 p = os.path.join(dp, f)
                 try:
                     t = os.path.getmtime(p)
@@ -1126,11 +1165,34 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
     def is_compiler_synth(sym: str) -> bool:
         return sym.startswith(("??_R", "??_G", "??_E"))
 
+    def is_synth_bare_vftable(sym: str) -> bool:
+        """编译器在"无 MI 基类 + 有虚方法 + out-of-line 拷贝构造/析构"组合下
+        强制落盘的 primary vftable（裸 `6B@` 形态），而真实 DLL 里没有该形态。
+
+        机制链（已用最小探针复现验证）：这些类在 classes.json 无继承条目
+        （MI 基类只存在于 PDB publics、不在导出表，导出驱动的继承提取未收录）
+        → 虚方法必须 virtual 才能产出 UEAA/MEAA 装饰 → out-of-line 拷贝构造/
+        析构定义（真实导出）触发 vptr 初始化 → primary vftable 落盘。
+        与 ??_R/??_G/??_E 同性质：编译器强制合成、真实对应物是非导出内部形态。
+
+        判定：`??_7` 前缀 + `6B@` 结尾 + 不在参考并集（导出表 ∪ PDB publics）
+        中。真实 DLL 若存在该类的 vftable，形态是**基类限定**的
+        （如 ??_7TouchScrollBar@DirectUI@@6BBaseScrollBar@1@@），故裸形态
+        必然不在并集里。
+        """
+        return (sym.startswith("??_7") and sym.endswith("@@6B@")
+                and sym not in union)
+
     target = {s for s in all_defined if s.startswith("?") and is_dui_ns(s)}
     target |= {s for s in all_defined
                if not s.startswith("?") and is_dui_ns(s) and not s.startswith("__")}
     synth = {s for s in target if is_compiler_synth(s)}
-    target_check = target - synth                       # 实际参与判定的目标
+    # 合成裸 vftable：与 is_compiler_synth 同级豁免（见函数注释的机制链）。
+    synth_vft = {s for s in target if is_synth_bare_vftable(s)}
+    # 生成器刻意注入的合成锚点（见 SYNTHETIC_ANCHORS 说明）：从判定目标中豁免，
+    # 但**单独统计并披露**，避免"豁免"变成"眼不见为净"。
+    anchors = target & SYNTHETIC_ANCHORS
+    target_check = target - synth - synth_vft - anchors   # 实际参与判定的目标
     excluded_thirdparty = {s for s in all_defined
                            if s.startswith("?") and not is_dui_ns(s) and not is_junk(s)}
 
@@ -1165,6 +1227,12 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
     ev.append("  第三方（std::/wil::/CRT，刻意排除） = %d" % len(excluded_thirdparty))
     ev.append("  DirectUI 命名空间（判定目标，未去合成符号） = %d" % len(target))
     ev.append("    其中编译器自动合成（??_R/??_G/??_E，排除） = %d" % len(synth))
+    ev.append("    其中编译器强制落盘的裸 vftable（??_7…@@6B@，排除） = %d" % len(synth_vft))
+    if synth_vft:
+        ev += ["       " + a for a in sorted(synth_vft)]
+    ev.append("    其中生成器刻意注入的合成锚点（见代码注释，排除） = %d" % len(anchors))
+    if anchors:
+        ev += ["       " + a for a in sorted(anchors)]
     ev.append("  实际判定目标 = %d" % len(target_check))
     ev.append("")
     ev.append("逐字命中参考集合     = %d" % len(matched))
@@ -1174,6 +1242,30 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
     if unmatched:
         ev.append("未命中清单:")
         ev += ["   " + u for u in sorted(unmatched)]
+
+    # ===== 裸 vftable 披露（已豁免，但必须全程可见）=====
+    # 真实 DLL 里一个类可能有多个**基类限定**的 vftable（??_7C@@6BBase@@），
+    # 也可能一个都没有；而生成器在这些类上总是产出裸形态 ??_7C@@6B@。该裸形态
+    # 已按"编译器强制合成"豁免（见 is_synth_bare_vftable 的机制链），但豁免
+    # 不等于隐藏 —— 这里逐条披露，并把真实 DLL 的对应形态一并列出，便于读者
+    # 判断这是"合成代价"而非"保真缺陷"。
+    if synth_vft:
+        ev.append("")
+        ev.append("【已豁免·披露】编译器强制落盘、真实 DLL 无对应形态的裸 vftable"
+                  "（%d 个）:" % len(synth_vft))
+        for s in sorted(synth_vft):
+            cls = s[len("??_7"):-len("@DirectUI@@6B@")]
+            # 真实 DLL 中该类的任何 vftable 形态（裸的或基类限定的）
+            real_forms = sorted(x for x in union
+                                if x.startswith("??_7" + cls + "@DirectUI@@6B"))
+            ev.append("   %s" % s)
+            if real_forms:
+                ev.append("      真实 DLL 形态（基类限定）: %s" % real_forms)
+            else:
+                ev.append("      真实 DLL 中该类的 vftable 个数 = 0"
+                          "（基类只在 PDB、不在导出表，导出驱动的继承提取未收录）")
+        ev.append("  说明：机制见 is_synth_bare_vftable() 的注释链；"
+                  "豁免仅针对此形态，A4 的 precision 判定不变。")
 
     # 编译失败必须计入结论 —— 编不出来的声明无法证明 ABI 保真。
     # 这里用**本次运行的返回码**（compile_failures），而不是检查 .obj 是否存在：

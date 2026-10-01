@@ -10,10 +10,10 @@ namespace DirectUI
 {
 
 XProvider::XProvider(XProvider const&a0)
-{}
+{ }
 
 XProvider::XProvider(void)
-{}
+{ }
 
 XProvider::~XProvider(void)
 {}

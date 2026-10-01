@@ -11,16 +11,8 @@
 
 namespace DirectUI
 {
-    class Value;
-    class DUIXmlParser;
     class Element;
-    class HWNDElement;
-    class NativeHWNDHost;
-    class Edit;
-    class Button;
-    class Progress;
-    class PushButton;
-    class XProvider;
+    class Value;
 
     class TouchCheckBox
         : public TouchButton
@@ -46,13 +38,6 @@ namespace DirectUI
         long SetCheckedState(CheckedStateFlags);
         long SetToggleOnClick(bool);
         static PropertyInfo const* ToggleOnClickProp(void);
-
-        private:
-        long _CreateAndAddGlyph(void);
-        long _CreateAndAddLabel(void);
-        Element* _GetLabel(void);
-        void _UpdateAccState(bool, CheckedStateFlags);
-        static IClassInfo* s_pClassInfo;
     };
 
 } // namespace DirectUI

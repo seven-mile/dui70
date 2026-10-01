@@ -382,7 +382,7 @@ pwsh -File tools\dui-pipeline\ci.ps1 -SelfTest
 | 8 | **ubuntu job 用反斜杠路径** | Linux 上 `\` 是普通字符，`'..\..'` 不做父目录回溯 | 全流程改用正斜杠（Windows 同样接受） |
 | 9 | **无 `git` 时静默跑** | G2 会给出可疑结论 | 增加 G0 前置检查 |
 | 10 | **`manifest.dll.file_version` 记的是路径元数据** | 记成 `10.0.26100.8875`，但该串在文件字节里出现 **0 次**（文件真实版本是 9278）；它是 System32 路径的 WRP 服务栈应答，换机器/换路径就变 → **契约字段不可复现** | 口径改为 `FixedFileInfo`（字节口径）+ 硬断言收窄（§7.5） |
-| 11 | **`extract.py` 的 `file_version()` 注释误判** | 把 8875 vs 9278 当成"文件自身两个版本号矛盾"记录，掩盖了真实机制（路径元数据 vs 文件字节） | 注释改为实测更正版；主口径改 FixedFileInfo，字符串版降为 `detail` 留痕 |
+| 11 | **`extract.py` 的 `file_version()` 旧注释描述错误** | 8875 vs 9278 的差异被记成"文件自身两个版本号矛盾"，与真实机制（路径元数据 vs 文件字节）不符 | 注释改为实测结论版；主口径改 FixedFileInfo，字符串版降为 `detail` 留痕 |
 | 12 | **MSVC 的 `undname.exe` 在 `model.py` 候选表里** | repro job 为 dumpbin 必须上 MSVC PATH → `model.py` 会**静默**选错工具：rc=0、4321 条全错（§7.4） | `repro.py` 实测探测输出格式，只接受 LLVM 形态 |
 | 13 | **`Get-Command` 会返回数组** | runner 的 PATH 有多个 git/python 目录时，`$cmd.Source` 把数组字符串化成**空格连接的一个路径** → 每个 job 在任何门禁前就崩（本机只有单个匹配，测不出来） | 四处（`ci.ps1` G0/Python、`repro.ps1`、`run.ps1`）显式取 `Select-Object -First 1`，git 另校验解析路径是真实文件 |
 | 14 | **PDB 与 DLL 同目录会改变 `dumpbin` 输出** | 追加 ` = ` 注解使 707 条 ordinal→name 错位 → `exports.json` 必然不一致（§7.3） | repro 下载层分目录 + 显式断言守住前提；注解解析错位本身留档为已知边界 |

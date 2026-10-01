@@ -82,13 +82,13 @@ jobs:
           VCPKG_ROOT: ${{ github.workspace }}\vcpkg
 
   # Stage 2: prove the committed pinned/ is reproducible from the published
-  # binary, not hand-edited. Downloads via manifest.dll.source_url, hard-asserts
-  # sha256, re-derives pinned/ in an isolated dir through the pure export-table
-  # path (msdl serves no dui70.pdb, so the publics half cannot be rebuilt), then
-  # closes with the golden gate.
+  # artefacts, not hand-edited. Downloads the DLL and the PDB via the two manifest
+  # source_urls, hard-asserts both sha256 values, re-derives pinned/ in an isolated
+  # dir (DLL and PDB in SEPARATE dirs -- dumpbin changes its output when a matching
+  # PDB sits beside the DLL), asserts byte-identity, then closes with the golden gate.
   repro:
     runs-on: windows-latest
-    # Deliberately NOT on `push`. This gate downloads ~1.7 MB from msdl and takes
+    # Deliberately NOT on `push`. This gate downloads ~3.6 MB from msdl and takes
     # minutes, and a push to feat/* usually also has an open PR, so running on
     # both would duplicate it. pull_request is the review gate; workflow_dispatch
     # allows a manual re-run (e.g. msdl was briefly unavailable).
@@ -98,12 +98,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      # dumpbin for the export table, and MSVC's undname.exe lands on PATH too --
-      # which model.py would WRONGLY accept. repro.py resolves llvm-undname by
-      # probing its output format, so the MSVC tool can never slip through.
-      # MSVC is needed for dumpbin (extract.py). repro.py additionally probes the
-      # undname path by OUTPUT FORMAT, because msvc-dev-cmd puts MSVC's undname.exe
-      # on PATH and that tool silently corrupts model.py's whole output.
+      # MSVC is needed for dumpbin (extract.py). Caution: msvc-dev-cmd also puts
+      # MSVC's undname.exe on PATH, which model.py would WRONGLY accept and which
+      # silently corrupts its whole output. repro.py resolves llvm-undname by
+      # PROBING its output format, so the MSVC tool can never slip through.
       - name: Locate MSVC
         uses: ilammy/msvc-dev-cmd@v1
         with:

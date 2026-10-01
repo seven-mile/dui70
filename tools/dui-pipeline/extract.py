@@ -298,9 +298,8 @@ def pdb_msdl_slot(guid, age):
     """PDB 在 msdl 上的槽位串 = GUID 去连字符(大写) + age 十进制直拼。
 
     规范路径是 ``<GUID 去掉连字符><age>``（两者之间没有分隔符、没有空格）。
-    曾经误用带连字符且带空格的 ``"<GUID> <age>"`` 形态请求，得到的 404
-    被误读成"微软已清除该 PDB 存档"——那其实不是一个合法 URL。
-    详见 CI.md 的 repro 一节。
+    带连字符或带空格的 ``"<GUID> <age>"`` 形态不是合法的符号服务器路径，
+    服务器对它只会返回 404。详见 CI.md 的 repro 一节。
     """
     if not guid or age is None:
         return None
@@ -426,9 +425,7 @@ def file_version(path):
       detail       —— {"fixed_fileinfo": ..., "string_fileversion": ...,
                        "mismatch": bool}，用于把差异显式记录下来。
 
-    关于 x64 dui70.dll 的版本号（2026-10-02 实测更正，原先的注释是误判）：
-
-    原注释称"文件里两个版本号互相不一致"，把差异当成**文件自身**的矛盾。实测证伪：
+    关于 x64 dui70.dll 的版本号（实测结论）：
 
       * 对 System32 的 pinned 件（sha256 2080E43F…）逐字节搜索，
         "10.0.26100.8875" 出现 **0** 次，"10.0.26100.9278" 出现 2 次；

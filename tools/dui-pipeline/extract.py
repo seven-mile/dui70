@@ -4,19 +4,18 @@
 dui-pipeline / symbols module -- 产物 1: pinned/exports.json (+ manifest 指纹校验)
 
 从真实 dui70.dll 的导出表（dumpbin /exports）与公开 PDB 的 publics 提取符号，
-规范化后写入 pinned/exports.json（schema v2, 见 INTERFACE.md 1.2）。
+规范化后写入 pinned/exports.json（见 INTERFACE.md 1.2）。
 
-契约: tools/dui-pipeline/INTERFACE.md v2 — 字段名/枚举不得擅改。
+契约: tools/dui-pipeline/INTERFACE.md — 字段名/枚举不得擅改。
 
-v2 输出结构（严格按契约 1.2）:
+输出结构（严格按契约 1.2）:
 {
-  "schema_version": 2,
   "exports": [ { ordinal, name, rva } ]
 }
-- 删 forwarded（dui70 无转发导出）
-- 删 publics 块（publics 职责属于 symbols.json）
-- 删 meta 块（身份信息上移 manifest，单一事实源）
-- mangled 更名 name
+- 无 forwarded 字段（dui70 无转发导出；转发器在解析阶段已剔除）
+- 无 publics 块（publics 是 symbols.json 的输入职责）
+- 无 meta 块（身份信息在 manifest.json，单一事实源）
+- 导出名记为 name（86 个纯 C 导出没有修饰名，name 比 mangled 更诚实）
 
 **指纹锚（契约 1.1 规则）**：写 pinned/ 前校验 DLL/PDB 的 sha256 与
 pinned/manifest.json 一致；不符则拒绝写入并要求显式 `--new-pin`。
@@ -26,10 +25,10 @@ pinned/manifest.json 一致；不符则拒绝写入并要求显式 `--new-pin`�
   llvm-pdbutil : (可选, 仅当 PDB 存在时用于交叉校验 GUID/age)
 
 用法:
-  python extract.py                        # 产 .local/build/exports.json（v1 全量, 自证用）
-  python extract.py --pinned               # 产 pinned/exports.json（v2 瘦身, 校验指纹）
-  python extract.py --pinned --new-pin     # 指纹不符时显式确认并重写 manifest
-  python extract.py --pinned --verify-pin  # 只校验指纹，不写任何文件
+  python extract.py                        # 校验指纹后产 pinned/exports.json
+  python extract.py --new-pin               # 指纹不符时显式确认换版并重写 manifest
+  python extract.py --verify-pin            # 只校验指纹，不写任何文件
+  python extract.py --pinned <dir>          # 指定 pinned 目录（默认 <repo>/pinned）
 """
 
 from __future__ import annotations
@@ -40,24 +39,84 @@ import datetime as _dt
 import json
 import os
 import re
+import shutil
 import struct
 import subprocess
 import sys
 
 # --------------------------------------------------------------------------
-# 契约中的关键路径常量
+# 路径与外部工具
 # --------------------------------------------------------------------------
-REPO = r"Z:\repos\DirectUI"
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 REAL_DLL_X64 = r"C:\Windows\System32\dui70.dll"
-PDB_X64 = os.path.join(REPO, ".local", "symbols", "dui70-26200-x64.pdb")
-PDB_PUBLICS = os.path.join(REPO, ".local", "cache", "pdb-publics-x64.txt")
-REAL_NORM = os.path.join(REPO, ".local", "cache", "real-x64-norm.txt")
+# pinned/ 是可提交的契约输入；BUILD 是放缓存与交接文件的工作目录（可丢弃重建）
 BUILD = os.path.join(REPO, ".local", "build")
 PINNED = os.path.join(REPO, "pinned")
+# 缓存目录：存放 dumpbin 原始输出与 PDB publics 文本的副本，便于离线复跑
+CACHE = os.path.join(REPO, ".local", "cache")
 
-DUMPBIN = (r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC"
-           r"\14.44.35207\bin\Hostx64\x64\dumpbin.exe")
-LLVM_PDBUTIL = r"C:\Local\Tools\mingw64\bin\llvm-pdbutil.exe"
+# 外部工具逻辑名 -> (可执行文件名候选, 覆盖用环境变量)
+_TOOLS = {
+    "dumpbin": (("dumpbin", "dumpbin.exe"), "DUMPBIN"),
+    "pdbutil": (("llvm-pdbutil", "llvm-pdbutil.exe"), "LLVM_PDBUTIL"),
+}
+
+
+def tool_path(name):
+    """Resolve an external tool to an absolute path.
+
+    Order:
+      1. the tool-specific environment variable (see _TOOLS);
+      2. PATH;
+      3. for dumpbin only, the newest MSVC installation found via vswhere
+         (Visual Studio does not put its tools on PATH by default).
+
+    Raises with an actionable message when the tool is absent, so a missing
+    dependency is reported as such rather than as a confusing parse failure.
+    """
+    candidates, env = _TOOLS[name]
+    if env and os.environ.get(env):
+        return os.environ[env]
+    for cand in candidates:
+        found = shutil.which(cand)
+        if found:
+            return found
+    if name == "dumpbin":
+        found = _dumpbin_from_vs()
+        if found:
+            return found
+    raise SystemExit(
+        "required external tool %r not found; install it and/or set %s to its "
+        "full path (dumpbin ships with the MSVC toolset: run from a Developer "
+        "Command Prompt, or install Visual Studio's C++ workload)"
+        % (candidates[0], env))
+
+
+def _dumpbin_from_vs():
+    """Locate dumpbin.exe in the newest MSVC toolset via vswhere, if present."""
+    vswhere = os.path.join(os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)"),
+                           "Microsoft Visual Studio", "Installer", "vswhere.exe")
+    if not os.path.isfile(vswhere):
+        return None
+    try:
+        p = subprocess.run([vswhere, "-latest", "-products", "*",
+                            "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+                            "-property", "installationPath"],
+                           capture_output=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    root = (p.stdout or b"").decode("utf-8", "replace").strip().splitlines()
+    if not root:
+        return None
+    msvc = os.path.join(root[0], "VC", "Tools", "MSVC")
+    if not os.path.isdir(msvc):
+        return None
+    arch = "x64" if struct.calcsize("P") * 8 == 64 else "x86"
+    for ver in sorted(os.listdir(msvc), reverse=True):
+        cand = os.path.join(msvc, ver, "bin", "Host%s" % arch, arch, "dumpbin.exe")
+        if os.path.isfile(cand):
+            return cand
+    return None
 
 
 # --------------------------------------------------------------------------
@@ -98,7 +157,13 @@ def verify_pin(pinned_dir, dll=None, pdb=None):
         return True, rep
 
     for what, path, spec in (("dll", dll or REAL_DLL_X64, mf.get("dll") or {}),
-                             ("pdb", pdb or PDB_X64, mf.get("pdb") or {})):
+                             ("pdb", pdb, mf.get("pdb") or {})):
+        # pdb 不在 manifest 里则不校验（PDB 是可选的交叉校验来源）
+        if path is None:
+            rep["checks"].append({"what": what, "expected": "n/a",
+                                  "actual": "not supplied", "ok": True,
+                                  "note": "未提供 %s 路径，跳过指纹校验" % what})
+            continue
         if not os.path.isfile(path):
             rep["checks"].append({"what": what, "path": path, "expected": "file exists",
                                   "actual": "missing", "ok": False})
@@ -126,7 +191,6 @@ def build_manifest(pinned_dir, dll, pdb, prev=None, new_pin=False):
     pi = pe_info(dll)
     pub_guid = pdb_guid_age(pdb) if pdb and os.path.isfile(pdb) else None
     mf = {
-        "schema_version": 2,
         "dll": {
             "name": os.path.basename(dll),
             "arch": pi["arch"],
@@ -155,7 +219,7 @@ def build_manifest(pinned_dir, dll, pdb, prev=None, new_pin=False):
 
 
 def dumpbin_version():
-    rc, out, err = run([DUMPBIN])
+    rc, out, err = run([tool_path("dumpbin")])
     txt = (out or "") + (err or "")
     m = re.search(r"(\d+\.\d+\.\d+[\.\d]*)", txt)
     return m.group(1) if m else "unknown"
@@ -277,17 +341,17 @@ def file_version(path):
     """读 VS_VERSIONINFO。
 
     返回 (file_version, detail)：
-      file_version —— 契约 meta.file_version 采用的值 = StringFileInfo\\FileVersion
-                      的版本串（去掉 " (WinBuild...)" 后缀），无则退回 FixedFileInfo。
+      file_version —— 契约 manifest.dll.file_version 采用的值 =
+                      StringFileInfo\\FileVersion 的版本串（去掉 " (WinBuild...)"
+                      后缀），无则退回 FixedFileInfo。
       detail       —— {"fixed_fileinfo": ..., "string_fileversion": ...,
                        "mismatch": bool}，用于把二进制层面的差异显式记录下来。
 
-    ！本机实测的坑（x64 dui70.dll）:
-        FixedFileInfo(二进制) = 10.0.26100.9278
-        StringFileInfo\\FileVersion = "10.0.26100.8875 (WinBuild.160101.0800)"
-      INTERFACE.md 对本 DLL 记录的是 10.0.26100.8875（且 x86 两者都是 9278），
-      即契约口径是"资源字符串版本"。故以字符串版本为准，并把 FixedFileInfo 差异
-      一并输出，避免这个事实被静默吞掉。
+    x64 dui70.dll 的 VS_VERSIONINFO 里两个版本号互相不一致，取用字符串版本：
+        FixedFileInfo(二进制)        = 10.0.26100.9278
+        StringFileInfo\\FileVersion  = "10.0.26100.8875 (WinBuild.160101.0800)"
+    契约对本 DLL 记录的是 10.0.26100.8875，即口径为"资源字符串版本"。x86 的
+    dui70.dll 两者都是 9278。FixedFileInfo 的差异一并输出，不静默吞掉。
     """
     fixed = None
     string = None
@@ -347,7 +411,7 @@ def parse_dumpbin_exports(text):
 
     返回 (exports, stats):
       exports: [ {ordinal:int, rva:"0x...", mangled:str, forwarded:None|str}, ... ]
-      stats:   计数信息(用于自证/报告)
+      stats:   计数信息(用于运行报告)
     """
     exports = []
     stats = {"lines": 0, "forwarded": 0, "static_data": 0, "skipped": []}
@@ -381,11 +445,15 @@ def parse_dumpbin_exports(text):
 
 
 def dumpbin_exports(dll, cache_file=None, refresh=True):
-    """运行 dumpbin /exports, 可用 cache_file 缓存原始文本。返回 (text, source)。"""
+    """运行 dumpbin /exports, 可用 cache_file 缓存原始文本。返回 (text, source)。
+
+    cache_file 是**缓存**而非输入依赖：命中且未要求 refresh 时直接复用，
+    以便在没有 MSVC 的机器上离线复跑；缺缓存时会现场调用 dumpbin 重建。
+    """
     if cache_file and not refresh and os.path.isfile(cache_file):
         with open(cache_file, "r", encoding="utf-8", errors="replace") as f:
             return f.read(), "cache:" + cache_file
-    rc, out, err = run([DUMPBIN, "/exports", dll])
+    rc, out, err = run([tool_path("dumpbin"), "/exports", dll])
     if rc != 0 and "number of functions" not in out:
         raise RuntimeError("dumpbin failed rc=%s\n%s\n%s" % (rc, out[-2000:], err[-2000:]))
     text = out + ("\n" + err if err.strip() else "")
@@ -403,11 +471,11 @@ def dumpbin_exports(dll, cache_file=None, refresh=True):
 #     "  307800 | S_PUB32 [size = 60] `??4DuiNavigate@DirectUI@@QEAAAEAV01@AEBV01@@Z`"
 #     "           flags = function, addr = 0001:462544"
 #
-#   ！！关键坑：左列 "307800" 不是 RVA，而是 PDB 里的记录偏移（本文档称 col1）。
-#   真正的 RVA = 该符号所在节的 VirtualAddress + addr 冒号后的十进制偏移。
+#   左列 "307800" 是 PDB 记录偏移（col1），**不是 RVA**。真实 RVA 需按
+#   该符号所在节的 VirtualAddress 加上 addr 冒号后的十进制偏移算出。
 #   例: ?DuiNavigate 属 section 1(.text, VA=0x1000)，addr=0001:462544 ->
-#       RVA = 0x1000 + 462544 = 0x71ED0，与 dumpbin /exports 的 0x00071ED0 完全一致。
-#   （已用 4319 个同时是导出的符号全量验证: 0 个不匹配）
+#       RVA = 0x1000 + 462544 = 0x71ED0，与 dumpbin /exports 的 0x00071ED0 一致。
+#   4319 个同时出现在导出表中的符号全部吻合（0 个不匹配）。
 # --------------------------------------------------------------------------
 _PUB_LINE = re.compile(r"^\s*(?P<col1>\d+)\s*\|\s*S_PUB32\b[^`]*`(?P<name>[^`]*)`\s*$")
 _PUB_ADDR = re.compile(r"^\s*flags\s*=\s*(?P<flags>\w+)\s*,\s*addr\s*=\s*(?P<sec>\d+):(?P<off>\d+)\s*$")
@@ -476,10 +544,18 @@ def read_pdb_publics(path, sections=None):
 
 
 def pdb_guid_age(pdb):
-    """用 llvm-pdbutil 读 PDB 的 GUID/Age (仅用于与 DLL 的 RSDS 交叉校验)。"""
-    if not os.path.isfile(LLVM_PDBUTIL) or not os.path.isfile(pdb):
+    """用 llvm-pdbutil 读 PDB 的 GUID/Age (仅用于与 DLL 的 RSDS 交叉校验)。
+
+    llvm-pdbutil 与 PDB 都是可选的：任一缺失即返回 None，交叉校验跳过，
+    不影响 DLL 自身 RSDS 提供的 GUID/Age（那才是权威来源）。
+    """
+    if not pdb or not os.path.isfile(pdb):
         return None
-    rc, out, err = run([LLVM_PDBUTIL, "dump", "-summary", pdb])
+    try:
+        pdbutil = tool_path("pdbutil")
+    except SystemExit:
+        return None
+    rc, out, err = run([pdbutil, "dump", "-summary", pdb])
     txt = out + err
     guid = re.search(r"GUID:\s*\{?([0-9A-Fa-f\-]{36})\}?", txt)
     age = re.search(r"Age:\s*(\d+)", txt)
@@ -531,53 +607,60 @@ def build(args):
         "generated_utc": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
 
-    doc = {"meta": meta, "exports": exports, "publics": publics}
-    with open(args.out, "w", encoding="utf-8") as f:
-        json.dump(doc, f, ensure_ascii=False, indent=1)
-        f.write("\n")
-
-    # ---------------- v2 pinned/exports.json（契约 1.2） ----------------
-    pinned_report = None
-    if getattr(args, "pinned", None):
-        pin_dir = args.pinned
-        ok, vrep = verify_pin(pin_dir, dll=dll, pdb=args.pdb)
-        pinned_report = {"verify_pin": vrep}
-        if not ok and not getattr(args, "new_pin", False):
-            raise SystemExit(
-                "pin 指纹不匹配，拒绝刷新 pinned/。\n"
-                + json.dumps(vrep, ensure_ascii=False, indent=2)
-                + "\n如确为有意换版，请加 --new-pin 显式确认。")
-        # 写 manifest（首次 pin 或 --new-pin）
-        prev = load_manifest(pin_dir)
-        if prev is None or getattr(args, "new_pin", False) or not ok:
-            mf = build_manifest(pin_dir, dll, args.pdb, prev=prev,
-                                new_pin=getattr(args, "new_pin", False))
-            ensure_dir(pin_dir)
-            with open(os.path.join(pin_dir, "manifest.json"), "w", encoding="utf-8") as f:
-                json.dump(mf, f, ensure_ascii=False, indent=2)
-                f.write("\n")
-            pinned_report["manifest_written"] = os.path.join(pin_dir, "manifest.json")
-            pinned_report["manifest"] = mf
-        v2 = {"schema_version": 2,
-              "exports": [{"ordinal": e["ordinal"], "name": e["mangled"], "rva": e["rva"]}
-                          for e in exports]}
+    # ---------------- pinned/exports.json（契约 1.2） ----------------
+    pin_dir = args.pinned
+    ok, vrep = verify_pin(pin_dir, dll=dll, pdb=args.pdb)
+    pinned_report = {"verify_pin": vrep}
+    if not ok and not args.new_pin:
+        raise SystemExit(
+            "pin 指纹不匹配，拒绝刷新 pinned/。\n"
+            + json.dumps(vrep, ensure_ascii=False, indent=2)
+            + "\n如确为有意换版，请加 --new-pin 显式确认。")
+    # 写 manifest（首次 pin 或 --new-pin）
+    prev = load_manifest(pin_dir)
+    if prev is None or args.new_pin or not ok:
+        mf = build_manifest(pin_dir, dll, args.pdb, prev=prev, new_pin=args.new_pin)
         ensure_dir(pin_dir)
-        pin_out = os.path.join(pin_dir, "exports.json")
-        with open(pin_out, "w", encoding="utf-8") as f:
-            json.dump(v2, f, ensure_ascii=False, indent=1)
+        with open(os.path.join(pin_dir, "manifest.json"), "w", encoding="utf-8") as f:
+            json.dump(mf, f, ensure_ascii=False, indent=2)
             f.write("\n")
-        pinned_report["out"] = pin_out
-        pinned_report["exports"] = len(v2["exports"])
-        pinned_report["size_bytes"] = os.path.getsize(pin_out)
+        pinned_report["manifest_written"] = os.path.join(pin_dir, "manifest.json")
+        pinned_report["manifest"] = mf
+    export_table = {"exports": [{"ordinal": e["ordinal"], "name": e["mangled"], "rva": e["rva"]}
+                                for e in exports]}
+    ensure_dir(pin_dir)
+    pin_out = os.path.join(pin_dir, "exports.json")
+    with open(pin_out, "w", encoding="utf-8") as f:
+        json.dump(export_table, f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    pinned_report["out"] = pin_out
+    pinned_report["exports"] = len(export_table["exports"])
+    pinned_report["size_bytes"] = os.path.getsize(pin_out)
 
-    # ---------------- 自证输出 ----------------
+    # ---------------- 内部交接文件（model.py 的输入） ----------------
+    # pinned/exports.json 按契约只有 {ordinal,name,rva}，不含 PDB publics；
+    # 而 publics（含 RVA）是 model.py 必需的。这里把原始解析结果落到
+    # --build 指定的工作目录（默认 .local/build/，git 忽略、可丢弃重建），
+    # 不是 tracked 产物。
+    # pub_flags 一并带上，使 model.py 不必回头去读 PDB publics 的原始文本。
+    raw_path = os.path.join(args.build, "extract-raw.json")
+    ensure_dir(args.build)
+    pub_flags = {d["mangled"]: d.get("flags") for d in pub_detail if d.get("flags")}
+    with open(raw_path, "w", encoding="utf-8") as f:
+        json.dump({"meta": meta, "exports": exports, "publics": publics,
+                   "pub_flags": pub_flags},
+                  f, ensure_ascii=False, indent=1)
+        f.write("\n")
+    pinned_report["raw_handoff"] = raw_path
+
+    # ---------------- 运行报告 ----------------
     exp_names = [e["mangled"] for e in exports]
     exp_set = set(exp_names)
     pub_names = [p["mangled"] for p in publics]
     pub_set = set(pub_names)
     derivable = sum(1 for e in exports if e["mangled"].startswith("?"))
     report = {
-        "out": args.out,
+        "out": pin_out,
         "dumpbin_source": src,
         "publics_source": psrc,
         "export_rows": len(exports),
@@ -598,16 +681,18 @@ def build(args):
         "meta": meta,
     }
 
-    if os.path.isfile(REAL_NORM):
-        with open(REAL_NORM, "r", encoding="utf-8", errors="replace") as f:
+    # 可选的交叉校验：若调用方另外提供了一份"已知正确的导出名清单"
+    # （每行一个名字），则与其逐名比对。这不是运行依赖 —— 不提供就跳过。
+    if args.cross_check and os.path.isfile(args.cross_check):
+        with open(args.cross_check, "r", encoding="utf-8", errors="replace") as f:
             norm = set(l.strip() for l in f if l.strip())
-        report["cross_real_x64_norm"] = {
-            "file": REAL_NORM,
+        report["cross_check"] = {
+            "file": args.cross_check,
             "count": len(norm),
             "equal": norm == exp_set,
-            "only_in_norm": len(norm - exp_set),
+            "only_in_file": len(norm - exp_set),
             "only_in_dumpbin": len(exp_set - norm),
-            "samples_only_in_norm": sorted(norm - exp_set)[:10],
+            "samples_only_in_file": sorted(norm - exp_set)[:10],
             "samples_only_in_dumpbin": sorted(exp_set - norm)[:10],
         }
 
@@ -628,29 +713,34 @@ def build(args):
     report["publics_rva_note"] = (
         "PDB publics 左列(col1)是记录偏移, 不是 RVA; rva = 节 VA + addr 的十进制偏移")
     report["version_note"] = (
-        "契约 INTERFACE.md 对本 DLL 记录 file_version=10.0.26100.8875; 实测该值取自 "
-        "VS_VERSIONINFO 的 StringFileInfo\\FileVersion（'10.0.26100.8875 "
-        "(WinBuild.160101.0800)'），而同一文件的 FixedFileInfo/PE 头为 10.0.26100.9278"
-        "（x86 dui70.dll 两者均为 9278）。meta.file_version 按契约口径取字符串版本。")
+        "manifest.dll.file_version=10.0.26100.8875 取自 VS_VERSIONINFO 的 "
+        "StringFileInfo\\FileVersion（'10.0.26100.8875 (WinBuild.160101.0800)'）；"
+        "同一文件的 FixedFileInfo/PE 头为 10.0.26100.9278（x86 dui70.dll 两者均为 "
+        "9278）。按契约口径取字符串版本。")
     if pinned_report is not None:
-        report["pinned_v2"] = pinned_report
+        report["pinned"] = pinned_report
 
     print(json.dumps(report, ensure_ascii=False, indent=2))
-    return doc, report
+    return report
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(
-        description="dui-pipeline symbols: dumpbin exports + PDB publics -> exports.json")
-    ap.add_argument("--dll", default=REAL_DLL_X64)
-    ap.add_argument("--pdb", default=PDB_X64)
-    ap.add_argument("--pdb-publics", default=PDB_PUBLICS)
-    ap.add_argument("--build", default=BUILD)
-    ap.add_argument("--out", default=os.path.join(BUILD, "exports.json"),
-                    help="v1 全量输出（自证用）")
-    ap.add_argument("--pinned", nargs="?", const=PINNED, default=None,
-                    help="同时产 pinned/exports.json（v2 瘦身）并校验/写 manifest；"
-                         "不带值时用仓库根 pinned/")
+        description="dui-pipeline: 真实 DLL + PDB -> pinned/exports.json（含 manifest 指纹校验）")
+    ap.add_argument("--dll", default=REAL_DLL_X64,
+                    help="待提取的 dui70.dll（默认系统 x64 副本 %s）" % REAL_DLL_X64)
+    ap.add_argument("--pdb", default=None,
+                    help="对应的 dui70.pdb。提供后用于交叉校验 GUID/Age 并解析 "
+                         "publics；缺失则只依赖 DLL 的导出表与 RSDS。")
+    ap.add_argument("--pdb-publics", default=None,
+                    help="llvm-pdbutil -publics 文本或符号清单的路径；"
+                         "提供后其符号并入 pinned/symbols.json")
+    ap.add_argument("--cross-check", default=None,
+                    help="可选的导出名清单（每行一个），用于交叉校验导出集合")
+    ap.add_argument("--build", default=BUILD,
+                    help="缓存/交接目录（dumpbin 原始输出、model.py 的输入）")
+    ap.add_argument("--pinned", default=PINNED,
+                    help="pinned 目录（默认 <repo>/pinned）")
     ap.add_argument("--new-pin", action="store_true",
                     help="指纹不符时显式确认换版并重写 manifest")
     ap.add_argument("--verify-pin", action="store_true",
@@ -660,8 +750,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     if args.verify_pin:
-        pin_dir = args.pinned or PINNED
-        ok, rep = verify_pin(pin_dir, dll=args.dll, pdb=args.pdb)
+        ok, rep = verify_pin(args.pinned, dll=args.dll, pdb=args.pdb)
         print(json.dumps(rep, ensure_ascii=False, indent=2))
         return 0 if ok else 1
 

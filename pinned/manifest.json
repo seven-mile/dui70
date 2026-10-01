@@ -1,5 +1,4 @@
 {
-  "schema_version": 2,
   "dll": {
     "name": "dui70.dll",
     "arch": "x64",

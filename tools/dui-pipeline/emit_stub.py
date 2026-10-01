@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-emit_stub.py -- codegen module of the dui-pipeline (schema v2).
+emit_stub.py -- stub source emitter of the dui-pipeline.
 
 Generates stub .cpp implementations for the target DirectUI classes, one
 class per TU, from pinned/symbols.json + pinned/classes.json. Every
@@ -9,13 +9,13 @@ non-template method gets a trivial out-of-line definition so the resulting
 .obj exports the exact MSVC decorated names of the real dui70.dll.
 Output is deterministic (CI golden).
 
-Hard acceptance metric (contract: tools/dui-pipeline/INTERFACE.md v2):
+Hard acceptance metric (contract: tools/dui-pipeline/INTERFACE.md):
     cl.exe /std:c++20 /Zc:wchar_t- /c /EHsc  ->  .obj
     dumpbin /symbols  ->  decorated name set
     must match the real exports for the target classes.
 
 Notes:
-  * The 5 legacy C functions (InitProcessPriv, UnInitProcessPriv,
+  * The 5 plain-name C functions (InitProcessPriv, UnInitProcessPriv,
     RegisterAllControls, StartMessagePump, StrToID) are NOT emitted here;
     they are plain-name exports declared extern "C" in the aggregate header.
   * 'vector deleting dtor' (??_E...) entries are compiler-generated, are
@@ -145,8 +145,8 @@ def render_definition(cls: str, sym: dict, tr: TypeTranslator) -> str:
 def render_data_definition(cls: str, sym: dict, tr: TypeTranslator) -> str:
     """Out-of-line static data member definition.
 
-    schema v2 carries the type in return_type; pointer-ness for pointer
-    members (e.g. s_pClassInfo) is recovered from the mangled name."""
+    The type comes from return_type; pointer-ness for pointer members
+    (e.g. s_pClassInfo) is recovered from the mangled name."""
     ty = tr.translate(sym.get("return_type") or "")
     name = sym["member"]
     mang = sym["mangled"]

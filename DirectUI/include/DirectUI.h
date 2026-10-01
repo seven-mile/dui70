@@ -20,7 +20,7 @@
 
 // ---------------------------------------------------------------------------
 // extern "C" API -- plain-name exports of the real dui70.dll.
-// Signatures from UITest usage + baseline declarations; the export table
+// Signatures from UITest usage + the DirectUI headers; the export table
 // itself only carries the undecorated name.
 // TODO: remaining ~80 plain-name exports (incl. DUI70_XXX-prefixed
 // whose signatures are not yet recovered) are not declared here.

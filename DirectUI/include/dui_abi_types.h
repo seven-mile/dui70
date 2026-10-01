@@ -6,7 +6,7 @@
 //  * global-scope forward declarations (mangled without @2@)
 //  * namespace DirectUI forward declarations
 //  * minimal complete definitions for by-value types
-// NOTE: compiled with /Zc:wchar_t- like the baseline, so
+// NOTE: compiled with /Zc:wchar_t- (the DirectUI ABI), so
 //       'const wchar_t*' == 'const unsigned short*' (UCString).
 #pragma once
 
@@ -41,7 +41,7 @@ public:
 
 // Compare a UID against an event-id ACCESSOR FUNCTION (called on the
 // spot). Lets consumer code write `ev->type == TouchButton::Click`
-// without call parentheses (baseline types.h compatibility).
+// without call parentheses (DirectUI types.h idiom).
 inline bool operator==(UID id, UID (*ev)(void))
 {
     UID p = ev();
@@ -103,7 +103,7 @@ namespace DirectUI
     enum CheckedStateFlags { CheckedStateFlags_None = 0 };
 
     // ---- ValueType: consumer-side knowledge (enum members are never
-    // exported; shape transcribed from the baseline Value.h). Used by
+    // exported; members transcribed from DirectUI Value.h). Used by
     // UITest in switch statements over Value::GetType(). ----
     enum class ValueType : int
     {

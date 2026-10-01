@@ -1,21 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-dui-pipeline / symbols module -- 产物 2: symbols.json
+dui-pipeline / symbols module -- 产物 2: pinned/symbols.json + pinned/classes.json
 
-吃 .local/build/exports.json（由 extract.py 产出），做:
+输入是 extract.py 从 DLL/PDB 解析出的符号（导出表 + PDB publics），做:
   1. llvm-undname 批量反修饰
-  2. 结构化解出契约要求的全部字段
-  3. 与手写基线（导入库 + 基线 DLL 导出表）对照得 baseline_status
-  4. 汇总 classes 数组
-输出 .local/build/symbols.json。
+  2. 结构化解出契约要求的字段
+  3. 写出 pinned/symbols.json + pinned/classes.json
 
-契约: tools/dui-pipeline/INTERFACE.md （冻结版 v1）— 字段名/枚举不得擅改。
+契约: tools/dui-pipeline/INTERFACE.md — 字段名/枚举不得擅改。
 只用标准库（Python 3.11）。
 
+依赖的外部工具:
+  llvm-undname  反修饰。从 PATH 查找（LLVM 发行版自带）；也可用
+                环境变量 LLVM_UNDNAME 或 --undname <path> 指定。
+
+输入:
+  --raw          extract.py 的交接文件（导出表 + PDB publics + pub_flags）
+  --inventory    pinned/class-inventory.csv —— 来自旧 build 的类名普查，
+                 作类名白名单用。少数类只导出普通成员函数，没有
+                 ctor/dtor/vftable 可供自举，只能靠它。该文件已随
+                 pinned/ 提交，缺失时报错（不静默降级）。
+
 用法:
-  python model.py                     # exports.json -> symbols.json
-  python model.py --self-check        # 额外打印逐项自证（默认也打印摘要）
+  python model.py                     # 读 .local/build/extract-raw.json -> pinned/
+  python model.py --pinned <dir>      # 指定 pinned 目录（默认 <repo>/pinned）
+  python model.py --undname <path>    # 指定 llvm-undname 可执行文件
+  python model.py --inventory <csv>   # 指定类清单 CSV
 """
 
 from __future__ import annotations
@@ -23,30 +34,22 @@ from __future__ import annotations
 import argparse
 import collections
 import csv
-import datetime as _dt
 import json
 import os
 import re
-import struct
+import shutil
 import subprocess
 import sys
 
-REPO = r"Z:\repos\DirectUI"
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BUILD = os.path.join(REPO, ".local", "build")
-AUDIT = os.path.join(REPO, ".local", "audit")
 HEADERS_DIR = os.path.join(REPO, "DirectUI")
-MSDEF = os.path.join(REPO, "DirectUI", "msdef.txt")
-# msdef.txt 在 dd1fd41 被删除（"retire hand-written DirectUI project"），
-# 但它是 4 个类的唯一来源（NavReference / LinkedListNode / ACCESSIBLEROLE / UID）。
-# 缓存副本 + git 历史兜底，使 class 发现不再依赖已退役的手写树。
-MSDEF_CACHE = os.path.join(AUDIT.replace("audit", "cache"), "msdef-x64.txt")
-CLASS_INVENTORY = os.path.join(AUDIT, "class-inventory-26200.csv")
-LEAD_MISSING_CSV = os.path.join(AUDIT, "missing-exports-26200.csv")
 PINNED_DIR = os.path.join(REPO, "pinned")
+# pinned/ 是冻结输入：类名普查 CSV 与 exports/symbols/classes 同住于此
+CLASS_INVENTORY = os.path.join(PINNED_DIR, "class-inventory.csv")
 
 # 契约 1.4: 目标类清单 + 继承表（轴 B 成本显式化）。改此表 = 改生成范围。
-CLASSES_V2 = {
-    "schema_version": 2,
+CLASSES = {
     "classes": ["Value", "DUIXmlParser", "Element", "HWNDElement", "NativeHWNDHost",
                 "TouchButton", "Edit", "Button", "Progress", "PushButton",
                 "TouchCheckBox", "XProvider"],
@@ -62,13 +65,6 @@ CLASSES_V2 = {
     },
 }
 
-BASELINE_DLL = os.path.join(REPO, "x64", "Debug", "Dui", "dui70.dll")
-BASELINE_LIB = os.path.join(REPO, "x64", "Debug", "Dui", "dui70.lib")
-
-UNDNAME = r"C:\Local\Tools\mingw64\bin\llvm-undname.exe"
-DUMPBIN = (r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC"
-           r"\14.44.35207\bin\Hostx64\x64\dumpbin.exe")
-
 CALL_CONVS = ("__cdecl", "__stdcall", "__thiscall", "__fastcall", "__vectorcall", "__clrcall")
 _CC_RE = re.compile(r"(__cdecl|__stdcall|__thiscall|__fastcall|__vectorcall|__clrcall)")
 _ACCESS_RE = re.compile(r"^(public|protected|private):\s*")
@@ -76,7 +72,6 @@ _ACCESS_RE = re.compile(r"^(public|protected|private):\s*")
 # 契约枚举（严格）
 KINDS = ("method", "static_method", "ctor", "dtor", "operator", "free_function",
          "data", "vftable", "c_api", "template", "unknown")
-BASELINE_STATUS = ("identical", "param_changed", "missing", "removed")
 
 # 已知数据类符号的名字形态（仅用于给"反修饰失败的 public"分 c_api / data）
 _DATA_NAME_HINTS = ("_GUID", "CLSID_", "IID_", "LIBID_", "CATID_", "__imp_", "_PchSym_",
@@ -96,6 +91,34 @@ def run(cmd, timeout=900):
     p = subprocess.run(cmd, capture_output=True, timeout=timeout)
     dec = lambda b: (b or b"").decode("utf-8", errors="replace")
     return p.returncode, dec(p.stdout), dec(p.stderr)
+
+
+# 外部工具逻辑名 -> (可执行文件名候选, 覆盖用环境变量)
+_TOOLS = {
+    "undname": (("llvm-undname", "llvm-undname.exe", "undname", "undname.exe"),
+                "LLVM_UNDNAME"),
+}
+
+
+def tool_path(name):
+    """Resolve an external tool to an absolute path.
+
+    Order: the tool-specific environment variable (e.g. LLVM_UNDNAME), then
+    PATH. A clear error is raised when the tool cannot be found, so that a
+    missing dependency is reported as such instead of surfacing later as an
+    empty undecoration result.
+    """
+    candidates, env = _TOOLS[name]
+    if env and os.environ.get(env):
+        return os.environ[env]
+    for cand in candidates:
+        found = shutil.which(cand)
+        if found:
+            return found
+    raise SystemExit(
+        "required external tool %r not found on PATH; install LLVM (which provides "
+        "%s) and/or set %s to its full path"
+        % (candidates[0], candidates[0], env))
 
 
 def split_top_level(s, sep="::"):
@@ -166,7 +189,7 @@ def match_paren(s, i):
 def is_template_mangled(mangled):
     """MSVC 模板实例化标记: 修饰名里出现 "?$"。
 
-    坑: 字符串常量 `??_C@_...` 的内容会被编码进修饰名, 内容里的 '#' 编码为 "?$CD",
+    注意: 字符串常量 `??_C@_...` 的内容会被编码进修饰名, 内容里的 '#' 编码为 "?$CD",
     于是出现 "?$" 但它根本不是模板（1024 个假阳性）。故排除 `??_C@`。
     """
     if mangled.startswith("??_C@"):
@@ -184,7 +207,7 @@ _TRAILING_SPEC = re.compile(r"\s*(?:noexcept(?:\s*\([^()]*\))?|throw\s*\([^()]*\
 def strip_trailing_spec(s):
     """去掉尾部的 noexcept / noexcept(...) / throw(...) 异常规格。
 
-    坑: "void (__cdecl *wil::g_pfnX)(void) noexcept" 因尾部 noexcept 导致
+    注意: "void (__cdecl *wil::g_pfnX)(void) noexcept" 因尾部 noexcept 导致
     "RET (__cc * DECL)(P)$" 匹配失败, 被误判成普通函数（member 取成返回类型）。
     共 17 个 wil:: 函数指针全局变量受此影响。
     """
@@ -202,7 +225,7 @@ def parse_fnptr_data(s):
     用显式扫描而非纯正则, 以便处理 DECL 里被反引号引住的名字
     （如 wil 的 `void * __cdecl Foo(int)'::`2'::pfnX, 内含括号）。
 
-    ！两个必须的守卫（否则会把"函数的一个参数"误当成被声明的实体）:
+    两个必须的守卫（否则会把"函数的一个参数"误当成被声明的实体）:
       1) ret 里不能有顶层 '(' —— 有则说明这个 '(' 属于参数列表，
          例如 Add(Element *, int (__cdecl *)(void const *, void const *))
       2) DECL 必须非空 —— 空 DECL 意味着"(*)"这种无名字段，不是数据声明
@@ -263,7 +286,7 @@ def parse_fnptr_data(s):
 
 # MSVC 函数内静态变量: "?VAR@?1??EnclosingFunc@Scope@@...@Z@4<TYPE>"
 #   反修饰结果形如: "<TYPE> `<enclosing signature>'::`2'::VAR"
-#   坑: 里面的反引号签名含 :: 和括号, 天真的"取最后一段 :: 之后"会取到**外层函数名**
+#   注意: 里面的反引号签名含 :: 和括号, 天真的"取最后一段 :: 之后"会取到**外层函数名**
 #   （27 个里有 23 个被这样误判）。变量名以修饰名为准最可靠。
 _LOCAL_STATIC_RE = re.compile(r"^\?(?P<var>[^@]+)@\?1\?\?")
 
@@ -325,8 +348,8 @@ def strip_ptr(decl):
 # 反修饰
 # ==========================================================================
 
-def _undecorate_chunk(chunk):
-    rc, out, err = run([UNDNAME] + chunk)
+def _undecorate_chunk(chunk, tool):
+    rc, out, err = run([tool] + chunk)
     groups, cur = [], []
     for ln in out.splitlines():
         if ln == "":
@@ -340,12 +363,13 @@ def _undecorate_chunk(chunk):
     return groups, err
 
 
-def undecorate_batch(names, chunk_chars=16000, verbose=True):
+def undecorate_batch(names, chunk_chars=16000, verbose=True, tool=None):
     """批量反修饰。返回 {mangled: undecorated|None}。
 
     llvm-undname 单参数输出 [mangled, undecorated, ""]（失败时只有 [mangled, ""]）;
     批量时每个符号一组, 以空行分隔。以"回显行 == 输入名"对齐, 数量不符时逐个回退。
     """
+    tool = tool or tool_path("undname")
     res = {}
     names = list(names)
     i, n_fallback, n_invoked = 0, 0, 0
@@ -355,7 +379,7 @@ def undecorate_batch(names, chunk_chars=16000, verbose=True):
             chunk.append(names[i])
             size += len(names[i]) + 1
             i += 1
-        groups, _ = _undecorate_chunk(chunk)
+        groups, _ = _undecorate_chunk(chunk, tool)
         n_invoked += 1
         aligned = (len(groups) == len(chunk) and
                    all(g and g[0] == c for g, c in zip(groups, chunk)))
@@ -366,7 +390,7 @@ def undecorate_batch(names, chunk_chars=16000, verbose=True):
             # 回退: 逐个调用, 保证不错位
             n_fallback += len(chunk)
             for c in chunk:
-                g, _ = _undecorate_chunk([c])
+                g, _ = _undecorate_chunk([c], tool)
                 g = g[0] if g else [c]
                 res[c] = g[1] if len(g) >= 2 and g[1] else None
     if verbose:
@@ -597,206 +621,38 @@ def _finish_kind(out, mangled):
 
 
 # ==========================================================================
-# 基线（手写 stub）符号集合
-# ==========================================================================
-
-def _baseline_dll_names(path=BASELINE_DLL):
-    """基线 DLL 的导出名集合（导入库的最终形态; 与 Lead 的 3198/1123/155 完全吻合）。"""
-    if not os.path.isfile(path):
-        return set(), "missing"
-    rc, out, err = run([DUMPBIN, "/exports", path])
-    names = set()
-    for ln in (out + "\n" + err).splitlines():
-        m = re.match(r"^\s*\d+\s+[0-9A-Fa-f]+\s+[0-9A-Fa-f]{8}\s+(\S.*?)\s*$", ln)
-        if m:
-            rest = m.group(1)
-            names.add(rest.split(" = ")[0] if " = " in rest else rest)
-    return names, "baseline-dll"
-
-
-def _baseline_lib_names(path=BASELINE_LIB):
-    """手写基线导入库的符号集合。
-
-    优先用 dumpbin /linkermember:1（任务指定的方法）; 同时用 COFF archive 的
-    first linker member 二进制解析做交叉校验 —— dumpbin 文本对超长符号会截断/丢行。
-    """
-    names = set()
-    src = "missing"
-    if os.path.isfile(path):
-        rc, out, err = run([DUMPBIN, "/linkermember:1", path])
-        for ln in (out + "\n" + err).splitlines():
-            m = re.match(r"^\s*[0-9A-Fa-f]{4,}\s+(\S+)\s*$", ln)
-            if not m:
-                continue
-            t = m.group(1)
-            if t.startswith("__imp_"):
-                t = t[6:]
-            if (t.startswith("__IMPORT_DESCRIPTOR") or t.startswith("__NULL_IMPORT_DESCRIPTOR")
-                    or "NULL_THUNK_DATA" in t or t.startswith(".")):
-                continue
-            if t in ("mode", "size", "uid", "gid", "time/date", "symbols", "public"):
-                continue
-            names.add(t)
-        src = "baseline-lib/dumpbin"
-        # 二进制交叉校验
-        binnames = _lib_linker_member_names(path)
-        if binnames:
-            if binnames != names:
-                print("[baseline] NOTE dumpbin /linkermember:1 (%d) != COFF archive (%d); "
-                      "using archive union" % (len(names), len(binnames)), file=sys.stderr)
-            names |= binnames
-            src = "baseline-lib/dumpbin+archive"
-    return names, src
-
-
-def _lib_linker_member_names(path):
-    """直接解析 COFF archive 的 first linker member（big-endian 偏移表）。"""
-    try:
-        raw = open(path, "rb").read()
-        if raw[:8] != b"!<arch>\n":
-            return set()
-        hdr = raw[8:68]
-        size = int(hdr[48:58].decode("ascii").strip())
-        d = raw[68:68 + size]
-        n = struct.unpack(">I", d[0:4])[0]
-        region = d[4 + 4 * n:]
-        out = set()
-        for tok in region.split(b"\0"):
-            if not tok:
-                continue
-            t = tok.decode("ascii", "replace")
-            if t.startswith("__imp_"):
-                t = t[6:]
-            if (t.startswith("__IMPORT_DESCRIPTOR") or t.startswith("__NULL_IMPORT_DESCRIPTOR")
-                    or "NULL_THUNK_DATA" in t):
-                continue
-            out.add(t)
-        return out
-    except Exception:
-        return set()
-
-
-def build_baseline_set():
-    """返回 (baseline_set, info)。baseline_set 是"手写基线能提供的导入符号"集合。
-
-    两路来源最终归一为同一集合（均得 identical=3198 / missing=1123 / removed=155）:
-      * 基线 DLL 导出表  —— 权威（导出名即链接期符号）
-      * 基线导入库       —— 需做别名归一: 基线 .lib 里 C API 存的是修饰名
-        （?BlurBitmap@DirectUI@@...），而真实 DLL 导出的是纯名（BlurBitmap），
-        二者是同一 API。规则: 若 .lib 符号的 member 名等于某个真实纯名导出，视为同一。
-    """
-    dll_names, dll_src = _baseline_dll_names()
-    lib_names, lib_src = _baseline_lib_names()
-    info = {
-        "sources": {"dll": dll_src, "lib": lib_src},
-        "baseline_dll_names": len(dll_names),
-        "baseline_lib_names": len(lib_names),
-        "baseline_dll_path": BASELINE_DLL,
-        "baseline_lib_path": BASELINE_LIB,
-    }
-    return dll_names | lib_names, dll_names, lib_names, info
-
-
-def alias_normalize(baseline, real_exports):
-    """把基线 .lib 中"C API 的修饰名"折叠回真实 DLL 使用的纯名。
-
-    基线 .lib 对 C API 存的是修饰名（如 ?BlurBitmap@DirectUI@@YAHPEAX0000@Z），
-    而真实 DLL 导出的是纯名（BlurBitmap），二者是同一 API。
-
-    注意: 只有当"该纯名本身是一个真实导出、且没有同名的修饰导出"时才折叠。
-    反例: InitThread —— 真实 DLL 同时导出纯名 `InitThread`（C API）和
-    `?InitThread@FontCache@DirectUI@@SAJXZ`（类静态方法），两者是不同符号，
-    若折叠会让后者被误判为 identical（正是 3197 vs 3198 差的 1 个）。
-    """
-    decorated_exports = set(n for n in real_exports if n.startswith("?"))
-    plain_exports = set(n for n in real_exports if not n.startswith("?"))
-    aliased = {}
-    eff = set()
-    for b in baseline:
-        if not b.startswith("?") or b.startswith("??"):
-            eff.add(b)
-            continue
-        member = b[1:].split("@", 1)[0]
-        if member in plain_exports and b not in decorated_exports:
-            aliased[b] = member
-            eff.add(member)
-            continue
-        eff.add(b)
-    return eff, aliased
-
-
-def key_of(parsed):
-    """class::member 键, 用于 param_changed 判定。"""
-    scope = parsed.get("scope")
-    member = parsed.get("member")
-    if member is None:
-        return None
-    return (scope, member)
-
-
-# ==========================================================================
 # 类名发现
 # ==========================================================================
 
-def load_class_inventory():
-    classes = set()
-    if os.path.isfile(CLASS_INVENTORY):
-        with open(CLASS_INVENTORY, encoding="utf-8", errors="replace") as f:
-            for row in csv.DictReader(f):
-                n = (row.get("Class") or "").strip()
-                if n:
-                    classes.add(n)
-    return classes
+def load_class_inventory(path):
+    """读取类清单 CSV（列: Class, MethodCount）。
 
+    这是 pinned/ 冻结输入之一：来自旧 build 的类名普查，作为类名白名单使用。
+    它覆盖仅凭修饰名无法反推的类（例如 BehaviorStore：只有普通成员函数，
+    没有任何 ctor/dtor/vftable 可供自举）；MethodCount 列是那份普查的产物，
+    精度不可靠，本模块不读。
 
-def server_scope_ok(name, known):
-    """判断 scope 的最后一段是否真的是"类"而不是"命名空间"。
-
-    规则: 已登记为类的名字 -> 是; 模板实例化（含 '<'）-> 是;
-    否则只有当它不是已知命名空间时才可能是类。
-    已知命名空间来自 PDB 里大量 "DirectUI::FreeFunc" / "DirectUI::g_var" 这类条目
-    —— 单看一行无法区分命名空间与类, 需靠白名单。
+    该文件随 pinned/ 一起提交，缺失即无法复现 pinned/symbols.json 的
+    class 字段，因此按错误处理而不是静默降级。
     """
-    if "<" in name:
-        return True
-    return name in known
+    if not path or not os.path.isfile(path):
+        raise SystemExit(
+            "class inventory CSV not found: %s\n"
+            "它是 pinned/ 的冻结输入之一（来自旧 build 的类名普查）；"
+            "用 --inventory <path> 指定其它位置。" % path)
+    classes = set()
+    with open(path, encoding="utf-8", errors="replace") as f:
+        for row in csv.DictReader(f):
+            n = (row.get("Class") or "").strip()
+            if n:
+                classes.add(n)
+    return classes
 
 
 def load_namespaces():
     """已知命名空间白名单（dui70 实际只用到这几个）。"""
     return {"DirectUI", "SWF", "std", "wistd", "wil", "Gdiplus", "Library",
             "Windows", "Microsoft", "Details", "wil_details"}
-
-
-def load_msdef_classes():
-    """从 msdef 抓类名。
-
-    坑 1: 天真的 `(\\w+)::` 会把命名空间 DirectUI 也当成类
-    （"DirectUI::Element::Foo()" 的第一个匹配是 "DirectUI"），
-    从而把 `DirectUI::FreeFunc()` 这类自由函数误判成 class="DirectUI" 的成员。
-    这里只认"紧邻 '(' 或 '`vftable' 的那一段"，即真正的 Scope::Member 结构。
-
-    坑 2: 直接 isfile(MSDEF) 判断会因 dd1fd41 删掉 DirectUI/msdef.txt 而静默返回空集，
-    导致 4 个类（NavReference/LinkedListNode/ACCESSIBLEROLE/UID）+ 一批类名丢失。
-    统一走 load_msdef_text() 的多级回退。
-    """
-    classes = set()
-    text = load_msdef_text()
-    if not text:
-        return classes
-    for ln in text.splitlines():
-            # Scope::Member(  ->  Scope 的最后一段是类
-            for m in re.finditer(r"([A-Za-z_]\w*)\s*::\s*(?:~\w+|operator\S*|[A-Za-z_]\w*)\s*\(", ln):
-                classes.add(m.group(1))
-            # Scope::`vftable'
-            for m in re.finditer(r"([A-Za-z_]\w*)\s*::\s*`vftable'", ln):
-                classes.add(m.group(1))
-            # 数据成员: "Type Scope::Member"（行尾无括号）
-            s = ln.strip()
-            if s and "(" not in s:
-                for m in re.finditer(r"([A-Za-z_]\w*)\s*::\s*[A-Za-z_]\w*\s*$", s):
-                    classes.add(m.group(1))
-    return classes
 
 
 def load_header_text():
@@ -812,117 +668,84 @@ def load_header_text():
     return "\n".join(buf)
 
 
-def load_msdef_text():
-    """读 msdef（MS 的修饰名定义清单）。
+def discover_classes(und, header_text, inventory_path):
+    """Collect class names from the undecorated dump (`und`), the headers and
+    the pinned class inventory.
 
-    优先 DirectUI/msdef.txt；已被删除时退回 .local/cache/msdef-x64.txt；
-    再不行从 git 历史取（只读操作，不改工作区）。
+    Sources, in decreasing authority:
+      1. the class inventory CSV from pinned/ (see load_class_inventory) — the
+         only source able to name classes that leave no ctor/dtor/vftable
+         residue;
+      2. `class X` / `struct X` declarations in the generated headers;
+      3. the scope of every ctor / dtor / operator= / vftable symbol in the
+         undecorated dump.
+
+    Source 3 needs only the DLL/PDB-derived undname output, so it is available
+    with no extra inputs. The `und` key is the *mangled* name, because
+    undecoration of a large batch is done in one llvm-undname pass keyed by
+    mangled name.
+
+    Only modifiers whose scope is necessarily a class are used (ctor, dtor,
+    operator=, and the vftable / deleting-dtor helpers). Bootstrapping from
+    free functions would be wrong: those may live in a namespace, which would
+    then be promoted to a class.
+
+    Scope extraction: the declarator is the text before the first "(", which
+    for a member definition is `... Scope::Member`; the last "::" segment is
+    the class name, so nested scopes resolve correctly. Three rendering quirks
+    have to be handled before taking that last segment:
+
+      * non-namespaced classes render as `public: __cdecl UID::UID(...)`,
+        gluing the calling convention onto the scope ("__cdecl UID") — strip
+        everything up to and including the last calling-convention token;
+      * `Scope::operator=` and `Scope::~Dtor` end with the member name, which
+        must be removed (otherwise a class such as NavReference would be
+        recorded as "operator=", and its members would lose their class and
+        fall back to `free_function`);
+      * the vftable helper renders as `Scope::`vftable'`, i.e. a backquoted
+        pseudo-member name that must be stripped with the member segment.
     """
-    if os.path.isfile(MSDEF):
-        with open(MSDEF, encoding="utf-8", errors="replace") as f:
-            return f.read()
-    if os.path.isfile(MSDEF_CACHE):
-        with open(MSDEF_CACHE, encoding="utf-8", errors="replace") as f:
-            return f.read()
-    try:
-        p = subprocess.run(["git", "show", "dd1fd41~1:DirectUI/msdef.txt"],
-                           cwd=REPO, capture_output=True, timeout=60)
-        if p.returncode == 0:
-            return (p.stdout or b"").decode("utf-8", errors="replace")
-    except (OSError, subprocess.SubprocessError):
-        pass
-    return ""
-
-
-def discover_classes(und, header_text, msdef_text):
-    """从 ctor/dtor/vftable 的 scope 里自举类名（scope 的最后一段）。
-
-    注: 这里的自举只是兜底（msdef 才是主来源）。它对无命名空间的类
-    （如 UID::UID）取不到正确的末段，但那种情况下 msdef 已经能提供，
-    因此保持保守实现，避免把命名空间误升为类。
-    """
-    known = set(load_class_inventory())
-    known |= load_msdef_classes()
+    known = set(load_class_inventory(inventory_path))
     for m in re.finditer(r"\b(?:class|struct)\s+([A-Za-z_]\w*)(?!\s*::)", header_text):
         known.add(m.group(1))
     for mangled, u in und.items():
         if not u:
             continue
-        if not mangled.startswith(("??0", "??1", "??_7", "??_G", "??_E", "??_D")):
+        if not mangled.startswith(("??0", "??1", "??4", "??_7", "??_G", "??_E", "??_D")):
             continue
         s = _ACCESS_RE.sub("", u.strip())
-        s = re.sub(r"^(class|struct|const)\s+", "", s)
-        if "::" in s:
-            scope = s.split("(", 1)[0]
-            # 无命名空间的类（如 "public: __cdecl UID::UID(...)"）会把调用约定
-            # 粘进 scope（"__cdecl UID"），导致 UID 从未被登记。剥掉最后一个
-            # 调用约定记号之前的所有内容。
-            scope = re.sub(r"^.*?\b__(?:cdecl|stdcall|thiscall|fastcall|vectorcall)\s+",
-                           "", scope)
-            scope = re.sub(r"\s*::\s*(`vftable'|~?\w+)$", "", scope)
-            scope = scope.strip()
-            if scope:
-                parts = split_top_level(scope, "::")
-                known.add(parts[-1])
-                known.add(template_base(parts[-1]))
+        s = re.sub(r"^(?:class|struct|const)\s+", "", s)
+        if "::" not in s:
+            continue
+        scope = s.split("(", 1)[0]
+        scope = re.sub(r"^.*?\b__(?:cdecl|stdcall|thiscall|fastcall|vectorcall)\s+",
+                       "", scope)
+        # 末尾成员：普通名 / ~dtor / operatorXXX / `vftable'
+        scope = re.sub(r"\s*::\s*(`vftable'|~?\w+|operator\S*)$", "", scope)
+        scope = scope.strip()
+        if not scope:
+            continue
+        parts = split_top_level(scope, "::")
+        known.add(parts[-1])
+        known.add(template_base(parts[-1]))
     return known
-
-
-# ==========================================================================
-# baseline_status
-# ==========================================================================
-
-def classify_status(mangled, is_export, eff_baseline, baseline_keys, key, exported_names):
-    """baseline_status —— 双侧校验。
-
-    契约: identical = "修饰名与手写基线导入库一致"。
-    但若一个符号只是 PDB public（真实 DLL 里存在、导出表里没有），它就不属于
-    "真实导出 ∩ 基线"：基线（stub DLL）曾把它导出、真实 DLL 现在不再导出，
-    因此它是 removed，而不是 identical。
-    （例: ??_7RichText@DirectUI@@6B@、??_7TouchButton@DirectUI@@6B@）
-    """
-    in_baseline = mangled in eff_baseline
-    if in_baseline:
-        return "identical" if is_export else "removed"
-    if key and key in baseline_keys:
-        return "param_changed"
-    return "missing"
 
 
 # ==========================================================================
 # 主流程
 # ==========================================================================
 
-def load_pdb_info(path):
-    """返回 (flags, rvas, record_offsets)。
-
-    flags:         name -> 'function' | 'none'
-    rvas:          name -> "0x........"（由 extract.py 算好的真实 RVA）
-    record_offsets: name -> PDB 记录偏移（注意: 不是 RVA）
-    """
-    flags, rvas, offs = {}, {}, {}
-    if not os.path.isfile(path):
-        return flags, rvas, offs
-    pending = None
-    with open(path, encoding="utf-8", errors="replace") as f:
-        for ln in f:
-            m = re.match(r"^\s*(\d+)\s*\|\s*S_PUB32\b[^`]*`([^`]*)`\s*$", ln)
-            if m:
-                pending = m.group(2)
-                offs[pending] = int(m.group(1))
-                continue
-            a = re.match(r"^\s*flags = (\w+), addr = (\d+):(\d+)", ln)
-            if a and pending:
-                flags[pending] = a.group(1)
-                pending = None
-    return flags, rvas, offs
-
-
 def build(args):
-    exports_path = args.exports
-    if not os.path.isfile(exports_path):
-        raise SystemExit("missing %s -- run extract.py first" % exports_path)
-    with open(exports_path, encoding="utf-8") as f:
+    raw_path = args.raw
+    if not os.path.isfile(raw_path):
+        raise SystemExit("missing %s -- run extract.py first" % raw_path)
+    # 先校验 pinned 输入，避免在跑完上万符号的反修饰之后才发现缺文件
+    if not args.inventory or not os.path.isfile(args.inventory):
+        raise SystemExit(
+            "class inventory CSV not found: %s\n"
+            "它是 pinned/ 的冻结输入之一（来自旧 build 的类名普查）；"
+            "用 --inventory <path> 指定其它位置。" % args.inventory)
+    with open(raw_path, encoding="utf-8") as f:
         src = json.load(f)
 
     exports = src["exports"]
@@ -932,18 +755,13 @@ def build(args):
         exp_by_name.setdefault(e["mangled"], e)
     pub_names = set(p["mangled"] for p in publics)
 
-    # ---------------- 基线 ----------------
-    raw_baseline, dll_b, lib_b, binfo = build_baseline_set()
-    eff_baseline, aliased = alias_normalize(raw_baseline, exp_by_name)
-
     # ---------------- 反修饰 ----------------
     all_names = sorted(set(exp_by_name) | pub_names)
-    und = undecorate_batch(all_names)
+    und = undecorate_batch(all_names, tool=args.undname or tool_path("undname"))
 
     # ---------------- 类发现 ----------------
     header_text = load_header_text()
-    msdef_text = load_msdef_text()
-    known_classes = discover_classes(und, header_text, msdef_text)
+    known_classes = discover_classes(und, header_text, args.inventory)
     namespaces = load_namespaces()
     # 命名空间白名单里的名字不算类（否则 "DirectUI::FreeFunc" 会被当成 DirectUI 的成员）
     known_classes = set(n for n in known_classes if n not in namespaces)
@@ -960,31 +778,15 @@ def build(args):
             return ("::".join(parts[:-1]) or None), last
         return scope, None
 
-    # ---------------- 基线 key 集合 ----------------
-    base_parsed = {}
-    base_und = undecorate_batch(sorted(eff_baseline)) if eff_baseline else {}
-    for b in eff_baseline:
-        bu = base_und.get(b) or (b if not b.startswith("?") else None)
-        if bu is None:
-            continue
-        bp = parse_undecorated(bu, b, resolve_scope)
-        if bp["member"] is not None:
-            base_parsed[b] = bp
-    baseline_keys = set()
-    for b, bp in base_parsed.items():
-        k = key_of(bp)
-        if k:
-            baseline_keys.add(k)
-
     # ---------------- 逐符号构造 ----------------
-    flags, _unused, rec_offsets = load_pdb_info(
-        os.path.join(REPO, ".local", "cache", "pdb-publics-x64.txt"))
-    # publics 的真实 RVA 由 extract.py 算好放在 exports.json 的 publics[].rva
+    # pub_flags 由 extract.py 从 PDB publics 文本解析后放进交接文件，
+    # 只用于区分"反修饰失败的 public"是 c_api 还是 data。
+    flags = dict(src.get("pub_flags") or {})
+    # publics 的真实 RVA 由 extract.py 算好放在交接文件的 publics[].rva
     pub_rva = {}
     for p in publics:
         if p.get("rva"):
             pub_rva.setdefault(p["mangled"], p["rva"])
-    n_pub_rva = len(pub_rva)
 
     symbols = []
     for mangled in all_names:
@@ -1014,73 +816,22 @@ def build(args):
         else:
             parsed = parse_undecorated(u, mangled, resolve_scope)
 
-        key = key_of(parsed)
-        status = classify_status(mangled, is_export, eff_baseline, baseline_keys, key,
-                                 exp_by_name)
-
         rva = e["rva"] if e else pub_rva.get(mangled)
-        record_offset = rec_offsets.get(mangled)
 
-        sym = {
+        # 契约 1.3 的字段集合。键**显式存在**（值可为 null），不做 sparse 省略
+        # —— 契约 §1.3 的字段完整性要求。
+        symbols.append({
             "mangled": mangled,
-            "undecorated": u,
-            "rva": rva,
-            "ordinal": e["ordinal"] if e else None,
-            "pdb_record_offset": record_offset,
-            "is_exported": bool(is_export),
             "kind": parsed["kind"],
-            "scope": parsed["scope"],
-            "namespace": parsed["namespace"],
             "class": parsed["class"],
             "member": parsed["member"],
-            "access": parsed["access"],
+            "is_exported": bool(is_export),
             "is_virtual": bool(parsed["is_virtual"]),
             "is_static": bool(parsed["is_static"]),
             "is_const": bool(parsed["is_const"]),
-            "callconv": parsed["callconv"],
             "return_type": parsed["return_type"],
             "params": parsed["params"],
-            "is_template": is_template_mangled(mangled),
-            "is_operator": bool(parsed["is_operator"]),
-            "baseline_status": status,
-        }
-        symbols.append(sym)
-
-    # ---------------- v2 瘦身投影（契约 1.3） ----------------
-    # 只留 11 个字段。与 v1 的差别:
-    #   - 键**显式存在**（值可为 null），不做 sparse 省略 —— 契约示例与
-    #     verifier A1 的"字段完整性"断言都要求字段齐全
-    #   - kind 保留原值（含 "template"）；见 meta 里对 1.3 枚举遗漏的说明
-    V2_FIELDS = ("mangled", "kind", "class", "member", "is_exported", "is_virtual",
-                 "is_static", "is_const", "return_type", "params", "rva")
-    v2_symbols = []
-    for s in symbols:
-        v2 = {}
-        for f in V2_FIELDS:
-            v2[f] = s.get(f)
-        v2_symbols.append(v2)
-
-    # ---------------- classes 汇总（v1 审计用, 不写进 v2） ----------------
-    by_class = collections.OrderedDict()
-    for s in symbols:
-        if not s["class"]:
-            continue
-        by_class.setdefault(s["class"], []).append(s)
-    classes = []
-    for name in sorted(by_class):
-        members = by_class[name]
-        base = template_base(name)
-        exp_members = [m for m in members if m["is_exported"]]
-        classes.append({
-            "name": name,
-            "namespace": members[0]["namespace"],
-            "methods": len(members),
-            "methods_exported": len(exp_members),
-            "methods_publics_only": len(members) - len(exp_members),
-            "is_template": "<" in name,
-            "in_baseline_headers": bool(re.search(r"\b%s\b" % re.escape(base), header_text)),
-            "in_msdef": ("::%s::" % base) in msdef_text or ("::%s>" % base) in msdef_text,
-            "stable": all(m["baseline_status"] == "identical" for m in exp_members),
+            "rva": rva,
         })
 
     # ---------------- meta ----------------
@@ -1088,94 +839,45 @@ def build(args):
     meta["source_exports_count"] = len(exports)
     meta["source_publics_count"] = len(publics)
     meta["symbols_count"] = len(symbols)
-    meta["classes_count"] = len(classes)
-
-    # 两套口径分开统计，避免把 7662 个非导出 public 的 missing 混进导出口径
-    st_exp = collections.Counter(s["baseline_status"] for s in symbols if s["is_exported"])
-    st_pub = collections.Counter(s["baseline_status"] for s in symbols if not s["is_exported"])
-    meta["baseline_status_scope"] = "exported_only"
-    meta["baseline_status"] = {
-        "exported_only": {
-            "total": sum(st_exp.values()),
-            "identical": st_exp.get("identical", 0),
-            "missing": st_exp.get("missing", 0),
-            "param_changed": st_exp.get("param_changed", 0),
-            "removed": st_exp.get("removed", 0),
-            "note": "identical 必须 == 3198; missing + param_changed == 1123",
-        },
-        "publics_only": {
-            "total": sum(st_pub.values()),
-            "identical": st_pub.get("identical", 0),
-            "missing": st_pub.get("missing", 0),
-            "param_changed": st_pub.get("param_changed", 0),
-            "removed": st_pub.get("removed", 0),
-            "note": "真实 PDB 有、但不在导出表里的内部符号; 与导出口径不能相加",
-        },
-    }
-    meta["baseline_stats"] = {
-        **binfo,
-        "baseline_effective_names": len(eff_baseline),
-        "aliased_lib_names": len(aliased),
-        "alias_examples": dict(list(aliased.items())[:5]),
-    }
+    meta["kind_counts"] = dict(collections.Counter(s["kind"] for s in symbols).most_common())
     meta["notes"] = {
         "params_void": "无参函数（undname 输出 '(void)'）的 params 记为 [] 而非 ['void']",
-        "is_template": "按 MSVC 修饰特征 '?$' 判定（排除 '??_C@' 字符串常量; 模板实例化）",
         "kind_precedence": "c_api/data(反修饰失败) > vftable > unknown(thunk/RTTI) > dtor > ctor > "
                            "operator > template > static_method > data > method > free_function",
-        "class_resolution": "scope 最后一段若为已知类名/模板实例（<...>）则为 class, 其余为 namespace",
-        "stable": "该类所有符号的 baseline_status 均为 identical",
-        "baseline_status_scope": "meta.baseline_status 分 exported_only / publics_only 两套口径统计; "
-                                 "baseline_status 字段本身仍是双侧校验的结果",
-        "removed": "基线有、真实导出表无 的 155 个符号（含 2 个仍以 PDB public 存在的 vftable）"
-                   "清单见 meta.removed_symbols",
+        "class_resolution": "scope 最后一段若为已知类名/模板实例（<...>）则为 class",
         "rva": "PDB publics 的左列是记录偏移而非 RVA; 真实 RVA=节VA+addr 十进制偏移",
     }
-    removed_syms = sorted(b for b in eff_baseline if b not in exp_by_name)
-    meta["removed_symbols"] = removed_syms
 
-    doc = {"meta": meta, "symbols": symbols, "classes": classes}
+    doc = {"meta": meta, "symbols": symbols}
 
-    # ---------------- 写出 ----------------
-    ensure_dir(os.path.dirname(args.out))
-    with open(args.out, "w", encoding="utf-8") as f:
-        json.dump(doc, f, ensure_ascii=False, indent=1)
+    # ---------------- pinned/symbols.json + pinned/classes.json ----------------
+    pin_dir = args.pinned
+    ensure_dir(pin_dir)
+    out_sym = os.path.join(pin_dir, "symbols.json")
+    with open(out_sym, "w", encoding="utf-8") as f:
+        json.dump({"symbols": symbols}, f, ensure_ascii=False, indent=1)
         f.write("\n")
+    # classes.json（契约 1.4）—— 12 类 + 8 条继承边
+    cpath = os.path.join(pin_dir, "classes.json")
+    with open(cpath, "w", encoding="utf-8") as f:
+        json.dump(CLASSES, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    pinned_report = {
+        "out": out_sym,
+        "classes_out": cpath,
+        "symbols": len(symbols),
+        "size_bytes": os.path.getsize(out_sym),
+        "classes_size_bytes": os.path.getsize(cpath),
+    }
 
-    # ---------------- v2 pinned/symbols.json（契约 1.3） ----------------
-    pinned_report = None
-    if getattr(args, "pinned", None):
-        pin_dir = args.pinned
-        ensure_dir(pin_dir)
-        out_v2 = os.path.join(pin_dir, "symbols.json")
-        with open(out_v2, "w", encoding="utf-8") as f:
-            json.dump({"schema_version": 2, "symbols": v2_symbols},
-                      f, ensure_ascii=False, indent=1)
-            f.write("\n")
-        # classes.json（契约 1.4）—— 12 类 + 8 条继承边
-        cpath = os.path.join(pin_dir, "classes.json")
-        with open(cpath, "w", encoding="utf-8") as f:
-            json.dump(CLASSES_V2, f, ensure_ascii=False, indent=2)
-            f.write("\n")
-        pinned_report = {
-            "out": out_v2,
-            "classes_out": cpath,
-            "symbols": len(v2_symbols),
-            "size_bytes": os.path.getsize(out_v2),
-            "classes_size_bytes": os.path.getsize(cpath),
-            "v2_fields": list(V2_FIELDS),
-        }
-
-    # ---------------- 自证 ----------------
-    report = self_check(doc, src, eff_baseline, dll_b, lib_b,
-                        alias_normalize(raw_baseline, exp_by_name)[1])
-    if pinned_report is not None:
-        report["pinned_v2"] = pinned_report
+    # ---------------- 运行报告 ----------------
+    report = self_check(doc, src)
+    report["pinned"] = pinned_report
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return doc, report
 
 
-def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
+def self_check(doc, src):
     symbols = doc["symbols"]
     exports = src["exports"]
     publics = src["publics"]
@@ -1184,53 +886,7 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
     expected_union = len(exp_names | pub_names)
 
     kinds = collections.Counter(s["kind"] for s in symbols)
-    status_all = collections.Counter(s["baseline_status"] for s in symbols)
-    status_exp = collections.Counter(s["baseline_status"] for s in symbols if s["is_exported"])
     exp_syms = [s for s in symbols if s["is_exported"]]
-    non_identical_exports = [s for s in exp_syms if s["baseline_status"] != "identical"]
-
-    # Lead 的 1123 交叉验证
-    lead_missing = None
-    if os.path.isfile(LEAD_MISSING_CSV):
-        with open(LEAD_MISSING_CSV, encoding="utf-8", errors="replace") as f:
-            lead_missing = set(r["Mangled"] for r in csv.DictReader(f) if r.get("Mangled"))
-    my_missing_mangled = set(s["mangled"] for s in non_identical_exports)
-    cmp_lead = None
-    if lead_missing is not None:
-        only_mine = my_missing_mangled - lead_missing
-        only_lead = lead_missing - my_missing_mangled
-        cmp_lead = {
-            "lead_csv": LEAD_MISSING_CSV,
-            "lead_count": len(lead_missing),
-            "mine_count_mangled_based": len(my_missing_mangled),
-            "equal": my_missing_mangled == lead_missing,
-            "diff_pct": round(100.0 * len(only_mine) / max(1, len(lead_missing)), 3),
-            "only_mine": len(only_mine),
-            "only_lead": len(only_lead),
-            "samples_only_mine": sorted(only_mine)[:5],
-            "samples_only_lead": sorted(only_lead)[:5],
-        }
-
-    # 基线三来源一致性
-    #   注意: removed 的判据是"基线有、真实导出表无"（契约原文）。
-    #   若某个基线符号虽然不再导出、但仍以 PDB public 形式存在于真实 DLL，
-    #   它仍然在 symbols 里（作为 is_exported=false 的 public），其 baseline_status=identical。
-    exp_list = [e["mangled"] for e in exports]
-
-    def stat(B):
-        rem = [b for b in B if b not in exp_names]
-        return {"identical": len([m for m in exp_list if m in B]),
-                "missing": len([m for m in exp_list if m not in B]),
-                "removed": len(rem),
-                "removed_but_still_pdb_public": len([b for b in rem if b in pub_names]),
-                "removed_gone_entirely": len([b for b in rem if b not in pub_names])}
-
-    baseline_check = {
-        "baseline_dll_raw": stat(dll_b),
-        "baseline_lib_raw": stat(lib_b),
-        "effective_after_alias": stat(eff_baseline),
-        "aliased_count": len(aliased),
-    }
 
     # rva 一致性: 导出 rva 与 PDB public rva 是否吻合
     pub_rva = {}
@@ -1240,11 +896,6 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
     checked = [s for s in exp_syms if s["mangled"] in pub_rva]
     mismatch = [s["mangled"] for s in checked if pub_rva[s["mangled"]] != s["rva"]]
 
-    # 显式断言（契约自证要求）
-    #   真实有、基线无 的导出 = missing + param_changed（param_changed 也是"基线没有该签名"）
-    strict_missing = [s for s in exp_syms if s["baseline_status"] == "missing"]
-    param_changed = [s for s in exp_syms if s["baseline_status"] == "param_changed"]
-    identical = [s for s in exp_syms if s["baseline_status"] == "identical"]
     target7 = ["Value", "DUIXmlParser", "Element", "HWNDElement", "NativeHWNDHost",
                "TouchButton", "Edit"]
     per_class = {}
@@ -1257,7 +908,6 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
             "exported": sum(1 for s in cs if s["is_exported"]),
             "kinds": dict(collections.Counter(s["kind"] for s in cs).most_common()),
         }
-    rva_mismatch_pub_only = None
     return {
         "assertions": {
             "symbols_eq_exports_union_publics":
@@ -1268,17 +918,9 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
                 sum(kinds[k] for k in ("method", "static_method", "ctor", "dtor", "operator")) > 0,
             "seven_target_classes_all_parsed":
                 all(v["parsed_methods"] > 0 or v["symbols"] == 0 for v in per_class.values()),
-            "missing_plus_param_changed_equals_lead":
-                (len(strict_missing) + len(param_changed)) == (len(lead_missing) if lead_missing else -1),
             "rva_export_vs_public_zero_mismatch": len(mismatch) == 0,
         },
         "per_target_class": per_class,
-        "export_status": {
-            "identical": len(identical),
-            "missing": len(strict_missing),
-            "param_changed": len(param_changed),
-            "missing_plus_param_changed": len(strict_missing) + len(param_changed),
-        },
         "counts": {
             "exports": len(exports),
             "publics": len(publics),
@@ -1292,12 +934,6 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
         },
         "kind_distribution": dict(kinds.most_common()),
         "kind_sum_check": sum(kinds.values()) == len(symbols),
-        "class_count": len(doc["classes"]),
-        "class_count_check": len(doc["classes"]) == len(set(s["class"] for s in symbols if s["class"])),
-        "baseline_status_all": dict(status_all.most_common()),
-        "baseline_status_exports_only": dict(status_exp.most_common()),
-        "baseline_check": baseline_check,
-        "lead_cross_check": cmp_lead,
         "rva_cross_check": {
             "export_rva_vs_pdb_public_rva": {"checked": len(checked),
                                              "mismatch": len(mismatch),
@@ -1305,27 +941,23 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
             "publics_without_rva": sum(1 for p in publics if not p.get("rva")),
             "note": "PDB 左列是记录偏移; 真实 RVA=节VA+addr 十进制偏移, 由 extract.py 计算",
         },
-        "undecorate_failures": {
-            "total": sum(1 for s in symbols if s["undecorated"] == s["mangled"] and not s["mangled"].startswith("?")),
-            "exports": sum(1 for s in symbols if s["is_exported"] and s["undecorated"] == s["mangled"]),
-            "publics_only": sum(1 for s in symbols if not s["is_exported"] and s["undecorated"] == s["mangled"]),
-        },
-        "notes": {
-            "missing_semantics": "mangled 与基线不一致的导出 = missing + param_changed; "
-                                 "strict missing 数 + param_changed 数才等于 Lead 的 1123",
-        },
     }
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser(
-        description="dui-pipeline symbols: exports.json -> symbols.json (v1 全量 / v2 瘦身)")
-    ap.add_argument("--exports", default=os.path.join(BUILD, "exports.json"))
-    ap.add_argument("--out", default=os.path.join(BUILD, "symbols.json"),
-                    help="v1 全量输出（自证用）")
-    ap.add_argument("--pinned", nargs="?", const=PINNED_DIR, default=None,
-                    help="同时产 pinned/symbols.json + pinned/classes.json（schema v2）；"
-                         "不带值时用仓库根 pinned/")
+        description="dui-pipeline: DLL/PDB 符号解析结果 -> pinned/symbols.json + pinned/classes.json")
+    ap.add_argument("--raw", default=os.path.join(BUILD, "extract-raw.json"),
+                    help="extract.py 的交接文件（导出表 + PDB publics）")
+    ap.add_argument("--pinned", default=PINNED_DIR,
+                    help="pinned 目录（默认 <repo>/pinned）")
+    ap.add_argument("--undname", default=None,
+                    help="llvm-undname 可执行文件路径（默认从 PATH 查找，"
+                         "也可用环境变量 LLVM_UNDNAME）")
+    ap.add_argument("--inventory", default=CLASS_INVENTORY,
+                    help="类名普查 CSV（列 Class,MethodCount）；默认 "
+                         "<repo>/pinned/class-inventory.csv。"
+                         "它是 pinned/ 的冻结输入之一，缺失时报错。")
     ap.add_argument("--self-check", action="store_true", default=True)
     args = ap.parse_args(argv)
     build(args)

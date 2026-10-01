@@ -10,7 +10,7 @@
 # Refresh mode (-RefreshPin; needs MSVC + dumpbin + llvm tools + the exact pinned
 # DLL/PDB by sha256): re-derives pinned/ from the system DLL, then continues.
 #
-# Legacy C entry points (InitProcessPriv etc.) need NO shim: generated headers
+# C entry points (InitProcessPriv etc.) need NO shim: generated headers
 # declare them extern "C", matching the real DLL's export form.
 #
 # Usage:
@@ -19,14 +19,40 @@ param(
     [switch]$SkipRun,
     [switch]$SkipCodegen,
     [switch]$RefreshPin,
-    [switch]$X86
+    [switch]$X86,
+    [string]$VcRoot,
+    [string]$Python
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 
-$vcRoot = 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207'
-$vcBin  = "$vcRoot\bin\Hostx64\x64"
-$py     = 'C:\Users\7mile\AppData\Local\Programs\Python\Python311\python.exe'
+# --- toolchain discovery ------------------------------------------------------
+if (-not $VcRoot) {
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+    if (Test-Path $vswhere) {
+        $installPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath | Select-Object -First 1
+        if ($installPath) {
+            $candidate = Get-ChildItem (Join-Path $installPath 'VC\Tools\MSVC') -Directory |
+                Sort-Object Name -Descending | Select-Object -First 1
+            if ($candidate) { $VcRoot = $candidate.FullName }
+        }
+    }
+    if (-not $VcRoot) { throw "MSVC not found; pass -VcRoot <path to VC\Tools\MSVC\<ver>>" }
+}
+if (-not $sdkVersion) {
+    $sdkRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\Include'
+    if (Test-Path $sdkRoot) {
+        $sdkVersion = (Get-ChildItem $sdkRoot -Directory -Filter '10.0.*' | Sort-Object Name -Descending |
+            Select-Object -First 1).Name
+    }
+    if (-not $sdkVersion) { throw "Windows SDK not found; pass -SdkVersion <10.0.xxxxx.0>" }
+}
+if (-not $Python) {
+    $Python = (Get-Command python -ErrorAction SilentlyContinue).Source
+    if (-not $Python) { throw "python not found on PATH; pass -Python <path>" }
+}
+$vcBin  = "$VcRoot\bin\Hostx64\x64"
 $build  = Join-Path $repo '.local\build'
 $pinned = Join-Path $repo 'pinned'
 New-Item -ItemType Directory -Force -Path $build, "$build\lib" | Out-Null
@@ -34,16 +60,16 @@ New-Item -ItemType Directory -Force -Path $build, "$build\lib" | Out-Null
 # --- step 0 (optional): refresh pinned from the system DLL -------------------
 if ($RefreshPin) {
     Write-Host "==> [0] refresh pinned/ from system dui70.dll (sha256-verified)" -ForegroundColor Magenta
-    & $py (Join-Path $PSScriptRoot 'extract.py') --pinned $pinned
+    & $Python (Join-Path $PSScriptRoot 'extract.py') --pinned $pinned
     if ($LASTEXITCODE -ne 0) { throw "extract.py failed" }
-    & $py (Join-Path $PSScriptRoot 'model.py') --pinned $pinned
+    & $Python (Join-Path $PSScriptRoot 'model.py') --pinned $pinned
     if ($LASTEXITCODE -ne 0) { throw "model.py failed" }
 }
 
 # --- step 1: regenerate the golden tree --------------------------------------
 if (-not $SkipCodegen) {
     Write-Host "==> [1/5] regen DirectUI/ from pinned/" -ForegroundColor Cyan
-    & $py (Join-Path $PSScriptRoot 'regen.py') 2>&1 | Select-Object -Last 4
+    & $Python (Join-Path $PSScriptRoot 'regen.py') 2>&1 | Select-Object -Last 4
     if ($LASTEXITCODE -ne 0) { throw "regen failed" }
 }
 
@@ -57,7 +83,11 @@ if ($LASTEXITCODE -ne 0) { throw "lib.exe failed" }
 # --- step 3: modname fidelity ------------------------------------------------
 if (-not $SkipCodegen) {
     Write-Host "==> [3/5] verify_codegen: stub modnames vs pinned exports" -ForegroundColor Cyan
-    & $py (Join-Path $PSScriptRoot 'verify_codegen.py') 2>&1 | Select-Object -Last 8
+    # Pass the discovered toolchain explicitly: run.ps1 is not necessarily running
+    # inside a VS developer prompt, and env vars set by sibling scripts do not persist.
+    $sdkInc = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\Include\$sdkVersion"
+    & $Python (Join-Path $PSScriptRoot 'verify_codegen.py') `
+        --vcbin "$vcBin" --sdk "$sdkInc" 2>&1 | Select-Object -Last 8
     if ($LASTEXITCODE -ne 0) { throw "verify_codegen failed" }
 }
 
@@ -92,3 +122,6 @@ finally {
         Stop-Process -Id $p.Id -Force -Confirm:$false -ErrorAction SilentlyContinue
     }
 }
+
+
+

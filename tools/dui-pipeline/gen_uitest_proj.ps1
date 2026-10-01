@@ -4,12 +4,19 @@
 #   ConfigurationType Application, v143, Unicode, /std:c++20, no PCH, SubSystem Windows
 #   TreatWChar_tAsBuiltInType false, IncludePath += WIL + vcpkg detours, link dui70.lib + detours.lib
 #
+# Toolchain discovery: VS + Windows SDK via vswhere / standard install roots.
+# Override with -VcRoot / -SdkVersion / -VcpkgRoot if the defaults don't match.
+#
 # Usage:
-#   pwsh -File gen_uitest_proj.ps1 [-Lib <path to dui70.lib>] [-OutDir <dir>] [-X86]
+#   pwsh -File gen_uitest_proj.ps1 [-Lib <path>] [-OutDir <dir>] [-VcRoot <msvc>] `
+#                                  [-SdkVersion <ver>] [-VcpkgRoot <root>] [-X86]
 param(
     [string]$Lib,
     [string]$OutDir,
     [string]$IncludeDir,   # generated headers dir; default DirectUI\include (golden tree)
+    [string]$VcRoot,
+    [string]$SdkVersion,
+    [string]$VcpkgRoot,
     [switch]$X86
 )
 $ErrorActionPreference = 'Stop'
@@ -21,16 +28,51 @@ $arch = if ($X86) { 'x86' } else { 'x64' }
 $hostArch = 'Hostx64'
 $targetArch = if ($X86) { 'x86' } else { 'x64' }
 
-$vcRoot = 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207'
-$vcBin = Join-Path $vcRoot "bin\$hostArch\$targetArch"
-$sdkVersion = '10.0.26100.0'
-$sdkInc = "C:\Program Files (x86)\Windows Kits\10\Include\$sdkVersion"
-$sdkLib = "C:\Program Files (x86)\Windows Kits\10\Lib\$sdkVersion"
-$sdkBin = "C:\Program Files (x86)\Windows Kits\10\bin\$sdkVersion\$targetArch"
+# --- toolchain discovery ----------------------------------------------------
+if (-not $VcRoot) {
+    $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+    if (Test-Path $vswhere) {
+        $installPath = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath | Select-Object -First 1
+        if ($installPath) {
+            $candidate = Get-ChildItem (Join-Path $installPath 'VC\Tools\MSVC') -Directory |
+                Sort-Object Name -Descending | Select-Object -First 1
+            if ($candidate) { $VcRoot = $candidate.FullName }
+        }
+    }
+    if (-not $VcRoot) { throw "MSVC not found; pass -VcRoot <path to VC\Tools\MSVC\<ver>>" }
+}
+if (-not $SdkVersion) {
+    $sdkRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\Include'
+    if (Test-Path $sdkRoot) {
+        $SdkVersion = (Get-ChildItem $sdkRoot -Directory -Filter '10.0.*' | Sort-Object Name -Descending |
+            Select-Object -First 1).Name
+    }
+    if (-not $SdkVersion) { throw "Windows SDK not found; pass -SdkVersion <10.0.xxxxx.0>" }
+}
+if (-not $VcpkgRoot) {
+    $detoursPkg0 = if ($X86) { 'x86-windows' } else { 'x64-windows' }
+    $probe = Join-Path "installed\$detoursPkg0" 'include\detours'
+    $candidates = @($env:VCPKG_ROOT, $env:VCPKG_INSTALLATION,
+                    (Join-Path $env:LOCALAPPDATA 'vcpkg'),
+                    (Join-Path $env:USERPROFILE 'vcpkg'),
+                    'C:\vcpkg')
+    foreach ($cand in $candidates) {
+        if ($cand -and (Test-Path (Join-Path $cand $probe))) { $VcpkgRoot = $cand; break }
+    }
+    if (-not $VcpkgRoot) {
+        throw "vcpkg with detours not found; install detours via vcpkg or pass -VcpkgRoot"
+    }
+}
+
+$vcBin = Join-Path $VcRoot "bin\$hostArch\$targetArch"
+$sdkInc = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\Include\$SdkVersion"
+$sdkLib = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\Lib\$SdkVersion"
+$sdkBin = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\bin\$SdkVersion\$targetArch"
 $wilInc = Join-Path $repo 'packages\Microsoft.Windows.ImplementationLibrary.1.0.230629.1\include'
 $detoursPkg = if ($X86) { 'x86-windows' } else { 'x64-windows' }
-$detoursInc = "C:\Local\Tools\vcpkg\installed\$detoursPkg\include"
-$detoursLib = "C:\Local\Tools\vcpkg\installed\$detoursPkg\lib"
+$detoursInc = Join-Path $VcpkgRoot "installed\$detoursPkg\include"
+$detoursLib = Join-Path $VcpkgRoot "installed\$detoursPkg\lib"
 
 if (-not $Lib) { $Lib = Join-Path $repo '.local\build\lib\dui70.lib' }
 if (-not $OutDir) { $OutDir = Join-Path $repo ".local\build\acceptance-$arch" }
@@ -44,8 +86,7 @@ $umLib = Join-Path $sdkLib "um\$targetArch"
 # Environment for cl/link/rc
 $env:PATH = "$vcBin;$sdkBin;$env:PATH"
 # Order matters: generated headers first, so `..\DirectUI\DirectUI.h` inside
-# UITest.cpp resolves to the GENERATED aggregate (extern-C legacy APIs) —
-# the hand-written baseline is not consumed on this path.
+# UITest.cpp resolves to the GENERATED aggregate (extern-C APIs).
 $env:INCLUDE = @(
     $IncludeDir,
     (Join-Path $vcRoot 'include'),
@@ -102,3 +143,4 @@ if (Test-Path $exe) {
 } else {
     throw "UITest.exe not produced"
 }
+

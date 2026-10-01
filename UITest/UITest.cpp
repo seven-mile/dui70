@@ -136,11 +136,15 @@ std::wstring to_string(ValueType type) {
 
 void DumpClassInfo(IClassInfo *info) {
 
-  constexpr auto DOC_DIR = LR"(C:\Users\7mile\source\repos\DirectUI\docs)";
+  // Output dir override; defaults to a "class-dump" folder next to the exe.
+  wchar_t dumpDir[MAX_PATH];
+  GetModuleFileNameW(nullptr, dumpDir, MAX_PATH);
+  auto dumpPath = std::filesystem::path{dumpDir}.parent_path() / L"class-dump";
+  std::filesystem::create_directories(dumpPath);
 
   std::wstring name = (LPCWSTR)info->GetName();
 
-  std::wofstream os{std::filesystem::path{DOC_DIR} / (name + L"Class.g.txt")};
+  std::wofstream os{dumpPath / (name + L"Class.g.txt")};
 
   os << (std::format(L"ClassInfo: <{}>\n", name).c_str());
 

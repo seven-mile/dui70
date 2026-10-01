@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Emit the MSVC module-definition (.def) file for dui70 from the pinned export table.
 
-Input is pinned/exports.json (schema v2; see tools/dui-pipeline/INTERFACE.md).
+Input is pinned/exports.json (see tools/dui-pipeline/INTERFACE.md).
 Output is DirectUI/dui70.def — the golden, git-tracked export manifest. Consumers
 build the import library themselves:
 
@@ -29,13 +29,11 @@ DEFAULT_OUT = REPO / "DirectUI" / "dui70.def"
 
 
 def load_exports(pinned_dir: Path) -> list[dict]:
-    """Load pinned/exports.json (schema v2). Returns entries in file order."""
+    """Load pinned/exports.json. Returns entries in file order."""
     path = pinned_dir / "exports.json"
     if not path.exists():
         raise FileNotFoundError(f"pinned exports not found: {path}")
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("schema_version") != 2:
-        raise ValueError(f"exports.json schema_version != 2 (got {data.get('schema_version')!r})")
     entries = data.get("exports")
     if not entries:
         raise ValueError("exports.json has no entries")

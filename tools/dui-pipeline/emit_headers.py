@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-emit_headers.py -- codegen module of the dui-pipeline (schema v2).
+emit_headers.py -- header emitter of the dui-pipeline.
 
 Generates C++ header files for the target DirectUI classes from
 pinned/symbols.json + pinned/classes.json. Output is deterministic:
 the same pinned inputs always produce byte-identical files (CI golden).
 
-Contract: tools/dui-pipeline/INTERFACE.md (v2).
+Contract: tools/dui-pipeline/INTERFACE.md.
 
 Usage:
     python emit_headers.py [--pinned <dir>] [--out <dir>] [--classes a,b,c]
@@ -30,40 +30,6 @@ CALLABLE_KINDS = {"method", "static_method", "ctor", "dtor", "operator"}
 # ---------------------------------------------------------------------------
 # Type universe
 # ---------------------------------------------------------------------------
-# Types declared at GLOBAL scope. Everything in this table that is a struct
-# or handle is either provided by <windows.h> (handles, tagXXX) or is a
-# DirectUI-external type that the real DLL mangles at global scope.
-GLOBAL_TYPES = {
-    # windows.h handles & structs (do NOT redeclare)
-    "HDC__": "windows",
-    "HBITMAP__": "windows",
-    "HENHMETAFILE__": "windows",
-    "HGADGET__": "declare",  # DECLARE_HANDLE - we emit a minimal decl
-    "HICON__": "windows",
-    "HINSTANCE__": "windows",
-    "HMENU__": "windows",
-    "HWND__": "windows",
-    "tagGMSG": "declare",  # not in windows.h
-    "tagMSG": "windows",
-    "tagPOINT": "windows",
-    "tagRECT": "windows",
-    "tagSIZE": "windows",
-    "_GUID": "windows-alias",  # GUID via windows.h; mangled as _GUID
-    "_RTL_CRITICAL_SECTION": "windows-alias",  # CRITICAL_SECTION
-    "IAccessible": "declare",
-    "IDuiBehavior": "declare",
-    "ISharedBitmap": "declare",
-    "IStream": "declare",
-    "IUnknown": "declare",
-    "IXmlReader": "declare",
-    "EventMsg": "declare",
-    # UID mangles as VUID@@ (GLOBAL scope) in the real DLL even though it is
-    # documented inside DirectUI in the baseline headers -- the decorated
-    # name is authoritative, so we declare it at global scope.
-    "UID": "define",  # needs a complete definition (returned by value)
-    "DynamicScaleValue": "enum",
-}
-
 # Types inside namespace DirectUI. kind -> declaration strategy.
 DIRECTUI_CLASS_TYPES = {
     "DeferCycle": "fwd",
@@ -97,21 +63,10 @@ DIRECTUI_STRUCT_TYPES = {
     "ThemeChangedEvent": "fwd",
     "UpdateCache": "fwd",
 }
-DIRECTUI_ENUM_TYPES = {
-    "_DUI_PARSE_STATE": "enum",
-    "DynamicScaleParsing": "enum",
-}
-PARSERTOOLS_TYPES = {
-    "ExprNode": ("struct", "fwd"),
-    "ValueParser": ("class", "fwd"),
-}
-# extra types referenced by the 12-class set (migration classes)
-MIGRATION_EXTRA_TYPES = {
-    "struct": ["IDialogElement", "IXBaby", "IXElementCP", "IXProviderCP"],
-}
-
-BANNER_TAIL = ""  # filled per-run with the pin fingerprint
-
+# extra struct types referenced by the target class set
+EXTRA_STRUCT_TYPES = [
+    "IDialogElement", "IXBaby", "IXElementCP", "IXProviderCP",
+]
 
 def make_banner(pin_hash12: str) -> str:
     return (
@@ -230,13 +185,13 @@ class TypeTranslator:
 
 
 # ---------------------------------------------------------------------------
-# Symbol model helpers (schema v2: no undecorated/scope/namespace/access)
+# Symbol model helpers
 # ---------------------------------------------------------------------------
 
-# Access recovery from the mangled name. schema v2 dropped the access
-# field, but the access letter is ENCODED IN the decorated name (it would
-# otherwise change: public=Q/E/U, protected=I/K/M, private=A/C/E).
-# Matrix derived from the v1 table (letter x is_virtual x is_static -> access):
+# Access recovery from the mangled name: the access letter is ENCODED IN
+# the decorated name per the MSVC access-code scheme (it would otherwise
+# change: public=Q/E/U, protected=I/K/M, private=A/C/E). The matrix
+# (letter x is_virtual x is_static -> access) is the standard encoding:
 #   plain:  A=private  I=protected  Q=public
 #   static: C=private  K=protected  S=public
 #   virt:   E=private  M=protected  U=public
@@ -504,8 +459,8 @@ def render_data_decl(sym: dict, tr: TypeTranslator) -> str:
     """static data member in-class declaration, e.g.
     'static IClassInfo* s_pClassInfo;'
 
-    schema v2 carries the type in return_type, but for pointer members the
-    field loses the pointer (e.g. 'struct DirectUI::IClassInfo' for what is
+    The type comes from return_type, but for pointer members that field
+    loses the pointer (e.g. 'struct DirectUI::IClassInfo' for what is
     really IClassInfo* -- mangled 0PEAU...EA). Pointer-ness is recovered
     from the mangled name."""
     ty = tr.translate(sym.get("return_type") or "")
@@ -538,7 +493,7 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("//  * global-scope forward declarations (mangled without @2@)")
     lines.append("//  * namespace DirectUI forward declarations")
     lines.append("//  * minimal complete definitions for by-value types")
-    lines.append("// NOTE: compiled with /Zc:wchar_t- like the baseline, so")
+    lines.append("// NOTE: compiled with /Zc:wchar_t- (the DirectUI ABI), so")
     lines.append("//       'const wchar_t*' == 'const unsigned short*' (UCString).")
     lines.append("#pragma once")
     lines.append("")
@@ -573,7 +528,7 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("")
     lines.append("// Compare a UID against an event-id ACCESSOR FUNCTION (called on the")
     lines.append("// spot). Lets consumer code write `ev->type == TouchButton::Click`")
-    lines.append("// without call parentheses (baseline types.h compatibility).")
+    lines.append("// without call parentheses (DirectUI types.h idiom).")
     lines.append("inline bool operator==(UID id, UID (*ev)(void))")
     lines.append("{")
     lines.append("    UID p = ev();")
@@ -607,14 +562,14 @@ def render_abi_types_header(banner: str) -> str:
         if name in ("LINEINFO", "ScaledSIZE", "ScaledRECT"):
             continue
         lines.append(f"    struct {name};")
-    for name in sorted(MIGRATION_EXTRA_TYPES["struct"]):
+    for name in sorted(EXTRA_STRUCT_TYPES):
         lines.append(f"    struct {name};")
     lines.append("")
     lines.append("    // ---- enum for TouchCheckBox (W4CheckedStateFlags@2@) ----")
     lines.append("    enum CheckedStateFlags { CheckedStateFlags_None = 0 };")
     lines.append("")
     lines.append("    // ---- ValueType: consumer-side knowledge (enum members are never")
-    lines.append("    // exported; shape transcribed from the baseline Value.h). Used by")
+    lines.append("    // exported; members transcribed from DirectUI Value.h). Used by")
     lines.append("    // UITest in switch statements over Value::GetType(). ----")
     lines.append("    enum class ValueType : int")
     lines.append("    {")
@@ -661,11 +616,11 @@ def render_abi_types_header(banner: str) -> str:
 def render_interfaces_header(banner: str) -> str:
     """Consumer-side pure-abstract interfaces. These produce NO export
     symbols in the real DLL (they are consumed via vtable slots only), so
-    they are transcribed from the baseline shape knowledge with slot order
-    preserved -- the //N comments in the baseline are the vtable indices."""
+    they are transcribed from the DirectUI interface shapes with slot order
+    preserved -- the //N comments are the vtable indices."""
     lines = [banner]
     lines.append("// Consumer-side interfaces: no exported symbols; vtable slot order")
-    lines.append("// mirrors the real dui70.dll consumers (baseline Interfaces.h).")
+    lines.append("// mirrors the real dui70.dll consumers (DirectUI Interfaces.h).")
     lines.append("#pragma once")
     lines.append("")
     lines.append("#include <windows.h>")
@@ -681,7 +636,7 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("    class DUIXmlParser;")
     lines.append("")
     lines.append("    // PropertyInfo: property metadata record (pointer-only in ABI).")
-    lines.append("    // cap->type is a ValueType bitfield (baseline Primitives.h).")
+    lines.append("    // cap->type is a ValueType bitfield (DirectUI Primitives.h).")
     lines.append("    struct PropertyInfo")
     lines.append("    {")
     lines.append("        UCString name;             // property name")
@@ -697,7 +652,7 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("        unsigned __int64 *unk2;")
     lines.append("    };")
     lines.append("")
-    lines.append("    // ---- DUSER enums + Event/InputEvent (consumer-side; from baseline")
+    lines.append("    // ---- DUSER enums + Event/InputEvent (consumer-side; from DirectUI")
     lines.append("    // misc.h -- Event is dereferenced by UITest listeners) ----")
     lines.append("    enum DUSER_MSG_FLAG : unsigned int")
     lines.append("    {")
@@ -792,7 +747,7 @@ def render_interfaces_header(banner: str) -> str:
     # interface; the inline empty bodies are never emitted unless odr-used
     # (the stub TUs never instantiate IClassInfo). The non-trivial-ish
     # shape (user-declared ctor/dtor) is kept so consumers stay source-
-    # compatible with the baseline shape.
+    # compatible with the DirectUI interface shape.
     lines.append("    struct __declspec(novtable) IClassInfo")
     lines.append("    {")
     lines.append("        IClassInfo() {}")
@@ -801,7 +756,7 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("        virtual ~IClassInfo() {}")
     lines.append("")
     lines.append("    public:")
-    lines.append("        // slots follow the baseline order (AddRef..AssertPIZeroRef,")
+    lines.append("        // slots follow the DirectUI order (AddRef..AssertPIZeroRef,")
     lines.append("        // then the deleting dtor)")
     lines.append("        virtual long AddRef(void) = 0;                                   // 0")
     lines.append("        virtual long Release(void) = 0;                                 // 1")
@@ -824,7 +779,7 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("    };")
     lines.append("")
     lines.append("    // IXProviderCP / IXElementCP: connection-point interfaces used by")
-    lines.append("    // XProvider (vtable slot order from the baseline).")
+    lines.append("    // XProvider (vtable slot order from the DirectUI interfaces).")
     lines.append("    class IXProviderCP")
     lines.append("    {")
     lines.append("    public:")
@@ -841,8 +796,8 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("")
     lines.append("    // IXProvider: the abstract interface XProvider implements.")
     lines.append("    // Slot order: IUnknown first (QI/AddRef/Release), then the")
-    lines.append("    // provider methods in baseline order. On x64 the real methods")
-    lines.append("    // are all __cdecl; the __stdcall markers in the baseline are")
+    lines.append("    // provider methods in DirectUI order. On x64 the real methods")
+    lines.append("    // are all __cdecl; the __stdcall markers in the DirectUI headers are")
     lines.append("    // ignored by the x64 compiler, so we use the default here too.")
     lines.append("    //")
     lines.append("    // MIDL_INTERFACE semantics (struct + novtable + protected ctor with")
@@ -887,13 +842,13 @@ def render_extern_c_block() -> str:
     """extern "C" declarations for the plain-named C API exports.
     The real DLL exports these as undecorated C symbols; declaring them
     extern \"C\" produces exactly the same symbol shape for the linker.
-    Signatures come from UITest usage + baseline knowledge (the export
+    Signatures come from UITest usage + the DirectUI headers (the export
     table only carries the plain name)."""
     lines = []
     lines.append("")
     lines.append("// ---------------------------------------------------------------------------")
     lines.append("// extern \"C\" API -- plain-name exports of the real dui70.dll.")
-    lines.append("// Signatures from UITest usage + baseline declarations; the export table")
+    lines.append("// Signatures from UITest usage + the DirectUI headers; the export table")
     lines.append("// itself only carries the undecorated name.")
     lines.append("// TODO: remaining ~80 plain-name exports (incl. DUI70_XXX-prefixed")
     lines.append("// whose signatures are not yet recovered) are not declared here.")

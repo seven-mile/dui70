@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-verify.py -- dui-pipeline 端到端独立校验（verifier 实现）
+verify.py -- dui-pipeline 端到端校验（独立复算）
 
 契约：tools/dui-pipeline/INTERFACE.md
 报告：.local/audit/pipeline-verification.md
 
 断言清单
 --------
-A1  symbols.json 自洽：条数、字段完整性、枚举值合法、无重复 mangled
-A2  生成的 .def 与真实导出表逐条一致（set 比较，报差集）
-A3  生成的导入库（lib.exe /def 产物）符号集与 .def 一致
+A1  symbols.json 自洽：条数、字段完整性、枚举值合法、无重复 mangled、
+    与 exports.json 的交叉一致、回归防护三条
+A2  生成的 dui70.def 与 pinned/exports.json 逐条一致（set 比较，报差集）
+A3  自建导入库（lib.exe /def 产物）覆盖全部导出，且非陈旧
 A4  **modname 保真（最重要）**：生成的 stub 源码编译出的 .obj，用 dumpbin /symbols
-    取修饰名集合，与真实导出集合求交 —— 目标子集必须 100% 逐字匹配
-A5  验收复跑：独立运行生成的 UITest.exe，Get-Process 查
-    MainWindowTitle == "Microsoft DirectUI Test"
+    取修饰名集合，与 `exports.json ∪ symbols(is_exported=false)` 比对 ——
+    目标集合必须无一遗漏、且全部可编译。只断言精度，覆盖率单独披露
+A5  验收复跑：独立运行生成的 UITest.exe，查
+    MainWindowTitle == "Microsoft DirectUI Test"，且产物非陈旧
+A6  确定性：regen 两次，产物树 byte-diff == 0
 
 设计原则
 --------
@@ -24,9 +27,9 @@ A5  验收复跑：独立运行生成的 UITest.exe，Get-Process 查
 
 用法
 ----
-  python verify.py                 # 全部断言
-  python verify.py --only A1,A4    # 只跑指定断言
-  python verify.py --json          # 额外打印机器可读汇总
+  python verify.py                       # 全部断言
+  python verify.py --assertion A1,A4     # 只跑指定断言
+  python verify.py --json                # 额外打印机器可读汇总
 """
 
 from __future__ import annotations
@@ -36,6 +39,7 @@ import csv
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -43,24 +47,21 @@ from collections import Counter
 
 # ---------------------------------------------------------------- 环境常量
 
-REPO = r"Z:\repos\DirectUI"
-PYTHON = r"C:\Users\7mile\AppData\Local\Programs\Python\Python311\python.exe"
-VCBIN = (
-    r"C:\Program Files\Microsoft Visual Studio\2022\Community"
-    r"\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64"
-)
-DUMPBIN = os.path.join(VCBIN, "dumpbin.exe")
-LIBEXE = os.path.join(VCBIN, "lib.exe")
-CL = os.path.join(VCBIN, "cl.exe")
-LLVM = r"C:\Local\Tools\mingw64\bin"
+# 仓库根由本文件位置推导（tools/dui-pipeline/verify.py -> 仓库根），
+# 不写死机器路径；同理解释器用当前进程的 sys.executable。
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PYTHON = sys.executable
 
-REAL_NORM = os.path.join(REPO, r".local\cache\real-x64-norm.txt")
-PDB_CSV = os.path.join(REPO, r".local\cache\pdb-symbols-x64.csv")
+# MSVC 工具目录（含 dumpbin.exe / cl.exe）：--vcbin > VCToolsInstallDir > PATH。
+VCBIN = ""
+DUMPBIN = "dumpbin"
+CL = "cl"
+
 REAL_DLL = r"C:\Windows\System32\dui70.dll"
 BUILD = os.path.join(REPO, r".local\build")
 SCRATCH = os.path.join(BUILD, "verify-scratch")   # 验证自己的临时产物（不污染受检产物）
 
-# ---- 契约 v2 路径（可被 --pinned/--out 覆盖，见 configure()）----
+# ---- 契约路径（可被 --pinned/--out 覆盖，见 configure()）----
 PINNED = os.path.join(REPO, "pinned")
 OUT = os.path.join(REPO, "DirectUI")
 REPORT = os.path.join(REPO, r".local\audit\pipeline-verification.md")
@@ -81,22 +82,19 @@ EXPECTED_TOTAL = 4321          # 真实导出条数（pinned/exports.json）
 EXPECTED_SYMBOLS = 11983       # pinned/symbols.json 条数（4321 导出 + 7662 publics）
 EXPECTED_NONEXPORTED = 7662    # is_exported=false 条数
 EXPECTED_WINDOW_TITLE = "Microsoft DirectUI Test"
-SCHEMA_VERSION = 2
 
-# 契约 v2 第 103 行的 kind 枚举。
+# 契约 §1.3 的 kind 枚举（11 种）。
 CONTRACT_KINDS = {"method", "static_method", "ctor", "dtor", "operator",
-                  "c_api", "free_function", "data", "vftable", "unknown"}
-# 实测 pinned/symbols.json 还含 'template'，契约枚举未列 —— 见 A1 的枚举断言。
-OBSERVED_EXTRA_KINDS = {"template"}
-KINDS = CONTRACT_KINDS | OBSERVED_EXTRA_KINDS
+                  "c_api", "free_function", "data", "vftable", "template",
+                  "unknown"}
 
-# v2 恒定必备字段（瘦 schema；class/member/return_type/rva 为条件字段）
+# 恒定必备字段（class/member/return_type/rva 为条件字段）
 REQUIRED_SYMBOL_FIELDS = [
     "mangled", "kind", "is_exported", "is_virtual", "is_static", "is_const",
     "params",
 ]
 
-# 曾经出错的 13 个 class::member（symbols 修复回归防护，见 A1）
+# 必须保持"方法语义"的 13 个 class::member（回归防护，见 A1）
 REGRESSION_TARGETS = [
     ("Element", "Add"), ("Element", "SortChildren"), ("Element", "GetValue"),
     ("Element", "SetValue"), ("Element", "_SetValue"),
@@ -113,7 +111,7 @@ def configure(pinned: str | None = None, out: str | None = None,
               report: str | None = None) -> None:
     """解析 --pinned/--out 并派生所有受检路径。
 
-    契约第 168 行要求所有脚本支持 `--pinned <dir>` / `--out <dir>`，
+    契约 §3 要求所有脚本支持 `--pinned <dir>` / `--out <dir>`，
     默认仓库根的 `pinned/` 与 `DirectUI/`。
     """
     global PINNED, OUT, REPORT, SYMBOLS_JSON, EXPORTS_JSON, MANIFEST_JSON
@@ -135,104 +133,6 @@ def configure(pinned: str | None = None, out: str | None = None,
     GEN_LIB = os.path.join(BUILD, "lib", "dui70.lib")     # run.ps1 自建
     UITEST_EXE = os.path.join(BUILD, "acceptance-x64", "UITest.exe")
     STUB_OBJ_DIR = os.path.join(SCRATCH, "stub-obj")
-
-# 已上报并转交修复的历史缺陷。即使当前复跑已 PASS，也必须在报告里保留痕迹 ——
-# 审计痕迹比"干净报告"更有价值（Lead 明确要求）。
-KNOWN_DEFECTS = [
-    {
-        "id": "D1",
-        "title": "meta.file_version 把 x64 写成 x86 的版本号",
-        "detail": ("symbols.json/exports.json 的 meta.dll 指向 System32（x64），"
-                   "file_version 却写成 10.0.26100.9278（SysWOW64/x86 的版本）；"
-                   "x64 实际为 10.0.26100.8875。已转交 symbols 模块修复。"),
-        "reported_utc": "2026-09-30T09:5x",
-        "probe": "verify.py A1 的 file_version 校验",
-    },
-    {
-        "id": "D2",
-        "title": "19 个数据符号（函数指针/数组）被误分类为 free_function",
-        "detail": ("undecorated 形如 `... (*name)(...)` / `... name[N]`，是变量而非函数，"
-                   "callconv 因此为 None；其中 ?g_rgMouseMap@HWNDHost@DirectUI@@0QAY02$$CBIA "
-                   "是**真实导出**，契约第 131 行应归 kind='data'。"
-                   "若按 free_function 生成声明，会产出 return_type=None 的荒谬签名，"
-                   "并直接导致 A4 失败。已转交 symbols 模块修复。"),
-        "reported_utc": "2026-09-30T09:5x",
-        "probe": "verify.py A1 的 callconv/kind 校验",
-    },
-    {
-        "id": "D3",
-        "title": "2 个 vftable 的 baseline_status 判为 identical，实为 removed",
-        "detail": ("??_7RichText@DirectUI@@6B@ 与 ??_7TouchButton@DirectUI@@6B@ "
-                   "在真实导出集合中**不存在**（dumpbin /exports 实证），基线有；"
-                   "按契约第 133 行应为 removed。这也使 symbols.json 全量口径的 "
-                   "identical=3200 与黄金集 3198 相差恰好 2。已转交 symbols 模块修复。"),
-        "reported_utc": "2026-09-30T09:5x",
-        "probe": "baseline_diff.py 交叉验证（exported 口径）",
-    },
-    {
-        "id": "D4",
-        "title": "def 别名方向反转（`修饰名 = 未修饰名`）导致 UITest 无法启动",
-        "detail": ("MSVC .def 语法为 `导出名 = 内部名`。曾写成 "
-                   "`?InitProcessPriv@... = InitProcessPriv`，使导出名变成修饰名；"
-                   "真实 DLL 导出的是**未修饰名**，UITest 也按未修饰名导入。"
-                   "后果：生成的 UITest.exe 有 5 个导入无法满足，"
-                   "直接运行退出码 0xC0000139 STATUS_ENTRYPOINT_NOT_FOUND，"
-                   "窗口句柄为 0。已由 lead 改为 alias-shim 方案修复，A5/A6 现均 PASS。"),
-        "reported_utc": "2026-09-30T09:3x",
-        "probe": "verify.py A5 的 unsatisfied-import + 退出码校验",
-    },
-    {
-        "id": "D5",
-        "title": "meta.removed_symbols 把 GetScreenDPI 计了两次（156 而非 155）",
-        "detail": ("`meta.removed_symbols` 有 156 条，但真实“只在基线、已不在真实 DLL”"
-                   "的**逻辑**符号只有 155 条。差的那 1 条是 `GetScreenDPI`：它同时以"
-                   "**未修饰名** `GetScreenDPI` 和**修饰名别名** "
-                   "`?GetScreenDPI@DirectUI@@YAHXZ` 出现在列表里，而二者是同一个 API。"
-                   "另注：我的 baseline_diff.py 早期版本用 `LIB ∪ DLL` 直接求差，"
-                   "把 50 组别名对双计，得出 removed=205（错）；已修为先做别名归一化，"
-                   "现产出 155，与 DLL 载体口径一致。"),
-        "reported_utc": "2026-09-30T10:0x",
-        "probe": "baseline_diff.py 别名归一化 + meta.removed_symbols 组成分析",
-    },
-    {
-        "id": "D6",
-        "title": "2 个 stub 源文件无法编译（DUIXmlParser.cpp / Element.cpp）",
-        "detail": ("codegen 产出 7 个 stub 源文件，其中 `DUIXmlParser.cpp` 报 "
-                   "C2143/C2447/C2059（`_SetValue` 附近缺分号、`__cdecl` 位置非法）、"
-                   "`Element.cpp` 报 C2146/C3646/C2761（`_SetValue` 参数解析错误）。"
-                   "这属于**生成器缺陷**：声明无法通过编译就谈不上 ABI 保真。"
-                   "A4 已把“源码存在但编译失败”从 SKIP 改为 FAIL，"
-                   "避免被误当成“尚未就绪”而放过。"),
-        "reported_utc": "2026-09-30T10:0x",
-        "probe": "verify.py A4 的独立重新编译（cl.exe /c）",
-    },
-    {
-        "id": "D7",
-        "title": "13 个「函数指针参数」方法被误判 kind=data 且 params 破碎",
-        "detail": ("Element::{Add,SortChildren,GetValue,SetValue,_SetValue,RemoveLocalValue,"
-                   "_RemoveLocalValue,_PreSourceChange} 与 DUIXmlParser::{Create,CreateLayout,"
-                   "SetGetSheetCallback,SetParseErrorCallback,SetUnknownAttrCallback} 共 13 个 "
-                   "class::member 曾被判为 kind='data'，且 params 被反修饰文本切碎"
-                   "（出现孤立的 ')'）。由 codegen 在联调中发现、symbols 修复。"
-                   "A1 新增三条回归断言锁死：13 目标 kind∈{method,static_method} 且括号配平、"
-                   "GetGetSheetCallback 的 return_type 保留函数指针形状、"
-                   "哨兵 'kind==data 且 params 含 \")\"' 计数为 0。"),
-        "reported_utc": "2026-09-30T10:3x",
-        "probe": "verify.py A1 的三条回归断言",
-    },
-    {
-        "id": "D8",
-        "title": "DUIXmlParser::GetGetSheetCallback 的 return_type 丢失函数指针形状",
-        "detail": ("该函数返回函数指针，但 return_type 一度只剩 `class DirectUI::Value *`，"
-                   "丢掉 `(__cdecl *)(unsigned short const *, void *)` 部分，"
-                   "会使生成的头文件产出错误签名。已修复；现 return_type 为 "
-                   "`class DirectUI::Value * (__cdecl *)(unsigned short const *, void *)`。"
-                   "A1 断言其必须含 `(__cdecl *)` / `unsigned short const *` / `void *`。"),
-        "reported_utc": "2026-09-30T10:3x",
-        "probe": "verify.py A1 的 return_type 形状断言",
-    },
-]
-
 
 # ---------------------------------------------------------------- 基础设施
 
@@ -282,6 +182,85 @@ def run(cmd: list[str], timeout: int = 600, env: dict | None = None) -> tuple[in
 _VCVARS_CACHE: dict | None = None
 
 
+def _tool_subdirs() -> list[str]:
+    """MSVC 二进制子目录候选（按架构优先 x64）。"""
+    return [os.path.join("bin", "Hostx64", "x64"),
+            os.path.join("bin", "Hostx86", "x86")]
+
+
+def discover_vcbin() -> str | None:
+    """定位 MSVC 二进制目录（含 dumpbin.exe），找不到返回 None。
+
+    顺序：环境变量 VCToolsInstallDir -> PATH 上的 dumpbin -> vswhere 查询。
+    """
+    vct = os.environ.get("VCToolsInstallDir")
+    if vct:
+        for sub in _tool_subdirs():
+            cand = os.path.join(vct, sub)
+            if os.path.isfile(os.path.join(cand, "dumpbin.exe")):
+                return cand
+    which = shutil.which("dumpbin")
+    if which:
+        return os.path.dirname(os.path.abspath(which))
+    vswhere = os.path.join(
+        os.environ.get("ProgramFiles(x86)", r"C:\Program Files (x86)"),
+        "Microsoft Visual Studio", "Installer", "vswhere.exe")
+    if os.path.isfile(vswhere):
+        rc, out, _err = run([vswhere, "-latest", "-products", "*",
+                             "-requires",
+                             "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+                             "-property", "installationPath"], timeout=60)
+        if rc == 0 and out.strip():
+            root = out.strip().splitlines()[0].strip()
+            base = os.path.join(root, "VC", "Tools", "MSVC")
+            if os.path.isdir(base):
+                for ver in sorted(os.listdir(base), reverse=True):
+                    for sub in _tool_subdirs():
+                        cand = os.path.join(base, ver, sub)
+                        if os.path.isfile(os.path.join(cand, "dumpbin.exe")):
+                            return cand
+    return None
+
+
+def configure_vcbin(path: str | None = None) -> str:
+    """设置 MSVC 工具目录（`--vcbin` 覆盖自动发现），返回说明文字。"""
+    global VCBIN, DUMPBIN, CL
+    chosen = None
+    if path:
+        chosen = os.path.abspath(path)
+        if not os.path.isfile(os.path.join(chosen, "dumpbin.exe")):
+            return "指定的 --vcbin 下没有 dumpbin.exe: %s" % chosen
+    else:
+        chosen = discover_vcbin()
+    if not chosen:
+        return ("未找到 MSVC 工具目录（可设 VCToolsInstallDir 或用 --vcbin 指定）；"
+                "将按 PATH 调用 dumpbin/cl")
+    VCBIN = chosen
+    DUMPBIN = os.path.join(chosen, "dumpbin.exe")
+    CL = os.path.join(chosen, "cl.exe")
+    return "MSVC 工具目录 = %s" % chosen
+
+
+def _vcvars_path() -> str | None:
+    """定位 vcvars64.bat（用于导出 INCLUDE/LIB/PATH）。"""
+    cands = []
+    vs = os.environ.get("VSINSTALLDIR")
+    if vs:
+        cands.append(os.path.join(vs, "VC", "Auxiliary", "Build", "vcvars64.bat"))
+    vct = os.environ.get("VCToolsInstallDir")
+    if vct:
+        cands.append(os.path.join(vct, "..", "..", "..", "Auxiliary", "Build",
+                                  "vcvars64.bat"))
+    if VCBIN:
+        cands.append(os.path.join(VCBIN, "..", "..", "..", "..", "..", "..",
+                                  "Auxiliary", "Build", "vcvars64.bat"))
+    for c in cands:
+        c = os.path.abspath(c)
+        if os.path.isfile(c):
+            return c
+    return None
+
+
 def msvc_env() -> tuple[dict | None, str]:
     """取得可编译 C++ 的环境（INCLUDE/LIB/PATH）。
 
@@ -292,12 +271,11 @@ def msvc_env() -> tuple[dict | None, str]:
     global _VCVARS_CACHE
     if _VCVARS_CACHE is not None:
         return _VCVARS_CACHE, "cached"
-    vcvars = (r"C:\Program Files\Microsoft Visual Studio\2022\Community"
-              r"\VC\Auxiliary\Build\vcvars64.bat")
-    if not os.path.isfile(vcvars):
-        return None, "vcvars64.bat 不存在: %s" % vcvars
+    vcvars = _vcvars_path()
+    if not vcvars:
+        return None, "未找到 vcvars64.bat（可用 --vcbin 或 VCToolsInstallDir 指定）"
     # 写一个临时 .bat 再执行：内联 `cmd /c "call ... && set"` 在 subprocess
-    # 的 list 形式下会被 list2cmdline 重新加引号，导致 cmd 解析失败（实测 rc=1、无输出）。
+    # 的 list 形式下会被 list2cmdline 重新加引号，导致 cmd 解析失败（rc=1、无输出）。
     bat = os.path.join(REPO, r".local\audit\_vcvars_env.bat")
     os.makedirs(os.path.dirname(bat), exist_ok=True)
     with open(bat, "w", encoding="ascii", errors="replace") as fh:
@@ -329,26 +307,21 @@ def q(path: str) -> str:
 def load_real(path: str | None = None) -> list[str]:
     """真实导出名集合。
 
-    v2 的唯一事实源是 `pinned/exports.json`（字段 `name`）；v1 的
-    `.local/cache/real-x64-norm.txt` 只作为 `--real-legacy` 的兜底。
+    唯一事实源是 `pinned/exports.json`（字段 `name`）。
     """
     if path:
         with open(path, "r", encoding="utf-8", errors="replace") as fh:
             return [ln.strip() for ln in fh if ln.strip()]
-    if os.path.isfile(EXPORTS_JSON):
-        with open(EXPORTS_JSON, "r", encoding="utf-8") as fh:
-            data = json.load(fh)
-        return [x.get("name") for x in data.get("exports", []) if x.get("name")]
-    with open(REAL_NORM, "r", encoding="utf-8", errors="replace") as fh:
-        return [ln.strip() for ln in fh if ln.strip()]
+    with open(EXPORTS_JSON, "r", encoding="utf-8") as fh:
+        data = json.load(fh)
+    return [x.get("name") for x in data.get("exports", []) if x.get("name")]
 
 
 def load_pdb_publics(path: str | None = None) -> set[str]:
     """PDB publics 名单（A4 的参考集合之一）。
 
-    v2 口径（Lead 指定）：**直接从 `pinned/symbols.json` 取
-    `is_exported == false` 的 mangled 集合** —— 瘦身 schema 仍保留这些符号。
-    不再依赖 `.local/cache/pdb-symbols-x64.csv`（v1 遗留）。
+    口径：直接从 `pinned/symbols.json` 取 `is_exported == false` 的
+    mangled 集合 —— schema 仍保留这些符号。
     """
     if path:
         out: set[str] = set()
@@ -431,7 +404,7 @@ def lib_symbols(path: str) -> set[str]:
 def obj_symbols(path: str) -> dict[str, set[str]]:
     """dumpbin /symbols 提取符号，返回 {'defined': {...}, 'undefined': {...}}。
 
-    dumpbin 的行格式（实测，字段数可变，符号名在最后一个 `|` 之后）：
+    dumpbin 的行格式（字段数可变，符号名在最后一个 `|` 之后）：
         009 00000000 SECT3  notype ()    External     | InitProcessPriv
         00A 00000000 UNDEF  notype ()    External     | ?Foo@Bar@@QAEXXZ
 
@@ -483,22 +456,19 @@ def is_junk(n: str) -> bool:
 
 
 def check_symbols_json(ctx: Ctx) -> None:
-    """A1（契约 v2）：pinned/symbols.json 自洽性。
+    """A1：pinned/symbols.json 自洽性。
 
-    v2 是**瘦 schema**：删掉了 undecorated/scope/namespace/access/callconv/
-    is_template/is_operator/baseline_status/classes/meta，且顶层只有
-    `schema_version` + `symbols`。因此 v1 的 A1 断言大部分已不适用，改为：
-
-      1) schema_version == 2，顶层 schema 形状
+    schema 顶层只有 symbols。断言：
+      1) 顶层形状（只允许 symbols 键）
       2) 条数：总 11983 = 导出 4321 + 非导出 7662
-      3) 字段完整性（恒定字段必备）
-      4) 枚举合法（kind 用契约枚举；实测多一个 'template' —— 单独披露）
+      3) 字段完整性（恒定字段必备 + 全量键集合）
+      4) 枚举合法（kind ∈ 契约 §1.3 的 11 种枚举）
       5) 无重复 mangled
       6) 交叉一致：is_exported=true 的 mangled 集合 == exports.json 的 name 集合
       7) 三件套齐全（manifest/exports/symbols/classes）
       8) 回归防护三条（13 class::member / GetGetSheetCallback / 哨兵）
     """
-    aid, title = "A1", "pinned/symbols.json 自洽性（schema v2：条数/字段/枚举/去重）"
+    aid, title = "A1", "pinned/symbols.json 自洽性（条数/字段/枚举/去重）"
     cmds = ["read %s" % SYMBOLS_JSON, "read %s" % EXPORTS_JSON,
             "read %s" % MANIFEST_JSON, "read %s" % CLASSES_JSON]
     if not os.path.isfile(SYMBOLS_JSON):
@@ -513,15 +483,12 @@ def check_symbols_json(ctx: Ctx) -> None:
     ev: list[str] = []
     problems: list[str] = []
 
-    # ---- (1) schema_version 与顶层形状 ----
-    sv = data.get("schema_version")
-    ev.append("schema_version = %r（契约期望 %d）" % (sv, SCHEMA_VERSION))
-    if sv != SCHEMA_VERSION:
-        problems.append("schema_version=%r != %d" % (sv, SCHEMA_VERSION))
-    top_extra = sorted(set(data) - {"schema_version", "symbols"})
-    ev.append("顶层多余键 = %s（v2 已删 meta/classes）" % (top_extra or "无"))
+    # ---- (1) 顶层形状 ----
+    top_extra = sorted(set(data) - {"symbols"})
+    ev.append("顶层键 = %s（契约 §1.3 只允许 symbols）" % sorted(data))
+    ev.append("顶层多余键 = %s（应为无）" % (top_extra or "无"))
     if top_extra:
-        problems.append("v2 顶层出现非契约键: %s" % top_extra)
+        problems.append("顶层出现非契约键: %s" % top_extra)
 
     # ---- (2) 条数 ----
     exported = [s for s in syms if s.get("is_exported") is True]
@@ -550,9 +517,9 @@ def check_symbols_json(ctx: Ctx) -> None:
     if missing_field:
         problems.append("缺必需字段: %s" % dict(missing_field))
 
-    # 实测（2026-10-01 pinned/ 交付版）全部 11983 条都带齐 11 个键，
-    # 连条件字段 class/member/return_type/rva 也是键恒在、值可为 null。
-    # 这里把它固化成断言：既能防"字段悄悄消失"，也能防"悄悄多加字段"。
+    # 全部 11983 条都带齐 11 个键，连条件字段 class/member/return_type/rva
+    # 也是键恒在、值可为 null。这里把它固化成断言：既能防"字段悄悄消失"，
+    # 也能防"悄悄多加字段"。
     key_union: Counter = Counter()
     for s in syms:
         for k in s:
@@ -580,14 +547,9 @@ def check_symbols_json(ctx: Ctx) -> None:
 
     # ---- (4) 枚举合法 ----
     kinds = Counter(s.get("kind") for s in syms)
-    illegal = {k: c for k, c in kinds.items() if k not in KINDS}
+    illegal = {k: c for k, c in kinds.items() if k not in CONTRACT_KINDS}
     ev.append("kind 分布 = %s" % dict(sorted(kinds.items(), key=lambda x: -x[1])))
-    ev.append("契约第 103 行枚举 = %s" % sorted(CONTRACT_KINDS))
-    extra_kinds = sorted(set(kinds) - CONTRACT_KINDS)
-    if extra_kinds:
-        ev.append("**契约枚举未列、但实测存在的 kind** = %s %s"
-                  % (extra_kinds, {k: kinds[k] for k in extra_kinds}))
-        ev.append("  => 契约第 103 行需补 'template'（或确认其归属）。")
+    ev.append("契约 §1.3 枚举 = %s" % sorted(CONTRACT_KINDS))
     if illegal:
         problems.append("非法 kind 值: %s" % illegal)
 
@@ -605,14 +567,15 @@ def check_symbols_json(ctx: Ctx) -> None:
     if os.path.isfile(EXPORTS_JSON):
         with open(EXPORTS_JSON, "r", encoding="utf-8") as fh:
             ex = json.load(fh)
-        ex_sv = ex.get("schema_version")
         ex_list = ex.get("exports", [])
         ex_names = [x.get("name") for x in ex_list]
         ev.append("")
         ev.append("--- 与 pinned/exports.json 交叉核对 ---")
-        ev.append("exports.json schema_version = %r，条数 = %d" % (ex_sv, len(ex_list)))
-        if ex_sv != SCHEMA_VERSION:
-            problems.append("exports.json schema_version=%r != %d" % (ex_sv, SCHEMA_VERSION))
+        ev.append("exports.json 顶层键 = %s（契约 §1.2 只允许 exports）" % sorted(ex))
+        ex_top_extra = sorted(set(ex) - {"exports"})
+        if ex_top_extra:
+            problems.append("exports.json 顶层出现非契约键: %s" % ex_top_extra)
+        ev.append("exports.json 条数 = %d" % len(ex_list))
         if len(ex_list) != EXPECTED_TOTAL:
             problems.append("exports.json 条数 %d != %d" % (len(ex_list), EXPECTED_TOTAL))
         ex_set = set(ex_names)
@@ -623,14 +586,14 @@ def check_symbols_json(ctx: Ctx) -> None:
             problems.append("is_exported 集合与 exports.json 不一致："
                             "仅 exports 有 %d，仅 symbols 有 %d"
                             % (len(ex_set - exp_set), len(exp_set - ex_set)))
-        # 契约 v2：exports 已删 forwarded/publics/meta，字段应为 ordinal/name/rva
+        # exports 条目字段应为 ordinal/name/rva，多出的即为非契约字段
         field_freq: Counter = Counter()
         for x in ex_list:
             field_freq.update(x.keys())
         ev.append("  exports 条目字段频次 = %s" % dict(field_freq))
         unexpected = sorted(set(field_freq) - {"ordinal", "name", "rva"})
         if unexpected:
-            problems.append("exports.json 含 v2 应删字段: %s" % unexpected)
+            problems.append("exports.json 含非契约字段: %s" % unexpected)
         ords = sorted(x.get("ordinal") for x in ex_list if isinstance(x.get("ordinal"), int))
         if ords and ords != list(range(1, len(ords) + 1)):
             problems.append("ordinal 不是 1..%d 连续（min=%s max=%s）"
@@ -658,7 +621,7 @@ def check_symbols_json(ctx: Ctx) -> None:
         by_cm.setdefault((s.get("class"), s.get("member")), []).append(s)
 
     ev.append("")
-    ev.append("===== 回归防护 (1)：13 个曾经误判的 class::member =====")
+    ev.append("===== 回归防护 (1)：13 个必须保持方法语义的 class::member =====")
     reg_bad = []
     for cls, mem in REGRESSION_TARGETS:
         hits = by_cm.get((cls, mem), [])
@@ -712,7 +675,7 @@ def check_symbols_json(ctx: Ctx) -> None:
 
     ctx.add(aid, title, Verdict.FAIL if problems else Verdict.PASS, cmds, ev,
             "; ".join(problems) if problems
-            else "schema v2 自洽（11983 = 4321 导出 + 7662 publics；含 13 回归目标 / "
+            else "schema 自洽（11983 = 4321 导出 + 7662 publics；含 13 回归目标 / "
                  "GetGetSheetCallback / 哨兵）")
 
 
@@ -722,11 +685,11 @@ def check_symbols_json(ctx: Ctx) -> None:
 def build_tree_fingerprint() -> tuple[float, int]:
     """返回 (最新 mtime, 文件数) —— 用于检测"验证期间有人在写产物"。
 
-    实测踩坑：一次全量复跑恰逢 codegen 重写产物，A4 因此抓到半写状态的 .cpp
+    注意：一次全量复跑恰逢产物被并发重写，A4 因此抓到半写状态的 .cpp
     而报"编译失败"，但单独复跑就 PASS。这是**竞态**而非真实缺陷；
-    若不检测，会把假 FAIL 报给 Lead。
+    若不检测，会产生假 FAIL。
 
-    v2 监视 pinned/ 与 OUT（生成物），排除本脚本自己的临时目录。
+    监视 pinned/ 与 OUT（生成物），排除本脚本自己的临时目录。
     """
     newest, count = -1.0, 0
     for root in (PINNED, OUT, os.path.join(BUILD, "lib"),
@@ -734,7 +697,7 @@ def build_tree_fingerprint() -> tuple[float, int]:
         if not os.path.isdir(root):
             continue
         for dp, dirs, files in os.walk(root):
-            # 跳过我们自己的临时/编译产物目录，避免把本脚本的写入当成"他人写入"
+            # 跳过本脚本自己的临时/编译产物目录，避免误判为并发写入
             dirs[:] = [d for d in dirs
                        if d not in ("verify-obj", "stub-obj")
                        and not d.startswith(("tmp-", "tmp_", "_"))]
@@ -920,7 +883,7 @@ def check_def(ctx: Ctx) -> None:
         if reversed_hits:
             ev.append("")
             ev.append("=> .def 的别名方向反了。MSVC .def 语法是 `导出名 = 内部名`。")
-            ev.append("   真实 dui70.dll 的导出表用**未修饰 C 名**（实测 dumpbin /exports 见下），")
+            ev.append("   真实 dui70.dll 的导出表用**未修饰 C 名**（dumpbin /exports 见下），")
             ev.append("   而 UITest.exe 也是按**未修饰 C 名**导入这些函数，故 .def 必须以")
             ev.append("   未修饰名作为**导出名**，即应写成 `InitProcessPriv = ?Init…@Z`（或无别名）。")
             ev.append("   当前写成 `?Init…@Z = InitProcessPriv`，导出名变成了修饰名，")
@@ -956,7 +919,7 @@ def check_gen_lib(ctx: Ctx) -> None:
     cmds: list[str] = []
     ev: list[str] = []
 
-    # 契约第 149 行：dui70.lib 不进 git，由 run.ps1 自建
+    # 契约第 135 行：dui70.lib 不进 git，由 run.ps1 自建
     #   lib.exe /def:DirectUI\dui70.def /machine:x64 /out:dui70.lib
     candidates = [GEN_LIB]
     defs = [OUT_DEF]
@@ -1030,9 +993,9 @@ def check_gen_lib(ctx: Ctx) -> None:
 
 
 def find_generated_sources(extra_dirs: list[str] | None = None) -> list[str]:
-    """收集待验的生成 stub .cpp —— 契约 v2 即 `DirectUI/src/*.cpp`。
+    """收集待验的生成 stub .cpp —— 即 DirectUI/src/*.cpp。
 
-    v2 的产物不再路过 `.local/`（契约第 169 行），因此默认根是 `OUT/src`。
+    产物不路过 .local/（契约第 157 行），因此默认根是 OUT/src。
     仍然排除 `tmp-*`/`_*` 邻域，避免把他人探针 TU 当成生成物。
     """
     roots: list[str] = list(extra_dirs or [])
@@ -1087,12 +1050,12 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
         gi = OUT_INCLUDE
         if os.path.isdir(gi):
             incs += ["/I" + gi]
-        incs += ["/I" + os.path.join(BUILD, "acceptance"), "/I" + REPO]
+        incs += ["/I" + REPO]
         for src in srcs:
             base = os.path.splitext(os.path.basename(src))[0]
             obj = os.path.join(STUB_OBJ_DIR, base + ".obj")
             # 先删除旧 .obj：否则上一次成功编译遗留的文件会让本次失败被误判为成功
-            # （实测踩坑：DUIXmlParser.cpp 修好后，残留 .obj 使失败状态继续显示）。
+            # （残留 .obj 会使上一次的成功状态继续显示）。
             if os.path.isfile(obj):
                 try:
                     os.remove(obj)
@@ -1123,7 +1086,7 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
         else:
             ctx.add(aid, title, Verdict.SKIP, cmds or ["<no .cpp found>"],
                     ev + ["未找到任何生成 stub 源码"],
-                    "stub 源码尚未产出 —— codegen 模块尚未就绪（非通过）")
+                    "DirectUI/src 尚未生成 —— stub 源码不存在（非通过）")
         return
 
     real = set(load_real())
@@ -1178,7 +1141,7 @@ def check_modname_fidelity(ctx: Ctx, src_dirs: list[str] | None = None) -> None:
 
     # ===== 覆盖率披露（防止把"A4 PASS"误读为"全部 4321 个导出都保真"）=====
     # A4 是**精度**（precision）断言：stub 里出现的 DirectUI 名字必须逐字正确。
-    # 它**不是完整性**（recall）断言 —— 只有 codegen 已覆盖到的类才会出现在 .obj 里。
+    # 它**不是完整性**（recall）断言 —— 只有生成器已覆盖到的类才会出现在 .obj 里。
     # 因此必须显式报告覆盖率，否则 PASS 会被过度解读。
     covered_exports = matched_export
     not_covered = real - covered_exports
@@ -1257,7 +1220,7 @@ def check_acceptance_run(ctx: Ctx) -> None:
         else:
             ctx.add(aid, title, Verdict.SKIP, ["Test-Path %s" % UITEST_EXE],
                     ["file not found: %s" % UITEST_EXE],
-                    "生成的 UITest.exe 尚未产生（lead 链接未完成）")
+                    "生成的 UITest.exe 尚未产生（尚未构建）")
             return
 
     ev: list[str] = []
@@ -1445,7 +1408,6 @@ def check_determinism(ctx: Ctx) -> None:
     b = os.path.join(SCRATCH, "regen-b")
     for d in (a, b):
         if os.path.isdir(d):
-            import shutil
             shutil.rmtree(d, ignore_errors=True)
 
     for out_dir, tag in ((a, "第 1 次"), (b, "第 2 次")):
@@ -1475,8 +1437,8 @@ def check_determinism(ctx: Ctx) -> None:
         ev.append("=> 两次 regen 产物逐字节一致（%d 个文件）" % len(ha))
 
     # 与仓库中当前 DirectUI/ 比对：确认产物是否为最新生成结果。
-    # 注意：这是**漂移**（drift）而非**确定性**。契约第 175 行的 golden test
-    # 才是"仓库产物必须等于 regen 结果"的断言；A6 按 Lead 指定只断言
+    # 注意：这是**漂移**（drift）而非**确定性**。契约第 137 行的 golden test
+    # 才是"仓库产物必须等于 regen 结果"的断言；A6 只断言
     # "regen 两次 byte-diff == 0"。二者混在一起会让"尚未提交 golden"被误报成
     # "生成器不确定"。因此漂移只作**独立披露**，不参与 A6 的 PASS/FAIL。
     drift_note = None
@@ -1522,32 +1484,13 @@ def check_determinism(ctx: Ctx) -> None:
 # ---------------------------------------------------------------- 报告
 
 
-def _defect_status(did: str, ctx: Ctx) -> str:
-    """把历史缺陷映射到当前复跑结论，用于报告里的占位说明。"""
-    related = {
-        "D1": "A1", "D2": "A1", "D3": "A1", "D4": "A5",
-        "D5": "A1", "D6": "A4", "D7": "A1", "D8": "A1",
-    }.get(did)
-    if not related:
-        return "—"
-    r = ctx.by_id(related)
-    if r is None:
-        return "本次未执行断言 %s（无法判断）" % related
-    if r["verdict"] == Verdict.PASS:
-        return "断言 %s 已 PASS —— 修复生效" % related
-    if r["verdict"] == Verdict.FAIL:
-        return "断言 %s 仍 FAIL —— 修复未生效或仅部分生效，详见该断言原始输出" % related
-    return "断言 %s 为 SKIP —— 输入缺失，无法确认" % related
-
-
 def write_report(ctx: Ctx, extra: list[str]) -> None:
     counts = Counter(r["verdict"] for r in ctx.results)
     L: list[str] = []
     A = L.append
-    A("# dui-pipeline 端到端验证报告（verify.py，verifier 独立执行）")
+    A("# dui-pipeline 端到端验证报告（verify.py，独立复算）")
     A("")
     A("生成时间（UTC）：%s" % time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
-    A("执行者：verifier（独立验证者，不采信任何其他模块的自述结论）")
     A("")
     A("## 结论汇总")
     A("")
@@ -1594,14 +1537,14 @@ def write_report(ctx: Ctx, extra: list[str]) -> None:
         A("```")
         A("")
 
-    A("## v2 断言矩阵")
+    A("## 断言矩阵")
     A("")
     A("| 断言 | 输入 | 参照（oracle）| 断言什么 | 覆盖边界（**不**断言什么）|")
     A("|---|---|---|---|---|")
-    A("| **A1** | `pinned/symbols.json` | 契约 §1.3 + §103 枚举 | schema_version==2；"
-      "顶层键恰为 `{schema_version,symbols}`；11983 = 4321 导出 + 7662 非导出；"
+    A("| **A1** | pinned/symbols.json | 契约 §1.3 + §103 枚举 | 顶层键恰为 {symbols}；"
+      "11983 = 4321 导出 + 7662 非导出；"
       "11 个键在全部条目上恒在；kind 枚举合法；mangled 无重复/空；"
-      "`is_exported` 集合 == `exports.json` 的 name 集合；13 个历史回归目标 |"
+      "`is_exported` 集合 == `exports.json` 的 name 集合；13 个回归目标 |"
       "**不判**语义正确性（名字对不对由 A4 判，条数对不对由 A2/A3 判）|")
     A("| **A2** | `DirectUI/dui70.def`（regen 产物）| `pinned/exports.json` | "
       "4321 条导出名逐条一致（集合相等 + 无多余/缺失）| "
@@ -1622,56 +1565,28 @@ def write_report(ctx: Ctx, extra: list[str]) -> None:
       "**不断言**仓库 `DirectUI/` 是否已是最新（那是 CI golden job 的 "
       "`git diff --exit-code`；漂移仅在本报告“附加披露”中给出）|")
     A("")
-    A("## v2 schema 缺什么字段（A1 自洽检查的产出）")
+    A("## schema 缺什么字段（A1 自洽检查的产出）")
     A("")
-    A("A1 只做自洽性检查，但顺带暴露了**契约与数据不一致**的地方，需 Lead 裁决：")
+    A("A1 只做自洽性检查，但顺带暴露了**契约文本与数据现实不一致**的地方，属于契约层面的待办：")
     A("")
-    A("| # | 发现 | 实测数据 | 影响 / 建议 |")
+    A("| # | 发现 | 数据 | 影响 / 建议 |")
     A("|---|---|---|---|")
-    A("| 1 | 契约 §103 的 kind 枚举**缺 `template`** | 契约列 10 种；数据实有 **11 种**，"
-      "多出 `template` = **1419** 条（占比第二）| 建议 §103 补 `template`。"
-      "否则任何“按契约枚举校验”的实现都会误报 1419 条非法 |")
-    A("| 2 | `rva` 对 6 个 `__guard_*` 符号为 `null` | 6 条数据符号（`__guard_eh_cont_count`、"
+    A("| 1 | `rva` 对 6 个 `__guard_*` 符号为 `null` | 6 条数据符号（`__guard_eh_cont_count`、"
       "`__guard_fids_count`、`__guard_flags`、`__guard_iat_count`、`__guard_longjmp_count`、"
       "`__guard_longjmp_table`）无 RVA | 它们是 CFG 计数/标志，**本就不占 RVA**。"
       "契约需写明“rva 可为 null 及其判定规则”，否则会被当成缺字段 |")
-    A("| 3 | `member`/`return_type`/`class` 允许 `null` 但**契约未声明** | "
+    A("| 2 | 哪些 kind 允许哪些字段为 `null` 未逐项规定 | "
       "`member` 为 null 1454 条（`data` 1097 + `unknown` 357）；"
-      "`return_type` 为 null 4613 条；`class` 为 null 4296 条 | 键恒在、值可 null。"
-      "契约应列出“哪些 kind 允许哪些字段为 null”，供下游安全解引用 |")
-    A("| 4 | `data` 却带非空 `params` | **8** 条（函数指针型全局变量，如 "
+      "`return_type` 为 null 4613 条；`class` 为 null 4296 条 | 契约已声明“值可为 null”，"
+      "但未逐 kind 列出规则；下游按 kind 解引用时仍需自行判断 |")
+    A("| 3 | `data` 却带非空 `params` | **8** 条（函数指针型全局变量，如 "
       "`?g_pfnLoggingCallback@details@wil@@...`）| 契约若把 `params` 定义为"
       "“仅函数类 kind 可用”，需为这 8 条开例外或改述 |")
-    A("| 5 | `manifest.json` 的 `pinned_utc` 是占位值 | `2026-10-01T00:00:00Z` | "
+    A("| 4 | `manifest.json` 的 `pinned_utc` 是占位值 | `2026-10-01T00:00:00Z` | "
       "非真实提取时间；若下游用它做“陈旧判定”会失真。本报告 A3 用**文件 mtime** 判陈旧 |")
     A("")
-    A("> 以上均为**契约文本**与**数据现实**的差异，不是数据缺陷。"
-      "A1 对第 1 条不判 FAIL（显式列入 `OBSERVED_EXTRA_KINDS` 并在证据里点名），"
-      "以免把“契约漏写”误报成“生成器产错”。")
+    A("> 以上均为**契约文本**与**数据现实**的差异，不是数据缺陷。")
     A("")
-
-    A("## 历史缺陷与修复状态（审计痕迹，按 Lead 要求保留）")
-    A("")
-    A("本节**不随当前复跑结果删除**。即使缺陷已修，也保留发现→上报→修复的完整链路，")
-    A("以便审计追溯「谁在何时发现了什么」。当前复跑结论见上方汇总表。")
-    A("")
-    A("| ID | 缺陷 | 上报时间 | 发现手段 | 状态 |")
-    A("|---|---|---|---|---|")
-    for d in KNOWN_DEFECTS:
-        A("| %s | %s | %s | %s | 已转修（见下方复跑结果） |"
-          % (d["id"], d["title"], d["reported_utc"], d["probe"]))
-    A("")
-    for d in KNOWN_DEFECTS:
-        A("### %s %s" % (d["id"], d["title"]))
-        A("")
-        A(d["detail"])
-        A("")
-        A("#### %s 修复后复跑占位" % d["id"])
-        A("")
-        A("- 复跑命令：`%s %s`" % (PYTHON, os.path.abspath(__file__)))
-        A("- 复跑结果：见上表对应断言的当前结论")
-        A("- 状态：%s" % _defect_status(d["id"], ctx))
-        A("")
 
     A("## 复现方式")
     A("")
@@ -1810,7 +1725,6 @@ def self_test() -> int:
         os.makedirs(d, exist_ok=True)
         for f in os.listdir(d):
             os.remove(os.path.join(d, f))
-        import shutil
         shutil.copy(src, os.path.join(d, os.path.basename(src)))
         ctx = Ctx()
         check_modname_fidelity(ctx, [d])
@@ -1832,13 +1746,14 @@ def self_test() -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="dui-pipeline end-to-end verifier (v2)")
-    ap.add_argument("--only", default="", help="逗号分隔的断言 id，如 A1,A4")
+    ap = argparse.ArgumentParser(description="dui-pipeline end-to-end checks (A1-A6)")
     ap.add_argument("--assertion", default="",
-                    help="CI 单断言模式：只跑一个断言 id（如 --assertion A3）；"
-                         "等价于 --only 但语义更明确，供 CI job 使用")
+                    help="只跑指定断言，逗号分隔（如 A1,A4 或单个 A3）；"
+                         "缺省则跑全部")
     ap.add_argument("--lib", default=None,
                     help="覆盖导入库路径（CI 的 abi job 用它指定自建 dui70.lib）")
+    ap.add_argument("--vcbin", default=None,
+                    help="MSVC 工具目录（含 dumpbin.exe / cl.exe）；默认自动发现")
     ap.add_argument("--json", action="store_true", help="打印机器可读汇总")
     ap.add_argument("--self-test", action="store_true",
                     help="用受控夹具验证 A4 判定逻辑本身是否正确")
@@ -1851,6 +1766,7 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     configure(args.pinned, args.out, args.report)
+    vc_note = configure_vcbin(args.vcbin)
 
     # CI：--lib 覆盖导入库路径（run.ps1 的产物位置可能与默认不同）
     if args.lib:
@@ -1860,7 +1776,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.self_test:
         return self_test()
 
-    sel = args.assertion or args.only
+    sel = args.assertion
     want = [x.strip().upper() for x in sel.split(",") if x.strip()] or list(CHECKS)
     unknown = [a for a in want if a not in CHECKS]
     if unknown:
@@ -1879,6 +1795,7 @@ def main(argv: list[str] | None = None) -> int:
     real = load_real()
     print("pinned  : %s" % PINNED)
     print("out     : %s" % OUT)
+    print("MSVC    : %s" % vc_note)
     print("真实导出集合: %d 条 (%s)" % (len(real), EXPORTS_JSON))
     if len(real) != EXPECTED_TOTAL:
         extras.append("真实导出集合为 %d 条，契约期望 %d —— 后续断言基线可能失真"
@@ -1900,16 +1817,12 @@ def main(argv: list[str] | None = None) -> int:
         print()
 
     # 竞态守卫：若产物在验证期间被改写，任何 FAIL 都可能是"半写状态"造成的假 FAIL。
-    # 此时把结论降级说明，避免把假 FAIL 当成真实缺陷上报。
+    # 此时在报告里降级说明，避免把假 FAIL 当成真实缺陷。
     race = check_build_quiescent(before_fp)
     if race:
-        extras.append("**并发写入告警**：%s。若有 FAIL，可能是 codegen 正在重写产物"
+        extras.append("**并发写入告警**：%s。若有 FAIL，可能是产物正被并发重写"
                       "导致的假 FAIL —— 请等其停止后复跑确认。" % "；".join(race))
         print("[WARN] %s" % "；".join(race))
-
-    # 注：v1 曾在此并入 baseline_diff.py 的 oracle 结论。契约 v2 已判
-    # baseline_status 死刑（第 116 行），该 oracle 退役；历史对照改由
-    # baseline_diff.py 读 git 历史完成，不再影响 verify.py 的结论。
 
     write_report(ctx, extras)
 

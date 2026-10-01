@@ -49,7 +49,12 @@ if (-not $sdkVersion) {
     if (-not $sdkVersion) { throw "Windows SDK not found; pass -SdkVersion <10.0.xxxxx.0>" }
 }
 if (-not $Python) {
-    $Python = (Get-Command python -ErrorAction SilentlyContinue).Source
+    # Select-Object -First 1: Get-Command can return several matches, and .Source
+    # on an array stringifies them all into one un-runnable path (this broke CI
+    # in ci.ps1 on the GitHub Windows runner, which has several git/python dirs
+    # on PATH while a normal dev box has one).
+    $Python = (@(Get-Command python -ErrorAction SilentlyContinue) |
+        Select-Object -First 1).Source
     if (-not $Python) { throw "python not found on PATH; pass -Python <path>" }
 }
 $vcBin  = "$VcRoot\bin\Hostx64\x64"

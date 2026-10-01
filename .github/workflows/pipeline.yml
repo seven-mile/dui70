@@ -1,11 +1,14 @@
-# CI: golden regeneration + ABI verification + smoke test
+# CI: golden regeneration + structural/ABI gates + smoke test
 #
-# golden (ubuntu, seconds)  — regen from pinned/, must be byte-identical to the
-#                             committed DirectUI/ tree. Generator changes MUST
+# The gates themselves live in tools/dui-pipeline/ci.ps1 (see CI.md). This
+# workflow only chooses WHICH gates each runner can afford:
+#
+# golden (ubuntu, seconds)  — G1+G2: pinned/ integrity + regen byte-identical to
+#                             the committed DirectUI/ tree. Generator changes MUST
 #                             ship with their golden diff in the same PR.
-# abi   (windows, minutes)  — rebuild import lib from the .def, compile the
-#                             stub TUs, assert decorated-name fidelity vs def.
-# smoke (windows, minutes)  — full pipeline: build UITest against the generated
+# abi    (windows, minutes) — G3+G4+G5: structure, decorated-name fidelity, and a
+#                             header-compile sample (needs MSVC).
+# smoke  (windows, minutes) — end-to-end: build UITest against the generated
 #                             library, run it, assert the DirectUI window is
 #                             created against the system dui70.dll.
 name: pipeline
@@ -23,13 +26,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Regenerate DirectUI/ from pinned/
-        run: python tools/dui-pipeline/regen.py
-      - name: Golden diff (empty = pass)
-        run: |
-          git add -N DirectUI
-          git diff --exit-code DirectUI/
-          echo "golden: DirectUI/ is in sync with pinned/"
+      # G1 + G2 only: needs no compiler, finishes in seconds. G2 also refuses to
+      # run on a dirty tree and catches NEW untracked generated files, which a
+      # bare `git diff` misses.
+      - name: Golden gates (G1+G2)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1 -GoldenOnly
 
   abi:
     runs-on: windows-latest
@@ -42,13 +44,20 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: x64
-      - name: Rebuild import library from def
+      # Full chain: G1, G2, G3 (classes.json vs generated tree), G4 (modname +
+      # extern-C fidelity, expected totals derived from pinned/ not hardcoded),
+      # G5 (header compile sample), GB (time budget).
+      - name: Pipeline gates
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1
+      # Not covered by ci.ps1: the .def must also produce a usable import
+      # library. Kept as its own gate because it validates the .def through
+      # lib.exe/dumpbin rather than through the generated sources.
+      - name: Import library from def (A3)
         run: |
           lib.exe /def:DirectUI\dui70.def /machine:x64 /out:$env:RUNNER_TEMP\dui70.lib
           dumpbin /linkermember:1 $env:RUNNER_TEMP\dui70.lib | Out-File -Encoding utf8 $env:RUNNER_TEMP\lib-members.txt
           python tools\dui-pipeline\verify.py --assertion A3 --lib $env:RUNNER_TEMP\dui70.lib
-      - name: Stub compile + modname fidelity
-        run: python tools\dui-pipeline\verify_codegen.py --pinned pinned --src DirectUI\src --inc DirectUI\include
 
   smoke:
     runs-on: windows-latest

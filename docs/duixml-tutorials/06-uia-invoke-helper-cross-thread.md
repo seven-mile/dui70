@@ -242,7 +242,7 @@ $all = $root.FindAll([System.Windows.Automation.TreeScope]::Descendants,
 ### 5.3 实测输出（原文照录）
 
 ```
-宿主: Z:\repos\DirectUI\.local\build\acceptance-x64\UITest.exe
+宿主: UITest.exe(本地构建,见 tools/dui-pipeline/)
 主窗口 HWND = 0x8C0B08  pid = 44176
 
 [0] RegisterWindowMessageW('DUI_UIA_InvokeHelperMsg') = 0xC075

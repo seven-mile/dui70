@@ -80,6 +80,10 @@ dui70.dll 26200 x64 的 PDB 符号、全量反汇编(`.local/build/dui70-full-di
 ## 系列背景
 
 - **语料库**:149 份 UIFILE(64 个系统 DLL),见 `docs/duixml-corpus/`(README 含统计)
+- **关于 `.local/` 引用**:正文与证据索引中引用的 `.local/build/`、`.local/audit/`、
+  `.local/corpus/` 路径是本仓库的**工作区存档**(git-ignored),存放复现脚本、反汇编
+  工作文件与审计底稿。这些路径不入库;读者需要复现时,依据正文给出的 RVA/行号/常量
+  自行验证即可——每篇的证据索引都设计为"只凭公开信息(PDB/系统 DLL/语料库)可复核"。
 - **任务大纲**:`.local/audit/duixml-tutorials-outline.md`(组件族 A-L)、
   `.local/audit/ui-mental-model-outline.md`(横切面 §1-§12)——注意 outline 的早期
   数字与教程实测有出入时,以教程为准(教程经过独立 QA 复核,见下)

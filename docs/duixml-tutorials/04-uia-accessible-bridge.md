@@ -389,8 +389,8 @@ manager 缓存**合起来就是一套池化——元素滚动出视野后 provid
 **步骤**：
 
 ```powershell
-# 1. 启动宿主
-$p = Start-Process Z:\repos\DirectUI\.local\build\acceptance-x64\UITest.exe -PassThru
+# 1. 启动宿主(本地构建的 UITest.exe,构建方式见 tools/dui-pipeline/)
+$p = Start-Process UITest.exe -PassThru
 Start-Sleep 3
 
 # 2. 用真实 UIA 客户端挂上窗口

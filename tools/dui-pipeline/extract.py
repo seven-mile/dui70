@@ -1,28 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-dui-pipeline / symbols module -- 产物 1: exports.json
+dui-pipeline / symbols module -- 产物 1: pinned/exports.json (+ manifest 指纹校验)
 
 从真实 dui70.dll 的导出表（dumpbin /exports）与公开 PDB 的 publics 提取符号，
-规范化后写入 .local/build/exports.json。
+规范化后写入 pinned/exports.json（schema v2, 见 INTERFACE.md 1.2）。
 
-契约: tools/dui-pipeline/INTERFACE.md （冻结版 v1）— 字段名/枚举不得擅改。
+契约: tools/dui-pipeline/INTERFACE.md v2 — 字段名/枚举不得擅改。
 
-输出结构（严格按契约）:
+v2 输出结构（严格按契约 1.2）:
 {
-  "meta":    { dll, file_version, arch, pdb_guid, pdb_age, generated_utc },
-  "exports": [ { ordinal, rva, mangled, forwarded } ],
-  "publics": [ { rva, mangled } ]
+  "schema_version": 2,
+  "exports": [ { ordinal, name, rva } ]
 }
+- 删 forwarded（dui70 无转发导出）
+- 删 publics 块（publics 职责属于 symbols.json）
+- 删 meta 块（身份信息上移 manifest，单一事实源）
+- mangled 更名 name
+
+**指纹锚（契约 1.1 规则）**：写 pinned/ 前校验 DLL/PDB 的 sha256 与
+pinned/manifest.json 一致；不符则拒绝写入并要求显式 `--new-pin`。
 
 只用标准库（Python 3.11）。外部工具:
   dumpbin.exe  : C:\\Program Files\\...\\Hostx64\\x64\\dumpbin.exe
   llvm-pdbutil : (可选, 仅当 PDB 存在时用于交叉校验 GUID/age)
 
 用法:
-  python extract.py                        # 用契约里的默认路径
-  python extract.py --dll <path> --out <path>
-  python extract.py --no-refresh           # 复用 .local/build/raw/ 下的原始 dump
+  python extract.py                        # 产 .local/build/exports.json（v1 全量, 自证用）
+  python extract.py --pinned               # 产 pinned/exports.json（v2 瘦身, 校验指纹）
+  python extract.py --pinned --new-pin     # 指纹不符时显式确认并重写 manifest
+  python extract.py --pinned --verify-pin  # 只校验指纹，不写任何文件
 """
 
 from __future__ import annotations
@@ -46,10 +53,112 @@ PDB_X64 = os.path.join(REPO, ".local", "symbols", "dui70-26200-x64.pdb")
 PDB_PUBLICS = os.path.join(REPO, ".local", "cache", "pdb-publics-x64.txt")
 REAL_NORM = os.path.join(REPO, ".local", "cache", "real-x64-norm.txt")
 BUILD = os.path.join(REPO, ".local", "build")
+PINNED = os.path.join(REPO, "pinned")
 
 DUMPBIN = (r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC"
            r"\14.44.35207\bin\Hostx64\x64\dumpbin.exe")
 LLVM_PDBUTIL = r"C:\Local\Tools\mingw64\bin\llvm-pdbutil.exe"
+
+
+# --------------------------------------------------------------------------
+# 指纹锚（契约 1.1）
+# --------------------------------------------------------------------------
+
+def sha256_file(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest().upper()
+
+
+def load_manifest(pinned_dir):
+    p = os.path.join(pinned_dir, "manifest.json")
+    if not os.path.isfile(p):
+        return None
+    with open(p, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def verify_pin(pinned_dir, dll=None, pdb=None):
+    """校验 DLL/PDB 指纹与 manifest 一致。
+
+    返回 (ok, report)。report 逐项列出 expected/actual。
+    """
+    mf = load_manifest(pinned_dir)
+    rep = {"manifest": os.path.join(pinned_dir, "manifest.json"), "checks": [], "ok": True}
+    if mf is None:
+        # 无 manifest: 首次 pin，允许（由调用方决定是否补写）
+        rep["ok"] = True
+        rep["manifest_missing"] = True
+        rep["checks"].append({"what": "manifest", "expected": "present",
+                              "actual": "absent", "ok": True,
+                              "note": "首次 pin, manifest 将由 --pinned 写入"})
+        return True, rep
+
+    for what, path, spec in (("dll", dll or REAL_DLL_X64, mf.get("dll") or {}),
+                             ("pdb", pdb or PDB_X64, mf.get("pdb") or {})):
+        if not os.path.isfile(path):
+            rep["checks"].append({"what": what, "path": path, "expected": "file exists",
+                                  "actual": "missing", "ok": False})
+            rep["ok"] = False
+            continue
+        actual_size = os.path.getsize(path)
+        actual_sha = sha256_file(path)
+        exp_sha = (spec.get("sha256") or "").upper()
+        exp_size = spec.get("size")
+        item = {"what": what, "path": path,
+                "expected": {"sha256": exp_sha, "size": exp_size},
+                "actual": {"sha256": actual_sha, "size": actual_size},
+                "sha256_match": actual_sha == exp_sha,
+                "size_match": actual_size == exp_size}
+        item["ok"] = item["sha256_match"] and item["size_match"]
+        if not item["ok"]:
+            rep["ok"] = False
+        rep["checks"].append(item)
+    return rep["ok"], rep
+
+
+def build_manifest(pinned_dir, dll, pdb, prev=None, new_pin=False):
+    """按契约 1.1 组装 manifest.json。prev 用于保留 toolchain/pinned_utc。"""
+    fv, _ = file_version(dll)
+    pi = pe_info(dll)
+    pub_guid = pdb_guid_age(pdb) if pdb and os.path.isfile(pdb) else None
+    mf = {
+        "schema_version": 2,
+        "dll": {
+            "name": os.path.basename(dll),
+            "arch": pi["arch"],
+            "file_version": fv,
+            "size": os.path.getsize(dll),
+            "sha256": sha256_file(dll),
+            "obtain_hint": "local C:\\Windows\\System32\\dui70.dll on Win11 26100; "
+                           "verify sha256 before refreshing",
+        },
+        "pdb": {
+            "guid": pi["pdb_guid"] or (pub_guid or {}).get("pdb_guid"),
+            "age": pi["pdb_age"] if pi["pdb_age"] is not None else (pub_guid or {}).get("pdb_age"),
+            "size": os.path.getsize(pdb) if pdb and os.path.isfile(pdb) else None,
+            "sha256": sha256_file(pdb) if pdb and os.path.isfile(pdb) else None,
+            "source_url": "https://msdl.microsoft.com/download/symbols/dui70.pdb/"
+                          "%s %s/dui70.pdb" % (pi["pdb_guid"], pi["pdb_age"]),
+        },
+        "toolchain": (prev or {}).get("toolchain") or {
+            "dumpbin": dumpbin_version(),
+            "note": "undname output is read-only consumption; version differences "
+                    "should not affect pinned content",
+        },
+        "pinned_utc": _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+    }
+    return mf
+
+
+def dumpbin_version():
+    rc, out, err = run([DUMPBIN])
+    txt = (out or "") + (err or "")
+    m = re.search(r"(\d+\.\d+\.\d+[\.\d]*)", txt)
+    return m.group(1) if m else "unknown"
 
 # --------------------------------------------------------------------------
 # 小工具
@@ -427,6 +536,40 @@ def build(args):
         json.dump(doc, f, ensure_ascii=False, indent=1)
         f.write("\n")
 
+    # ---------------- v2 pinned/exports.json（契约 1.2） ----------------
+    pinned_report = None
+    if getattr(args, "pinned", None):
+        pin_dir = args.pinned
+        ok, vrep = verify_pin(pin_dir, dll=dll, pdb=args.pdb)
+        pinned_report = {"verify_pin": vrep}
+        if not ok and not getattr(args, "new_pin", False):
+            raise SystemExit(
+                "pin 指纹不匹配，拒绝刷新 pinned/。\n"
+                + json.dumps(vrep, ensure_ascii=False, indent=2)
+                + "\n如确为有意换版，请加 --new-pin 显式确认。")
+        # 写 manifest（首次 pin 或 --new-pin）
+        prev = load_manifest(pin_dir)
+        if prev is None or getattr(args, "new_pin", False) or not ok:
+            mf = build_manifest(pin_dir, dll, args.pdb, prev=prev,
+                                new_pin=getattr(args, "new_pin", False))
+            ensure_dir(pin_dir)
+            with open(os.path.join(pin_dir, "manifest.json"), "w", encoding="utf-8") as f:
+                json.dump(mf, f, ensure_ascii=False, indent=2)
+                f.write("\n")
+            pinned_report["manifest_written"] = os.path.join(pin_dir, "manifest.json")
+            pinned_report["manifest"] = mf
+        v2 = {"schema_version": 2,
+              "exports": [{"ordinal": e["ordinal"], "name": e["mangled"], "rva": e["rva"]}
+                          for e in exports]}
+        ensure_dir(pin_dir)
+        pin_out = os.path.join(pin_dir, "exports.json")
+        with open(pin_out, "w", encoding="utf-8") as f:
+            json.dump(v2, f, ensure_ascii=False, indent=1)
+            f.write("\n")
+        pinned_report["out"] = pin_out
+        pinned_report["exports"] = len(v2["exports"])
+        pinned_report["size_bytes"] = os.path.getsize(pin_out)
+
     # ---------------- 自证输出 ----------------
     exp_names = [e["mangled"] for e in exports]
     exp_set = set(exp_names)
@@ -489,21 +632,39 @@ def build(args):
         "VS_VERSIONINFO 的 StringFileInfo\\FileVersion（'10.0.26100.8875 "
         "(WinBuild.160101.0800)'），而同一文件的 FixedFileInfo/PE 头为 10.0.26100.9278"
         "（x86 dui70.dll 两者均为 9278）。meta.file_version 按契约口径取字符串版本。")
+    if pinned_report is not None:
+        report["pinned_v2"] = pinned_report
 
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return doc, report
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="dui-pipeline symbols: dumpbin exports + PDB publics -> exports.json")
+    ap = argparse.ArgumentParser(
+        description="dui-pipeline symbols: dumpbin exports + PDB publics -> exports.json")
     ap.add_argument("--dll", default=REAL_DLL_X64)
     ap.add_argument("--pdb", default=PDB_X64)
     ap.add_argument("--pdb-publics", default=PDB_PUBLICS)
     ap.add_argument("--build", default=BUILD)
-    ap.add_argument("--out", default=os.path.join(BUILD, "exports.json"))
+    ap.add_argument("--out", default=os.path.join(BUILD, "exports.json"),
+                    help="v1 全量输出（自证用）")
+    ap.add_argument("--pinned", nargs="?", const=PINNED, default=None,
+                    help="同时产 pinned/exports.json（v2 瘦身）并校验/写 manifest；"
+                         "不带值时用仓库根 pinned/")
+    ap.add_argument("--new-pin", action="store_true",
+                    help="指纹不符时显式确认换版并重写 manifest")
+    ap.add_argument("--verify-pin", action="store_true",
+                    help="只校验指纹，不写任何文件")
     ap.add_argument("--no-refresh", action="store_true",
                     help="复用 .local/build/raw/ 下已缓存的 dumpbin 输出")
     args = ap.parse_args(argv)
+
+    if args.verify_pin:
+        pin_dir = args.pinned or PINNED
+        ok, rep = verify_pin(pin_dir, dll=args.dll, pdb=args.pdb)
+        print(json.dumps(rep, ensure_ascii=False, indent=2))
+        return 0 if ok else 1
+
     build(args)
     return 0
 

@@ -47,14 +47,20 @@ import os
 import re
 import subprocess
 import sys
+import time
 from collections import Counter
 
 # ---------------------------------------------------------------- 环境常量
 
 REPO = r"Z:\repos\DirectUI"
+PYTHON = r"C:\Users\7mile\AppData\Local\Programs\Python\Python311\python.exe"
 DUMPBIN = (
     r"C:\Program Files\Microsoft Visual Studio\2022\Community"
     r"\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe"
+)
+CL = (
+    r"C:\Program Files\Microsoft Visual Studio\2022\Community"
+    r"\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe"
 )
 
 DEF_REAL = os.path.join(REPO, r".local\cache\real-x64-norm.txt")
@@ -108,6 +114,271 @@ def is_junk(name: str) -> bool:
 def norm_undecorate_plain(name: str) -> str:
     """去掉 __imp_ 前缀；仅用于导入库。"""
     return name[6:] if name.startswith("__imp_") else name
+
+
+# ---------------------------------------------------------------- 历史基线（git）
+
+# 契约 v2 第 116 行：baseline_status 语义已死，手写基线退役；
+# 「历史对照由 baseline_diff.py 读 git 历史满足」。因此本脚本降级为**历史工具**：
+# 它的 oracle 不再是 x64\Debug\Dui\dui70.dll（该目录被 .gitignore 忽略、随时可能消失），
+# 而是 **git 历史里的手写基线**，可长期复现。
+
+GIT_BASELINE_REF = "master"
+GIT_BASELINE_DIR = "DirectUI"
+
+
+def git_available() -> bool:
+    try:
+        out = run(["git", "-C", REPO, "rev-parse", "--verify", GIT_BASELINE_REF])
+        return bool(out.strip())
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def git_show(path: str, ref: str = GIT_BASELINE_REF) -> str | None:
+    """读取 git 历史中的文件内容；不存在返回 None。"""
+    try:
+        p = subprocess.run(["git", "-C", REPO, "show", "%s:%s" % (ref, path)],
+                           capture_output=True, text=True, errors="replace")
+        if p.returncode != 0:
+            return None
+        return p.stdout
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def git_ls_files(ref: str = GIT_BASELINE_REF, prefix: str = GIT_BASELINE_DIR) -> list[str]:
+    try:
+        p = subprocess.run(["git", "-C", REPO, "ls-tree", "-r", "--name-only",
+                            "%s:%s" % (ref, prefix)],
+                           capture_output=True, text=True, errors="replace")
+        if p.returncode != 0:
+            return []
+        return [ln.strip() for ln in p.stdout.splitlines() if ln.strip()]
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def history_baseline_symbols(ref: str = GIT_BASELINE_REF) -> dict:
+    """从 git 历史 + 冻结快照反推"历史基线符号集"。
+
+    契约 v2 第 116 行指定「读 git 历史」。实测结论（见报告）：
+      * `DirectUI/DirectUI.def`（git 历史）只有 **51 个未修饰 C 名** ——
+        它是"legacy C 入口"清单，不是完整导出集；
+      * `DirectUI/*.h` 是**源码级**声明，里面根本没有修饰名（`?Foo@Bar@@`），
+        按文本正则抽取只能得到极少数误命中。
+    因此**光靠 git 历史文本无法重建 4321 条基线符号集**；历史模式的符号来源
+    取二者之并：
+      1. git 历史 `DirectUI.def`（权威的 C 名清单，可长期复现）；
+      2. **冻结快照** `.local/audit/baseline-diff.csv`（4476 行，Lead 明确认可）
+         —— 由 v1 时期的基线 LIB/DLL 逐符号对照落盘，是基线二进制消失后
+         唯一幸存的完整记录。
+
+    返回 {'def','snapshot','snapshot_rows','headers','files','def_path','any'}。
+    """
+    res: dict = {"def": set(), "snapshot": set(), "snapshot_rows": 0,
+                 "headers": set(), "files": 0, "def_path": None}
+    files = git_ls_files(ref)
+    if files:
+        res["files"] = len(files)
+
+    # 1) 历史 .def：`导出名 = 内部名` -> 取左侧导出名
+    for cand in ("DirectUI.def", "dui70.def"):
+        txt = git_show("%s/%s" % (GIT_BASELINE_DIR, cand), ref)
+        if not txt:
+            continue
+        res["def_path"] = "%s/%s" % (GIT_BASELINE_DIR, cand)
+        in_exp = False
+        for raw in txt.splitlines():
+            line = raw.split(";")[0].strip()
+            if not line:
+                continue
+            up = line.upper()
+            if up.startswith("EXPORTS"):
+                in_exp = True
+                continue
+            if up.startswith(("LIBRARY", "NAME", "DESCRIPTION", "SECTIONS",
+                              "STACKSIZE", "HEAPSIZE", "VERSION", "STUB")):
+                in_exp = False
+                continue
+            if not in_exp:
+                continue
+            name = line.split("=", 1)[0].split()[0]
+            if name and not name.startswith("@"):
+                res["def"].add(name)
+        break
+
+    # 2) 冻结快照：baseline-diff.csv（v1 落盘的基线逐符号记录）
+    if os.path.isfile(DEF_CSV):
+        try:
+            with open(DEF_CSV, encoding="utf-8", errors="replace") as fh:
+                for row in csv.DictReader(fh):
+                    m = (row.get("mangled") or "").strip()
+                    if not m:
+                        continue
+                    res["snapshot_rows"] += 1
+                    # 只要"曾出现在基线 LIB 或 DLL 中"的符号
+                    if row.get("in_baseline_lib") == "yes" or \
+                       row.get("in_baseline_dll") == "yes":
+                        res["snapshot"].add(m)
+        except OSError:
+            pass
+
+    res["any"] = res["def"] | res["snapshot"]
+    return res
+
+
+def compare_against_history(gen_symbols: set[str], ref: str = GIT_BASELINE_REF) -> dict:
+    """生成物 vs 历史基线：并集/差集对照（本脚本 v2 的主输出）。"""
+    hist = history_baseline_symbols(ref)
+    hist_any = hist["any"]
+    return {
+        "ref": ref,
+        "hist_files": hist["files"],
+        "hist_def_path": hist["def_path"],
+        "hist_def": hist["def"],
+        "hist_snapshot": hist["snapshot"],
+        "snapshot_rows": hist["snapshot_rows"],
+        "hist_headers": hist["headers"],
+        "hist_any": hist_any,
+        "gen_total": len(gen_symbols),
+        "hist_total": len(hist_any),
+        "only_gen": sorted(gen_symbols - hist_any),
+        "only_hist": sorted(hist_any - gen_symbols),
+        "common": sorted(gen_symbols & hist_any),
+    }
+
+
+_VCVARS_CACHE: dict | None = None
+
+
+def msvc_env() -> dict | None:
+    """取得可编译 C++ 的环境（INCLUDE/LIB/PATH）。
+
+    cl.exe 直接调用会报 `fatal error C1034: windows.h: no include path set`，
+    因为缺少 INCLUDE；这里通过 vcvars64.bat 导出环境并缓存（进程内只做一次）。
+    与 verify.py 同样的做法，避免"历史模式"因环境缺失静默退化成 0 个符号。
+    """
+    global _VCVARS_CACHE
+    if _VCVARS_CACHE is not None:
+        return _VCVARS_CACHE
+    vcvars = (r"C:\Program Files\Microsoft Visual Studio\2022\Community"
+              r"\VC\Auxiliary\Build\vcvars64.bat")
+    if not os.path.isfile(vcvars):
+        return None
+    # 写一个临时 .bat 再执行：内联 `cmd /c "call ... && set"` 在 subprocess 的
+    # list 形式下会被 list2cmdline 重新加引号，导致 cmd 解析失败（实测无输出）。
+    bat = os.path.join(REPO, r".local\audit\_vcvars_env.bat")
+    os.makedirs(os.path.dirname(bat), exist_ok=True)
+    try:
+        with open(bat, "w", encoding="ascii", errors="replace") as fh:
+            fh.write('@echo off\r\ncall "%s" >nul 2>&1\r\nset\r\n' % vcvars)
+        p = subprocess.run(["cmd", "/c", bat], capture_output=True, text=True,
+                           errors="replace", timeout=180)
+    except Exception:  # noqa: BLE001
+        return None
+    if "INCLUDE=" not in (p.stdout or "").upper():
+        return None
+    env = dict(os.environ)
+    for line in p.stdout.splitlines():
+        if "=" in line:
+            k, v = line.split("=", 1)
+            env[k.strip()] = v.strip()
+    _VCVARS_CACHE = env
+    return env
+
+
+def compiled_generated_symbols(src_dir: str) -> set[str]:
+    """编译 DirectUI/src 的 stub，返回其**已定义**的修饰名集合。
+
+    这是历史模式里"生成器侧"的权威口径：直接看编译器真正产出的修饰名，
+    而不是从源码文本猜测（文本正则会把注释/字符串里的片段也算进去）。
+    编译不可用时返回空集，由调用方降级到文本口径。
+    """
+    srcs = []
+    d = os.path.join(src_dir, "src")
+    if os.path.isdir(d):
+        for f in sorted(os.listdir(d)):
+            if f.lower().endswith(".cpp"):
+                srcs.append(os.path.join(d, f))
+    if not srcs:
+        return set()
+    cl = CL
+    if not os.path.isfile(cl):
+        return set()
+    env = msvc_env() or None
+    if env is None:
+        print("[WARN] 未能取得 MSVC 环境（vcvars64.bat），历史模式降级为文本口径")
+        return set()
+    objdir = os.path.join(REPO, r".local\build\verify-scratch\hist-obj")
+    os.makedirs(objdir, exist_ok=True)
+    out: set[str] = set()
+    for src in srcs:
+        obj = os.path.join(objdir, os.path.splitext(os.path.basename(src))[0] + ".obj")
+        if os.path.isfile(obj):
+            try:
+                os.remove(obj)
+            except OSError:
+                pass
+        cmd = [cl, "/nologo", "/c", "/EHsc", "/std:c++17", "/D_AMD64_",
+               "/DUNICODE", "/D_UNICODE", "/I" + os.path.join(src_dir, "include"),
+               "/Fo" + obj, src]
+        p = subprocess.run(cmd, capture_output=True, text=True,
+                           errors="replace", env=env)
+        if p.returncode == 0 and os.path.isfile(obj):
+            out |= obj_defined_symbols(obj)
+    return out
+
+
+def obj_defined_symbols(obj_path: str) -> set[str]:
+    """dumpbin /symbols -> 该 .obj **已定义**的 External 符号名。"""
+    try:
+        out = run([DUMPBIN, "/symbols", obj_path])
+    except Exception:  # noqa: BLE001
+        return set()
+    syms: set[str] = set()
+    for line in out.splitlines():
+        if "|" not in line:
+            continue
+        m = re.match(r"^\s*[0-9A-Fa-f]+\s+([0-9A-Fa-f]{8})\s+(\S+)\s+(.*)$", line)
+        if not m:
+            continue
+        sect, rest = m.group(2), m.group(3)
+        name = rest.rsplit("|", 1)[1].strip()
+        if not name:
+            continue
+        name = name.split(" (", 1)[0].strip()
+        if not name or "External" not in rest or sect.upper() == "UNDEF":
+            continue
+        if not is_junk(name):
+            syms.add(name)
+    return syms
+
+
+def load_generated_symbols(src_dir: str) -> dict[str, set[str]]:
+    """从生成 stub 源/头文件抽取修饰名（不编译的降级口径）。
+
+    返回 {'src': set, 'inc': set, 'any': set}。
+    """
+    pat = re.compile(r"\?[?$A-Za-z0-9_@]+")
+    src_syms: set[str] = set()
+    inc_syms: set[str] = set()
+    for root, bucket in ((os.path.join(src_dir, "src"), src_syms),
+                         (os.path.join(src_dir, "include"), inc_syms)):
+        if not os.path.isdir(root):
+            continue
+        for dp, _dirs, files in os.walk(root):
+            for f in files:
+                if not f.lower().endswith((".cpp", ".h")):
+                    continue
+                try:
+                    txt = open(os.path.join(dp, f), encoding="utf-8",
+                               errors="replace").read()
+                except OSError:
+                    continue
+                for m in pat.finditer(txt):
+                    bucket.add(m.group(0))
+    return {"src": src_syms, "inc": inc_syms, "any": src_syms | inc_syms}
 
 
 # ---------------------------------------------------------------- 符号提取
@@ -572,6 +843,171 @@ def write_md(s: dict, rows: list[dict], symbols_path: str, symbols_meta: dict | 
         fh.write("\n".join(L) + "\n")
 
 
+# ---------------------------------------------------------------- 历史模式
+
+
+def run_history_mode(args) -> int:
+    """生成物 vs git 历史基线（契约 v2 第 116 行指定的历史对照）。"""
+    if not git_available():
+        print("[FATAL] git 不可用或 ref %r 不存在 —— 历史模式无法执行" % args.ref)
+        return 2
+
+    text_gen = load_generated_symbols(args.src)
+    # 权威口径：编译 stub，取编译器真正产出的修饰名。
+    compiled = compiled_generated_symbols(args.src)
+    compile_ok = bool(compiled)
+    gen_src = compiled if compile_ok else text_gen["src"]
+
+    if not text_gen["any"] and not compiled:
+        print("[FATAL] 生成物目录 %s 下未找到任何修饰名" % args.src)
+        return 2
+
+    cmps = {
+        "compiled-src" if compile_ok else "text-src":
+            compare_against_history(gen_src, args.ref),
+        "text-src+include": compare_against_history(text_gen["any"], args.ref),
+    }
+    c = list(cmps.values())[0]
+
+    # 逐符号对照表（生成物侧）
+    rows = []
+    for m in sorted(text_gen["any"]):
+        rows.append({
+            "mangled": m,
+            "in_gen_compiled": "yes" if m in compiled else "no",
+            "in_gen_src_text": "yes" if m in text_gen["src"] else "no",
+            "in_gen_include": "yes" if m in text_gen["inc"] else "no",
+            "in_hist_def": "yes" if m in c["hist_def"] else "no",
+            "in_hist_snapshot": "yes" if m in c["hist_snapshot"] else "no",
+            "history_status": "common" if m in c["hist_any"] else "new_in_generator",
+        })
+    for m in c["only_hist"]:
+        rows.append({
+            "mangled": m,
+            "in_gen_compiled": "no", "in_gen_src_text": "no", "in_gen_include": "no",
+            "in_hist_def": "yes" if m in c["hist_def"] else "no",
+            "in_hist_snapshot": "yes" if m in c["hist_snapshot"] else "no",
+            "history_status": "only_in_history",
+        })
+
+    hist_csv = os.path.splitext(args.history_md)[0] + ".csv"
+    with open(hist_csv, "w", encoding="utf-8", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=["mangled", "in_gen_compiled",
+                                           "in_gen_src_text", "in_gen_include",
+                                           "in_hist_def", "in_hist_snapshot",
+                                           "history_status"])
+        w.writeheader()
+        w.writerows(rows)
+
+    L: list[str] = []
+    A = L.append
+    A("# 生成物 vs git 历史基线（baseline_diff.py --history）")
+    A("")
+    A("生成时间（UTC）：%s" % time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
+    A("执行者：verifier（独立验证者）")
+    A("")
+    A("## 为什么是「历史模式」")
+    A("")
+    A("契约 v2 第 116 行判了 `baseline_status` 死刑，手写基线退役；"
+      "v1 的 oracle 载体 `x64\\Debug\\Dui\\dui70.dll` **被 .gitignore 忽略**"
+      "（`.gitignore:18 [Xx]64/`），随时可能消失、不可长期复现。"
+      "因此本脚本降级为**历史工具**：读 git 历史里的手写基线，"
+      "输出「生成物 vs 历史基线」的并集/差集对照。")
+    A("")
+    A("## 实测：为什么必须补一份冻结快照")
+    A("")
+    A("本想「纯 git 历史」重建基线符号集，实测**行不通**，两个数据源都不够：")
+    A("")
+    A("| 来源 | 实测内容 | 为什么不够 |")
+    A("|---|---|---|")
+    A("| `master:DirectUI/DirectUI.def` | **51 个未修饰 C 名**（InitProcessPriv 等 legacy 入口）"
+      "| 只是 legacy 入口清单，不是完整导出集 |")
+    A("| `master:DirectUI/*.h`（101 个）| 源码级声明，**不含修饰名** |"
+      "`?Foo@Bar@@` 在头文件里不存在，文本正则无从匹配 |")
+    A("")
+    A("故历史符号集 = 历史 .def（权威 C 名）∪ **冻结快照** "
+      "`.local/audit/baseline-diff.csv`（%d 行；Lead 明确认可）。"
+      "该 CSV 是 v1 时期基线 LIB/DLL 的逐符号落盘，也是基线二进制消失后"
+      "唯一幸存的完整记录。" % c["snapshot_rows"])
+    A("")
+    A("生成器侧则**编译** stub 取编译器真正产出的修饰名（`in_gen_compiled`），"
+      "文本抽取仅作降级备用 —— 正则会把注释/字符串里的片段也算进去。")
+    A("")
+    A("## 数据源")
+    A("")
+    A("| 项 | 值 |")
+    A("|---|---|")
+    A("| git ref | `%s` |" % c["ref"])
+    A("| 历史基线目录 | `%s/`（%d 个文件）|" % (GIT_BASELINE_DIR, c["hist_files"]))
+    A("| 历史 .def | `%s` |" % (c["hist_def_path"] or "<未找到>"))
+    A("| 历史 .def 符号数 | %d |" % len(c["hist_def"]))
+    A("| 冻结快照符号数 | %d（来自 %d 行）|"
+      % (len(c["hist_snapshot"]), c["snapshot_rows"]))
+    A("| 历史符号合计（去重）| %d |" % c["hist_total"])
+    A("| 生成物符号（%s）| %d |"
+      % ("编译口径" if compile_ok else "文本口径（编译不可用，已降级）", c["gen_total"]))
+    A("| 交集 | %d |" % len(c["common"]))
+    A("")
+    A("## 差集")
+    A("")
+    A("| 方向 | 数量 | 含义 |")
+    A("|---|---|---|")
+    A("| 仅生成物有（new_in_generator） | %d | 历史基线没有、生成器新产出的符号 |"
+      % len(c["only_gen"]))
+    A("| 仅历史有（only_in_history） | %d | 历史声明过、生成物未覆盖（含历史内部符号）|"
+      % len(c["only_hist"]))
+    A("")
+    A("### src-only vs src+include 口径")
+    A("")
+    A("| 口径 | 生成物符号数 | 仅生成物有 | 仅历史有 |")
+    A("|---|---|---|---|")
+    for k, v in cmps.items():
+        A("| %s | %d | %d | %d |" % (k, v["gen_total"], len(v["only_gen"]),
+                                      len(v["only_hist"])))
+    A("")
+    A("> 说明：`include` 里含大量仅用于**消费者侧**的接口声明（Interfaces.h 等），"
+      "它们本就不该出现在导出集合里；因此 `src` 口径更接近「导出的符号」，"
+      "`src+include` 口径更接近「声明过的符号」。两者都报，不做取舍。")
+    A("")
+    A("## 仅生成物有（前 40）")
+    A("")
+    A("```")
+    for m in c["only_gen"][:40]:
+        A(m)
+    if len(c["only_gen"]) > 40:
+        A("... 共 %d 条" % len(c["only_gen"]))
+    A("```")
+    A("")
+    A("## 仅历史有（前 40）")
+    A("")
+    A("```")
+    for m in c["only_hist"][:40]:
+        A(m)
+    if len(c["only_hist"]) > 40:
+        A("... 共 %d 条" % len(c["only_hist"]))
+    A("```")
+    A("")
+    A("## 复现方式")
+    A("")
+    A("```")
+    A("%s %s --history --ref %s" % (PYTHON, os.path.abspath(__file__), args.ref))
+    A("```")
+    A("")
+    os.makedirs(os.path.dirname(os.path.abspath(args.history_md)), exist_ok=True)
+    with open(args.history_md, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(L) + "\n")
+
+    print("ref            = %s" % c["ref"])
+    print("hist files     = %d  (def: %s)" % (c["hist_files"], c["hist_def_path"]))
+    print("gen symbols    = %d   hist symbols = %d   common = %d"
+          % (c["gen_total"], c["hist_total"], len(c["common"])))
+    print("only-generator = %d" % len(c["only_gen"]))
+    print("only-history   = %d" % len(c["only_hist"]))
+    print("wrote          %s" % hist_csv)
+    print("wrote          %s" % args.history_md)
+    return 0
+
+
 # ---------------------------------------------------------------- main
 
 
@@ -583,9 +1019,29 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--symbols", default=DEF_SYMBOLS)
     ap.add_argument("--csv", default=DEF_CSV)
     ap.add_argument("--md", default=DEF_MD)
+    ap.add_argument("--history", action="store_true",
+                    help="历史模式（契约 v2）：生成物 vs **git 历史手写基线**，"
+                         "不依赖 x64\\Debug\\Dui（该目录被 .gitignore 忽略）")
+    ap.add_argument("--ref", default=GIT_BASELINE_REF,
+                    help="历史模式使用的 git ref（默认 master）")
+    ap.add_argument("--pinned", default=os.path.join(REPO, "pinned"),
+                    help="契约输入目录（与 verify.py 同参数名；历史模式下用于定位快照）")
+    ap.add_argument("--out", default=os.path.join(REPO, "DirectUI"),
+                    help="生成物目录（与 verify.py 同参数名）")
+    ap.add_argument("--src", default=None,
+                    help="历史模式：生成物目录（默认取 --out）")
+    ap.add_argument("--history-md", default=os.path.join(
+        REPO, r".local\audit\baseline-history.md"),
+        help="历史模式报告输出路径")
     ap.add_argument("--self-test", action="store_true",
                     help="只断言 oracle == 3198，非 0 退出表示复现失败")
     args = ap.parse_args(argv)
+
+    # 与 verify.py 对齐：--out 是生成物目录的规范参数名
+    if args.src is None:
+        args.src = args.out
+    if args.history:
+        return run_history_mode(args)
 
     real = load_real(args.real)
     baseline_lib = dumpbin_lib_symbols(args.lib)

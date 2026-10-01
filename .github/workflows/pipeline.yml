@@ -1,0 +1,62 @@
+# CI: golden regeneration + ABI verification + smoke test
+#
+# golden (ubuntu, seconds)  — regen from pinned/, must be byte-identical to the
+#                             committed DirectUI/ tree. Generator changes MUST
+#                             ship with their golden diff in the same PR.
+# abi   (windows, minutes)  — rebuild import lib from the .def, compile the
+#                             stub TUs, assert decorated-name fidelity vs def.
+# smoke (windows, minutes)  — full pipeline: build UITest against the generated
+#                             library, run it, assert the DirectUI window is
+#                             created against the system dui70.dll.
+name: pipeline
+
+on:
+  push:
+    branches: [master, feat/*]
+  pull_request:
+
+jobs:
+  golden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Regenerate DirectUI/ from pinned/
+        run: python tools/dui-pipeline/regen.py
+      - name: Golden diff (empty = pass)
+        run: |
+          git add -N DirectUI
+          git diff --exit-code DirectUI/
+          echo "golden: DirectUI/ is in sync with pinned/"
+
+  abi:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Locate MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Rebuild import library from def
+        run: |
+          lib.exe /def:DirectUI\dui70.def /machine:x64 /out:$env:RUNNER_TEMP\dui70.lib
+          dumpbin /linkermember:1 $env:RUNNER_TEMP\dui70.lib | Out-File -Encoding utf8 $env:RUNNER_TEMP\lib-members.txt
+          python tools\dui-pipeline\verify.py --assertion A3 --lib $env:RUNNER_TEMP\dui70.lib
+      - name: Stub compile + modname fidelity
+        run: python tools\dui-pipeline\verify_codegen.py --pinned pinned --src DirectUI\src --inc DirectUI\include
+
+  smoke:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: vcpkg dependencies (detours)
+        run: vcpkg install detours:x64-windows
+      - name: Run end-to-end pipeline
+        run: pwsh -File tools\dui-pipeline\run.ps1
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}\vcpkg

@@ -9,13 +9,13 @@
 param(
     [string]$Lib,
     [string]$OutDir,
-    [string]$IncludeDir,   # generated headers dir; default .local/build/generated/include
+    [string]$IncludeDir,   # generated headers dir; default DirectUI\include (golden tree)
     [switch]$X86
 )
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 
-if (-not $IncludeDir) { $IncludeDir = Join-Path $repo '.local\build\generated\include' }
+if (-not $IncludeDir) { $IncludeDir = Join-Path $repo 'DirectUI\include' }
 
 $arch = if ($X86) { 'x86' } else { 'x64' }
 $hostArch = 'Hostx64'

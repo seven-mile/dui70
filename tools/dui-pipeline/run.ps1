@@ -1,19 +1,24 @@
-# dui-pipeline orchestrator: one command to reproduce the whole spine.
+# dui-pipeline orchestrator: one command from pinned inputs to a verified window.
 #
-#   1. emit_def.py      -> .local/build/dui70-full.def     (4321 exports from real dui70.dll)
-#   2. lib.exe /def     -> .local/build/lib/dui70.lib      (plain-name import library, final)
-#   3. codegen          -> .local/build/generated/         (12-class headers + stubs, modname-faithful)
-#   4. gen_uitest_proj  -> .local/build/acceptance-x64/UITest.exe
+# Default mode (pinned -> golden -> build -> run):
+#   1. regen.py        -> DirectUI/            (def + include + src, from pinned/)
+#   2. lib.exe /def    -> .local/build/lib/dui70.lib
+#   3. verify_codegen  -> modname fidelity     (stub TUs vs pinned exports)
+#   4. gen_uitest_proj -> .local/build/acceptance-x64/UITest.exe
 #   5. run + assert window title == 'Microsoft DirectUI Test' (real system dui70.dll)
 #
-# Legacy C entry points (InitProcessPriv etc.) need NO shim: the generated
-# headers declare them extern "C", so the exe imports the plain names the
-# real DLL exports directly.
+# Refresh mode (-RefreshPin; needs MSVC + dumpbin + llvm tools + the exact pinned
+# DLL/PDB by sha256): re-derives pinned/ from the system DLL, then continues.
 #
-# Usage:  pwsh -File tools\dui-pipeline\run.ps1 [-SkipRun] [-SkipCodegen] [-X86]
+# Legacy C entry points (InitProcessPriv etc.) need NO shim: generated headers
+# declare them extern "C", matching the real DLL's export form.
+#
+# Usage:
+#   pwsh -File tools\dui-pipeline\run.ps1 [-SkipRun] [-SkipCodegen] [-RefreshPin] [-X86]
 param(
     [switch]$SkipRun,
     [switch]$SkipCodegen,
+    [switch]$RefreshPin,
     [switch]$X86
 )
 $ErrorActionPreference = 'Stop'
@@ -23,40 +28,45 @@ $vcRoot = 'C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC
 $vcBin  = "$vcRoot\bin\Hostx64\x64"
 $py     = 'C:\Users\7mile\AppData\Local\Programs\Python\Python311\python.exe'
 $build  = Join-Path $repo '.local\build'
+$pinned = Join-Path $repo 'pinned'
 New-Item -ItemType Directory -Force -Path $build, "$build\lib" | Out-Null
 
-# --- steps 1+2: def + import library ----------------------------------------
-Write-Host "==> [1/5] emit .def from real dui70.dll exports" -ForegroundColor Cyan
-& $py (Join-Path $PSScriptRoot 'emit_def.py') --out (Join-Path $build 'dui70-full.def')
-if ($LASTEXITCODE -ne 0) { throw "emit_def failed" }
+# --- step 0 (optional): refresh pinned from the system DLL -------------------
+if ($RefreshPin) {
+    Write-Host "==> [0] refresh pinned/ from system dui70.dll (sha256-verified)" -ForegroundColor Magenta
+    & $py (Join-Path $PSScriptRoot 'extract.py') --pinned $pinned
+    if ($LASTEXITCODE -ne 0) { throw "extract.py failed" }
+    & $py (Join-Path $PSScriptRoot 'model.py') --pinned $pinned
+    if ($LASTEXITCODE -ne 0) { throw "model.py failed" }
+}
 
-Write-Host "==> [2/5] lib.exe import library (final: dui70.lib)" -ForegroundColor Cyan
+# --- step 1: regenerate the golden tree --------------------------------------
+if (-not $SkipCodegen) {
+    Write-Host "==> [1/5] regen DirectUI/ from pinned/" -ForegroundColor Cyan
+    & $py (Join-Path $PSScriptRoot 'regen.py') 2>&1 | Select-Object -Last 4
+    if ($LASTEXITCODE -ne 0) { throw "regen failed" }
+}
+
+# --- step 2: import library from the golden def ------------------------------
+Write-Host "==> [2/5] lib.exe import library from DirectUI\dui70.def" -ForegroundColor Cyan
 Remove-Item (Join-Path $build 'lib\dui70.lib') -Force -ErrorAction SilentlyContinue
-& "$vcBin\lib.exe" /nologo /def:"$build\dui70-full.def" /machine:x64 `
+& "$vcBin\lib.exe" /nologo /def:"$repo\DirectUI\dui70.def" /machine:x64 `
     /out:"$build\lib\dui70.lib" | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "lib.exe failed" }
 
-# --- step 3: codegen (headers + stubs + self-verification) ------------------
+# --- step 3: modname fidelity ------------------------------------------------
 if (-not $SkipCodegen) {
-    Write-Host "==> [3/5] codegen: 12-class headers + stubs (modname fidelity)" -ForegroundColor Cyan
-    & $py (Join-Path $PSScriptRoot 'emit_headers.py') --classes ('
-        Value,DUIXmlParser,Element,HWNDElement,NativeHWNDHost,TouchButton,Edit,' +
-        'Button,Progress,PushButton,TouchCheckBox,XProvider' -replace '\s','') 2>&1 |
-        Select-Object -Last 4
-    if ($LASTEXITCODE -ne 0) { throw "emit_headers failed" }
-    & $py (Join-Path $PSScriptRoot 'emit_stub.py') 2>&1 | Select-Object -Last 4
-    if ($LASTEXITCODE -ne 0) { throw "emit_stub failed" }
-    # codegen's own verification harness (compiles stubs, compares modnames vs real exports)
+    Write-Host "==> [3/5] verify_codegen: stub modnames vs pinned exports" -ForegroundColor Cyan
     & $py (Join-Path $PSScriptRoot 'verify_codegen.py') 2>&1 | Select-Object -Last 8
     if ($LASTEXITCODE -ne 0) { throw "verify_codegen failed" }
 }
 
-# --- step 4: build acceptance exe -------------------------------------------
+# --- step 4: build acceptance exe --------------------------------------------
 Write-Host "==> [4/5] build UITest against generated dui70.lib" -ForegroundColor Cyan
 & pwsh -NoProfile -File (Join-Path $PSScriptRoot 'gen_uitest_proj.ps1') -Lib "$build\lib\dui70.lib"
 if ($LASTEXITCODE -ne 0) { throw "gen_uitest_proj failed" }
 
-# --- step 5: run + assert ---------------------------------------------------
+# --- step 5: run + assert ----------------------------------------------------
 if ($SkipRun) { Write-Host "==> [5/5] skipped (-SkipRun)"; return }
 Write-Host "==> [5/5] run acceptance exe, assert window" -ForegroundColor Cyan
 $exe = Join-Path $build 'acceptance-x64\UITest.exe'

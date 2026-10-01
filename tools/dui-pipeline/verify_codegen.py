@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-verify_codegen.py -- self-verification harness for the codegen module.
+verify_codegen.py -- self-verification harness for the codegen module (schema v2).
 
 Builds every generated stub TU with cl.exe (/std:c++20 /Zc:wchar_t- /c /EHsc),
-extracts the decorated names via dumpbin /symbols, and diffs them against the
-real dui70.dll export set (.local/cache/real-x64-norm.txt).
+extracts the decorated names via dumpbin /symbols, and diffs them against
+the real dui70.dll export set (pinned/exports.json).
 
-Reports, per target class:
-  * how many of the class's REAL exports the stub .obj reproduces exactly
-  * the subset that must match: baseline_status == 'identical' (target: 100%)
-  * failures with the closest real symbol for diagnosis
+Per contract v2 the target set is: every EXPORTED symbol of the target
+classes (the old baseline_status=identical distinction is retired with the
+hand-written baseline).
+
+Also asserts extern "C" purity: no obj may contain a C++-decorated name
+for the plain C API exports.
 
 This is an internal self-check tool of the codegen module; the pipeline-level
 verifier (verifier/verify.py) re-checks independently.
@@ -34,18 +36,10 @@ SDKINC = Path(r"C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0")
 CL = VCBIN / "cl.exe"
 DUMPBIN = VCBIN / "dumpbin.exe"
 
-DEFAULT_SYMBOLS = REPO / ".local" / "build" / "symbols.json"
-DEFAULT_REAL = REPO / ".local" / "cache" / "real-x64-norm.txt"
-DEFAULT_SRC = REPO / ".local" / "build" / "generated" / "src"
-DEFAULT_INC = REPO / ".local" / "build" / "generated" / "include"
-DEFAULT_OBJ = REPO / ".local" / "build" / "generated" / "obj"
-
-TARGET_CLASSES = ["Value", "DUIXmlParser", "Element", "HWNDElement",
-                  "NativeHWNDHost", "TouchButton", "Edit"]
-MIGRATION_CLASSES = TARGET_CLASSES + ["Button", "Progress", "PushButton",
-                                      "TouchCheckBox", "XProvider"]
-
-CALLABLE_KINDS = {"method", "static_method", "ctor", "dtor", "operator"}
+DEFAULT_PINNED = REPO / "pinned"
+DEFAULT_SRC = REPO / "DirectUI" / "src"
+DEFAULT_INC = REPO / "DirectUI" / "include"
+DEFAULT_OBJ = REPO / ".local" / "build" / "verify-obj"
 
 
 def run(cmd: list, **kw) -> subprocess.CompletedProcess:
@@ -78,26 +72,35 @@ def obj_symbols(obj: Path) -> set[str]:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--symbols", type=Path, default=DEFAULT_SYMBOLS)
-    ap.add_argument("--real", type=Path, default=DEFAULT_REAL)
+    ap.add_argument("--pinned", type=Path, default=DEFAULT_PINNED)
     ap.add_argument("--src", type=Path, default=DEFAULT_SRC)
     ap.add_argument("--inc", type=Path, default=DEFAULT_INC)
     ap.add_argument("--objdir", type=Path, default=DEFAULT_OBJ)
-    ap.add_argument("--classes", default=",".join(MIGRATION_CLASSES))
+    ap.add_argument("--classes", default=None,
+                    help="override the class list from classes.json (comma-separated)")
     ap.add_argument("--report", type=Path, default=None)
     args = ap.parse_args(argv)
 
-    classes = [c for c in args.classes.split(",") if c]
-    real = set(x.strip() for x in args.real.read_text(encoding="utf-8").splitlines() if x.strip())
-    syms = json.loads(args.symbols.read_text(encoding="utf-8"))["symbols"]
+    # class list from pinned/classes.json
+    classes = json.loads((args.pinned / "classes.json").read_text(encoding="utf-8"))["classes"]
+    if args.classes:
+        classes = [c.strip() for c in args.classes.split(",") if c.strip()]
+
+    # real export set from pinned/exports.json (schema v2: name field)
+    exports = json.loads((args.pinned / "exports.json").read_text(encoding="utf-8"))
+    real = {e["name"] for e in exports["exports"]}
 
     report = []
-    total_id_match = total_id = 0
+    total_match = total = 0
     all_ok = True
 
     for cls in classes:
         # compile
         src = args.src / f"{cls}.cpp"
+        if not src.exists():
+            report.append(f"## {cls}: MISSING TU {src}")
+            all_ok = False
+            continue
         rc, out = compile_tu(src, args.objdir, args.inc)
         if rc != 0:
             report.append(f"## {cls}: COMPILE FAILED (rc={rc})")
@@ -108,39 +111,27 @@ def main(argv=None) -> int:
             continue
         got = obj_symbols(args.objdir / f"{cls}.obj")
 
-        # expected symbol groups for this class
-        cls_syms = [s for s in syms
-                    if s.get("class") == cls and s.get("namespace") == "DirectUI"]
-        identical = [s for s in cls_syms
-                     if s.get("baseline_status") == "identical"
-                     and s.get("is_exported")]
-        # identical symbols of any kind except true function templates (??$)
-        id_targets = [s["mangled"] for s in identical
-                      if not s["mangled"].startswith("??$")]
-        id_match = [m for m in id_targets if m in got]
+        # target set: ALL real exports of this class (contract v2 semantics)
+        cls_real = {n for n in real if f"@{cls}@DirectUI@@" in n}
+        cls_match = cls_real & got
 
-        # all real exports of this class
-        cls_real = {m for m in real if f"@{cls}@DirectUI@@" in m}
-        cls_real_match = cls_real & got
-
-        n_id, n_idm = len(id_targets), len(id_match)
-        total_id += n_id
-        total_id_match += n_idm
-        status = "OK" if n_idm == n_id else "FAIL"
-        if n_idm != n_id:
+        n, nm = len(cls_real), len(cls_match)
+        total += n
+        total_match += nm
+        status = "OK" if nm == n else "FAIL"
+        if nm != n:
             all_ok = False
         report.append(
-            f"## {cls}: identical-export match {n_idm}/{n_id} [{status}]"
-            f" | real-class-exports reproduced {len(cls_real_match)}/{len(cls_real)}"
+            f"## {cls}: real-export match {nm}/{n} [{status}]"
         )
-        if n_idm != n_id:
-            report.append("### missing identical symbols:")
-            for m in sorted(set(id_targets) - got):
+        if nm != n:
+            report.append("### missing real exports:")
+            for m in sorted(cls_real - got):
                 report.append(f"  - {m}")
 
-    pct = 100.0 * total_id_match / total_id if total_id else 0.0
+    pct = 100.0 * total_match / total if total else 0.0
     summary = (
-        f"TOTAL identical-export match: {total_id_match}/{total_id} "
+        f"TOTAL real-export match: {total_match}/{total} "
         f"({pct:.2f}%)  {'**100% ACHIEVED**' if pct == 100 else '**NOT 100%**'}"
     )
 

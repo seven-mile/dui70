@@ -36,8 +36,31 @@ BUILD = os.path.join(REPO, ".local", "build")
 AUDIT = os.path.join(REPO, ".local", "audit")
 HEADERS_DIR = os.path.join(REPO, "DirectUI")
 MSDEF = os.path.join(REPO, "DirectUI", "msdef.txt")
+# msdef.txt 在 dd1fd41 被删除（"retire hand-written DirectUI project"），
+# 但它是 4 个类的唯一来源（NavReference / LinkedListNode / ACCESSIBLEROLE / UID）。
+# 缓存副本 + git 历史兜底，使 class 发现不再依赖已退役的手写树。
+MSDEF_CACHE = os.path.join(AUDIT.replace("audit", "cache"), "msdef-x64.txt")
 CLASS_INVENTORY = os.path.join(AUDIT, "class-inventory-26200.csv")
 LEAD_MISSING_CSV = os.path.join(AUDIT, "missing-exports-26200.csv")
+PINNED_DIR = os.path.join(REPO, "pinned")
+
+# 契约 1.4: 目标类清单 + 继承表（轴 B 成本显式化）。改此表 = 改生成范围。
+CLASSES_V2 = {
+    "schema_version": 2,
+    "classes": ["Value", "DUIXmlParser", "Element", "HWNDElement", "NativeHWNDHost",
+                "TouchButton", "Edit", "Button", "Progress", "PushButton",
+                "TouchCheckBox", "XProvider"],
+    "inheritance": {
+        "HWNDElement": "Element",
+        "Edit": "Element",
+        "TouchButton": "Element",
+        "Button": "Element",
+        "Progress": "Element",
+        "PushButton": "Button",
+        "TouchCheckBox": "TouchButton",
+        "XProvider": "IXProvider",
+    },
+}
 
 BASELINE_DLL = os.path.join(REPO, "x64", "Debug", "Dui", "dui70.dll")
 BASELINE_LIB = os.path.join(REPO, "x64", "Debug", "Dui", "dui70.lib")
@@ -746,18 +769,22 @@ def load_namespaces():
 
 
 def load_msdef_classes():
-    """从 msdef.txt 抓类名。
+    """从 msdef 抓类名。
 
-    坑: 天真的 `(\\w+)::` 会把命名空间 DirectUI 也当成类
+    坑 1: 天真的 `(\\w+)::` 会把命名空间 DirectUI 也当成类
     （"DirectUI::Element::Foo()" 的第一个匹配是 "DirectUI"），
     从而把 `DirectUI::FreeFunc()` 这类自由函数误判成 class="DirectUI" 的成员。
     这里只认"紧邻 '(' 或 '`vftable' 的那一段"，即真正的 Scope::Member 结构。
+
+    坑 2: 直接 isfile(MSDEF) 判断会因 dd1fd41 删掉 DirectUI/msdef.txt 而静默返回空集，
+    导致 4 个类（NavReference/LinkedListNode/ACCESSIBLEROLE/UID）+ 一批类名丢失。
+    统一走 load_msdef_text() 的多级回退。
     """
     classes = set()
-    if not os.path.isfile(MSDEF):
+    text = load_msdef_text()
+    if not text:
         return classes
-    with open(MSDEF, encoding="utf-8", errors="replace") as f:
-        for ln in f:
+    for ln in text.splitlines():
             # Scope::Member(  ->  Scope 的最后一段是类
             for m in re.finditer(r"([A-Za-z_]\w*)\s*::\s*(?:~\w+|operator\S*|[A-Za-z_]\w*)\s*\(", ln):
                 classes.add(m.group(1))
@@ -786,14 +813,34 @@ def load_header_text():
 
 
 def load_msdef_text():
+    """读 msdef（MS 的修饰名定义清单）。
+
+    优先 DirectUI/msdef.txt；已被删除时退回 .local/cache/msdef-x64.txt；
+    再不行从 git 历史取（只读操作，不改工作区）。
+    """
     if os.path.isfile(MSDEF):
         with open(MSDEF, encoding="utf-8", errors="replace") as f:
             return f.read()
+    if os.path.isfile(MSDEF_CACHE):
+        with open(MSDEF_CACHE, encoding="utf-8", errors="replace") as f:
+            return f.read()
+    try:
+        p = subprocess.run(["git", "show", "dd1fd41~1:DirectUI/msdef.txt"],
+                           cwd=REPO, capture_output=True, timeout=60)
+        if p.returncode == 0:
+            return (p.stdout or b"").decode("utf-8", errors="replace")
+    except (OSError, subprocess.SubprocessError):
+        pass
     return ""
 
 
 def discover_classes(und, header_text, msdef_text):
-    """从 ctor/dtor/vftable 的 scope 里自举类名（scope 的最后一段）。"""
+    """从 ctor/dtor/vftable 的 scope 里自举类名（scope 的最后一段）。
+
+    注: 这里的自举只是兜底（msdef 才是主来源）。它对无命名空间的类
+    （如 UID::UID）取不到正确的末段，但那种情况下 msdef 已经能提供，
+    因此保持保守实现，避免把命名空间误升为类。
+    """
     known = set(load_class_inventory())
     known |= load_msdef_classes()
     for m in re.finditer(r"\b(?:class|struct)\s+([A-Za-z_]\w*)(?!\s*::)", header_text):
@@ -807,6 +854,11 @@ def discover_classes(und, header_text, msdef_text):
         s = re.sub(r"^(class|struct|const)\s+", "", s)
         if "::" in s:
             scope = s.split("(", 1)[0]
+            # 无命名空间的类（如 "public: __cdecl UID::UID(...)"）会把调用约定
+            # 粘进 scope（"__cdecl UID"），导致 UID 从未被登记。剥掉最后一个
+            # 调用约定记号之前的所有内容。
+            scope = re.sub(r"^.*?\b__(?:cdecl|stdcall|thiscall|fastcall|vectorcall)\s+",
+                           "", scope)
             scope = re.sub(r"\s*::\s*(`vftable'|~?\w+)$", "", scope)
             scope = scope.strip()
             if scope:
@@ -994,7 +1046,21 @@ def build(args):
         }
         symbols.append(sym)
 
-    # ---------------- classes 汇总 ----------------
+    # ---------------- v2 瘦身投影（契约 1.3） ----------------
+    # 只留 11 个字段。与 v1 的差别:
+    #   - 键**显式存在**（值可为 null），不做 sparse 省略 —— 契约示例与
+    #     verifier A1 的"字段完整性"断言都要求字段齐全
+    #   - kind 保留原值（含 "template"）；见 meta 里对 1.3 枚举遗漏的说明
+    V2_FIELDS = ("mangled", "kind", "class", "member", "is_exported", "is_virtual",
+                 "is_static", "is_const", "return_type", "params", "rva")
+    v2_symbols = []
+    for s in symbols:
+        v2 = {}
+        for f in V2_FIELDS:
+            v2[f] = s.get(f)
+        v2_symbols.append(v2)
+
+    # ---------------- classes 汇总（v1 审计用, 不写进 v2） ----------------
     by_class = collections.OrderedDict()
     for s in symbols:
         if not s["class"]:
@@ -1076,9 +1142,35 @@ def build(args):
         json.dump(doc, f, ensure_ascii=False, indent=1)
         f.write("\n")
 
+    # ---------------- v2 pinned/symbols.json（契约 1.3） ----------------
+    pinned_report = None
+    if getattr(args, "pinned", None):
+        pin_dir = args.pinned
+        ensure_dir(pin_dir)
+        out_v2 = os.path.join(pin_dir, "symbols.json")
+        with open(out_v2, "w", encoding="utf-8") as f:
+            json.dump({"schema_version": 2, "symbols": v2_symbols},
+                      f, ensure_ascii=False, indent=1)
+            f.write("\n")
+        # classes.json（契约 1.4）—— 12 类 + 8 条继承边
+        cpath = os.path.join(pin_dir, "classes.json")
+        with open(cpath, "w", encoding="utf-8") as f:
+            json.dump(CLASSES_V2, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        pinned_report = {
+            "out": out_v2,
+            "classes_out": cpath,
+            "symbols": len(v2_symbols),
+            "size_bytes": os.path.getsize(out_v2),
+            "classes_size_bytes": os.path.getsize(cpath),
+            "v2_fields": list(V2_FIELDS),
+        }
+
     # ---------------- 自证 ----------------
     report = self_check(doc, src, eff_baseline, dll_b, lib_b,
                         alias_normalize(raw_baseline, exp_by_name)[1])
+    if pinned_report is not None:
+        report["pinned_v2"] = pinned_report
     print(json.dumps(report, ensure_ascii=False, indent=2))
     return doc, report
 
@@ -1226,9 +1318,14 @@ def self_check(doc, src, eff_baseline, dll_b, lib_b, aliased):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(description="dui-pipeline symbols: exports.json -> symbols.json")
+    ap = argparse.ArgumentParser(
+        description="dui-pipeline symbols: exports.json -> symbols.json (v1 全量 / v2 瘦身)")
     ap.add_argument("--exports", default=os.path.join(BUILD, "exports.json"))
-    ap.add_argument("--out", default=os.path.join(BUILD, "symbols.json"))
+    ap.add_argument("--out", default=os.path.join(BUILD, "symbols.json"),
+                    help="v1 全量输出（自证用）")
+    ap.add_argument("--pinned", nargs="?", const=PINNED_DIR, default=None,
+                    help="同时产 pinned/symbols.json + pinned/classes.json（schema v2）；"
+                         "不带值时用仓库根 pinned/")
     ap.add_argument("--self-check", action="store_true", default=True)
     args = ap.parse_args(argv)
     build(args)

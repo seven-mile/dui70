@@ -1,4 +1,4 @@
-# CI: golden regeneration + structural/ABI gates + smoke test
+# CI: golden regeneration + structural/ABI gates + smoke test + pinned repro
 #
 # The gates themselves live in tools/dui-pipeline/ci.ps1 (see CI.md). This
 # workflow only chooses WHICH gates each runner can afford:
@@ -11,12 +11,23 @@
 # smoke  (windows, minutes) — end-to-end: build UITest against the generated
 #                             library, run it, assert the DirectUI window is
 #                             created against the system dui70.dll.
+# repro  (windows, minutes) — re-derive pinned/ from the two msdl artefacts named
+#                             by manifest.dll.source_url + manifest.pdb.source_url
+#                             and assert BYTE-identity (no tolerated differences).
+#                             Windows runner because extract.py's file_version()
+#                             uses the Win32 version API (ctypes.windll), and
+#                             because dumpbin is needed. DLL and PDB are kept in
+#                             separate directories on purpose: dumpbin changes its
+#                             output when a matching PDB sits beside the DLL.
 name: pipeline
 
 on:
   push:
     branches: [master, feat/*]
   pull_request:
+  # stage-2 repro is network-dependent (msdl); allow a manual run so it can be
+  # exercised without pushing, and re-run if msdl is briefly unavailable.
+  workflow_dispatch:
 
 jobs:
   golden:
@@ -69,3 +80,58 @@ jobs:
         run: pwsh -File tools\dui-pipeline\run.ps1
         env:
           VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+
+  # Stage 2: prove the committed pinned/ is reproducible from the published
+  # binary, not hand-edited. Downloads via manifest.dll.source_url, hard-asserts
+  # sha256, re-derives pinned/ in an isolated dir through the pure export-table
+  # path (msdl serves no dui70.pdb, so the publics half cannot be rebuilt), then
+  # closes with the golden gate.
+  repro:
+    runs-on: windows-latest
+    # Deliberately NOT on `push`. This gate downloads ~1.7 MB from msdl and takes
+    # minutes, and a push to feat/* usually also has an open PR, so running on
+    # both would duplicate it. pull_request is the review gate; workflow_dispatch
+    # allows a manual re-run (e.g. msdl was briefly unavailable).
+    if: github.event_name != 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # dumpbin for the export table, and MSVC's undname.exe lands on PATH too --
+      # which model.py would WRONGLY accept. repro.py resolves llvm-undname by
+      # probing its output format, so the MSVC tool can never slip through.
+      # MSVC is needed for dumpbin (extract.py). repro.py additionally probes the
+      # undname path by OUTPUT FORMAT, because msvc-dev-cmd puts MSVC's undname.exe
+      # on PATH and that tool silently corrupts model.py's whole output.
+      - name: Locate MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      # The runner image ships LLVM (llvm-pdbutil, for reading PDB publics) but
+      # does not always PATH it; repro.py also probes the well-known LLVM roots and
+      # mingw-style trees. Note the official Windows LLVM build has NO
+      # llvm-undname.exe, so do not assume this step finds one.
+      - name: Locate LLVM (pdbutil/undname)
+        shell: pwsh
+        run: |
+          $added = @()
+          foreach ($llvm in @('C:\Program Files\LLVM\bin', 'C:\Program Files (x86)\LLVM\bin')) {
+            if (Test-Path (Join-Path $llvm 'llvm-pdbutil.exe')) {
+              Add-Content -Path $env:GITHUB_PATH -Value $llvm
+              $added += $llvm
+            }
+          }
+          if ($added.Count -eq 0) {
+            Write-Host 'LLVM not at the default roots; repro.py will search further'
+          } else {
+            Write-Host ("added to PATH: " + ($added -join '; '))
+          }
+      - name: Re-derive pinned/ from msdl and assert (R1+R2+R3)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/repro.ps1
+      # Closing gate: the re-derived tree must still satisfy the fast golden
+      # gates, so a repro "pass" can never be a locally-broken workspace.
+      - name: Golden gates (G1+G2)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1 -GoldenOnly

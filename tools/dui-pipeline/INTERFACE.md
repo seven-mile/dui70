@@ -38,17 +38,21 @@ pinned/
   "dll": {
     "name": "dui70.dll",
     "arch": "x64",
-    "file_version": "10.0.26100.8875",
+    "file_version": "10.0.26100.9278",
     "size": 1732608,
     "sha256": "2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC0ACAD9AA556",
-    "obtain_hint": "local C:\\Windows\\System32\\dui70.dll on Win11 26100; verify sha256 before refreshing"
+    "source_url": "https://msdl.microsoft.com/download/symbols/dui70.dll/3D7534841aa000/dui70.dll",
+    "msdl_slot": "3D7534841aa000",
+    "obtain_hint": "msdl 只需 source_url；本地 Win11 26100 为 C:\\Windows\\System32\\dui70.dll（注意 System32 路径的 file_version 查询会被 WRP 服务元数据回答，见 CI.md §7.5）；刷新前必须校验 sha256"
   },
   "pdb": {
     "guid": "F1920C0E-D3DE-254F-E969-E8E8CC4435CE",
     "age": 1,
     "size": 1912832,
     "sha256": "198608E557573D8242A50C2313CAF3DD95323053FB99CEFDB08BB3C5E014033F",
-    "source_url": "https://msdl.microsoft.com/download/symbols/dui70.pdb/F1920C0E-D3DE-254F-E969-E8E8CC4435CE 1/dui70.pdb"
+    "source_url": "https://msdl.microsoft.com/download/symbols/dui70.pdb/F1920C0ED3DE254FE969E8E8CC4435CE1/dui70.pdb",
+    "msdl_slot": "F1920C0ED3DE254FE969E8E8CC4435CE1",
+    "obtain_hint": "msdl 只需 source_url（槽位 = GUID 去连字符直接拼 age）；这份 PDB 的 publics 是 symbols.json 能达到 11983 行的输入"
   },
   "toolchain": {
     "dumpbin": "14.44.35228 (VS2022 17.14)",
@@ -159,11 +163,16 @@ DirectUI/
 
 ## 4. CI（GitHub Actions）
 
-| job | runner | 耗时 | 断言 |
+四个 job（详见 `CI.md` §8；门禁实现全部委托给 `ci.ps1` / `repro.ps1`）：
+
+| job | runner | 触发 | 断言 |
 |---|---|---|---|
-| golden | ubuntu | 秒级 | regen.py 后 `git diff --exit-code DirectUI/`；diff 直接贴 PR |
-| abi | windows-latest | 分钟级 | lib.exe /def 重建、stub 编译、modname 保真、lib 符号覆盖 4321 |
-| smoke | windows-latest | 分钟级 | run.ps1 全流程，窗口标题 + SYSTEM32 断言 |
+| golden | ubuntu | push / PR | `ci.ps1 -GoldenOnly`：G1 pinned 完整性 + G2 regen 逐字节可复现 |
+| abi | windows-latest | push / PR | `ci.ps1` 全量：G3/G4/G5（双向类相等、modname/extern-C 保真、头文件编译） |
+| smoke | windows-latest | push / PR | `run.ps1` 全流程，窗口标题 + SYSTEM32 断言 |
+| repro | windows-latest | PR / 手动 | `repro.ps1`：从 msdl 重下 DLL+PDB → 重推 pinned/ → **逐字节**比对（R1/R2/R3） |
+
+`repro` 故意**不**在 push 上跑：它联网且耗时，开着 PR 的 push 会重复触发。
 
 顺序纪律：任何验证前必须 regen → lib.exe → 重链 exe（陈旧产物会假 PASS，
 verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝对路径。
@@ -187,3 +196,29 @@ verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝
 4. 一个 commit 同时含 pinned + golden → review 看到的 diff 就是
    "这次 Windows 更新对 ABI 意味着什么"（新增类/签名变化全部可见）
 ```
+
+**刷新约束**：
+
+- **PDB 与 DLL 一样可从公共符号服务器复现**。msdl 上 dui70 的 PDB（含历史版本）
+  都能取到，前提是用**规范地址形态**：
+  ```
+  https://msdl.microsoft.com/download/symbols/<name>.pdb/<GUID 去连字符><age>/<name>.pdb
+  ```
+  槽位是 GUID 去掉连字符后**直接拼接** age（中间没有分隔符、没有空格）。
+  换版刷新因此可以走**全量 publics 路径**：`extract.py --pdb-publics`
+  （配合 `llvm-pdbutil dump -publics`）→ `model.py`，`exports.json` 与
+  `symbols.json` 都能 byte 级重建（当前 4321 + 11983 条）。
+- **刷新铁则：DLL 与 PDB 必须放在不同目录**。`dumpbin /exports` 在 DLL 旁存在
+  同名 PDB 时会改变输出——追加 ` = <mangled>` 注解，而 `parse_dumpbin_exports`
+  会把这些注解行的名字错配到 ordinal 上（实测 707 条错位）。pinned 是在**无注解**
+  形态下建立的，所以 PDB 与 DLL 同目录必然导致 `exports.json` 不一致。
+  `repro.py` 的下载层已按分目录实现，并有断言守住这个前提。（注解行解析错位
+  本身是已知边界，修它属于流水线核心改动，尚未处理。）
+- PDB 走 msdl 时必须同样做 **sha256 硬断言**：`manifest.pdb` 记录
+  `sha256`/`size`/`guid`/`age`，repro 会现算 RSDS 槽位并与 `source_url` 交叉核对。
+- 附带事实：WIN10 时代构建（1507/1607/2004）的 CODEVIEW 调试目录中
+  AddressOfRawData ≠ PointerToRawData，pe_info 按 RVA 语义取址（历史 bug 已修，
+  详见 git log）；26100/28000 两字段恰好相等是当年侥幸工作的原因。
+
+**另见**：`manifest.dll.file_version` 的口径（FixedFileInfo vs System32 路径的
+WRP 服务元数据）、repro 门禁的断言层次与负向测试，见 `CI.md` §7。

@@ -2,21 +2,25 @@
   "dll": {
     "name": "dui70.dll",
     "arch": "x64",
-    "file_version": "10.0.26100.8875",
+    "file_version": "10.0.26100.9278",
     "size": 1732608,
     "sha256": "2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC0ACAD9AA556",
-    "obtain_hint": "local C:\\Windows\\System32\\dui70.dll on Win11 26100; verify sha256 before refreshing"
+    "source_url": "https://msdl.microsoft.com/download/symbols/dui70.dll/3D7534841aa000/dui70.dll",
+    "msdl_slot": "3D7534841aa000",
+    "obtain_hint": "msdl (see source_url); verify sha256 before refreshing. Locally it also exists as C:\\Windows\\System32\\dui70.dll on Win11 26100, but that path reports a WRP servicing version (10.0.26100.8875) instead of the file's own FixedFileInfo (10.0.26100.9278)."
   },
   "pdb": {
     "guid": "F1920C0E-D3DE-254F-E969-E8E8CC4435CE",
     "age": 1,
     "size": 1912832,
     "sha256": "198608E557573D8242A50C2313CAF3DD95323053FB99CEFDB08BB3C5E014033F",
-    "source_url": "https://msdl.microsoft.com/download/symbols/dui70.pdb/F1920C0E-D3DE-254F-E969-E8E8CC4435CE 1/dui70.pdb"
+    "source_url": "https://msdl.microsoft.com/download/symbols/DUI70.pdb/F1920C0ED3DE254FE969E8E8CC4435CE1/DUI70.pdb",
+    "msdl_slot": "F1920C0ED3DE254FE969E8E8CC4435CE1",
+    "obtain_hint": "msdl (see source_url); verify sha256 before refreshing. The slot is '<GUID without hyphens><age>' -- hyphenated or space-separated forms are not valid symbol-server paths and 404. Publics from this PDB are what make the rebuilt symbols.json complete (11983 rows)."
   },
   "toolchain": {
     "dumpbin": "14.44.35228 (VS2022 17.14)",
     "note": "undname output is read-only consumption; version differences should not affect pinned content"
   },
-  "pinned_utc": "2026-10-01T00:00:00Z"
+  "pinned_utc": "2026-10-01T23:24:01Z"
 }

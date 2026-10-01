@@ -48,8 +48,9 @@ PINNED_DIR = os.path.join(REPO, "pinned")
 # pinned/ 是冻结输入：类名普查 CSV 与 exports/symbols/classes 同住于此
 CLASS_INVENTORY = os.path.join(PINNED_DIR, "class-inventory.csv")
 
-# 契约 1.4: 目标类清单 + 继承表（轴 B 成本显式化）。改此表 = 改生成范围。
-CLASSES = {
+# 契约 1.4: 引导种子（仅在 pinned/classes.json 缺失时使用；已存在 = 冻结输入，不覆盖）。
+# 改此表 = 改生成范围 —— 现在的正确途径是直接编辑 pinned/classes.json（195 类）。
+SEED_CLASSES = {
     "classes": ["Value", "DUIXmlParser", "Element", "HWNDElement", "NativeHWNDHost",
                 "TouchButton", "Edit", "Button", "Progress", "PushButton",
                 "TouchCheckBox", "XProvider"],
@@ -857,14 +858,36 @@ def build(args):
     with open(out_sym, "w", encoding="utf-8") as f:
         json.dump({"symbols": symbols}, f, ensure_ascii=False, indent=1)
         f.write("\n")
-    # classes.json（契约 1.4）—— 12 类 + 8 条继承边
+    # classes.json（契约 1.4）—— 生成范围的真实来源。
+    # 历史教训（2026-10-02 事故）：这里曾经无条件写死 12 类旧列表，把已提交的
+    # 195 类 classes.json 打回 12 类（run.ps1 任何一次执行都会触发）。
+    # 现在的语义：classes.json 是 pinned/ 冻结输入，model.py 只在文件缺失时
+    # 才用 SEED_CLASSES 引导初始版本；已存在时绝不覆盖。
     cpath = os.path.join(pin_dir, "classes.json")
-    with open(cpath, "w", encoding="utf-8") as f:
-        json.dump(CLASSES, f, ensure_ascii=False, indent=2)
-        f.write("\n")
+    if os.path.exists(cpath):
+        try:
+            with open(cpath, encoding="utf-8") as f:
+                existing = json.load(f)
+            if not (isinstance(existing, dict)
+                    and isinstance(existing.get("classes"), list)
+                    and isinstance(existing.get("inheritance"), dict)):
+                raise ValueError("classes.json 形状不对（缺 classes/inheritance）")
+        except (ValueError, OSError) as exc:
+            sys.exit("refusing to overwrite pinned/classes.json: %s\n"
+                     "（pinned/ 是冻结输入；如确要重建，请先手动移走该文件）" % exc)
+        with open(cpath, encoding="utf-8") as f:
+            final_classes = json.load(f)
+        report_classes_note = "kept existing pinned/classes.json (frozen input)"
+    else:
+        final_classes = SEED_CLASSES
+        with open(cpath, "w", encoding="utf-8") as f:
+            json.dump(SEED_CLASSES, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        report_classes_note = "bootstrapped classes.json from SEED_CLASSES (12-class seed)"
     pinned_report = {
         "out": out_sym,
         "classes_out": cpath,
+        "classes_note": report_classes_note,
         "symbols": len(symbols),
         "size_bytes": os.path.getsize(out_sym),
         "classes_size_bytes": os.path.getsize(cpath),

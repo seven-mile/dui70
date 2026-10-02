@@ -65,6 +65,12 @@ jobs:
       # library. Kept as its own gate because it validates the .def through
       # lib.exe/dumpbin rather than through the generated sources.
       - name: Import library from def (A3)
+        # verify.py prints CJK diagnostics; the runner's default console encoding is
+        # cp1252, which raises UnicodeEncodeError and fails the step for a reason
+        # unrelated to the assertion. ci.ps1 sets PYTHONUTF8 only inside its own
+        # process, so it does not reach this step -- set it here (env, not code).
+        env:
+          PYTHONUTF8: "1"
         run: |
           lib.exe /def:DirectUI\dui70.def /machine:x64 /out:$env:RUNNER_TEMP\dui70.lib
           dumpbin /linkermember:1 $env:RUNNER_TEMP\dui70.lib | Out-File -Encoding utf8 $env:RUNNER_TEMP\lib-members.txt
@@ -74,8 +80,13 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: vcpkg dependencies (detours)
-        run: vcpkg install detours:x64-windows
+      # The smoke build compiles UITest.cpp with cl.exe directly (run.ps1 calls
+      # gen_uitest_proj.ps1, which does not read UITest.vcxproj). The project's wil
+      # dependency is a NuGet restore path that .gitignore excludes from the repo, so
+      # on a fresh clone wil must come from vcpkg -- into the same installed-tree
+      # include dir that detours already populates.
+      - name: vcpkg dependencies (detours + wil)
+        run: vcpkg install detours:x64-windows wil:x64-windows
       - name: Run end-to-end pipeline
         run: pwsh -File tools\dui-pipeline\run.ps1
         env:

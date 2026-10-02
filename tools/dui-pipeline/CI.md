@@ -244,8 +244,8 @@ git checkout -- DirectUI
 
 **但要注意一个真实的可用性边界**：G2 的前置检查要求工作树干净，而
 `git add -A`（内容无差异，只是刷新 index）和 `git update-index --refresh`
-都**不能**清掉这些 `M`，只有 `git checkout --` 能。因此**在同一工作树里连续
-跑第二次 `ci.ps1` 会被 G2 前置检查拒绝**：
+都**不能**清掉这些 `M`，只有 `git checkout --` 能。因此在**checkout 得到 CRLF
+的工作树**里连续跑第二次 `ci.ps1` 会被 G2 前置检查拒绝：
 
 ```
 GATE G2: FAIL  expected=a clean DirectUI/ + pinned/ working tree before regenerating
@@ -256,6 +256,20 @@ GATE G2: FAIL  expected=a clean DirectUI/ + pinned/ working tree before regenera
 看起来却是干净的）。CI 上每个 job 都在全新 clone 上只跑一次，因此不受影响；
 本地要重跑时先 `git checkout -- DirectUI` 即可。`repro.ps1` 跟着
 `ci.ps1 -GoldenOnly` 跑的组合（正是 repro job 的形态）同理。
+
+在**全新 clone** 上的受控实测（`.local/build/ci-probe/eol-clone-test.ps1`，
+`core.autocrlf=true`）：
+
+| 阶段 | `DirectUI/include/Element.h` | `git status` 条目 | `ci.ps1 -GoldenOnly` |
+|---|---|---|---|
+| clone 后（原始） | CRLF=448, 21506B | 0 | — |
+| 第 1 次运行后 | CRLF=0, 21058B | **382** | **rc=0 全绿**（G2 用规范化 diff 判定，真 PASS） |
+| 第 2 次运行后 | CRLF=0, 21058B | 382 | **rc=1**（G2 前置检查拒绝） |
+| `git checkout -- DirectUI` 后 | CRLF=448, 21506B | 0 | 又可跑了 |
+
+> 注意这个现象取决于工作树的**初始行尾**：长期本地工作树若早被 regen 写成 LF，
+> `git status` 从一开始就是干净的，连跑多次也不会触发（实测如此）。所以它是
+> "全新 clone / checkout 得到 CRLF" 的情形，而不是无条件发生。
 
 ---
 
@@ -336,6 +350,42 @@ pwsh -File tools\dui-pipeline\ci.ps1 -SelfTest
 
 对受控夹具验证篡改/新增/删除/删类四种检测，并确认
 `modname_total` 会随 `classes.json` 变化（证明指标是**推导**的，不是常量）。
+
+### 5.4.1 smoke job 的第三方依赖：detours 与 wil 都来自 vcpkg
+
+`smoke` job 的构建**不经过** `UITest.vcxproj`：`run.ps1` 调
+`gen_uitest_proj.ps1`，后者直接调 `cl.exe`/`link.exe`（见该脚本头部注释）。
+因此 `.vcxproj` 里的 NuGet 引用对 CI **不生效**：
+
+- `UITest.vcxproj:179` 用 `packages\Microsoft.Windows.ImplementationLibrary...`
+  （wil）—— 那是 **NuGet restore 的本地目录**，被 `.gitignore` 的
+  `**/packages/*` 排除，**从未进过仓库**。所以任何全新 clone / CI 上都不存在，
+  这正是曾在 runner 上 `UITest.cpp(6): fatal error C1083: Cannot open include
+  file: 'wil/common.h'` 的根因（不是 wil 缺失，而是"以为 NuGet 会补上"）。
+- detours 则由 workflow 的 `vcpkg install detours:x64-windows` 提供。
+
+**修法**：`vcpkg install detours:x64-windows wil:x64-windows`。wil 与 detours
+落在同一个 `installed\x64-windows\include`，而该目录本来就在 `INCLUDE` 上，
+所以不需要改 include 逻辑、更不需要 `vcpkg.json` manifest 模式
+（manifest 模式要求走 vcpkg 的 MSBuild/CMake 集成，而这里是手写 `cl` 调用，
+manifest 根本不会被读）。
+
+`gen_uitest_proj.ps1` 侧只加了最小防御：`INCLUDE` 只收**实际存在**的目录
+（本地 NuGet 路径在 CI 上不存在时不再作为死路径挂着），并在两处来源都没有
+`wil\common.h` 时给出可操作的报错。
+
+本地受控验证（把 `packages/` 改名藏起来、用 vcpkg 形状的目录树冒充
+`installed\x64-windows`，即 CI 的真实形态）：`cl` 编译通过 →
+`UITest.exe` 产出 → 运行后窗口标题 `Microsoft DirectUI Test` 且
+`dui70.dll` 来自 `C:\WINDOWS\SYSTEM32\`。
+
+### 5.4.2 A3 步骤的 stdout 编码
+
+`verify.py` 会打印中文诊断，而 runner 默认控制台编码是 cp1252 → 该步骤
+`UnicodeEncodeError: 'charmap' codec can't encode characters`（**与断言无关**，
+是输出编码问题）。`ci.ps1` 只在**自己进程内**设 `PYTHONUTF8`，不会传递到
+Actions 的下一个 step，所以在 workflow 的 A3 step 上显式加 `PYTHONUTF8: "1"`。
+这是 env 层修复，`verify.py` 本身未改动。
 
 ### 5.5 repro 的负向测试：15 项，全部通过
 
@@ -525,7 +575,7 @@ manifest 是"这份 binary 的指纹契约"，每个字段都应能从**字节**
 |---|---|---|
 | `golden` | ubuntu | `ci.ps1 -GoldenOnly`（G1+G2，秒级） |
 | `abi` | windows | `ci.ps1` 全量（G1–G5+GB），另加 `verify.py --assertion A3` 的 import-lib 门禁 |
-| `smoke` | windows | `run.ps1` 端到端（建窗断言，需要 detours） |
+| `smoke` | windows | `run.ps1` 端到端（建窗断言，需要 vcpkg 的 detours + wil，见 §5.4.1） |
 | `repro` | windows | `repro.ps1`（R1–R3，联网），收尾再跑 `ci.ps1 -GoldenOnly` |
 
 `abi` job 保留了原有的 `lib.exe /def` + `dumpbin` + `verify.py A3` 步骤 ——
@@ -551,7 +601,7 @@ manifest 的 `dll.source_url` / `pdb.source_url` 是**唯一**的 URL 出处，w
 | `tools/dui-pipeline/repro.py` | repro 断言（R1 重下 DLL+PDB / R2 重推导 / R3 全量逐字节） |
 | `tools/dui-pipeline/pinned.sha256` | `pinned/` 的 sha256 清单（LF 规范化） |
 | `tools/dui-pipeline/CI.md` | 本文 |
-| `.github/workflows/pipeline.yml` | 四个 job 委托到 `ci.ps1` / `repro.ps1` |
+| `.github/workflows/pipeline.yml` | 四个 job 委托到 `ci.ps1` / `repro.ps1`（smoke 的第三方依赖见 §5.4.1，A3 的编码见 §5.4.2） |
 
 CI 自身**不写** `pinned/` 或 `DirectUI/`；唯一会写的文件是
 `pinned.sha256`（仅显式 `hash --write`）与 `.local/` 下的临时产物

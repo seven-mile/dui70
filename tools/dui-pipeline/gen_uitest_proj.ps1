@@ -70,10 +70,21 @@ $vcBin = Join-Path $VcRoot "bin\$hostArch\$targetArch"
 $sdkInc = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\Include\$SdkVersion"
 $sdkLib = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\Lib\$SdkVersion"
 $sdkBin = Join-Path ${env:ProgramFiles(x86)} "Windows Kits\10\bin\$SdkVersion\$targetArch"
+# WIL is consumed from whichever source is present:
+#   * local dev boxes: the NuGet restore dir below (git-ignored, so a fresh clone
+#     does NOT have it -- see .gitignore's '**/packages/*');
+#   * CI: `vcpkg install wil:x64-windows`, which lands wil/ in $detoursInc (the
+#     vcpkg include dir already added to INCLUDE further down).
+# The filter below means an absent NuGet dir is simply not put on the include path.
 $wilInc = Join-Path $repo 'packages\Microsoft.Windows.ImplementationLibrary.1.0.230629.1\include'
 $detoursPkg = if ($X86) { 'x86-windows' } else { 'x64-windows' }
 $detoursInc = Join-Path $VcpkgRoot "installed\$detoursPkg\include"
 $detoursLib = Join-Path $VcpkgRoot "installed\$detoursPkg\lib"
+if (-not (Test-Path (Join-Path $wilInc 'wil\common.h')) -and
+    -not (Test-Path (Join-Path $detoursInc 'wil\common.h'))) {
+    throw ("wil/common.h not found. Install it with 'vcpkg install wil:x64-windows' " +
+           "(CI does this) or restore the NuGet package into packages\.")
+}
 
 if (-not $Lib) { $Lib = Join-Path $repo '.local\build\lib\dui70.lib' }
 if (-not $OutDir) { $OutDir = Join-Path $repo ".local\build\acceptance-$arch" }
@@ -95,7 +106,13 @@ $umLib = Join-Path $sdkLib "um\$targetArch"
 $env:PATH = "$vcBin;$sdkBin;$env:PATH"
 # Order matters: generated headers first, so `..\DirectUI\DirectUI.h` inside
 # UITest.cpp resolves to the GENERATED aggregate (extern-C APIs).
-$env:INCLUDE = @(
+#
+# $wilInc is the git-ignored NuGet restore path, so it is absent on a fresh clone /
+# CI; there, wil comes from vcpkg and sits in $detoursInc alongside detours. Drop
+# directories that do not exist rather than putting dead entries on the include
+# path ($wilInc is guarded above, so at least one of the two really has wil).
+$incDirs = @()
+foreach ($d in @(
     $IncludeDir,
     (Join-Path $vcRoot 'include'),
     (Join-Path $sdkInc 'ucrt'),
@@ -104,7 +121,10 @@ $env:INCLUDE = @(
     (Join-Path $sdkInc 'winrt'),
     $wilInc,
     $detoursInc
-) -join ';'
+)) {
+    if ($d -and (Test-Path -LiteralPath $d)) { $incDirs += $d }
+}
+$env:INCLUDE = $incDirs -join ';'
 $env:LIB = @($vcLib, $ucrtLib, $umLib, $detoursLib) -join ';'
 
 Write-Host "=== building UITest against $Lib ===" -ForegroundColor Cyan

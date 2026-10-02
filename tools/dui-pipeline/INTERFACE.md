@@ -43,8 +43,22 @@ pinned/
   （分类 hint），不会凭空增删导出或改 ABI；若与 `classes.json` 冲突，以
   `classes.json` 为准。它**不是自动生成**的，也没有随 DLL 刷新而重建——它记录的是
   当时那份 build 的观测。
-- 因此它**不参与** `repro.py` 的字节级断言（repro 只看 `exports.json`/`symbols.json`），
-  在 `pinned.sha256` 里有指纹仅代表"冻结不要动"，不代表"可从 msdl 重建"。
+- **它参与 `repro.py` 的 R2→R3 链，只是不作为独立产物被比较**。R2 调 `model.py` 时
+  用 `--inventory` 把 `pinned/class-inventory.csv` 传进去；`model.py` 只读它的
+  `Class` 列作**类名白名单**（`MethodCount` 列明确不读，见 `load_class_inventory`），
+  R2 由此产出的 `symbols.json` 再由 R3 **逐字节**比较（该比较的 docstring 即写
+  "BYTE-IDENTICAL"）。所以它不参与的是"独立比对"，不是"整条断言链"。
+- **改动它可能让 R3 失败**：把行删空或只留一半，实测 `symbols.json` 的字节会变
+  （11983 行不变，但有 15 个类的归属丢失：`BehaviorStore`、`BinaryFile`、`ByteCode`、
+  `CLocalClasses`、`ClassData`、`DUIParsePlayer`、`HandleCache`、`Impl`、`Internal`、
+  `PropNotify`、`PropertyData`、`SinkProvider`、`SmoothDot`、`TouchEditAccessible`、
+  `TouchTooltipTimings`——它们没有任何 ctor/dtor/vftable 可供自举，只能由这张表命名）。
+  反之，只改 `MethodCount` 列**完全不影响**输出（全改 0 / 全改 99999 实测 `symbols.json`
+  逐字节不变），删改可自举的类名（如首行 `AccessibleButton`）同样无影响。
+- 在 `pinned.sha256` 里有指纹（5 个条目之一）表示它是**冻结输入**——改它就必须同步重生成
+  `symbols.json` 并重新冻结，而不是"冻结不要动、可随意忽略"。它仍**不是契约**：
+  契约是 `classes.json`（195 类，人工策展），二者冲突时以 `classes.json` 为准。
+  它也不代表"可从 msdl 重建"：它是当时那份 build 的观测。
 
 ### 1.1 manifest.json
 

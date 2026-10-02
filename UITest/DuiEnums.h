@@ -1,8 +1,28 @@
-// DuiAnim.h -- the animation bit-field accepted by Element::SetAnimation().
+// DuiEnums.h -- the enums dui70 reports through runtime reflection, written out
+// as C++ `enum class`es.
+//
+// This file is organized in sections, one per enum-valued property. `DuiAnim`
+// (the animation bit-field accepted by Element::SetAnimation) is the first
+// section; the remaining enum-valued properties found in the classinfo dumps are
+// meant to be added here as further sections rather than as separate headers. The
+// dumps report 32 enum-valued properties covering 27 distinct value sets; where
+// several properties share one set (for example Width/Height both use
+// `Auto = -1`, and CompositingQuality/InterpolationMode/PixelOffsetMode/
+// SmoothingMode share `default/low/high`), that set is defined once and
+// referenced from each property's comment.
+//
+// Naming: every enum here is `Dui`-prefixed. The generated tree already defines
+// `enum Flags` (dui_abi_types.h) and the dumps have a `[Flags]` property, so an
+// unprefixed name would collide in any TU that includes the generated headers.
+// Check the generated enum names before adding one.
 //
 // ============================================================================
-// WHERE THESE VALUES COME FROM  【实锤】
+// SECTION: Animation  (Element::Animation property)
 // ============================================================================
+//
+// ----------------------------------------------------------------------------
+// Where these values come from  【实锤】
+// ----------------------------------------------------------------------------
 // Not from guessing and not from a symbol dump: dui70 reports this table about
 // itself. Every control's `[Animation]` property carries an `enum_value_map`,
 // and the classinfo dump prints it as a `name : value` list. All 86 dumps that

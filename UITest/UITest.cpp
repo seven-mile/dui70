@@ -8,7 +8,7 @@
 //      output as docs/duixml-classinfo/; HookClassFactoryRegister() below is how
 //      it is regenerated.
 //   3. The animation system: SetAnimation() with a combined bit-field, plus a
-//      hover-driven alpha fade. See UITest/DuiAnim.h for the bit layout.
+//      hover-driven alpha fade. See UITest/DuiEnums.h for the bit layout.
 //
 // Built by tools/dui-pipeline/gen_uitest_proj.ps1 (which does not go through
 // UITest.vcxproj) and asserted by tools/dui-pipeline/run.ps1 step 5: the window
@@ -32,7 +32,7 @@
 
 #include <detours/detours.h>
 
-#include "DuiAnim.h"
+#include "DuiEnums.h"
 
 #pragma comment(lib, "dui70.lib")
 #pragma comment(lib, "comctl32.lib")
@@ -339,7 +339,7 @@ int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   //
   // SetAnimation takes one 32-bit word that ORs together the sub-fields --
   // easing, delay, alpha, target property, scale, reverse, speed. The layout,
-  // and the evidence for each value, live in UITest/DuiAnim.h.
+  // and the evidence for each value, live in UITest/DuiEnums.h.
   // -------------------------------------------------------------------------
   if (!IsAnimationsEnabled())
     EnableAnimations();

@@ -91,12 +91,12 @@ pwsh -File tools/dui-pipeline/run.ps1
   - `DirectUI::Value` 的类型系统是整棵树的地基（教程 02 篇）。
   - `IClassInfo`/`PropertyInfo`/`EnumMap` 构成的**运行期反射**是 dui70 最有价值的
     特性之一——本仓库直接消费它：`docs/duixml-classinfo/` 就是这套反射的 dump，
-    而 `DuiAnim.h` 的动画位域表也来自它（dui70 自报，不是猜的）。
+    而 `DuiEnums.h` 的枚举表也来自它（dui70 自报，不是猜的）。
   - 事件系统只要把 `IElementListener` 的接口对上就能跑；`InputEvent` 覆盖了主要
     交互，普通 `Event` 按消息种类细分。
   - 布局：`BorderLayout` 已足够支撑大部分自适应布局；`gtc`/`gtf` 等 duixml 指令
     实际是 uxtheme 的 API。
-  - 动画：插值方法多但可动画属性少，位域取值见 `UITest/DuiAnim.h`。
+  - 动画：插值方法多但可动画属性少，位域取值见 `UITest/DuiEnums.h`。
   - 自制控件可以自己实现 `IClassInfo` 并重写 `Element` 虚方法，此时既能子类化
     `WndProc`，也能用 `Host` 套娃做 UserControl。
   - 兼容性：dui70 作为随系统 ship 的库（还有 ieui 等 fork），旧接口从版本 8 到

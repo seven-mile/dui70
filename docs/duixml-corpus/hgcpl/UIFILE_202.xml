@@ -1,0 +1,270 @@
+<!--
+  source: %SYSTEMROOT%\System32\hgcpl.dll
+  resource: UIFILE / "202" / lang 1033
+  size: 14296 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+<style resid="ExpandoButton">
+<element foreground="gtc(CONTROLPANELSTYLE,9,0,3803)"/>
+<button cursor="hand"/>
+<clipper visible="false"/>
+<if expanded="true">
+<clipper visible="true"/>
+</if>
+<if id="atom(ExpandedContentArea)">
+<element animation="rectanglev|s|fast"/>
+</if>
+<if id="atom(divider)">
+<element height="1rp" width="5000rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if id="atom(ExpandoButtonImage)">
+<button height="themeable(gtmet(TaskDialog, 13, 0, 2417), '21rp')" width="themeable(gtmet(TaskDialog, 13, 0, 2416), '19rp')" background="themeable(dtb(TaskDialog, 13, 1), dfc(3, 0x0001))"/>
+<if mousefocused="true">
+<button background="themeable(dtb(TaskDialog, 13, 2), dfc(3, 0x0001 | 0x1000))"/>
+</if>
+<if keyfocused="true">
+<button contentalign="focusrect"/>
+</if>
+<if pressed="true">
+<button background="themeable(dtb(TaskDialog, 13, 3), dfc(3, 0x0001 | 0x0200))"/>
+</if>
+<if selected="true">
+<button background="themeable(dtb(TaskDialog, 13, 4), dfc(3, 0x0000))"/>
+<if mousefocused="true">
+<button background="themeable(dtb(TaskDialog, 13, 5), dfc(3, 0x0000 | 0x1000))"/>
+</if>
+<if pressed="true">
+<button background="themeable(dtb(TaskDialog, 13, 6), dfc(3, 0x0000| 0x0200))"/>
+</if>
+</if>
+</if>
+</style>
+</stylesheets>
+<HgCplPage resid="main" id="atom(Advanced)" layout="borderlayout()">
+<Element sheet="cp_style" class="cp_topbox" layoutpos="none" layout="borderlayout()" id="atom(AdvPageContents)">
+<ScrollViewer xscrollable="false" layoutpos="client" sheet="common" id="atom(AdvScrollViewer)">
+<Element layout="borderlayout()" sheet="cp_style" class="cp_spoke_frame">
+<Element layoutpos="top" layout="flowlayout(0,0,2)">
+<Element id="atom(startLinks)" class="cp_content_pane" layoutpos="client" layout="borderlayout()">
+<Element content="resstr(554)" layoutpos="top" padding="rect(0rp,2rp,0rp,0rp)" class="cp_content_instruction"/>
+<Element content="resstr(584)" layoutpos="top" class="cp_content_text" margin="rect(0rp,7rp,0rp,0rp)"/>
+<macro expand="ExpandoArea" id="atom(PrivateProfileArea)" layoutpos="top">
+<bind connect="ExpandoButtonText" content="resstr(615)"/>
+</macro>
+<macro expand="ExpandoArea" id="atom(PublicProfileArea)" layoutpos="top">
+<bind connect="ExpandoButtonText" content="resstr(616)"/>
+</macro>
+<macro expand="ExpandoArea" id="atom(DomainProfileArea)" layoutpos="top">
+<bind connect="ExpandoButtonText" content="resstr(617)"/>
+</macro>
+<macro expand="ExpandoArea" id="atom(AllProfileArea)" layoutpos="top">
+<bind connect="ExpandoButtonText" content="resstr(631)"/>
+</macro>
+</Element>
+</Element>
+</Element>
+</ScrollViewer>
+<element layoutpos="bottom" layout="filllayout()">
+<element sheet="cp_style" class="cp_command_float" layout="borderlayout()">
+<element layoutpos="top" layout="flowlayout(0,0,2)" background="themeable(dtb(TaskDialog, 8, 0), threedface)">
+<element layout="flowLayout(0,0,1)" class="cp_command_button_box">
+<viewer>
+<element layout="flowlayout()">
+<CCPushButton id="atom(ButtonSaveChanges)" layoutpos="right" content="resstr(567)"/>
+<CCPushButton id="atom(ButtonCancel)" layoutpos="right" content="resstr(564)"/>
+</element>
+</viewer>
+</element>
+</element>
+</element>
+</element>
+</Element>
+</HgCplPage>
+<element resid="ExpandoArea" layout="borderlayout()" layoutpos="top" sheet="ExpandoButton">
+<expando id="atom(Expando)" layout="borderlayout()" layoutpos="top" padding="rect(0rp,14rp,0rp,0rp)" selected="false">
+<AccessibleButton id="atom(arrow)" layout="borderlayout()" layoutpos="top" accessible="true" accrole="pushbutton">
+<element id="atom(ExpandoButtonText)" sheet="cp_style" layoutpos="left" class="cp_content_text"/>
+<element layoutpos="client" layout="flowlayout(0,2,0,2)" padding="rect(5rp,5rp,5rp,5rp)">
+<element id="atom(divider)" class="cp_content_divider_line"/>
+</element>
+<element layout="flowlayout(0,2)" layoutpos="right">
+<button id="atom(ExpandoButtonImage)" active="inactive"/>
+</element>
+</AccessibleButton>
+<clipper id="atom(clipper)" layoutpos="client">
+<element id="atom(clipped)" layout="borderlayout()" sheet="cp_style" padding="rect(25rp,0rp,0rp,0rp)">
+<Macro expand="radio_button_setting" id="atom(NetworkDiscoverySetting)" layoutpos="top">
+<bind connect="Title" content="resstr(541)"/>
+<bind connect="Caption" content="resstr(542)"/>
+<bind connect="Button0" content="resstr(543)"/>
+<bind connect="Button0OptionCheckbox" content="resstr(652)"/>
+<bind connect="Button1" content="resstr(544)"/>
+<bind connect="Button2" layoutpos="none"/>
+</Macro>
+<Macro expand="radio_button_setting" id="atom(FileSharingSetting)" layoutpos="top">
+<bind connect="Title" content="resstr(545)"/>
+<bind connect="Caption" content="resstr(546)"/>
+<bind connect="Button0" content="resstr(547)"/>
+<bind connect="Button1" content="resstr(548)"/>
+<bind connect="Button2" layoutpos="none"/>
+</Macro>
+<Macro expand="radio_button_setting" id="atom(PublicFolderSetting)" layoutpos="top">
+<bind connect="Title" content="resstr(549)"/>
+<bind connect="Caption" content="resstr(550)"/>
+<bind connect="Button1" content="resstr(552)"/>
+<bind connect="Button2" content="resstr(553)"/>
+</Macro>
+<element layout="verticalflowlayout(0,0,0,0)" layoutpos="top" margin="rect(0rp,12rp,0rp,0rp)" id="atom(MediaSharingSection)">
+<Macro expand="radio_button_setting" id="atom(MediaSharingSetting)">
+<bind connect="Title" content="resstr(559)"/>
+<bind connect="Caption" content="resstr(560)"/>
+</Macro>
+<element layout="verticalflowlayout(0,0,0,0)" padding="rect(50rp,0rp,0rp,0rp)">
+<element id="atom(MediaSharingStatus)" class="cp_content_text"/>
+<NavigateButton layout="flowlayout()" navigationtargetrelative="ShareMedia">
+<button class="cp_content_link" content="resstr(607)"/>
+</NavigateButton>
+</element>
+</element>
+<Macro expand="radio_button_setting" id="atom(FileSharingMinEncryptionSetting)" layoutpos="top">
+<bind connect="Title" content="resstr(627)"/>
+<bind connect="Caption" content="resstr(628)"/>
+<bind connect="Button0" content="resstr(629)"/>
+<bind connect="Button1" content="resstr(630)"/>
+<bind connect="Button2" layoutpos="none"/>
+</Macro>
+<Macro expand="radio_button_setting" id="atom(HomeGroupRemoteAccessSetting)" layoutpos="none">
+<bind connect="Title" content="resstr(639)"/>
+<bind connect="Caption" content="resstr(640)"/>
+<bind connect="Button0" content="resstr(641)"/>
+<bind connect="Button1" content="resstr(642)"/>
+<bind connect="Button2" layoutpos="none"/>
+</Macro>
+<Macro expand="radio_button_setting" id="atom(PasswordProtectionSetting)" layoutpos="none">
+<bind connect="Title" content="resstr(609)"/>
+<bind connect="Caption" content="resstr(610)"/>
+<bind connect="Button0" content="resstr(611)"/>
+<bind connect="Button1" content="resstr(612)"/>
+<bind connect="Button2" layoutpos="none"/>
+</Macro>
+</element>
+</clipper>
+</expando>
+</element>
+<element resid="radio_button_setting" layout="borderlayout()" margin="rect(0rp,12rp,0rp,0rp)" accessible="true" accrole="cell">
+<element id="atom(TitleBar)" layout="flowlayout(0,2)" layoutpos="top" margin="rect(2rp,15rp,0rp,5rp)" padding="rect(0rp,5rp,0rp,0rp)">
+<element id="atom(Title)" class="cp_content_text" contentalign="endellipsis" accessible="true" accRole="statictext"/>
+<element layoutpos="client" class="cp_content_divider_line" margin="rect(8rp,0rp,5rp,0rp)"/>
+</element>
+<element layout="verticalflowlayout(0,0,0,0)" layoutpos="top" padding="rect(25rp,10rp,5rp,0rp)">
+<CCSysLink id="atom(Caption)" contentalign="wrapleft" enabled="true" active="mouse|keyboard" margin="rect(0rp,0rp,0rp,11rp)"/>
+<selector id="atom(RadioButtons)" accessible="true" layout="verticalflowlayout(0,0,0,0)" padding="rect(25rp,0rp,0rp,0rp)">
+<CCRadioButton id="atom(Button0)" active="inactive" enabled="false"/>
+<element id="atom(Button0OptionArea)" layout="flowlayout()" layoutpos="top" padding="rect(25rp,0rp,0rp,0rp)">
+<CCCheckBox id="atom(Button0OptionCheckbox)"/>
+<CCSysLink id="atom(Button0OptionHelp)" contentalign="wrapleft" enabled="true" active="mouse|keyboard" padding="rect(0rp,0rp,0rp,1rp)"/>
+</element>
+<CCRadioButton id="atom(Button1)" active="inactive" enabled="false"/>
+<element id="atom(Button1OptionArea)" layout="flowlayout()" layoutpos="top" padding="rect(25rp,0rp,0rp,0rp)">
+<CCCheckBox id="atom(Button1OptionCheckbox)"/>
+<CCSysLink id="atom(Button1OptionHelp)" contentalign="wrapleft" enabled="true" active="mouse|keyboard" padding="rect(0rp,0rp,0rp,1rp)"/>
+</element>
+<CCRadioButton id="atom(Button2)" active="inactive" enabled="false"/>
+</selector>
+</element>
+</element>
+</duixml>

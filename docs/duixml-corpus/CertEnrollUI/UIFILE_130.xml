@@ -1,0 +1,1885 @@
+<!--
+  source: %SYSTEMROOT%\System32\CertEnrollUI.dll
+  resource: UIFILE / "130" / lang 1033
+  size: 47171 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<?xml version="1.0"?>
+<duixml>
+<stylesheets>
+<style resid="mainss">
+<if id="atom(checkmark)">
+<button width = "sysmetric(71)"
+height = "sysmetric(72)"
+background = "dtb(button, 3, 1)"/>
+<if mousefocused="true">
+<button background="dtb(button, 3, 2)"/>
+</if>
+<if pressed="true">
+<button background="dtb(button, 3, 3)"/>
+</if>
+<if enabled="false">
+<button background="dtb(button, 3, 4)"/>
+</if>
+<if selected="true">
+<button background="dtb(button, 3, 5)"/>
+<if mousefocused="true">
+<button background="dtb(button, 3, 6)"/>
+</if>
+<if pressed="true">
+<button background="dtb(button, 3, 7)"/>
+</if>
+<if enabled="false">
+<button background="dtb(button, 3, 8)"/>
+</if>
+</if>
+</if>
+<if id="atom(radiomark)">
+<button
+width       = "sysmetric(71)"
+height      = "sysmetric(72)"
+background  = "dtb(button, 2, 1)"
+accessible  = "true"
+accrole     = "radiobutton"
+/>
+<if mousefocused="true">
+<button background="dtb(button, 2, 2)"/>
+</if>
+<if pressed="true">
+<button background="dtb(button, 2, 3)"/>
+</if>
+<if enabled="false">
+<button background="dtb(button, 2, 4)"/>
+</if>
+<if selected="true">
+<button background="dtb(button, 2, 5)"/>
+<if mousefocused="true">
+<button background="dtb(button, 2, 6)"/>
+</if>
+<if pressed="true">
+<button background="dtb(button, 2, 7)"/>
+</if>
+<if enabled="false">
+<button background="dtb(button, 2, 8)"/>
+</if>
+</if>
+</if>
+<if id="atom(arrow)">
+<accessiblebutton contentalign="middlecenter"
+accessible="true" 
+accRole="PushButton"
+accName="resstr(1201)"
+width = "sysmetric(71)"
+height = "sysmetric(72)"
+content="themeable(ARGB(0,0,0,0), resbmp(205))"
+background="themeable(dtb(listview, 8, 1), ARGB(0,0,0,0))"
+/>
+<if keyfocused="true">
+<accessiblebutton contentalign="focusrect | middlecenter"/>
+</if>
+<if mousefocused="true">
+<accessiblebutton
+content="themeable(ARGB(0,0,0,0), resbmp(204))"
+background="themeable(dtb(listview, 8, 2), ARGB(0,0,0,0))"
+/>
+</if>
+<if pressed="true">
+<accessiblebutton
+content="themeable(ARGB(0,0,0,0), resbmp(205))"
+background="themeable(dtb(listview, 8, 3), ARGB(0,0,0,0))"
+/>
+</if>
+<if selected="true">
+<accessiblebutton 
+content="themeable(ARGB(0,0,0,0), resbmp(206))"
+background="themeable(dtb(listview, 9, 1), ARGB(0,0,0,0))"
+/>
+<if mousefocused="true">
+<accessiblebutton 
+content="themeable(ARGB(0,0,0,0), resbmp(207))"
+background="themeable(dtb(listview, 9, 2), ARGB(0,0,0,0))"
+/>
+</if>
+<if pressed="true">
+<accessiblebutton 
+content="themeable(ARGB(0,0,0,0), resbmp(208))"
+background="themeable(dtb(listview, 9, 3), ARGB(0,0,0,0))"
+/>
+</if>
+</if>
+</if>
+<if id="atom(CEPExpando)">
+<if selected="true">
+<expando background="themeable(dtb(listview, 6, 10), Highlight)"
+foreground="themeable(gtc(AeroWizard, 3, 0, 3803), HighlightText)" />
+</if>
+</if>
+<if id="atom(nopolicy)">
+<if selected="true">
+<element background="themeable(dtb(listview, 6, 11), Highlight)"
+foreground="themeable(gtc(AeroWizard, 3, 0, 3803), HighlightText)" />
+</if>
+</if>
+<if id="atom(friendlyname)">
+<element fontsize="16"
+fontweight="bold"
+padding="rect(6rp, 2rp, 6rp, 2rp)"
+borderthickness="rect(0, 0, 0, 1rp)" />
+</if>
+<if id="atom(TemplateExpando)">
+<if expanded="true">
+<expando background="themeable(dtb(listview, 6, 2), ARGB(0,0,0,0))"/>
+</if>
+<if expanded="false">
+<if mousefocused="true">
+<expando background="themeable(dtb(listview, 6, 2), ARGB(0,0,0,0))"/>
+</if>
+</if>
+</if>
+<if id="atom(header)">
+<if expanded="true">
+<expandable background="themeable(dtb(listview, 6, 2), ARGB(0,0,0,0))"/>
+<if mousefocused="true">
+<expandable background="themeable(dtb(listview, 6, 2), ARGB(0,0,0,0))"/>
+</if>
+</if>
+<if expanded="false">
+<expandable background="themeable(dtb(listview, 6, 10), ARGB(0,0,0,0))"/>
+<if mousefocused="true">
+<expandable background="themeable(dtb(listview, 6, 10), ARGB(0,0,0,0))"/>
+</if>
+</if>
+</if>
+<if class="GroupBox">
+<element borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+padding="rect(4rp,4rp,4rp,4rp)"/>
+</if>
+<if class="ListItem">
+<button layoutpos="top"
+accessible="true"
+accRole="ListItem"/>
+<if selected="true">
+<button	background="highlight"
+foreground="highlighttext"/>
+</if>
+<if keyfocused="true">
+<button	contentalign="focusrect"/>
+</if>
+</if>
+<if class="ScrollViewer">
+<CCHScrollBar layoutpos="ninebottom" accessible="true"/>
+<CCVScrollBar layoutpos="nineright" accessible="true"/>
+<viewer layoutpos="nineclient"/>
+<if vertical="false">
+<scrollbar layoutpos="ninebottom"/>
+</if>
+<if vertical="true">
+<scrollbar layoutpos="nineright"/>
+</if>
+</if>
+<if id="atom(ButtonText)">
+<element ContentAlign="WrapLeft"/>
+<if keyfocused="true">
+<element ContentAlign="WrapLeft | focusrect"/>
+</if>
+</if>
+<if id="atom(helplink)">
+<CCSysLink layoutpos="bottom"
+padding="rect(0, 4rp, 0, 0)"
+/>
+</if>
+</style>
+</stylesheets>
+<Button resid="ListItem"
+class="ListItem"
+active="mouse|keyboard"
+sheet="mainss"/>
+<element resid="CheckBoxVisualTree"
+accessible="true"
+layout="borderlayout()"
+accRole="checkbutton">
+<button id="atom(checkmark)"
+layoutpos="left"
+active="inactive"/>
+<element id="atom(ButtonText)"
+layoutpos="left"/>
+</element>
+<element resid="RadioButtonVisualTree"
+accessible="true"
+layout="borderlayout()"
+accRole="radiobutton">
+<button id="atom(radiomark)"
+layoutpos="left"
+active="inactive"/>
+<element id="atom(ButtonText)"
+layoutpos="left"/>
+</element>
+<element resid="CAListItem" 
+sheet="common" 
+layout="borderlayout()" 
+layoutpos="top" 
+margin="rect(0, 0, 4rp, 4rp)" 
+accRole="ListItem" 
+accessible="true">
+<element id="atom(layout)" 
+layout="gridlayout(1, 2)"
+layoutpos="top">
+<CCCheckBox id="atom(CheckBox)"/>
+<element id="atom(CAType)" contentalign="wrapleft"/>
+</element>
+<element id="atom(ErrorText)"
+contentalign="wrapleft"
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1433)" 
+layoutpos="none"/>
+<element id="atom(ErrorDetails)" 
+contentalign="wrapleft"
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1434)"
+layoutpos="none"/>
+</element>
+<element resid="CspListItem" 
+layout="borderlayout()" 
+layoutpos="top" 
+margin="rect(0, 0, 4rp, 4rp)" 
+accRole="ListItem" 
+accessible="true">
+<CCCheckBox id="atom(CheckBox)" 
+layoutpos="top"/>
+<element id="atom(ErrorText)"
+contentalign="wrapleft"
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1433)" 
+layoutpos="none"/>
+<element id="atom(ErrorDetails)" 
+contentalign="wrapleft"
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1434)" 
+layoutpos="none"/>
+</element>
+<Element resid="BigWizard" 
+width="570rp"
+height="276rp"
+/>
+<Element resid="SmallWizard" 
+width="480rp"
+height="260rp"
+/>
+<Element resid="main"
+sheet="common"
+font="IconFont"
+accessible="true"
+Background="themeable(dtb(AeroWizard, 3, 0), threedface)"
+Foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"
+Layout="BorderLayout()">
+<element id="atom(instruction)"
+LayoutPos="top"
+Margin="rect(0, 16rp, 0rp, 16rp)" 
+contentalign="wrapleft"
+accessible="true"
+accRole="StaticText"/>
+<element id="atom(client)"
+layoutpos="client"
+layout="filllayout()">
+</element>
+<CCProgressBar id="atom(ProgressBar)"
+height="12rp" 
+width="100rp" 
+LayoutPos="none" 
+margin="rect(4rp, 4rp, 4rp, 4rp)" 
+accessible="true" 
+accName="resstr(1402)"/>
+<CCSysLink id="atom(helplink)" layoutpos="bottom"/>
+</Element>
+<element resid="ceplist"
+sheet="mainss"
+layout="filllayout()"
+margin="rect(0rp,2rp,0rp,2rp)"
+padding="rect(1rp,1rp,1rp,1rp)"
+background="themeable(dtb(listbox, 4, 3), Window)"
+borderthickness="themeable(rect(0,0,0,0), rect(1rp,1rp,1rp,1rp))"
+bordercolor="threedshadow">
+<ScrollViewer XScrollable="false"
+accessible="true"
+accRole="List"
+background="ARGB(0,0,0,0)">
+<element layout="borderlayout()"
+padding="rect(2rp,2rp,2rp,2rp)">
+<element id="atom(noenrollmentpolicy)"
+layoutpos="top"
+accessible="true"
+accRole="statictext"
+accName="resstr(1503)" 
+fontweight="bold"
+content="resstr(1503)" />
+<element id="atom(enterpriselist)"
+layoutpos="top"
+layout="borderlayout()"
+accessible="true"
+accRole="list"
+accName="resstr(1494)" >
+<element layoutpos="top"
+fontweight="bold"
+content="resstr(1494)" />
+</element>
+<element id="atom(userlist)"
+layoutpos="top"
+layout="borderlayout()"
+accessible="true"
+accRole="list"
+accName="resstr(1495)" >
+<element layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="left"
+fontweight="bold"
+content="resstr(1495)" />
+<accessiblebutton id="atom(addnew)"
+accessible="true" 
+accRole="Link"
+sheet="common"
+class="link"
+accName="resstr(1500)"
+layoutpos="right"
+padding ="rect(0, 0, 5rp, 0)"
+content="resstr(1500)" />
+</element>
+</element>
+<element layoutpos="top"
+layout="borderlayout()">
+<element
+layoutpos="top"
+content="resstr(1502)"
+padding="rect(0rp, 5rp, 0rp, 5rp)"
+fontweight="bold"
+accName="resstr(1502)" />
+<element id="atom(nopolicy)"           
+layoutpos="top"
+content="resstr(1501)"
+padding="rect(8rp, 4rp, 0rp, 5rp)"
+active="mouse|keyboard"
+accessible="true"
+accRole="listitem"
+accName="resstr(1501)" />
+</element>
+</element>
+</ScrollViewer>
+</element>
+<Expando resid="cepitem"
+accessible="true"
+accRole="listitem"
+accName="resstr(1498)"
+sheet="mainss"
+layout="BorderLayout()"
+LayoutPos="Top"
+id="atom(CEPExpando)"
+margin="rect(0, 4rp, 16rp, 4rp)"
+padding="rect(4rp, 0, 4rp, 4rp)"
+active="mouse|keyboard">
+<Expandable layoutpos="top"
+layout="filllayout()"
+background="ARGB(0,0,0,0)"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element id="atom(TextFriendlyName)"
+accessible="true"
+accRole="statictext"
+accName="resstr(1499)"
+contentalign="wrapleft"
+layoutpos="client"/>
+<element layoutpos="right" layout="borderlayout()">
+<accessiblebutton id="atom(arrow)"
+active="mouse"
+layoutpos="top"/>
+</element>
+</element>
+</Expandable>
+<clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+background="argb(0,0,0,0)"
+height="0">
+<element id="atom(clipped)"
+padding="rect(4rp, 0rp, 4rp, 4rp)"
+layout="borderlayout()">
+<element layoutpos="client"
+layout="borderlayout()" >
+<element layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="left"
+padding="rect(16rp, 0rp, 4rp, 0rp)"
+content="resstr(1496)" />
+<element id="atom(TextID)"
+accessible="true"
+accRole="statictext"
+accName="resstr(1496)"
+contentalign="wrapleft"
+layoutpos="left" />
+</element>
+</element>
+<element layoutpos="right"
+layout="borderlayout()">
+<CCPushButton id="atom(properties)"
+accessible="true"
+accRole="PushButton"
+shortcut="auto"
+layoutpos="bottom"
+content="resstr(1206)" />
+</element>
+</element>
+</clipper>
+</Expando>
+<element resid="templatelist"
+layout="borderlayout()"
+padding="rect(4rp,2rp,2rp,2rp)"
+sheet="mainss">
+<element layout="filllayout()"
+layoutpos="client"
+background="themeable(dtb(listbox, 4, 3), Window)"
+borderthickness="themeable(rect(0,0,0,0), rect(1rp,1rp,1rp,1rp))"
+padding="rect(1rp,1rp,1rp,1rp)"
+bordercolor="threedshadow">
+<ScrollViewer XScrollable="false"
+accessible="true"
+accRole="List"
+background="ARGB(0,0,0,0)">
+<element id="atom(list)"
+layout="borderlayout()"/>
+</ScrollViewer>
+</element>
+<CCCheckBox id="atom(ShowAllTemplates)"
+margin="rect(0, 8rp, 0, 0)"
+layoutpos="none"
+content="resstr(1270)"
+accessible="true"/>
+</element>
+<element resid="templategroupheader"
+id="atom(friendlyname)"
+layoutpos="top">
+</element>
+<element resid="failedCEP"
+id="atom(ErrorText)" 
+layoutpos="top"
+contentalign="wrapleft" 
+padding="rect(16rp, 4rp, 4rp, 4rp)" 
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1433)">
+</element>
+<Expando resid="template" 
+accRole="listitem"
+accName="resstr(1247)" 
+sheet="mainss"
+layout="BorderLayout()" 
+LayoutPos="Top" 
+id="atom(TemplateExpando)" 
+margin="rect(0, 4rp, 16rp, 4rp)" 
+padding="rect(4rp, 0, 4rp, 4rp)"
+active="mouse">
+<Expandable layoutpos="top" 
+layout="filllayout()" 
+background="ARGB(0,0,0,0)"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="client"
+layout="gridlayout(1,2)">
+<element id="atom(ButtonHost)" 
+layout="filllayout()"/>
+<element layout="borderlayout()">
+<element id="atom(statusicon)" 
+layoutpos="left"
+contentalign="middlecenter" 
+padding="rect(0,0,2rp,0)"/>
+<element content="resstr(1200)" 
+fontweight="bold" 
+contentalign="middleleft" 
+layoutpos="left"/>
+<element
+layoutpos="left"
+layout="flowlayout(0, 2)"
+>
+<element id="atom(textStatus)" 
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1200)" 
+contentalign="wrapleft"
+/>
+</element>
+</element>
+</element>
+<element 
+layoutpos="right"
+layout="flowlayout(0, 2,2,2)"
+>
+<accessiblebutton id="atom(arrow)"/>
+</element>
+<element id="atom(LabelDetails)" 
+content="resstr(1201)" 
+contentalign="middleleft" 
+layoutpos="right"/>
+</element>
+<element id="atom(ErrorText)" 
+contentalign="wrapleft" 
+padding="rect(16rp, 0, 0, 0)" 
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1433)"/>
+<element id="atom(ErrorDetails)" 
+contentalign="wrapleft" 
+padding="rect(16rp, 0, 0, 0)" 
+accessible="true" 
+accRole="StaticText" 
+accName="resstr(1434)"/>
+<element layoutpos="top" 
+layout="borderlayout()" 
+padding="rect(24rp, 0, 0, 0)">
+<accessiblebutton id="atom(warning)"
+sheet="common" 
+class="link"
+accessible="true" 
+accRole="Link" 
+accName="resstr(1288)" 
+layoutpos="none" 
+layout="flowlayout(0, 2)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<Element id="atom(warningicon)" 
+background="ARGB(0,0,0,0)"
+contentalign="middlecenter"
+margin="rect(0, 0, 4rp, 0)"/>
+<Element content="resstr(1288)" 
+contentalign="wrapleft" 
+background="ARGB(0,0,0,0)"/>
+</accessiblebutton>
+</element>
+</element>
+</Expandable>
+<clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+background="argb(0,0,0,0)"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element id="atom(extensions)"
+layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="left"
+width="sysmetric(71)"/>
+<element layoutpos="top"
+content="resstr(1209)"
+contentalign="wrapleft" 
+margin="rect(4rp, 2rp, 0, 2rp)"/>
+<element layoutpos="top"
+padding="rect(24rp,0,0,0)"
+layout="borderlayout()">
+<element id="atom(KULabel)" content="resstr(1480)" layoutpos="left"/>
+<element id="atom(KU)" 
+accessible="true" 
+accRole="StaticText" 
+layoutpos="client" 
+layout="borderlayout()" 
+accName="resstr(1480)"/>
+</element>
+<element layoutpos="top"
+padding="rect(24rp,0,0,0)"
+layout="borderlayout()">
+<element id="atom(EkuLabel)" content="resstr(1205)" layoutpos="left"/>
+<element id="atom(EKU)" 
+accessible="true" 
+accRole="StaticText" 
+layoutpos="client" 
+layout="borderlayout()" 
+accName="resstr(1205)"/>
+</element>
+<element layoutpos="top"
+padding="rect(24rp,0,0,0)"
+layout="borderlayout()"
+margin="rect(0,4rp,0,0)">
+<element id="atom(ValidityLabel)" content="resstr(1401)" layoutpos="left"/>
+<element id="atom(validity)"
+accessible="true" 
+accRole="StaticText" 
+layoutpos="client" 
+accName="resstr(1401)"/>
+</element>
+</element>
+<element layoutpos="top"
+layout="borderlayout()">
+<PushButton id="atom(EditView)" 
+sheet="common"
+accessible="true" 
+accRole="PushButton"
+shortcut="auto"
+layoutpos="right"/>
+</element>
+</element>
+</clipper>
+</Expando> 
+<Element resid="SelectUser" 
+layout="borderlayout()" 
+font="IconFont"
+margin="rect(0, 24rp, 0, 0)">
+<Element layoutpos="top"
+content="resstr(1435)"/>
+<Element layoutpos="top"
+layout="borderlayout()">
+<Edit id="atom(EditUser)"
+layoutpos="client"
+accessible="true"
+accName="resstr(1435)"/>
+<CCPushButton id="atom(Browse)"
+content="resstr(1436)"
+accessible="true"
+layoutpos="right"/>
+</Element>
+</Element>
+<element resid="UserDetails" 
+accessible="true" 
+sheet="common" 
+layout="borderlayout()" 
+Foreground="windowtext"
+font="IconFont"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1406)" 
+accessible="true" 
+accRole="StaticText"/>
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1416)" 
+margin="rect(0, 8rp, 0, 4rp)"/>
+<element layoutpos="top"
+contentalign="wrapleft"
+content="resstr(1417)"/>
+<element accessible="true" 
+accRole="Grouping" 
+accName="resstr(1202)" 
+layoutpos="top"
+layout="borderlayout()"
+margin="rect(0,8rp,0,0)">
+<element layoutpos="top"
+content="resstr(1202)"/>
+<element layoutpos="top"
+layout="tablelayout(0, 0, 
+3,3, -50,
+2,2, 140,
+3,3,-50)">
+<element class="GroupBox"
+sheet="mainss"
+layout="filllayout()"
+height="100rp"
+margin="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+sheet="common">
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1412)"/>
+<combobox id="atom(ComboBoxSN)" 
+layoutpos="top" 
+accessible="true"
+margin="rect(4rp,4rp,4rp,4rp)"
+accName="resstr(1412)"/>
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1414)"/>
+<Edit id="atom(EditSN)" 
+layoutpos="top" 
+accessible="true" 
+accName="resstr(1414)"/>
+</element>
+</element>
+<element layout="borderlayout()">
+<PushButton id="atom(AddSN)" 
+Enabled="false" 
+layoutpos="top"
+shortcut="auto"
+content="resstr(1476)" 
+accessible="true" 
+accRole="PushButton"/>
+<PushButton id="atom(RemoveSN)" 
+Enabled="false" 
+layoutpos="bottom"
+shortcut="auto"
+content="resstr(1477)" 
+accessible="true" 
+accRole="PushButton"/>
+</element>
+<ScrollViewer accessible="true"
+sheet="mainss"
+borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+accRole="List"
+accName="resstr(1202)"
+height="100rp">
+<selector id="atom(SNListBox)" 
+Layout="BorderLayout()">
+</selector>
+</ScrollViewer>
+</element>
+</element>
+<element accessible="true" 
+accRole="Grouping" 
+accName="resstr(1203)" 
+layoutpos="client"
+layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1203)"/>
+<element layoutpos="client" 
+layout="tablelayout(0,0,3,3,-50,
+2,2, 140,
+3,3,-50)">
+<element class="GroupBox"
+sheet="mainss" 
+layout="filllayout()"
+margin="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+sheet="common">
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1474)"/>
+<combobox id="atom(ComboboxSAN)" 
+layoutpos="top" 
+accessible="true"
+margin="rect(4rp, 4rp, 4rp, 4rp)"
+accName="resstr(1412)"/>
+<element id="atom(TypeIDBlock)"
+layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1413)"/>
+<Edit id="atom(EditSANTypeID)" 
+layoutpos="top" 
+accessible="true"
+accName="resstr(1413)"/>
+</element>
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1475)"/>
+<Edit id="atom(EditSANValue)" 
+layoutpos="top" 
+accessible="true" 
+accName="resstr(1475)"/>
+</element>
+</element>
+<element layout="borderlayout()">
+<PushButton id="atom(AddSAN)" 
+enabled="false" 
+layoutpos="top" 
+shortcut="auto"
+content="resstr(1478)" 
+accessible="true"
+accRole="PushButton"/>
+<PushButton id="atom(RemoveSAN)" 
+enabled="false" 
+layoutpos="bottom" 
+shortcut="auto"
+content="resstr(1479)" 
+accessible="true" 
+accRole="PushButton"/>
+</element>
+<ScrollViewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+accName="resstr(1203)"
+margin="rect(4rp, 4rp, 4rp, 4rp)">
+<selector id="atom(SANListBox)" 
+Layout="BorderLayout()">
+</selector>
+</ScrollViewer>
+</element>
+</element>
+<CCSysLink id="atom(helplink)"
+layoutpos="bottom"
+content="resstr(2001)"
+/>
+</element>
+<element resid="CertDetails" 
+layout="borderlayout()" 
+sheet="common" 
+Foreground="windowtext"
+font="IconFont"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1405)" 
+accessible="true" 
+accRole="StaticText"/>
+<element layoutpos="top"
+content="resstr(1403)"
+shortcut="auto"
+margin="rect(0,8rp,0,4rp)"
+/>
+<edit id="atom(EditName)"
+accessible="true"
+accName="resstr(1403)"
+maxlength="40"
+layoutpos="top"
+/>
+<element layoutpos="top"
+shortcut="auto"
+content="resstr(1404)"
+/>
+<edit id="atom(EditDesc)" 
+accessible="true" 
+accName="resstr(1404)"
+maxlength="255"
+layoutpos="top" 
+/>
+<CCSysLink id="atom(helplink)"
+content="resstr(2000)"
+/>
+</element>
+<element resid="CertExts" 
+sheet="common" 
+layout="borderlayout()" 
+Foreground="windowtext"
+font="IconFont" 
+padding="rect(4rp, 4rp, 4rp, 4rp)" 
+accessible="true" 
+accRole="Grouping">
+<ScrollViewer XScrollable="false" sheet="mainss" layoutpos="client">
+<element layout="borderlayout()" sheet="common">
+<element layoutpos="top"
+contentalign="wrapleft"
+content="resstr(1407)"
+accessible="true"
+accRole="StaticText"/>
+<Expando id="atom(KeyUsage)" 
+expanded="false" 
+layout="BorderLayout()" 
+LayoutPos="Top" 
+margin="rect(0, 16rp, 16rp, 16rp)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+accessible="true"
+accRole="Grouping"
+accName="resstr(1204)"
+active="mouse">
+<Expandable id="atom(header)" 
+sheet="mainss"
+layoutpos="top" 
+layout="filllayout()" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1481)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="true"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1419)"
+margin="rect(0,8rp,0,8rp)"/>
+<element layoutpos="top" 
+layout="tablelayout(0, 0, 
+3,0, -50,
+2,2, 140,
+3,0, -50)">
+<element layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1420)"/>
+<scrollviewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+pinning="pinvert" 
+layoutpos="client" 
+height="160rp" 
+accName="resstr(1420)">
+<Selector id="atom(AvailableKeyUsage)"
+sheet="mainss"
+layout="borderlayout()">
+<button class="ListItem" 
+content="resstr(1228)"/>
+<button class="ListItem" 
+content="resstr(1229)"/>
+<button class="ListItem" 
+content="resstr(1230)"/>
+<button class="ListItem" 
+content="resstr(1231)"/>
+<button class="ListItem"
+content="resstr(1232)"/>
+<button class="ListItem"
+content="resstr(1233)"/>
+<button class="ListItem"
+content="resstr(1234)"/>
+<button class="ListItem"
+content="resstr(1235)"/>
+<button class="ListItem"
+content="resstr(1236)"/>
+</Selector>
+</scrollviewer>
+</element>
+<element layout="borderlayout()">
+<PushButton id="atom(AddKeyUsage)" 
+enabled="false" 
+layoutpos="top" 
+accessible="true" 
+accRole="PushButton" 
+content="resstr(1289)"/>
+<PushButton id="atom(RemoveKeyUsage)" 
+enabled="false" 
+layoutpos="bottom" 
+accessible="true" 
+accRole="PushButton" 
+content="resstr(1290)"/>
+</element>
+<element layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1421)"/>
+<scrollviewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+pinning="pinvert" 
+layoutpos="client" 
+height="160rp" 
+accName="resstr(1421)">
+<Selector id="atom(SelectedKeyUsage)" 
+sheet="mainss" 
+layout="borderlayout()">
+<button class="ListItem" 
+height="0" 
+visible="false" 
+content="resstr(1228)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1229)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1230)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1231)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1232)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1233)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1234)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1235)"/>
+<button class="ListItem"
+height="0"
+visible="false"
+content="resstr(1236)"/>
+</Selector>
+</scrollviewer>
+</element>
+</element>
+<CCCheckBox id="atom(KUCritical)" 
+layoutpos="top" 
+margin="rect(0,8rp,0,8rp)"
+accessible="true" 
+content="resstr(1457)"/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(ExtendedKeyUsage)" 
+layout="BorderLayout()" 
+LayoutPos="Top" 
+margin="rect(0, 16rp, 16rp, 16rp)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)" 
+active="mouse" 
+accessible="true" 
+accName="resstr(1423)" 
+accRole="Grouping">
+<Expandable id="atom(header)" 
+sheet="mainss" 
+layoutpos="top" 
+layout="filllayout()" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1482)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="false"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1424)" 
+margin="rect(0,8rp,0,8rp)"/>
+<element layoutpos="top" 
+layout="tablelayout(0, 0,3, 0, -50,2, 2, 140,3, 0,-50)">
+<element layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1420)"/>
+<scrollviewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+layoutpos="client"
+height="160rp"
+accName="resstr(1420)"
+pinning="pinvert">
+<Selector id="atom(AvailableEKU)" 
+sheet="common"
+layout="borderlayout()">
+</Selector>
+</scrollviewer>
+</element>
+<element layout="borderlayout()">
+<PushButton id="atom(AddEKU)" 
+enabled="false" 
+layoutpos="top" 
+accessible="true" 
+accRole="PushButton" 
+content="resstr(1289)"/>
+<PushButton id="atom(RemoveEKU)" 
+enabled="false" 
+layoutpos="bottom" 
+accessible="true" 
+accRole="PushButton" 
+content="resstr(1290)"/>
+</element>
+<element layout="borderlayout()">
+<element layoutpos="top"
+content="resstr(1421)"/>
+<scrollviewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+height="160rp"
+accName="resstr(1421)"
+pinning="pinvert">
+<Selector id="atom(SelectedEKU)" 
+sheet="common"
+layout="borderlayout()"/>
+</scrollviewer>
+</element>
+</element>
+<CCCheckBox id="atom(EKUCritical)" 
+layoutpos="top" 
+margin="rect(0,8rp,0,8rp)"
+accessible="true" 
+content="resstr(1458)"/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(BasicConstraints)" 
+expanded="false" 
+layout="BorderLayout()" 
+LayoutPos="Top" 
+margin="rect(0, 16rp, 16rp, 16rp)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)" 
+active="mouse" 
+accessible="true" 
+accName="resstr(1425)" 
+accRole="Grouping">
+<Expandable id="atom(header)" 
+sheet="mainss" 
+layoutpos="top" 
+layout="filllayout()" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1483)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="false"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1426)" 
+margin="rect(0,8rp,0,8rp)"/>
+<CCCheckBox id="atom(EnableBC)" 
+layoutpos="top" 
+margin="rect(0,8rp,0,8rp)"
+accessible="true" 
+content="resstr(1246)"/>
+<element id="atom(IssueCertsPanel)" 
+layoutpos="top" 
+layout="borderlayout()" 
+enabled="false">
+<CCCheckBox id="atom(IssueCerts)" 
+layoutpos="top" 
+margin="rect(0,8rp,0,8rp)"
+accessible="true" 
+content="resstr(1427)"/>
+<element id="atom(PathLenPanel)" 
+enabled="false" 
+layoutpos="top" 
+layout="borderlayout()" 
+margin="rect(0,8rp,0,8rp)" 
+padding="rect(36rp,0,0,0)">
+<element layoutpos="left" 
+contentalign="middlecenter"
+content="resstr(1415)" 
+margin="rect(0,0,8rp,0)"/>
+<element layoutpos="left" layout="filllayout()">
+<edit id="atom(PathLen)" 
+width="128rp" 
+accessible="true" 
+accName="resstr(1415)"/>
+</element>
+</element>
+<CCCheckBox id="atom(CriticalBC)"
+layoutpos="top"
+margin="rect(0,8rp,0,8rp)"
+accessible="true" 
+content="resstr(1459)"/>
+</element>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(SymmetricAlgorithm)" 
+expanded="false" 
+layout="BorderLayout()" 
+LayoutPos="Top" 
+margin="rect(0, 16rp, 16rp, 16rp)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)" 
+active="mouse" 
+accessible="true" 
+accName="resstr(1428)" 
+accRole="Grouping">
+<Expandable id="atom(header)" 
+sheet="mainss" 
+layoutpos="top" 
+layout="filllayout()" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left" 
+shortcut="auto"
+content="resstr(1484)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="false"/>
+</element>
+</Expandable>
+<Clipper id="atom(Clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1429)" 
+margin="rect(0,8rp,0,8rp)"/>
+<CCCheckBox id="atom(SymAlg)"
+layoutpos="top"
+accessible="true" 
+content="resstr(1246)"/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(CustomExtensions)" 
+expanded="false" 
+layout="BorderLayout()" 
+LayoutPos="Top" 
+margin="rect(0, 16rp, 16rp, 16rp)" 
+padding="rect(4rp, 4rp, 4rp, 4rp)" 
+active="mouse" 
+accessible="true" 
+accName="resstr(1430)" 
+accRole="Grouping">
+<Expandable id="atom(header)" 
+sheet="mainss" 
+layoutpos="top" 
+layout="filllayout()" 
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()" 
+background="ARGB(0,0,0,0)">
+<element layoutpos="left" 
+shortcut="auto"
+content="resstr(1485)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="false"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+content="resstr(1431)" 
+margin="rect(0,8rp,0,8rp)"/>
+<element layoutpos="top" 
+layout="tablelayout(0, 0,3, 0, -50,2, 2, 140,3, 0, -50)">
+<element class="GroupBox" sheet="mainss" height="160rp" layout="filllayout()">
+<element layout="borderlayout()"
+sheet="common">
+<element layoutpos="top"
+content="resstr(1242)"/>
+<edit id="atom(OID)" 
+layoutpos="top" 
+accessible="true" 
+accName="resstr(1242)"/>
+<element layoutpos="top"
+content="resstr(1244)"/>
+<edit id="atom(value)" 
+layoutpos="top" 
+accessible="true" 
+accName="resstr(1244)"/>
+<CCCheckBox id="atom(CriticalCE)"
+layoutpos="top"
+margin="rect(0,8rp,0,8rp)"
+accessible="true"
+enabled="false" 
+content="resstr(1460)"/>
+</element>
+</element>
+<element layout="borderlayout()">
+<PushButton id="atom(AddCE)"
+layoutpos="top"
+content="resstr(1289)"
+accessible="true" 
+accRole="PushButton" 
+enabled="false"/>
+<PushButton id="atom(RemoveCE)"
+layoutpos="bottom"
+content="resstr(1290)"
+accessible="true" 
+accRole="PushButton" 
+enabled="false"/>
+</element>
+<scrollviewer borderthickness="rect(1rp, 1rp, 1rp, 1rp)"
+bordercolor="threedshadow"
+sheet="mainss"
+accessible="true"
+accRole="List"
+height="160rp" 
+layoutpos="client">
+<selector id="atom(CustExtList)"
+sheet="common"
+layout="borderlayout()"/>
+</scrollviewer>
+</element>
+</element>
+</Clipper>
+</Expando>
+</element>
+</ScrollViewer>
+<CCSysLink id="atom(helplink)"
+content="resstr(2002)"
+/>
+</element>
+<element resid="KeyDetails"
+layout="borderlayout()"
+sheet="common"
+Foreground="windowtext"
+font="IconFont" 
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+accessible="true">
+<ScrollViewer sheet="mainss" XScrollable="false" layoutpos="client">
+<element sheet="common" layout="borderlayout()">
+<Expando id="atom(CSPListExpando)"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+expanded="false"
+active="mouse"
+accessible="true"
+accName="resstr(1210)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1486)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="true"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top"
+contentalign="wrapleft"
+margin="rect(0,8rp,0,8rp)"
+content="resstr(1211)"/>
+<element class="GroupBox"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+accessible="true"
+accRole="List"
+accName="resstr(1210)">
+<ScrollViewer XScrollable="false"
+sheet="mainss" 
+height="128rp">
+<element id="atom(csplist)"
+sheet="common"
+layout="borderlayout()">
+</element>
+</ScrollViewer>
+</element>
+<CCCheckBox id="atom(ShowAllCsps)"
+margin="rect(0,8rp,0,0)"
+content="resstr(1272)"
+accessible="true"/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(KeyOptionsExpando)"
+expanded="false"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+active="mouse"
+accessible="true"
+accName="resstr(1212)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1487)"/>
+<accessiblebutton id="atom(arrow)"
+layoutpos="right"
+AbsorbsShortcut="true"
+selected="true"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top"
+contentalign="wrapleft"
+margin="rect(0,8rp,0,8rp)"
+content="resstr(1213)"/>
+<element layoutpos="top"
+layout="borderlayout()">
+<element layoutpos="left"
+content="resstr(1214)"
+margin="rect(0,0,8rp,0)"/>
+<ComboBox id="atom(KeySizes)"
+layoutpos="left"
+width="256rp"
+accessible="true"
+accName="resstr(1214)"/>
+</element>
+<CCCheckBox id="atom(KeyExport)"
+content="resstr(1218)"
+layoutpos="top"
+accessible="true"
+margin="rect(0,8rp,0,8rp)"/>
+<CCCheckBox id="atom(KeyArchival)"
+content="resstr(1219)"
+layoutpos="top"
+accessible="true"
+margin="rect(0,8rp,0,8rp)"/>
+<CCCheckBox id="atom(StrongProtect)"
+content="resstr(1217)"
+layoutpos="top"
+accessible="true"
+margin="rect(0,8rp,0,8rp)"/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(KeySpecExpando)"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+active="mouse"
+accessible="true"
+accName="resstr(1221)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1488)"/>
+<accessiblebutton id="atom(arrow)"
+AbsorbsShortcut="true"
+layoutpos="right"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top"
+contentalign="wrapleft"
+margin="rect(0,8rp,0,8rp)"
+content="resstr(1222)"/>
+<selector id="atom(keyspec)"
+layoutpos="top"
+layout="borderlayout()">
+<CCRadioButton layoutpos="top"
+content="resstr(1223)"
+accessible="true"
+margin="rect(0,8rp,0,8rp)"/>
+<CCRadioButton layoutpos="top"
+content="resstr(1224)"
+accessible="true"
+margin="rect(0,8rp,0,8rp)"/>
+</selector>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(HashAlgExpando)"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+active="mouse"
+accessible="true"
+accName="resstr(1463)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1489)"/>
+<accessiblebutton id="atom(arrow)"
+AbsorbsShortcut="true"
+layoutpos="right"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top"
+contentalign="wrapleft"
+margin="rect(0,8rp,0,8rp)"
+content="resstr(1464)"/>
+<element layoutpos="top" layout="borderlayout()">
+<element layoutpos="left" 
+content="resstr(1465)"
+margin="rect(0, 8rp, 0, 0)"/>
+<ComboBox id="atom(combobox)" 
+layoutpos="left"
+accName="resstr(1465)"
+accessible="true"
+width="256rp"/>
+</element>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(SignatureFormat)"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+active="mouse"
+accessible="true"
+accName="resstr(1467)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1490)"/>
+<accessiblebutton id="atom(arrow)"
+AbsorbsShortcut="true"
+layoutpos="right"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<CCCheckBox id="atom(checkbox)"
+layoutpos="top" 
+content="resstr(1468)" 
+accessible="true" 
+padding="rect(0,8rp,0,0)"/>
+<CCSysLink 
+id="atom(signaturehelp)"
+content="resstr(1492)"
+contentalign="wrapleft" 
+margin="rect(0,4rp,0,8rp)"
+/>
+</element>
+</Clipper>
+</Expando>
+<Expando id="atom(KeyPermissionsExpando)"
+layout="BorderLayout()"
+LayoutPos="Top"
+margin="rect(0, 16rp, 16rp, 16rp)"
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+active="mouse"
+accessible="true"
+accName="resstr(1215)"
+accRole="Grouping">
+<Expandable id="atom(header)"
+sheet="mainss" 
+layoutpos="top"
+layout="filllayout()"
+padding="rect(4rp, 4rp, 4rp, 4rp)">
+<element layout="borderlayout()"
+background="ARGB(0,0,0,0)">
+<element layoutpos="left"
+shortcut="auto"
+content="resstr(1491)"/>
+<accessiblebutton id="atom(arrow)"
+AbsorbsShortcut="true"
+layoutpos="right"/>
+</element>
+</Expandable>
+<Clipper id="atom(clipper)"
+layoutpos="top"
+expanded="false"
+height="0">
+<element id="atom(clipped)"
+layout="borderlayout()">
+<element layoutpos="top" 
+contentalign="wrapleft" 
+margin="rect(0,8rp,0,8rp)" 
+content="resstr(1216)"/>
+<CCCheckBox id="atom(usecustom)"
+layoutpos="top" 
+content="resstr(1287)" 
+accessible="true" 
+margin="rect(0,8rp,0,8rp)"/>
+<element layoutpos="top"
+layout="borderlayout()"
+margin="rect(16rp, 0, 0, 0)">
+<PushButton id="atom(SetPermissions)" 
+layoutpos="left" 
+accessible="true"
+accRole="PushButton" 
+content="resstr(1220)"/>
+</element>
+</element>
+</Clipper>
+</Expando>
+</element>
+</ScrollViewer>
+<CCSysLink id="atom(helplink)"
+content="resstr(2003)"
+/>
+</element>
+<element resid="CAList"
+layout="borderlayout()"
+sheet="mainss"
+Foreground="windowtext"
+font="IconFont" 
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+accessible="true">
+<element layoutpos="top"
+margin="rect(0,0,0,16rp)"
+content="resstr(1400)"
+contentalign="wrapleft"
+accessible="true"
+accRole="StaticText"/>
+<element layout="borderlayout()"
+layoutpos="client">
+<element class="GroupBox"
+sheet="mainss" 
+layoutpos="client"
+layout="borderlayout()"
+accessible="true"
+accRole="List">
+<ScrollViewer layoutpos="top"
+sheet="mainss" 
+XScrollable="false">
+<element sheet="common" 
+layout="borderlayout()">
+<element id="atom(header)"
+layoutpos="top"
+layout="gridlayout(1,2)">
+<element content="resstr(1284)"/>
+<element content="resstr(1432)"/>
+</element>
+<element id="atom(calist)"
+layoutpos="top"
+layout="borderlayout()"/>
+</element>
+</ScrollViewer>
+</element>
+<CCCheckBox id="atom(ShowAllCAs)"
+margin="rect(0,8rp,0,0)"
+content="resstr(1271)"
+accessible="true"/>
+</element>
+<CCSysLink id="atom(helplink)"
+content="resstr(2004)"
+/>
+</element>
+<element resid="RASignature"
+layout="borderlayout()"
+sheet="mainss"
+Foreground="windowtext"
+font="IconFont" 
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+accessible="true">
+<element id="atom(text)" 
+layoutpos="top" 
+contentalign="wrapleft" 
+margin="rect(0,0,0,32rp)" 
+accessible="true" 
+accRole="StaticText"/>
+<element layoutpos="top"
+contentalign="middleleft"
+content="resstr(1240)" />
+<element layoutpos="top"
+layout="borderlayout()">
+<Element id="atom(CertName)" 
+borderthickness="rect(1rp,1rp,1rp,1rp)" 
+bordercolor="threedshadow"
+margin="rect(0,0,4rp,0)"
+layoutpos="client" 
+accessible="true" 
+accRole="StaticText"
+accName="resstr(1240)"/>
+<CCPushButton id="atom(ChooseCert)"
+content="resstr(1241)"
+accessible="true"
+layoutpos="right"/>
+</element>
+<CCSysLink id="atom(helplink)"
+content="resstr(2005)"
+/>
+</element>
+<element resid="enrollagent"
+layout="borderlayout()"
+sheet="mainss"
+font="IconFont" 
+padding="rect(4rp, 4rp, 4rp, 4rp)"
+accessible="true">
+<element id="atom(text)" 
+layoutpos="top" 
+contentalign="wrapleft" 
+margin="rect(0,0,0,32rp)" 
+accessible="true" 
+accRole="StaticText"/>
+<element layoutpos="top"
+contentalign="middleleft"
+content="resstr(1240)" />
+<element layoutpos="top"
+layout="borderlayout()">
+<Element id="atom(CertName)" 
+borderthickness="rect(1rp,1rp,1rp,1rp)" 
+bordercolor="threedshadow"
+margin="rect(0,0,4rp,0)"
+layoutpos="client" 
+accessible="true" 
+accRole="StaticText"
+accName="resstr(1240)"/>
+<CCPushButton id="atom(ChooseCert)"
+content="resstr(1241)"
+accessible="true"
+layoutpos="right"/>
+</element>
+</element>
+<button resid="CustExt"
+sheet="mainss" 
+class="ListItem"
+layout="filllayout()"
+margin="rect(0, 4rp, 0, 4rp)"
+layoutpos="top">
+<element layout="borderlayout()" contentalign="middleleft">
+<element layoutpos="top"
+layout="rowlayout(4)">
+<element content="resstr(1242)"
+margin="rect(0,0,2rp,0)"/>
+<element id="atom(oid)"/>
+</element>
+<element layoutpos="top"
+layout="rowlayout(4)">
+<element content="resstr(1403)"
+margin="rect(0,0,2rp,0)"/>
+<element id="atom(friendlyname)"/>
+</element>
+<element layoutpos="top"
+layout="rowlayout(4)">
+<element content="resstr(1244)"
+margin="rect(0,0,2rp,0)"/>
+<element id="atom(value)"/>
+</element>
+<element id="atom(critical)"
+layoutpos="top"
+content="resstr(1245)"/>
+</element>
+</button>
+<button resid="HyperLink"
+class="HyperLink"
+sheet="mainss"
+layoutpos="top"/>
+<element resid="CustRequest"
+layout="borderlayout()"
+sheet="mainss"
+font="IconFont" 
+padding="rect(4rp, 8rp, 4rp, 0rp)"
+accessible="true">
+<element layoutpos="top"
+layout="borderlayout()"
+padding="rect(16rp, 0rp, 16rp, 16rp)">
+<element layoutpos="left"
+layout="rowlayout(5)">
+<element content="resstr(1446)"
+padding="rect(0,0,16rp,0)"/>
+</element>
+<element layoutpos="client"
+layout="borderlayout()">
+<ComboBox layoutpos="top"
+accName="resstr(1446)"
+id="atom(combobox)"
+accessible="true"/>
+<CCCheckBox layoutpos="top" 
+id="atom(suppressdefault)" 
+content="resstr(1447)" 
+accessible="true" 
+margin="rect(0, 4rp, 0, 0)"/>
+</element>
+</element>
+<element layoutpos="top"
+layout="borderlayout()"
+padding="rect(16rp, 0rp, 16rp, 0rp)">
+<element layoutpos="left"
+layout="rowlayout(5)">
+<element content="resstr(1448)"
+accessible="true"
+padding="rect(0,0,16rp,0)"/>
+</element>
+<selector layout="borderlayout()"
+layoutpos="client">
+<CCRadioButton id="atom(Pkcs10)"
+layoutpos="top"
+content="resstr(1449)"
+selected="true"
+accessible="true"
+margin="rect(16rp, 4rp, 0, 0)"/>
+<CCRadioButton layoutpos="top"
+content="resstr(1450)"
+accessible="true"
+margin="rect(16rp, 4rp, 0, 0)"/>
+</selector>
+</element>
+<element layoutpos="top"
+content="resstr(1454)"
+contentalign="wrapleft"
+accessible="true"
+accrole="StaticText"
+margin="rect(4rp, 16rp, 0, 0)"/>
+</element>
+<element resid="FileOpen"
+layout="borderlayout()"
+font="IconFont" 
+padding="rect(0, 32rp, 16rp, 0)">
+<element layoutpos="top"
+contentalign="middleleft"
+content="resstr(1226)"
+margin="rect(0,0,8rp,0)"/>
+<element layoutpos="top"
+layout="borderlayout()">
+<edit id="atom(filename)"
+contentalign="middleleft"
+layoutpos="client"
+width="256rp"
+accessible="true"
+accName="resstr(1226)"/>
+<CCPushButton id="atom(browse)"
+layoutpos="right"
+content="resstr(1227)"
+accessible="true"/>
+</element>
+<element layoutpos="top"
+content="resstr(1451)"
+margin="rect(0, 16rp, 0, 0)"/>
+<selector layoutpos="top" layout="borderlayout()">
+<CCRadioButton id="atom(base64)"
+layoutpos="top"
+selected="true" 
+content="resstr(1452)"
+accessible="true"/>
+<CCRadioButton layoutpos="top"
+content="resstr(1453)"
+accessible="true"/>
+</selector>
+</element>
+</duixml>

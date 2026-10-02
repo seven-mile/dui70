@@ -1,0 +1,27 @@
+<!--
+  source: %SYSTEMROOT%\System32\wlandlg.dll
+  resource: UIFILE / "267" / lang 1033
+  size: 442 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element
+resid="WlanDlg OneX Page"
+id="atom(CFEWlanDlgOneXPage)"
+layout="flowlayout()"
+accessible="true"
+width="265rp">
+<element
+layout="Borderlayout()"
+layoutpos="top"
+padding="rect(0rp,16rp,0rp,0rp)"
+accessible="true">
+<TouchCommandButton
+id="atom(IDC_BUTTON_ONEXCREDENTIALS)"
+content="resstr(279)"
+contentalign="wrapleft"
+layoutpos="top"
+class="default"/>
+</element>
+</element>
+</duixml>

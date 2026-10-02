@@ -1,0 +1,397 @@
+<!--
+  source: %SYSTEMROOT%\System32\fvewiz.dll
+  resource: UIFILE / "20" / lang 1033
+  size: 36459 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="local">
+<if class="standardText">
+<element foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)" contentalign="wrapleft"/>
+</if>
+<if class="taskPending">
+<if id="atom(checkedTaskDescription)">
+<element fontweight="normal"/>
+</if>
+</if>
+<if class="taskInProgress">
+<if id="atom(checkedTaskDescription)">
+<element fontweight="bold"/>
+</if>
+</if>
+<if class="taskCompleted">
+<if id="atom(checkedTaskDescription)">
+<element fontweight="normal"/>
+</if>
+</if>
+<if class="taskFailed">
+<if id="atom(checkedTaskDescription)">
+<element fontweight="normal"/>
+</if>
+</if>
+<if class="para">
+<element foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)" contentalign="wrapleft" margin="rect(0,10rp,0,10rp)"/>
+<if enabled="false">
+<element foreground="gtc(TEXTSTYLE,9,2,3803)"/>
+</if>
+</if>
+<if id="atom(ExpandoButtonImage)">
+<Button height="themeable(gtmet(TaskDialog, 13, 0, 2417), '21rp')" width="themeable(gtmet(TaskDialog, 13, 0, 2416), '19rp')" margin="themeable(gtmar(TaskDialog, 20, 0, 3602), rect(0rp,0rp,10rp,0rp))"/>
+<if selected="true">
+<Button background="themeable(dtb(TaskDialog, 13, 4), dfc(3, 0x0000))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog, 13, 5), dfc(3, 0x0000))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog, 13, 6), dfc(3, 0x0000))"/>
+</if>
+</if>
+<if selected="false">
+<Button background="themeable(dtb(TaskDialog, 13, 1), dfc(3, 0x0001))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog, 13, 2), dfc(3, 0x0001))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog, 13, 3), dfc(3, 0x0001))"/>
+</if>
+</if>
+</if>
+<ccsyslink accessible="true" accrole="link" shortcut="auto" contentalign="wrapleft" overhang="false" foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+<edit foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+<cclistview foreground="themeable(gtc(AeroWizard, 3, 0, 3803), windowtext)"/>
+</style>
+</stylesheets>
+<element resid="errorBoxMacro">
+<element layoutpos="top" layout="borderlayout()">
+<element id="atom(infostatusicon)" accessible="true" accrole="graphic" accname="resstr(1996)" accDesc="resstr(2146)" content="icon(81,sysmetric(49),sysmetric(50),library(imageres.dll))" layoutpos="none" margin="rect(0rp,6rp,6rp,6rp)"/>
+<element id="atom(warningstatusicon)" accessible="true" accrole="graphic" accname="resstr(1926)" accDesc="resstr(2147)" content="icon(84,sysmetric(49),sysmetric(50),library(imageres.dll))" layoutpos="none" margin="rect(0rp,6rp,6rp,6rp)"/>
+<element id="atom(errorstatusicon)" accessible="true" accrole="graphic" accname="resstr(1997)" accDesc="resstr(2148)" content="icon(98,sysmetric(49),sysmetric(50),library(imageres.dll))" layoutpos="none" margin="rect(0rp,6rp,6rp,6rp)"/>
+<element id="atom(statustext)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" visible="false" content="resstr(1927)"/>
+</element>
+</element>
+<element resid="checkedTaskMacro" layout="borderlayout()" margin="rect(0rp, 5rp, 0rp, 5rp)">
+<element id="atom(checkIcon)" accessible="true" accrole="graphic" accname="resstr(2066)" accDesc="resstr(2149)" layoutpos="left" visible="false" content="icon(4, 14rp, 14rp)"/>
+<element id="atom(failIcon)" accessible="true" accrole="graphic" accname="resstr(2067)" accDesc="resstr(2150)" layoutpos="none" visible="false" content="icon(5, 14rp, 14rp)"/>
+<element id="atom(checkedTaskDescription)" accessible="true" accrole="statictext" active="keyboard" sheet="local" layoutpos="top" margin="rect(6rp, 0rp, 0rp, 0rp)" padding="rect(0rp, 1rp, 0rp, 0rp)" content="resstr(2068)"/>
+</element>
+<element resid="warningMessageMacro" layout="borderlayout()">
+<element id="atom(warningIcon)" accessible="true" accrole="graphic" accname="resstr(2069)" accDesc="resstr(2151)" layoutpos="left" content="icon(84, sysmetric(49), sysmetric(50), library(imageres.dll))"/>
+<element layout="borderlayout()" layoutpos="client" margin="rect(10rp, 0rp, 0rp, 0rp)">
+<element id="atom(warningMessage)" accessible="true" accrole="statictext" active="keyboard" sheet="local" class="standardText" layoutpos="top" content="resstr(2070)"/>
+</element>
+</element>
+<element resid="warningMessageAndLinkMacro" layout="borderlayout()">
+<element id="atom(warningIcon)" accessible="true" accrole="graphic" accname="resstr(2069)" accDesc="resstr(2151)" layoutpos="left" content="icon(84, sysmetric(49), sysmetric(50), library(imageres.dll))"/>
+<element layout="borderlayout()" layoutpos="client" margin="rect(10rp, 0rp, 0rp, 0rp)">
+<element id="atom(warningMessage)" accessible="true" accrole="statictext" active="keyboard" sheet="local" class="standardText" layoutpos="top"/>
+<ccsyslink id="atom(warningLink)" sheet="local" layoutpos="top" margin="rect(0rp, 2rp, 0rp, 0rp)" padding="rect(2rp, 0rp, 0rp, 0rp)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1843)" accrole="pane" resid="page0" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="verticalflowlayout(0,0,0)" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1929)" content="resstr(1928)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="verticalflowlayout(0, 0, 0)" accessible="true" accrole="Grouping" accname="resstr(2211)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1NoTPMWithPassphrase)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="none" content="resstr(2177)"/>
+<element id="atom(para1TpmPlusPinOrSKOptional)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="none" visible="false" content="resstr(2190)"/>
+<CCCommandLink id="atom(usepin)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" transparent="true" layoutpos="left" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(1935)"/>
+<CCCommandLink id="atom(usestartupkey)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" transparent="true" layoutpos="left" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(1936)"/>
+<CCCommandLink id="atom(skipstartupkeypin)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" layoutpos="top" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" transparent="true" content="resstr(1937)"/>
+<CCCommandLink id="atom(usepassphrase)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" transparent="true" layoutpos="left" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(2178)"/>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1847)" accrole="pane" resid="page2" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="verticalflowlayout(0, 0, 0)" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1945)" content="resstr(1944)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="verticalflowlayout(0, 0, 0)" accessible="true" accrole="Grouping" accname="resstr(2212)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(oscontent)" layoutpos="top" layout="borderlayout()" width="563rp" margin="rect(0,0,0,10rp)">
+<element id="atom(para1)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(0,0,0,4rp)" content="resstr(1764)"/>
+</element>
+<element id="atom(datacontent)" layoutpos="top" layout="borderlayout()" width="563rp" margin="rect(0,0,0,10rp)">
+<element id="atom(para3)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(0,0,0,4rp)" content="resstr(2048)"/>
+</element>
+<CCCommandLink id="atom(savepasswordaad)" accessible="true" accrole="pushbutton" class="commandButton" sheet="local" layoutpos="top" transparent="true" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(2201)"/>
+<CCCommandLink id="atom(savepasswordskydrive)" accessible="true" accrole="pushbutton" class="commandButton" sheet="local" layoutpos="top" transparent="true" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(2196)"/>
+<CCCommandLink id="atom(savepassworddrive)" accessible="true" accrole="pushbutton" class="commandButton" visible="false" sheet="local" layoutpos="none" transparent="true" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(1946)"/>
+<CCCommandLink id="atom(savepassword)" accessible="true" accrole="pushbutton" class="commandLink" sheet="local" layoutpos="top" transparent="true" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(1949)"/>
+<CCCommandLink id="atom(printpassword)" accessible="true" accrole="pushbutton" class="commandButton" sheet="local" layoutpos="top" transparent="true" minsize="size(563rp,0)" padding="rect(0,0,0,0rp)" content="resstr(1948)"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="bottom">
+<ccsyslink id="atom(infolink2)" accname="resstr(2050)" sheet="local" layoutpos="bottom" content="resstr(2049)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1849)" accrole="pane" resid="page3" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layoutpos="top" layout="borderlayout()">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1951)" content="resstr(1950)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2213)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(paraPinLength)" layoutpos="top" accessible="true" accrole="statictext" active="keyboard" sheet="local" class="para" content="resstr(2136)"/>
+<element layoutpos="top" layout="tablelayout(0,0,0,2,-30,0,2,-70,1,0,1rp)" padding="rect(0rp, 95rp, 0rp, 15rp)">
+<element id="atom(enterpinlabel)" accessible="false" accrole="statictext" class="para" sheet="local" shortcut="auto" layoutpos="left" padding="rect(0rp,0rp,3rp,0rp)" contentalign="wrapleft" content="resstr(1954)"/>
+<wizardedit id="atom(pinedit)" accessible="true" accname="resstr(1956)" accDesc="resstr(2152)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="right" content="resstr(1955)" width="200rp"/>
+<element/>
+</element>
+<element layoutpos="top" layout="tablelayout(0,0,0,2,-30,0,1,-70,1,0,1rp)" padding="rect(0rp, 15rp, 0rp, 5rp)">
+<element id="atom(confirmpinlabel)" accessible="false" accrole="statictext" class="para" sheet="local" layoutpos="left" contentalign="wrapleft" padding="rect(0rp,0rp,3rp,0rp)" shortcut="auto" content="resstr(1958)"/>
+<wizardedit id="atom(pinconfirm)" accessible="true" accname="resstr(1960)" accDesc="resstr(2153)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="right" content="resstr(1959)" width="200rp"/>
+<element/>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1851)" accrole="pane" resid="page4" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layoutpos="top" layout="borderlayout()">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1825)" content="resstr(1773)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2214)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="bottom" layout="borderlayout()"/>
+<element id="atom(para2)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(1897)"/>
+<element layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(shortcut)" accessible="true" accrole="statictext" class="para" sheet="local" layoutpos="none" visible="false" content="resstr(1898)"/>
+<cclistview id="atom(listviewdrives)" accessible="true" accrole="list" accname="resstr(1900)" accDesc="resstr(2154)" active="mouse|keyboard" shortcut="auto" width="270rp" height="102rp" winstyle="16461" layoutpos="left" borderstyle="1" borderthickness="rect(1rp,1rp,1rp,1rp)" content="resstr(1899)"/>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1853)" active="mouse" accrole="pane" resid="page5" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1962)" content="resstr(1961)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2215)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="bottom" layout="borderlayout()"/>
+<element id="atom(oscontent)" layoutpos="top" layout="borderlayout()" width="563rp" margin="rect(0,0,0,10rp)">
+<element id="atom(para1)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(1781)"/>
+<element id="atom(para2A)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" visible="true" content="resstr(1989)"/>
+<CCCheckbox id="atom(paraDryRunBox)" layoutpos="bottom" contentalign="wrapleft" content="resstr(1912)" accessible="true" sheet="local" padding="rect(4rp,16rp,0rp,0rp)"/>
+<element id="atom(paraDryRunText)" visible="false" layoutpos="none" content="resstr(1988)" accessible="true" accrole="statictext" active="keyboard" class="para" padding="rect(18rp,0rp,0rp,0rp)"/>
+<element id="atom(paraDryRunText_usb)" visible="false" layoutpos="none" content="resstr(2009)" accessible="true" accrole="statictext" active="keyboard" class="para" padding="rect(18rp,0rp,0rp,0rp)"/>
+<element id="atom(paraDryRunWarning)" layoutpos="top" content="resstr(1963)" accessible="true" accrole="statictext" active="keyboard" class="para" visible="true" padding="rect(18rp,0rp,0rp,0rp)"/>
+</element>
+<element id="atom(datacontent)" layoutpos="top" layout="borderlayout()" width="563rp" margin="rect(0,0,0,10rp)">
+<element id="atom(dataUnlockMethods)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2143)" margin="rect(0,0,0,14rp)"/>
+<element id="atom(datapara2)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2054)"/>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1859)" accrole="pane" resid="page6" sheet="common" layout="borderlayout()" minsize="size(563rp,300rp)">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(1967)" content="resstr(1966)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2216)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="bottom" layout="borderlayout()"/>
+<cccommandlink id="atom(goaddpassphrase)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2038)"/>
+<cccommandlink id="atom(gochangepassphrase)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2040)"/>
+<cccommandlink id="atom(goremovepassphrase)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2042)"/>
+<cccommandlink id="atom(goaddsmartcard)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2112)"/>
+<cccommandlink id="atom(goremovesmartcard)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2114)"/>
+<cccommandlink id="atom(gorecoverypassword)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(1968)"/>
+<cccommandlink id="atom(gostartup)" accessible="true" accrole="pushbutton" transparent="true" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(1970)"/>
+<cccommandlink id="atom(gopin)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(1972)"/>
+<cccommandlink id="atom(goaddautounlock)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2044)"/>
+<cccommandlink id="atom(goremoveautounlock)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2046)"/>
+<cccommandlink id="atom(goWipeFreeSpace)" transparent="true" accessible="true" accrole="pushbutton" active="mouse|keyboard" shortcut="auto" layoutpos="top" content="resstr(2168)"/>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1861)" accrole="pane" resid="page7" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2000)" content="resstr(1999)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2217)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1ManuallyTurnOnTpm)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="none" content="resstr(2007)"/>
+<element id="atom(para1TurnOnTpmRestart)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(22rp,0rp,0rp,6rp)" content="resstr(2008)"/>
+<element id="atom(para1TurnOnTpmShutdown)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(22rp,0rp,0rp,6rp)" content="resstr(1818)"/>
+<element id="atom(para1PPIRestart)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(22rp,0rp,0rp,22rp)" content="resstr(2187)"/>
+<element id="atom(para1PPIShutdown)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(22rp,0rp,0rp,22rp)" content="resstr(2188)"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="bottom">
+<ccsyslink id="atom(infolink)" accname="resstr(2117)" sheet="local" layoutpos="bottom" content="resstr(2116)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(1874)" accrole="pane" resid="page8" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar"/>
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1ProgressDescription)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="none"/>
+<CCProgressBar id="atom(ProgressBar)" winstyle="8" height="15rp" active="inactive" accessible="true" accname="resstr(2140)" layoutpos="top"/>
+<element id="atom(removalwarning)" class="para" layout="borderlayout()" layoutpos="none">
+<element accessible="true" accrole="graphic" accname="resstr(2141)" accDesc="resstr(2155)" content="icon(84,sysmetric(49),sysmetric(50),library(imageres.dll))" layoutpos="left" margin="rect(0rp,6rp,6rp,6rp)"/>
+<element id="atom(removalwarningtext)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2142)"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="bottom">
+<ccsyslink id="atom(infolink)" accname="resstr(2083)" sheet="local" visible="false" layoutpos="bottom" content="resstr(2082)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2014)" accrole="pane" resid="page9" sheet="common" layout="borderLayout()" width="563rp" height="300rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2016)" content="resstr(2015)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2218)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<CCCheckbox id="atom(paraPassphraseBox)" layoutpos="top" contentalign="wrapleft" content="resstr(2017)" accessible="true" sheet="local" padding="rect(0,0,0,5rp)"/>
+<element id="atom(passphraseSection)" layoutpos="top" layout="borderlayout()">
+<element layoutpos="top" content="resstr(2144)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" padding="rect(14rp,1rp,0,0)" margin="rect(0,0,0,0)"/>
+<element layoutpos="top" layout="ninegridlayout()" padding="rect(20rp,16rp,0,16rp)">
+<element content="resstr(2057)" shortcut="auto" accessible="true" accrole="statictext" layoutpos="ninetopleft" class="para" sheet="local" padding="rect(0,2rp,0,0)" margin="rect(0,0,0,0)"/>
+<element layout="borderlayout()" layoutpos="ninetop" padding="rect(5rp,0,0,0)">
+<element layout="borderlayout()" layoutpos="bottom">
+<wizardedit id="atom(passphraseedit)" accessible="true" accname="resstr(2059)" accDesc="resstr(2156)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="left" content="resstr(2058)" width="300rp"/>
+</element>
+</element>
+<element layoutpos="nineleft" height="13rp"/>
+<element content="resstr(2145)" shortcut="auto" accessible="true" accrole="statictext" layoutpos="ninebottomleft" class="para" sheet="local" padding="rect(0,2rp,0,0)" margin="rect(0,0,0,0)"/>
+<element layout="borderlayout()" layoutpos="ninebottom" padding="rect(5rp,0,0,0)">
+<element layout="borderlayout()" layoutpos="bottom">
+<wizardedit id="atom(passphraseconfirm)" accessible="true" accname="resstr(2061)" accDesc="resstr(2157)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="left" content="resstr(2060)" width="300rp"/>
+</element>
+</element>
+</element>
+</element>
+<CCCheckbox id="atom(paraSmartCardBox)" layoutpos="top" contentalign="wrapleft" content="resstr(2064)" accessible="true" sheet="local" padding="rect(0,0,0,4rp)"/>
+<element id="atom(paraSmartCardText)" layoutpos="top" content="resstr(2065)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" padding="rect(16rp,0rp,0rp,8rp)" margin="rect(0,0,0,0)"/>
+<CCCheckbox id="atom(paraAutoUnlockBox)" layoutpos="top" contentalign="wrapleft" content="resstr(2020)" accessible="true" sheet="local"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2022)" accrole="pane" resid="page10" sheet="common" layout="borderLayout()" width="563rp" height="300rp">
+<element layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2024)" content="resstr(2023)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2210)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(0,0,0,4rp)" content="resstr(2025)"/>
+<element id="atom(asciiwarning)" class="para" layout="borderlayout()" layoutpos="none">
+<element id="atom(asciiwarningicon)" accessible="true" accrole="graphic" accname="resstr(2179)" accDesc="resstr(2180)" content="icon(84,sysmetric(49),sysmetric(50),library(imageres.dll))" layoutpos="left" margin="rect(0rp,6rp,6rp,6rp)"/>
+<element id="atom(asciiwarningtext)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2181)"/>
+</element>
+<element id="atom(enterpassphraselabel)" accessible="true" accrole="statictext" class="para" sheet="local" shortcut="auto" layoutpos="top" content="resstr(2026)"/>
+<element layoutpos="top" layout="borderlayout()">
+<wizardedit id="atom(passphraseedit)" accessible="true" accname="resstr(2028)" accDesc="resstr(2158)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="left" content="resstr(2027)" width="300rp"/>
+</element>
+<element id="atom(confirmpassphraselabel)" accessible="true" accrole="statictext" class="para" sheet="local" layoutpos="top" padding="rect(0rp,0rp,3rp,0rp)" shortcut="auto" content="resstr(2029)"/>
+<element layoutpos="top" layout="borderlayout()">
+<wizardedit id="atom(passphraseconfirm)" accessible="true" accname="resstr(2031)" accDesc="resstr(2159)" active="mouse|keyboard" passwordcharacter="9679" themedborder="true" class="wizedit" sheet="local" contentalign="middleleft" layoutpos="left" content="resstr(2030)" width="300rp"/>
+</element>
+<CCCheckbox id="atom(showpassphrasebox)" layoutpos="top" contentalign="wrapleft" content="resstr(2182)" accessible="true" sheet="local" padding="rect(0rp,5rp,0rp,0rp)"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="bottom">
+<ccsyslink id="atom(infolink)" accname="resstr(2037)" sheet="local" layoutpos="bottom" content="resstr(2036)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2075)" accrole="pane" resid="PageRequiredSteps" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2077)" content="resstr(2076)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2219)">
+<macro expand="warningMessageMacro" id="atom(winreBreakWarning)" layoutpos="none" visible="false">
+<bind connect="warningMessage" content="resstr(2122)"/>
+</macro>
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1StepsExplanation)" accessible="true" accrole="statictext" active="keyboard" accname="resstr(2118)" class="para" sheet="local" layoutpos="top" content="resstr(2078)"/>
+<element layout="borderlayout()" layoutpos="top" padding="rect(50rp, 20rp, 0rp, 0rp)">
+<macro expand="checkedTaskMacro" id="atom(taskHardDrivePrep)" layoutpos="none">
+<bind connect="checkedTaskDescription" content="resstr(2079)" accname="resstr(2119)"/>
+</macro>
+<macro expand="checkedTaskMacro" id="atom(taskTurnOnTpm)" layoutpos="none">
+<bind connect="checkedTaskDescription" content="resstr(2080)" accname="resstr(2120)"/>
+</macro>
+<macro expand="checkedTaskMacro" id="atom(taskEncryptVolume)" layoutpos="none">
+<bind connect="checkedTaskDescription" content="resstr(2081)" accname="resstr(2121)"/>
+</macro>
+</element>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="bottom">
+<ccsyslink id="atom(infolink)" accname="resstr(2083)" sheet="local" layoutpos="bottom" content="resstr(2082)"/>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2084)" accrole="pane" resid="PageRepartitionPlan" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2086)" content="resstr(2085)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2220)">
+<element id="atom(para1DrivePrepPlanGeneric)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2087)"/>
+<element layout="borderlayout()" margin="rect(0rp, 10rp, 0rp, 10rp)" padding="rect(0rp, 0rp, 30rp, 0rp)">
+<expando id="atom(MoreDetailsExpando)" layout="borderlayout()" layoutpos="top">
+<element layout="borderlayout()" layoutpos="top">
+<accessiblebutton id="atom(arrow)" layoutpos="left" layout="borderlayout()" padding="rect(0rp,0rp,5rp,0rp)" accessible="true" accrole="pushbutton" accname="resstr(2134)" accdesc="resstr(2135)">
+<button id="atom(ExpandoButtonImage)" sheet="local" active="inactive" layoutpos="top"/>
+</accessiblebutton>
+<element id="atom(paraMoreDetails)" accessible="true" accrole="statictext" accname="resstr(2124)" sheet="local" class="para" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)" content="resstr(2123)"/>
+</element>
+<element id="atom(clipper)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2088)"/>
+</expando>
+<element id="atom(shrinkWarnings)" layout="borderlayout()" layoutpos="top">
+<element id="atom(para1Caution)" accessible="true" accrole="statictext" accname="resstr(2126)" class="para" sheet="local" layoutpos="top" padding="rect(3rp, 0rp, 0rp, 0rp)" margin="rect(0rp, 0rp, 0rp, 10rp)" content="resstr(2089)"/>
+<macro expand="warningMessageAndLinkMacro" id="atom(para1drivePrepWarning1)" layoutpos="top" margin="rect(0rp, 20rp, 0rp, 10rp)">
+<bind connect="warningMessage" accname="resstr(2127)" content="resstr(2090)"/>
+<bind connect="warningLink" accname="resstr(2128)" content="resstr(2091)"/>
+</macro>
+<macro expand="warningMessageMacro" id="atom(para1drivePrepWarning2)" layoutpos="top" margin="rect(0rp, 30rp, 0rp, 10rp)">
+<bind connect="warningMessage" accname="resstr(2129)" content="resstr(2092)"/>
+</macro>
+</element>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2101)" accrole="pane" active="mouse|keyboard" resid="PageRepartitioning" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2103)" content="resstr(2102)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2221)">
+<element layoutpos="top" layout="borderlayout()">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(para1DrivePrepStatusExplanation)" accessible="true" accrole="statictext" active="keyboard" accname="resstr(2105)" sheet="local" class="para" content="resstr(2104)" layoutpos="top"/>
+<element layout="borderlayout()" layoutpos="top" padding="rect(40rp, 5rp, 10rp, 5rp)" margin="rect(0rp, 25rp, 0rp, 15rp)">
+<macro expand="checkedTaskMacro" id="atom(TaskVolumeShrinking)" layoutpos="none"/>
+<macro expand="checkedTaskMacro" id="atom(TaskVolumeCreating)" layoutpos="none"/>
+<macro expand="checkedTaskMacro" id="atom(TaskVolumePreparing)" layoutpos="none"/>
+</element>
+</element>
+<element layout="borderlayout()" layoutpos="top">
+<element layoutpos="top" accessible="true" accrole="statictext" accname="resstr(2107)" content="resstr(2106)"/>
+<CCProgressBar id="atom(ProgressBar)" winstyle="8" height="15rp" active="inactive" accessible="true" margin="rect(0rp, 5rp, 0rp, 5rp)" accname="Repartitioning progress"/>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2108)" accrole="pane" active="mouse|keyboard" resid="PageRepartitioningComplete" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2110)" content="resstr(2109)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2222)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(paraMustRestart)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2111)"/>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2163)" accrole="pane" active="mouse|keyboard" resid="PageCompletePreProvisioned" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2164)" content="resstr(2165)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2223)">
+<macro id="atom(PageError)" expand="errorBoxMacro" layoutpos="top" layout="borderlayout()"/>
+<element id="atom(paraSelectedDrive)" accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" content="resstr(2166)"/>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2169)" accrole="pane" resid="PageDataOnlyEncryptionChoice" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element accessible="true" layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2170)" content="resstr(2171)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2224)">
+<element accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 14rp)" content="resstr(2172)"/>
+<selector id="atom(selectorEncryptionType)" layoutpos="top" layout="borderlayout()" accessible="true">
+<CCRadioButton id="atom(radioDataOnlyEncryption)" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 7rp)" contentalign="wrapleft" accname="resstr(2173)" content="resstr(2174)" shortcut="auto" accessible="true" sheet="local"/>
+<CCRadioButton id="atom(radioFullEncryption)" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 7rp)" contentalign="wrapleft" accname="resstr(2175)" content="resstr(2176)" shortcut="auto" accessible="true" sheet="local"/>
+</selector>
+</element>
+</element>
+</element>
+<element id="atom(wizardroot)" accessible="true" accname="resstr(2202)" accrole="pane" resid="PageDownlevelSupportChoice" sheet="common" layout="borderlayout()" width="563rp" height="300rp">
+<element accessible="true" layoutpos="top" layout="borderlayout()" width="563rp">
+<element id="atom(wiztitle)" accessible="true" accrole="titlebar" accname="resstr(2203)" content="resstr(2204)"/>
+<element id="atom(optionlist)" layoutpos="top" layout="borderLayout()" accessible="true" accrole="Grouping" accname="resstr(2225)">
+<element accessible="true" accrole="statictext" active="keyboard" class="para" sheet="local" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 14rp)" content="resstr(2205)"/>
+<selector id="atom(selectorDownlevelEncryption)" layoutpos="top" layout="borderlayout()" accessible="true">
+<CCRadioButton id="atom(radioXtsAesEncryption)" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 7rp)" contentalign="wrapleft" accname="resstr(2208)" content="resstr(2209)" shortcut="auto" accessible="true" sheet="local"/>
+<CCRadioButton id="atom(radioAesCbcEncryption)" layoutpos="top" padding="rect(0rp, 0rp, 0rp, 7rp)" contentalign="wrapleft" accname="resstr(2206)" content="resstr(2207)" shortcut="auto" accessible="true" sheet="local"/>
+</selector>
+</element>
+</element>
+</element>
+</duixml>

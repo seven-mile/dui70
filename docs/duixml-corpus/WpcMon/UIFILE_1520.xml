@@ -1,0 +1,48 @@
+<!--
+  source: %SYSTEMROOT%\System32\WpcMon.exe
+  resource: UIFILE / "1520" / lang 1033
+  size: 1843 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<styleSheets>
+<Style resid="style" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<RichText font="12;normal;none;Segoe UI"/>
+</Style>
+</styleSheets>
+<ImmersiveDialog resid="allowContent" layout="verticalFlowLayout(0, 0, 0, 0)">
+<richText id="atom(header)" content="resstr(516)" contentAlign="WrapLeft"/>
+<element height="10rp"/>
+<element layout="flowLayout()">
+<element id="atom(contentIcon)" width="32rp" height="32rp" margin="rect(0, 0, 10rp, 0)"/>
+<RichText id="atom(contentTitle)" contentAlign="wrapLeft"/>
+<element width="20rp"/>
+<RichText id="atom(contentRating)" content="resstr(517)" layoutPos="none"/>
+</element>
+<element height="10rp"/>
+</ImmersiveDialog>
+<ImmersiveDialog resid="allowWebsite" layout="fillLayout()">
+<element sheet="style" layout="verticalFlowLayout(0, 0, 0, 0)">
+<richText id="atom(header)" content="resstr(510)" contentAlign="WrapLeft"/>
+<element height="10rp"/>
+<element layout="flowlayout()">
+<RichText id="atom(url)" contentAlign="wrapLeft"/>
+<RichText id="atom(category)" content="resstr(512)" contentAlign="wrapLeft"/>
+</element>
+<RichText id="atom(title)" contentAlign="wrapLeft"/>
+<touchcheckbox id="atom(allowHostname)" content="resstr(518)" margin="rect(0, 30rp, 0, 0)" toggleOnClick="true" checkedState="1" shortcut="auto" accrole="checkbutton" accessible="true"/>
+<element height="10rp"/>
+</element>
+</ImmersiveDialog>
+<ImmersiveDialog resid="allowExtraTime" layout="fillLayout()">
+<element sheet="style" layout="verticalFlowLayout(0, 0, 0, 0)">
+<richText id="atom(header)" content="resstr(511)" contentAlign="WrapLeft"/>
+<element height="10rp"/>
+<element layout="flowlayout()">
+<richText content="resstr(513)"/>
+<element width="10rp"/>
+<touchSelect id="atom(suspension)" width="220rp"/>
+</element>
+</element>
+</ImmersiveDialog>
+</duixml>

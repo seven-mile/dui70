@@ -1,0 +1,146 @@
+# CI: golden regeneration + structural/ABI gates + smoke test + pinned repro
+#
+# The gates themselves live in tools/dui-pipeline/ci.ps1 (see CI.md). This
+# workflow only chooses WHICH gates each runner can afford:
+#
+# golden (ubuntu, seconds)  — G1+G2: pinned/ integrity + regen byte-identical to
+#                             the committed DirectUI/ tree. Generator changes MUST
+#                             ship with their golden diff in the same PR.
+# abi    (windows, minutes) — G3+G4+G5: structure, decorated-name fidelity, and a
+#                             header-compile sample (needs MSVC).
+# smoke  (windows, minutes) — end-to-end: build UITest against the generated
+#                             library, run it, assert the DirectUI window is
+#                             created against the system dui70.dll.
+# repro  (windows, minutes) — re-derive pinned/ from the two msdl artefacts named
+#                             by manifest.dll.source_url + manifest.pdb.source_url
+#                             and assert BYTE-identity (no tolerated differences).
+#                             Windows runner because extract.py's file_version()
+#                             uses the Win32 version API (ctypes.windll), and
+#                             because dumpbin is needed. DLL and PDB are kept in
+#                             separate directories on purpose: dumpbin changes its
+#                             output when a matching PDB sits beside the DLL.
+name: pipeline
+
+on:
+  push:
+    branches: [master, feat/*]
+  pull_request:
+  # stage-2 repro is network-dependent (msdl); allow a manual run so it can be
+  # exercised without pushing, and re-run if msdl is briefly unavailable.
+  workflow_dispatch:
+
+jobs:
+  golden:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # G1 + G2 only: needs no compiler, finishes in seconds. G2 also refuses to
+      # run on a dirty tree and catches NEW untracked generated files, which a
+      # bare `git diff` misses.
+      - name: Golden gates (G1+G2)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1 -GoldenOnly
+
+  abi:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Locate MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      # Full chain: G1, G2, G3 (classes.json vs generated tree), G4 (modname +
+      # extern-C fidelity, expected totals derived from pinned/ not hardcoded),
+      # G5 (header compile sample), GB (time budget).
+      - name: Pipeline gates
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1
+      # Not covered by ci.ps1: the .def must also produce a usable import
+      # library. Kept as its own gate because it validates the .def through
+      # lib.exe/dumpbin rather than through the generated sources.
+      - name: Import library from def (A3)
+        # verify.py prints CJK diagnostics; the runner's default console encoding is
+        # cp1252, which raises UnicodeEncodeError and fails the step for a reason
+        # unrelated to the assertion. ci.ps1 sets PYTHONUTF8 only inside its own
+        # process, so it does not reach this step -- set it here (env, not code).
+        env:
+          PYTHONUTF8: "1"
+        run: |
+          lib.exe /def:DirectUI\dui70.def /machine:x64 /out:$env:RUNNER_TEMP\dui70.lib
+          dumpbin /linkermember:1 $env:RUNNER_TEMP\dui70.lib | Out-File -Encoding utf8 $env:RUNNER_TEMP\lib-members.txt
+          python tools\dui-pipeline\verify.py --assertion A3 --lib $env:RUNNER_TEMP\dui70.lib
+
+  smoke:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The smoke build compiles UITest.cpp with cl.exe directly (run.ps1 calls
+      # gen_uitest_proj.ps1, which does not read UITest.vcxproj). The project's wil
+      # dependency is a NuGet restore path that .gitignore excludes from the repo, so
+      # on a fresh clone wil must come from vcpkg -- into the same installed-tree
+      # include dir that detours already populates.
+      - name: vcpkg dependencies (detours + wil)
+        run: vcpkg install detours:x64-windows wil:x64-windows
+      - name: Run end-to-end pipeline
+        run: pwsh -File tools\dui-pipeline\run.ps1
+        env:
+          VCPKG_ROOT: ${{ github.workspace }}\vcpkg
+
+  # Stage 2: prove the committed pinned/ is reproducible from the published
+  # artefacts, not hand-edited. Downloads the DLL and the PDB via the two manifest
+  # source_urls, hard-asserts both sha256 values, re-derives pinned/ in an isolated
+  # dir (DLL and PDB in SEPARATE dirs -- dumpbin changes its output when a matching
+  # PDB sits beside the DLL), asserts byte-identity, then closes with the golden gate.
+  repro:
+    runs-on: windows-latest
+    # Deliberately NOT on `push`. This gate downloads ~3.6 MB from msdl and takes
+    # minutes, and a push to feat/* usually also has an open PR, so running on
+    # both would duplicate it. pull_request is the review gate; workflow_dispatch
+    # allows a manual re-run (e.g. msdl was briefly unavailable).
+    if: github.event_name != 'push'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # MSVC is needed for dumpbin (extract.py). Caution: msvc-dev-cmd also puts
+      # MSVC's undname.exe on PATH, which model.py would WRONGLY accept and which
+      # silently corrupts its whole output. repro.py resolves llvm-undname by
+      # PROBING its output format, so the MSVC tool can never slip through.
+      - name: Locate MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      # The runner image ships LLVM (llvm-pdbutil, for reading PDB publics) but
+      # does not always PATH it; repro.py also probes the well-known LLVM roots and
+      # mingw-style trees. Note the official Windows LLVM build has NO
+      # llvm-undname.exe, so do not assume this step finds one.
+      - name: Locate LLVM (pdbutil/undname)
+        shell: pwsh
+        run: |
+          $added = @()
+          foreach ($llvm in @('C:\Program Files\LLVM\bin', 'C:\Program Files (x86)\LLVM\bin')) {
+            if (Test-Path (Join-Path $llvm 'llvm-pdbutil.exe')) {
+              Add-Content -Path $env:GITHUB_PATH -Value $llvm
+              $added += $llvm
+            }
+          }
+          if ($added.Count -eq 0) {
+            Write-Host 'LLVM not at the default roots; repro.py will search further'
+          } else {
+            Write-Host ("added to PATH: " + ($added -join '; '))
+          }
+      - name: Re-derive pinned/ from msdl and assert (R1+R2+R3)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/repro.ps1
+      # Closing gate: the re-derived tree must still satisfy the fast golden
+      # gates, so a repro "pass" can never be a locally-broken workspace.
+      - name: Golden gates (G1+G2)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/ci.ps1 -GoldenOnly

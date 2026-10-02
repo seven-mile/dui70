@@ -1,0 +1,63 @@
+<!--
+  source: %SYSTEMROOT%\System32\eapsimextdesktop.dll
+  resource: UIFILE / "1101" / lang 1033
+  size: 3804 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="EapSimIdentityPage" id="atom(EapSimIdentityPage)" layout="borderlayout()" accessible="true" accrole="pane" accname="EapSimIdentityPage" sheet="Modern" width="265rp">
+<element id="atom(pinUnlockingNode)" layout="borderlayout()" layoutpos="none" padding="rect(0rp,31rp,0rp,0rp)" accessible="true">
+<ModernProgressRing id="atom(unlockingProgressBar)" layoutpos="left" height="20rp" width="20rp"/>
+<RichText content="resstr(4001)" contentalign="bottomleft | wrapleft" layoutpos="client" padding="rect(10rp,0rp,0rp,0rp)" accrole="statictext" accessible="true"/>
+</element>
+<element id="atom(readingDevicesNode)" layout="borderlayout()" layoutpos="none" padding="rect(0rp,31rp,0rp,0rp)" accessible="true">
+<ModernProgressRing id="atom(readingDevicesProgressBar)" layoutpos="left" height="20rp" width="20rp"/>
+<RichText content="resstr(4000)" contentalign="bottomleft | wrapleft" layoutpos="client" padding="rect(10rp,0rp,0rp,0rp)" accrole="statictext" accessible="true"/>
+</element>
+<element id="atom(EapSimNoSimsNode)" layout="borderlayout()" accessible="true" layoutpos="none">
+<RichText content="resstr(1119)" contentalign="bottomleft | wrapleft" accrole="statictext" accessible="true"/>
+</element>
+<element id="atom(EapSimSelectNode)" layout="borderlayout()" layoutpos="none">
+<element id="atom(IDC_PIN_FAILED_NODE)" layout="Borderlayout()" layoutpos="none">
+<RichText id="atom(IDC_PIN_FAILED_TEXT)" contentalign="wrapleft" accrole="statictext" accessible="true" foreground="ImmersiveSaturatedInlineErrorText"/>
+</element> 
+<element id="atom(IDC_PIN_ATTEMPTS_NODE)" layout="flowlayout()" layoutpos="none" padding="rect(0rp,0rp,0rp,7rp)">
+<RichText content="resstr(4002)" accrole="statictext" accessible="true"/>
+<RichText id="atom(IDC_PIN_ATTEMPTS_NUMBER)" contentalign="middleleft" accrole="statictext" accessible="true"/>
+</element>
+<element id="atom(SimListNode)" layoutpos="top" layout="borderlayout()">
+<touchselect id="atom(simlist)" accname="simlist" layoutpos="top" shortcut="117" accessible="true"/>
+<touchedit2 id="atom(IDC_PIN_PASSWORD)" passwordcharacter="9679" margin="rect(0rp,28rp,0rp,0rp)" layoutpos="none" shortcut="112" PromptText="resstr(1123)" PromptWithCaret="true" accessible="true" accname="resstr(4003)" ContentAlign="middleleft" behaviors="Windows.UI.Popups::TouchEditContextMenu()"/>
+</element>
+<element id="atom(TelNumberNode)" layoutpos="none" layout="flowlayout(0,0,0,0)" margin="rect(0rp,24rp,0rp,0rp)">
+<RichText content="resstr(4004)" accrole="statictext" accessible="true"/>
+<RichText id="atom(TelNumber)" contentalign="wrapleft" accrole="statictext" accessible="true"/>
+</element>
+<element id="atom(IccIdNode)" layoutpos="none" layout="flowlayout(0,0,0,0)" margin="rect(0rp,24rp,0rp,0rp)">
+<RichText content="resstr(4005)" accrole="statictext" accessible="true"/>
+<RichText id="atom(IccId)" contentalign="wrapleft" accrole="statictext" accessible="true"/>
+</element>
+<element layoutpos="top" layout="flowlayout(0,0,0,0)">
+<RichText content="resstr(4006)" accrole="statictext" accessible="true"/>
+<RichText id="atom(devName)" contentalign="wrapleft" accrole="statictext" accessible="true"/>
+</element>
+</element>
+</element>
+<stylesheets>
+<style resid="Modern" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<RichText constrainlayout="narrow"/>
+<if id="atom(unlockingProgressBar)">
+<ModernProgressRing foreground="ImmersiveSaturatedPrimaryText"/>
+</if>
+<if id="atom(readingDevicesProgressBar)">
+<ModernProgressRing foreground="ImmersiveSaturatedPrimaryText"/>
+</if>
+<if class="TitlePaddingWithoutText">
+<element padding="rect(0rp, 16rp, 0rp, 0rp)"/>
+</if>
+<if class="InputPaddingWithoutText">
+<element padding="rect(0rp, 0rp, 0rp, 7rp)"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

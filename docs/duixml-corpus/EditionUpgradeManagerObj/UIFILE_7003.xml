@@ -1,0 +1,102 @@
+<!--
+  source: %SYSTEMROOT%\System32\EditionUpgradeManagerObj.dll
+  resource: UIFILE / "7003" / lang 1033
+  size: 2522 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="PWL_style" base="ressheet(ImmersiveStyles, library(dui70.dll), dark)">
+<if class="norm_text">
+<RichText
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_price">
+<RichText
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"/>
+</if>
+<if class="pwl_CheckBox">
+<touchcheckbox
+contentalign="topleft | wrapleft"
+ToggleOnClick="true"
+accessible="true"
+foreground="ImmersiveSaturatedPrimaryText"
+accrole="checkbutton"/>
+</if>
+<if class="pwl_progress_ring" >
+<ModernProgressRing
+width="20rp"
+height="20rp"
+foreground="ImmersiveSaturatedPrimaryText"
+margin="rect(20rp, 0rp, 5rp, 25rp)"/>
+</if>
+<if class="pwl_touch_hyper_link">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis"
+accessible="true"
+cursor="hand"
+accdefaction="click"/>
+<if keyfocused="true">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis | focusrect"/>
+</if>
+</if>
+<TouchHyperLink
+contentalign    = "topleft | wrapleft"
+accessible      = 'true'
+accrole         = 'link'
+cursor = "hand"
+/>
+</style>
+</stylesheets>
+<Element
+resid = "ProgressPage"
+id = "atom(ProgressPage)"
+layout = "borderlayout()"
+MinSize ="size(80rp, 249rp)"
+sheet = "PWL_style"
+accessible = "true"
+accrole = "dialog">
+<RichText
+accessible = "true"
+accrole = "statictext"
+layoutpos = "top"
+class = "norm_text"
+contentalign = "wrapleft"
+margin="rect(0rp, 0rp, 10rp, 25rp)"
+id = "atom(UserInstructions)"
+overhang="false"
+/>
+<Element id="atom(LoadingWrapper)" layout = "verticalflowlayout(0, 2, 2, 2)" layoutpos="client">
+<ModernProgressRing id = "atom(ScanningProgressRing)"
+accessible="true"
+background="argb(0,0,0,0)"
+class="moset_progress_ring"
+width="50rp"
+height="50rp"
+margin="rect(0rp, 0rp, 0rp, 15rp)"
+accname="ProgressBar"
+accrole="ProgressBar"
+/>
+<RichText
+id = "atom(ProgressLabel)"
+class = "norm_text"
+contentalign="middlecenter"
+accessible="true"
+accrole="StatusBar"
+accName="Upgrade progress"
+overhang = "false"
+/>
+</Element>
+<Element layout = "flowlayout()" id = "atom(Errorwrapper)" layoutpos = "bottom">
+<RichText id = "atom(PkeyErrorMsg)" margin = "rect(0rp, 0rp, 10rp, 25rp)" class = "norm_text" contentalign="wrapleft"
+accessible="true" accrole="statictext"
+foreground="ImmersiveStartInlineErrorText" overhang = "false"/>
+</Element>
+</Element>
+</duixml>

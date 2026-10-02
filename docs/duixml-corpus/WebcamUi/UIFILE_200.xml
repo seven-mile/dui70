@@ -1,0 +1,154 @@
+<!--
+  source: %SYSTEMROOT%\System32\WebcamUi.dll
+  resource: UIFILE / "200" / lang 1033
+  size: 16832 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="WebcamLayout" id="atom(webcamPage)" sheet="defaultSheet" visible="true" layout="filllayout()" behaviors="PVL::AnimationTrap()" class="clsTopLevelPage">
+		<AppMainPage id="atom(mainPageElement)" layout="filllayout()">
+			<element layoutpos="client" layout="filllayout()">
+				<element layoutpos="client" layout="filllayout()">
+					<FileDocked id="atom(idFileDocked)" layoutpos="client" layout="filllayout()" active="pointer">
+						<TouchScrollViewer id="atom(idTSV)" xscrollable="true" yscrollable="false" layoutpos="client" xbarvisibility="never" ybarvisibility="never" accessible="true" accrole="list" ZoomMaximum="1.0" ZoomMinimum="0.6" InteractionMode="TranslateX|Zoom|Inertia" SnapMode="Single" active="mouse|pointer" behaviors="DUI70::TSVEnableVirtualization()">
+							<element id="atom(idItemList)" layout="flowlayout()" layoutpos="client" background="20575" active="mouse|keyboard|pointer|nosyncfocus" />
+						</TouchScrollViewer>
+						<TouchButton id="atom(idPrevItem)" content="resstr(550)" class="clsFileDockedNavigationButton" layoutpos="absolute" visible="false" active="mouse|pointer|keyboard|nosyncfocus" accname="resstr(1001)" accdesc="resstr(1000)" />
+						<TouchButton id="atom(idNextItem)" content="resstr(551)" class="clsFileDockedNavigationButton" layoutpos="absolute" visible="false" active="mouse|pointer|keyboard|nosyncfocus" accname="resstr(1002)" accdesc="resstr(1003)" />
+						<element id="atom(idFileDockedPlaybackAnimation)" class="clsPlaybackAnimation" layout="filllayout()" layoutpos="absolute" visible="false">
+							<element layoutpos="client" layout="verticalflowlayout(0,2,2,2)" background="20575">
+								<element id="atom(idFileDockedAnimationPreview)" class="clsPlaybackAnimationPreview" layoutpos="client" />
+							</element>
+							<ModernProgressRing id="atom(idVideoPlaybackProgress)" class="clsPlaybackRing" layoutpos="client" />
+						</element>
+					</FileDocked>
+					<element id="atom(idCaptureAnimation)" class="clsCaptureAnimation" layout="filllayout()" layoutpos="none">
+						<element layoutpos="client" layout="verticalflowlayout(0,2,2,2)" background="20575">
+							<element id="atom(idCaptureAnimationPreview)" layoutpos="client" />
+						</element>
+						<element class="clsCaptureProgressBarContainer" layout="borderlayout()" layoutpos="top">
+							<ModernProgressBar id="atom(idCaptureProgress)" class="clsCaptureProgress" layoutpos="client" determinate="false" />
+						</element>
+					</element>
+					<element id="atom(idFocusAnimation)" layout="borderlayout()" visible="false" layoutpos="absolute">
+						<element id="atom(idLeftRect)" class="clsFocusRectLeft" layoutpos="left" />
+						<element layoutpos="client" class="clsFocusAnimationSpacer" />
+						<element id="atom(idRightRect)" class="clsFocusRectRight" layoutpos="right" />
+					</element>
+					<PreviewArea id="atom(idPreviewArea)" layoutpos="client" layout="filllayout()">
+						<element id="atom(idPreviewTextArea)" layout="flowlayout(0,2,0,2)" layoutpos="none">
+							<element id="atom(idPreviewTextLargeModeArea)" class="clsPreviewTextArea" layout="borderlayout()" layoutpos="none">
+								<element id="atom(idPreviewTextLargeModeSpacerElement)" class="clsPreviewTextLargeModeSpacer" layoutpos="left" />
+								<element layoutpos="client" layout="borderlayout()">
+									<RichText id="atom(idPreviewTextLargeModeHeaderTextElement)" class="clsPreviewTextHeader" content="resstr(654)" layoutpos="top" />
+									<RichText id="atom(idPreviewTextLargeModeHeaderTextSmallElement)" class="clsPreviewTextHeaderSmall" content="resstr(654)" layoutpos="top" />
+									<RichText id="atom(idPreviewTextLargeModeBodyPrimaryElement)" class="clsPreviewTextLargeModeBodyPrimary" layoutpos="top" />
+									<RichText id="atom(idPreviewTextLargeModeBodySecondaryElement)" class="clsPreviewTextLargeModeBodySecondary" layoutpos="top" />
+								</element>
+							</element>
+							<element id="atom(idPreviewTextSmallModeArea)" class="clsPreviewTextArea" layout="borderlayout()" layoutpos="none">
+								<RichText id="atom(idPreviewTextSmallModeBodyPrimaryElement)" class="clsPreviewTextSmallModeBodyPrimary" layoutpos="top" />
+								<RichText id="atom(idPreviewTextSmallModeBodySecondaryElement)" class="clsPreviewTextSmallModeBodySecondary" layoutpos="top" />
+							</element>
+						</element>
+						<PreviewControl id="atom(idPreviewControl)" class="clsPreviewControl" layoutpos="absolute" accname="resstr(1004)" />
+					</PreviewArea>
+					<element id="atom(idPhotoArea)" layout="filllayout()" layoutpos="none" active="pointer">
+						<element id="atom(idPhotoViewElement)" layoutpos="absolute" accessible="true" accrole="graphic" accname="Photo viewing area" />
+						<PhotoCropControl id="atom(idPhotoCropCtrl)" class="clsPhotoCropControl" accname="resstr(1005)" accdesc="resstr(1006)" layoutpos="absolute">
+							<CommandButton id="atom(idCropTopLeft)" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" layoutpos="absolute" class="clsPhotoCropCircle" active="inactive" />
+							<CommandButton id="atom(idCropTopRight)" class="clsPhotoCropCircle" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" layoutpos="absolute" active="inactive" />
+							<CommandButton id="atom(idCropBottomLeft)" class="clsPhotoCropCircle" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" layoutpos="absolute" active="inactive" />
+							<CommandButton id="atom(idCropBottomRight)" class="clsPhotoCropCircle" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" layoutpos="absolute" active="inactive" />
+						</PhotoCropControl>
+						<ModernProgressRing id="atom(idPhotoCropProgressIndicator)" class="clsPhotoCropProgressIndicator" layoutpos="none" />
+					</element>
+					<element id="atom(idPlaybackVideoArea)" layout="filllayout()" layoutpos="none" active="pointer">
+						<element id="atom(idVideoPlaybackTextArea)" class="clsVideoPlaybackTextArea" layout="borderlayout()" layoutpos="none">
+							<element id="atom(idVideoPlaybackTextLeftSpace)" layoutpos="left" class="clsVideoPlaybackTextLeftSpace" />
+							<RichText id="atom(idVideoPlaybackText)" class="clsVideoPlaybackText" layoutpos="top" />
+						</element>
+						<PlaybackVideoControl id="atom(idPlaybackVideoControl)" class="clsPlaybackControl" layoutpos="absolute" layout="verticalflowlayout(0,2,2,2)" accname="Playback Area" visible="false">
+							<CommandButton id="atom(idPlayPauseBtn)" class="clsPlayPauseCmdBtn" layoutpos="client" RestGlyphs="resstr(844)" HoverGlyphs="resstr(845)" PressedGlyphs="resstr(846)" DisabledGlyphs="resstr(847)" CustomRestGlyphs="resstr(848)" CustomHoverGlyphs="resstr(849)" CustomPressedGlyphs="resstr(850)" CustomDisabledGlyphs="resstr(851)" Description="resstr(712)" CustomDescription="resstr(713)" NoLabelTooltip="false" custom="false" visible="false" accname="resstr(1034)" />
+						</PlaybackVideoControl>
+					</element>
+				</element>
+			</element>
+			<element layout="filllayout()" layoutpos="left" background="20575">
+				<CommandButton id="atom(idDlgCloseBtn)" class="clsBackCommandButton" layoutpos="none" RestGlyphs="resstr(852)" HoverGlyphs="resstr(853)" PressedGlyphs="resstr(854)" DisabledGlyphs="resstr(855)" active="mouse|pointer|keyboard|nosyncfocus" NoLabelTooltip="false" Expanded="false" accname="resstr(1007)" accdesc="resstr(1008)" />
+				<CommandButton id="atom(idCloseBtn)" class="clsCloseCommandButton" layoutpos="none" RestGlyphs="resstr(916)" HoverGlyphs="resstr(917)" PressedGlyphs="resstr(918)" DisabledGlyphs="resstr(919)" active="mouse|pointer|keyboard|nosyncfocus" NoLabelTooltip="false" Expanded="false" accname="resstr(1066)" accdesc="resstr(1067)" />
+			</element>
+			<element id="atom(idCountdownBackground)" class="clsCountdownBackground" layout="flowlayout(0,2,2,2)" layoutpos="none">
+				<element id="atom(idCountdownContainer)" layout="filllayout()">
+					<RichText visible="false" class="clsCountdownText" content="resstr(1011)" />
+					<RichText visible="false" class="clsCountdownText" content="resstr(1012)" />
+					<RichText visible="false" class="clsCountdownText" content="resstr(1013)" />
+				</element>
+			</element>
+			<CommandBar id="atom(idCaptureCommandBar)" class="clsAppCommandBar" layout="borderlayout()" layoutpos="absolute" visible="false" enabled="false">
+				<element layout="borderlayout()" class="clsRightPadding" layoutpos="right">
+					<CommandButton id="atom(idCameraCycleBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(808)" HoverGlyphs="resstr(809)" PressedGlyphs="resstr(810)" DisabledGlyphs="resstr(811)" Label="resstr(719)" enabled="false" accname="resstr(1016)" accdesc="resstr(1017)" />
+					<CommandButton id="atom(idSettingsBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(812)" HoverGlyphs="resstr(813)" PressedGlyphs="resstr(814)" DisabledGlyphs="resstr(815)" Label="resstr(714)" enabled="false" accname="resstr(1018)" accdesc="resstr(1019)" />
+					<CommandButton id="atom(idTimerBtn)" class="clsToggleCmdBtn" layoutpos="left" RestGlyphs="resstr(816)" HoverGlyphs="resstr(817)" PressedGlyphs="resstr(818)" DisabledGlyphs="resstr(819)" CustomRestGlyphs="resstr(856)" CustomHoverGlyphs="resstr(857)" CustomPressedGlyphs="resstr(858)" CustomDisabledGlyphs="resstr(859)" Label="resstr(715)" CustomLabel="resstr(716)" Description="resstr(717)" CustomDescription="resstr(718)" enabled="false" custom="false" accname="resstr(1020)" />
+					<CommandButton id="atom(idCaptureModeSwitchBtn)" class="clsToggleCmdBtn" layoutpos="left" CustomRestGlyphs="resstr(800)" CustomHoverGlyphs="resstr(801)" CustomPressedGlyphs="resstr(802)" CustomDisabledGlyphs="resstr(803)" RestGlyphs="resstr(804)" HoverGlyphs="resstr(805)" PressedGlyphs="resstr(806)" DisabledGlyphs="resstr(807)" Label="resstr(720)" CustomLabel="resstr(721)" Description="resstr(722)" CustomDescription="resstr(723)" enabled="false" custom="false" accname="resstr(1021)" />
+					<RichText id="atom(idVideoCaptureCounterText)" class="clsVideoCaptureDurationCounterText" layoutpos="none" accname="resstr(1022)" accdesc="resstr(1023)" />
+					<element id="atom(idCommandBarPaddingElement)" class="clsExpandedPadding" layoutpos="right" />
+				</element>
+			</CommandBar>
+			<CommandBar id="atom(idPhotoCommandBar)" class="clsAppCommandBar" layoutpos="absolute" visible="false" enabled="false" layout="borderlayout()" contentalign="middleright">
+				<element layout="borderlayout()" class="clsRightPadding" layoutpos="right">
+					<CommandButton id="atom(idPhotoCropBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(820)" HoverGlyphs="resstr(821)" PressedGlyphs="resstr(822)" DisabledGlyphs="resstr(823)" Label="resstr(724)" accname="resstr(1024)" accdesc="resstr(1025)" />
+					<CommandButton id="atom(idPhotoDeleteBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(836)" HoverGlyphs="resstr(837)" PressedGlyphs="resstr(838)" DisabledGlyphs="resstr(839)" Label="resstr(725)" accname="resstr(1026)" accdesc="resstr(1027)" />
+					<CommandButton id="atom(idPhotoAcceptBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(828)" HoverGlyphs="resstr(829)" PressedGlyphs="resstr(830)" DisabledGlyphs="resstr(831)" Label="resstr(726)" accname="resstr(1028)" accdesc="resstr(1029)" />
+					<CommandButton id="atom(idPhotoCancelCropBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(832)" HoverGlyphs="resstr(833)" PressedGlyphs="resstr(834)" DisabledGlyphs="resstr(835)" Label="resstr(727)" accname="resstr(1030)" accdesc="resstr(1031)" />
+					<CommandButton id="atom(idPhotoRetakeBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(840)" HoverGlyphs="resstr(841)" PressedGlyphs="resstr(842)" DisabledGlyphs="resstr(843)" Label="resstr(728)" accname="resstr(1032)" accdesc="resstr(1033)" />
+					<element id="atom(idCommandBarPaddingElement)" class="clsExpandedPadding" layoutpos="right" />
+				</element>
+			</CommandBar>
+			<CommandBar id="atom(idVideoCommandBar)" class="clsAppCommandBar" layoutpos="absolute" visible="false" enabled="false" layout="borderlayout()" contentalign="middlecenter">
+				<element id="atom(idPlaybackContainer)" class="clsPlaybackContainer" layoutpos="client" layout="borderlayout()" contentalign="middlecenter">
+					<RichText id="atom(idRelativePosition)" class="clsPlaybackCurrentPosTxt" layoutpos="left" />
+					<TrimmingControl id="atom(idTrimmingControl)" class="clsTrimmingControl" layoutpos="client" layout="borderlayout()" accname="resstr(1036)" accrole="toolbar">
+						<CommandButton id="atom(idTrimLeft)" class="clsTrimMarker" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" NoLabelTooltip="false" layoutpos="absolute" x="0rp" y="9rp" accname="Left Trim" accdesc="Trim start marker" />
+						<CommandButton id="atom(idPosition)" class="clsThumb" RestGlyphs="resstr(951)" HoverGlyphs="resstr(951)" PressedGlyphs="resstr(951)" DisabledGlyphs="resstr(952)" NoLabelTooltip="false" layoutpos="absolute" x="13rp" y="29rp" accname="Current Position" accdesc="Current video position marker" />
+						<CommandButton id="atom(idTrimRight)" class="clsTrimMarker" RestGlyphs="resstr(950)" HoverGlyphs="resstr(950)" PressedGlyphs="resstr(950)" DisabledGlyphs="resstr(950)" NoLabelTooltip="false" layoutpos="absolute" x="40rp" y="9rp" accname="Right Trim" accdesc="Trim end marker" />
+					</TrimmingControl>
+					<element layout="borderlayout()" layoutpos="right">
+						<RichText id="atom(idDuration)" class="clsPlaybackDurationTxt" layoutpos="left" />
+						<CommandButton id="atom(idShowTrimsBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(824)" HoverGlyphs="resstr(825)" PressedGlyphs="resstr(826)" DisabledGlyphs="resstr(827)" Label="resstr(729)" accname="resstr(1040)" accdesc="resstr(1041)" />
+						<CommandButton id="atom(idVideoDeleteBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(836)" HoverGlyphs="resstr(837)" PressedGlyphs="resstr(838)" DisabledGlyphs="resstr(839)" Label="resstr(730)" accname="resstr(1042)" accdesc="resstr(1043)" />
+						<CommandButton id="atom(idVideoAcceptBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(828)" HoverGlyphs="resstr(829)" PressedGlyphs="resstr(830)" DisabledGlyphs="resstr(831)" Label="resstr(731)" accname="resstr(1044)" accdesc="resstr(1045)" />
+						<CommandButton id="atom(idVideoExitTrimModeBtn)" class="clsCommandButton" layoutpos="none" RestGlyphs="resstr(832)" HoverGlyphs="resstr(833)" PressedGlyphs="resstr(834)" DisabledGlyphs="resstr(835)" Label="resstr(732)" accname="resstr(1046)" accdesc="resstr(1047)" />
+						<CommandButton id="atom(idVideoRetakeBtn)" class="clsCommandButton" layoutpos="left" RestGlyphs="resstr(840)" HoverGlyphs="resstr(841)" PressedGlyphs="resstr(842)" DisabledGlyphs="resstr(843)" Label="resstr(733)" accname="resstr(1048)" accdesc="resstr(1049)" />
+						<element id="atom(idCommandBarPaddingElement)" class="clsExpandedPadding" layoutpos="right" />
+					</element>
+				</element>
+				<element id="atom(idTrimContainer)" layoutpos="none" layout="borderlayout()" contentalign="middlecenter">
+					<ModernProgressBar id="atom(idTrimProgress)" class="clsTrimProgress" accessible="true" accname="resstr(1051)" layoutpos="top" position="0" minimum="0" maximum="100" determinate="true" />
+					<element layout="borderlayout()" class="clsRightPadding" layoutpos="right">
+						<CommandButton id="atom(idTrimCancel)" class="clsTrimCancelCmdBtn" layoutpos="left" RestGlyphs="resstr(832)" HoverGlyphs="resstr(833)" PressedGlyphs="resstr(834)" DisabledGlyphs="resstr(835)" Label="resstr(734)" accname="resstr(1052)" accdesc="resstr(1053)" accrole="pushbutton" />
+						<element id="atom(idTrimContainerPaddingElement)" class="clsExpandedPadding" layoutpos="right" />
+					</element>
+				</element>
+			</CommandBar>
+		</AppMainPage>
+	</element>
+	<FileDockedItem resid="FileDockedItem" sheet="defaultSheet" layoutpos="client" active="pointer" layout="borderlayout()" contentalign="middlecenter">
+		<element id="atom(idItemContainer)" layoutpos="client" layout="verticalflowlayout(0,2,2,2)">
+			<element id="atom(idItem)" class="clsFileDockedItemContent" layoutpos="client" layout="borderlayout()" accessible="true" accrole="graphic" contentalign="middlecenter">
+				<element id="atom(idOrnament)" class="clsOrnament" layout="borderlayout()" background="20575" layoutpos="none">
+					<element id="atom(idOrnamentTop)" layout="borderlayout()" layoutpos="none">
+						<element id="atom(idSelectionIcon)" accessible="true" accrole="graphic" accname="Selected" content="sgraphic(390, 2)" contentalign="topright" layoutpos="right" />
+					</element>
+					<element id="atom(idOrnamentBottom)" layout="borderlayout()" layoutpos="none">
+						<element id="atom(idVideoType)" class="clsVideoIconOrnament" contentalign="middlecenter" layoutpos="right" />
+						<RichText id="atom(idVideoLength)" class="clsOrnamentText" contentalign="middleright" layoutpos="right" />
+					</element>
+				</element>
+			</element>
+		</element>
+	</FileDockedItem>
+	<stylesheets>
+		<style resid="defaultSheet" base="ressheet(205, webcamui_style)" />
+	</stylesheets>
+</duixml>

@@ -1,0 +1,388 @@
+<!--
+  source: %SYSTEMROOT%\System32\fvecpl.dll
+  resource: UIFILE / "110" / lang 1033
+  size: 27019 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+<style resid="bitlocker_style">
+<if class="GroupHeader">
+<if mousewithin="true">
+<Element background="themeable(dtb(Explorer::ListView,1,2), threedlightshadow)"/>
+</if>
+</if>
+<if class="ExpandoButtonText">
+<Element font="gtf(CONTROLPANELSTYLE, 5, 0)" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" contentalign="wrapleft" layoutpos="top"/>
+<if keyfocused="true">
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+</if>
+<if id="atom(ExpandoButtonImage)">
+<Button height="themeable(gtmet(TaskDialog, 13, 0, 2417), '21rp')" width="themeable(gtmet(TaskDialog, 13, 0, 2416), '19rp')" margin="themeable(gtmar(TaskDialog, 20, 0, 3602), rect(0rp,0rp,10rp,0rp))"/>
+<if keyfocused="true">
+<button contentalign="focusrect"/>
+</if>
+<if selected="true">
+<Button background="themeable(dtb(TaskDialog, 13, 4), dfc(3, 0x0000))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog, 13, 5), dfc(3, 0x0000))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog, 13, 6), dfc(3, 0x0000))"/>
+</if>
+</if>
+<if selected="false">
+<Button background="themeable(dtb(TaskDialog, 13, 1), dfc(3, 0x0001))"/>
+<if mousefocused="true">
+<Button background="themeable(dtb(TaskDialog, 13, 2), dfc(3, 0x0001))"/>
+</if>
+<if pressed="true">
+<Button background="themeable(dtb(TaskDialog, 13, 3), dfc(3, 0x0001))"/>
+</if>
+</if>
+</if>
+</style>
+</stylesheets>
+<FveCplPage resid="main" sheet="cp_style" layout="borderlayout()" accessible="true" accname="BitLocker Drive Encryption Hub" accrole="16">
+<element class="cp_topbox" layout="borderlayout()" layoutpos="client">
+<scrollviewer id="atom(userviewer)" sheet="common" layoutpos="top" xscrollable="false" yscrollable="true" accessible="true" accrole="16" accname="BitLocker Drive Encryption Content">
+<element class="cp_hub_frame" sheet="cp_style" layoutpos="top" layout="borderlayout()">
+<element layout="borderlayout()" layoutpos="top">
+<viewer layoutpos="right">
+<button id="atom(hubhelp)" class="cp_help_glyph" cursor="hand" accessible="true" accname="hubhelp" accrole="link"/>
+</viewer>
+</element>
+<element class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+<element layoutpos="top" layout="flowlayout()">
+<element class="cp_content_instruction" layoutpos="top" content="resstr(1103)"/>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<element layoutpos="top" layout="flowlayout()">
+<element class="cp_content_text" layoutpos="top" content="resstr(1104)"/>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<element layout="borderlayout()" layoutpos="top">
+<element id="atom(PolicyInfoBanner)" layout="borderlayout()" class="cp_content_banner_box">
+<element id="atom(PolicyInfoIcon)" content="icon(81, sysmetric(49), sysmetric(50),library(imageres.dll))" layoutpos="left" padding="rect(0rp,0rp,5rp,0rp)" accessible="true" accname="resstr(1199)" accrole="graphic"/>
+<element id="atom(PolicyInfoLabel)" class="cp_content_text" layoutpos="left" content="resstr(1200)"/>
+</element>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)"/>
+<element layoutpos="top" layout="filllayout()">
+<element layout="flowlayout()">
+<element content="resstr(1201)" contentalign="wrapleft" class="cp_content_instruction" accessible="true" accRole="statictext"/>
+</element>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+<element layoutpos="top" layout="borderlayout()">
+<repeater expand="volumeInfo" id="atom(osDriveList)" layoutpos="top" layout="borderlayout()" sheet="cp_style" accessible="true" accrole="list" accname="Operating system drive.">
+<bind connect="volumeExpandoDrive" property="volumeExpandoDrive"/>
+</repeater>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)"/>
+<element layoutpos="top" layout="filllayout()">
+<element layout="flowlayout()">
+<element content="resstr(1202)" contentalign="wrapleft" class="cp_content_instruction" accessible="true" accRole="statictext"/>
+</element>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+<element layoutpos="top" layout="borderlayout()">
+<repeater expand="volumeInfo" id="atom(fixedDriveList)" layoutpos="top" layout="borderlayout()" sheet="cp_style" accessible="true" accrole="list" accname="Fixed data drives.">
+<bind connect="volumeExpandoDrive" property="volumeExpandoDrive"/>
+</repeater>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)"/>
+<element layoutpos="top" layout="filllayout()">
+<element layout="flowlayout()">
+<element content="resstr(1146)" contentalign="wrapleft" class="cp_content_instruction" accessible="true" accRole="statictext"/>
+</element>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<repeater expand="volumeInfo" id="atom(removableDriveList)" layoutpos="top" layout="borderlayout()" sheet="cp_style" accessible="true" accrole="list" accname="Removable data drives.">
+<bind connect="volumeExpandoDrive" property="volumeExpandoDrive"/>
+</repeater>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+<element id="atom(insertRemovableDrive)" layoutpos="none" class="cp_content_text" content="resstr(1147)" padding="rect(15rp,0rp,0rp,0rp)"/>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+</element> 
+</element> 
+</scrollviewer>
+</element>
+</FveCplPage>
+<FveCplPage resid="basic-main" sheet="cp_style" layout="borderlayout()" accessible="true" accname="BitLocker Drive Encryption Hub" accrole="16">
+<element class="cp_topbox" layout="borderlayout()" layoutpos="client">
+<scrollviewer id="atom(userviewer)" sheet="common" layoutpos="top" xscrollable="false" yscrollable="true" accessible="true" accrole="16" accname="BitLocker Drive Encryption Content">
+<element class="cp_hub_frame" sheet="cp_style" layoutpos="top" layout="borderlayout()">
+<element layout="borderlayout()" layoutpos="top">
+<viewer layoutpos="right">
+<button id="atom(hubhelp)" class="cp_help_glyph" cursor="hand" accessible="true" accname="hubhelp" accrole="link"/>
+</viewer>
+</element>
+<element class="cp_content_pane" layoutpos="top" layout="borderlayout()">
+<element id="atom(BitLockerOnPane)" layoutpos="top" layout="borderlayout()">
+<element layoutpos="top" layout="flowlayout()">
+<element class="cp_content_instruction" layoutpos="top" content="resstr(1218)"/>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<element layoutpos="top" layout="flowlayout()">
+<element class="cp_content_text" layoutpos="top" content="resstr(1219)"/>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)"/>
+<element layoutpos="top" layout="filllayout()">
+<element layout="flowlayout()">
+<element content="resstr(1201)" contentalign="wrapleft" class="cp_content_instruction" accessible="true" accRole="statictext"/>
+</element>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+<element layoutpos="top" layout="borderlayout()">
+<repeater expand="volumeInfoBasic" id="atom(osDriveList)" layoutpos="top" layout="borderlayout()" sheet="cp_style" accessible="true" accrole="list" accname="Operating system drive">
+<bind connect="volumeExpandoDrive" property="volumeExpandoDrive"/>
+</repeater>
+</element> 
+<element class="cp_content_v_spacer" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)"/>
+<element id="atom(fixedDriveHeader)" layoutpos="top" layout="filllayout()">
+<element layout="flowlayout()">
+<element content="resstr(1202)" contentalign="wrapleft" class="cp_content_instruction" accessible="true" accRole="statictext"/>
+</element>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top" padding="rect(0rp,10rp,40rp,10rp)"/>
+<element layoutpos="top" layout="borderlayout()">
+<repeater expand="volumeInfoBasic" id="atom(fixedDriveList)" layoutpos="top" layout="borderlayout()" sheet="cp_style" accessible="true" accrole="list" accname="Fixed data drives">
+<bind connect="volumeExpandoDrive" property="volumeExpandoDrive"/>
+</repeater>
+</element>
+</element>
+<element id="atom(BitLockerOffPane)" layoutpos="none" layout="borderlayout()">
+<element layoutpos="top" layout="flowlayout()">
+<element class="cp_content_instruction" layoutpos="top" content="resstr(1210)"/>
+</element>
+<element class="cp_content_v_spacer" layoutpos="top"/>
+<element layoutpos="top" layout="flowlayout()">
+<element id="atom(DeviceEncryptionOffMessage)" class="cp_content_text" layoutpos="top" content="resstr(1204)"/>
+<element id="atom(DeviceEncryptionOffMessageArm)" class="cp_content_text" layoutpos="top" content="resstr(1222)"/>
+</element>
+</element>
+</element>
+</element>
+</scrollviewer>
+</element>
+</FveCplPage>
+<element resid="volumeInfo" layoutpos="top" layout="borderlayout()" margin="rect(0rp,10rp,0rp,0rp)" padding="rect(0rp,0rp,60rp,0rp)">
+<element layoutpos="top" layout="filllayout()">
+<element class="cp_content_divider_line"/>
+</element>
+<expando id="atom(volumeExpando)" sheet="bitlocker_style" layout="borderlayout()" layoutpos="top">
+<Element id="atom(HeaderButton)" class="GroupHeader" layout="borderlayout()" layoutpos="top" padding="rect(0,7rp,0,7rp)">
+<Accessiblebutton id="atom(volumeGroupHeader)" layout="borderlayout()" layoutpos="top" background="argb(0,0,0,0)" accessible="true" accrole="pushbutton">
+<Element layout="flowlayout(0,2,0,2)" layoutpos="left" padding="rect(7rp,0rp,0rp,0rp)">
+<Element id="atom(volumeExpandoDrive)" class="ExpandoButtonText" accessible="true" content="resstr(1181)" shortcut="auto"/>
+</Element>
+<Accessiblebutton id="atom(arrow)" layoutpos="right" layout="flowlayout()" padding="rect(15rp,0,15rp,0)" accessible="true" accrole="pushbutton" accname="resstr(1160)" accdesc="resstr(1161)">
+<Button id="atom(ExpandoButtonImage)" class="ExpandButtonNormal" layoutpos="top" active="inactive"/>
+</Accessiblebutton>
+</Accessiblebutton>
+</Element>
+<element id="atom(clipper)" sheet="cp_style" class="cp_content_pane" visible="false" layoutpos="bottom" layout="borderlayout()" padding="rect(12rp,10rp,0,7rp)" animation="rectangleV | s | veryfast">
+<element layoutpos="client" layout="borderlayout()"> 
+<element id="atom(volumeListItem)" class="cp_drv_box" layoutpos="client" layout="borderlayout()" margin="rect(0rp,10rp,0rp,10rp)" accessible="true" accrole="listitem" accname="Drive">
+<element layout="flowlayout(0,2,0,0)" layoutpos="top" padding="rect(30rp,0rp,0rp,0rp)">
+<element id="atom(picture)" margin="rect(4rp,4rp,4rp,4rp)" accessible="true" accrole="graphic" accname="resstr(1138)" layoutpos="top"/>
+<element layout="verticalflowlayout(0, 0, 0, 0)" padding="rect(160rp,4rp,0rp,4rp)">
+<element id="atom(wrapperTurnOn)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldTurnOn)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1148)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandTurnOn)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1140)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperUnlock)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldUnlock)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1211)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandUnlock)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1142)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperSuspend)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldSuspend)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1150)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandSuspend)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1143)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperResume)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldResume)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1151)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandResume)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1144)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperChangeStartupUnlock)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldChangeStartupUnlock)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1214)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandChangeStartupUnlock)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1215)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperSaveRecovery)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldSaveRecovery)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1195)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandSaveRecovery)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1196)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperChangePin)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldChangePin)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1178)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandChangePin)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1153)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperChangePassphrase)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldChangePassphrase)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1178)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandChangePassphrase)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1154)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperAddPassphrase)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldAddPassphrase)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1164)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandAddPassphrase)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1165)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperRemovePassphrase)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldRemovePassphrase)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1166)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandRemovePassphrase)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1167)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperAddSmartCard)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldAddSmartCard)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1168)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandAddSmartCard)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1169)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperRemoveSmartCard)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldRemoveSmartCard)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1170)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandRemoveSmartCard)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1171)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperDuplicateStartupKey)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldDuplicateStartupKey)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1176)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandDuplicateStartupKey)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1177)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperEnableAutoUnlock)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldEnableAutoUnlock)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1172)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandEnableAutoUnlock)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1173)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperDisableAutoUnlock)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldDisableAutoUnlock)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1174)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandDisableAutoUnlock)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1175)" margin="rect(4rp,0,0,0)"/>
+</element>
+<element id="atom(wrapperTurnOff)" layoutpos="none" layout="flowlayout(0,2,0,2)" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldTurnOff)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1149)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandTurnOff)" class="cp_content_link" accrole="pushbutton" layoutpos="left" content="resstr(1141)" margin="rect(4rp,0,0,0)"/>
+</element> 
+</element>
+</element>
+</element>
+</element> 
+</element> 
+</expando> 
+</element>
+<element resid="volumeInfoBasic" layoutpos="top" layout="borderlayout()" margin="rect(0rp,10rp,0rp,0rp)" padding="rect(0rp,0rp,60rp,0rp)">
+<element layoutpos="top" layout="filllayout()">
+<element class="cp_content_divider_line"/>
+</element>
+<expando id="atom(volumeExpando)" sheet="bitlocker_style" layout="borderlayout()" layoutpos="top">
+<Element id="atom(HeaderButton)" class="GroupHeader" layout="borderlayout()" layoutpos="top" padding="rect(0,7rp,0,7rp)">
+<Accessiblebutton id="atom(volumeGroupHeader)" layout="borderlayout()" layoutpos="top" background="argb(0,0,0,0)" accessible="true" accrole="pushbutton">
+<Element layout="flowlayout(0,2,0,2)" layoutpos="left" padding="rect(7rp,0rp,0rp,0rp)">
+<Element id="atom(volumeExpandoDrive)" class="ExpandoButtonText" accessible="true" content="resstr(1181)" shortcut="auto"/>
+</Element>
+<Accessiblebutton id="atom(arrow)" layoutpos="right" layout="flowlayout()" padding="rect(15rp,0,15rp,0)" accessible="true" accrole="pushbutton" accname="resstr(1160)" accdesc="resstr(1161)">
+<Button id="atom(ExpandoButtonImage)" class="ExpandButtonNormal" layoutpos="top" active="inactive"/>
+</Accessiblebutton>
+</Accessiblebutton>
+</Element>
+<element id="atom(clipper)" sheet="cp_style" class="cp_content_pane" visible="false" layoutpos="bottom" layout="borderlayout()" padding="rect(12rp,10rp,0,7rp)" animation="rectangleV | s | veryfast">
+<element layoutpos="client" layout="borderlayout()"> 
+<element id="atom(volumeListItem)" class="cp_drv_box" layoutpos="client" layout="borderlayout()" margin="rect(0rp,10rp,0rp,10rp)" accessible="true" accrole="listitem" accname="Drive">
+<element layout="flowlayout(0,2,0,0)" layoutpos="top" padding="rect(30rp,0rp,0rp,0rp)">
+<element id="atom(picture)" margin="rect(4rp,4rp,4rp,4rp)" accessible="true" accrole="graphic" accname="resstr(1138)" layoutpos="top"/>
+<element layout="verticalflowlayout(0, 0, 0, 0)" padding="rect(160rp,4rp,0rp,4rp)">
+<element id="atom(wrapperSaveRecovery)" layoutpos="none" layout="flowlayout()" margin="rect(0,0,0,4rp)">
+<button id="atom(shieldSaveRecovery)" cursor="hand" layoutpos="left" visible="false" accrole="graphic" accname="resstr(1195)" content="icon(78,sysmetric(49),sysmetric(50),library(imageres.dll))" active="mouse"/>
+<button id="atom(commandSaveRecovery)" class="cp_content_link" layoutpos="left" content="resstr(1196)" margin="rect(4rp,0,0,0)"/>
+</element>
+</element>
+</element>
+</element>
+</element> 
+</element> 
+</expando> 
+</element>
+</duixml>

@@ -1,0 +1,64 @@
+<!--
+  source: %SYSTEMROOT%\System32\DXP.dll
+  resource: UIFILE / "910" / lang 1033
+  size: 3933 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="DeviceBrandingModule" id="atom(DeviceBrandingModule)" layoutpos="top" layout="borderlayout()" height="182rp" accessible="true" accrole="pane" accname="resstr(2220,library(dxp.dll))">
+<element id="atom(idSeparator)" height="1rp" layoutpos="bottom" foreground="WindowText" background="Window"/>
+<element id="atom(idHeader)" layoutpos="top" layout="filllayout()" foreground="WindowText" background="Window" accessible="true" accrole="graphic" accname="resstr(2221,library(dxp.dll))">
+<Watermark id="atom(idWatermark)" layoutpos="client" layout="filllayout()" background="argb(0,0,0,0)">
+<element id="atom(idWatermarkImage)" layoutpos="client" accessible="true" accrole="graphic" accname="resstr(2222,library(dxp.dll))"/>
+</Watermark>
+<element id="atom(idGlass)" layoutpos="client"/>
+<element id="atom(idMainLayout)" layoutpos="client" layout="borderlayout()" background="argb(0,0,0,0)">
+<DeviceImage id="atom(idModelImage)" layoutpos="left" background="argb(0,0,0,0)" accessible="true" accrole="graphic" accname="resstr(2223,library(dxp.dll))"/>
+<element id="atom(idStatusPanel)" layoutpos="client" layout="borderlayout()" padding="rect(0,0,0rp,0rp)" background="argb(0,0,0,0)">
+<element id="atom(idDeviceName)" layoutpos="top" Font="gtf(ControlPanelStyle, 5, 0)" padding="rect(12rp,20rp,12rp,10rp)" contentalign="endellipsis" accessible="true" accrole="statictext"/>
+<element id="atom(idDeviceDesc)" layoutpos="top" Font="gtf(ControlPanelStyle, 8, 0)" padding="rect(12rp,0,0,0)" contentalign="endellipsis" accessible="true" accrole="statictext"/>
+<element layout="filllayout()" layoutpos="left" padding="rect(16rp,8rp,0,6rp)" height="124rp">
+<element id="atom(idBulletList)" layoutpos="client" layout="borderlayout()" visible="false"/>
+<element id="atom(idStatusGrid)" layoutpos="client" layout="gridlayout(3,2)" width="380rp" visible="false"/>
+</element>
+</element>
+<LogoFrame id="atom(idLogoPanel)" layoutpos="right" layout="borderlayout()">
+<NavButton id="atom(idMfgLogo1)" sheet="navButtonStyle" layoutpos="top" visible="false"/>
+<NavButton id="atom(idMfgLogo2)" sheet="navButtonStyle" layoutpos="top" visible="false"/>
+</LogoFrame>
+</element>
+</element>
+</element>
+<stylesheets>
+<style resid="navButtonStyle">
+<NavButton background="argb(0,0,0,0)" tooltip="true" accessible="true" contentAlign="middlecenter" accrole="link"/>
+<if mousefocused="true">
+<NavButton cursor="hand"/>
+</if>
+<if KeyFocused="true">
+<NavButton contentAlign="middlecenter|focusrect"/>
+</if>
+</style>
+<style resid="hyperlinkStyle">
+<button font="iconfont" contentalign="middleleft|endellipsis"/>
+<if custom="true">
+<if mousefocused="true">
+<button cursor="hand" font="iconfont;;;underline"/>
+</if>
+<if KeyFocused="true">
+<button contentAlign="middleleft|endellipsis|focusrect"/>
+</if>
+</if>
+</style>
+</stylesheets>
+<element resid="statusItem" layout="borderlayout()" layoutpos="top" padding="rect(1rp,1rp,1rp,1rp)">
+<element id="atom(statusIcon)" padding="rect(4rp,0rp,4rp,0rp)" layoutpos="left" contentalign="middleleft" background="argb(0,0,0,0)"/>
+<CCProgressBar id="atom(progressBar)" layoutpos="none" height="14rp" background="argb(0,0,0,0)" padding="rect(0,3rp,44rp,0rp)"/>
+<PercentFull id="atom(percentFull)" accessible="true" accrole="statictext" layoutpos="none" height="14rp" background="argb(0,0,0,0)" padding="rect(0,3rp,44rp,0rp)"/>
+<button id="atom(statusText)" sheet="hyperlinkStyle" layoutpos="client" enabled="true" tooltip="true" accessible="true" accrole="StaticText" background="argb(0,0,0,0)"/>
+</element>
+<element resid="bulletItem" layoutpos="top" layout="borderlayout()" padding="rect(4rp,2rp,4rp,2rp)" background="argb(0,0,0,0)">
+<element id="atom(bulletGlyph)" layoutpos="left" padding="rect(4rp,4rp,4rp,4rp)"/>
+<element id="atom(bulletText)" layoutpos="left" contentalign="endellipsis" accessible="true" accrole="StaticText"/>
+</element>
+</duixml>

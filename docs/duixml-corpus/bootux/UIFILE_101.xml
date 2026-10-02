@@ -1,0 +1,27 @@
+<!--
+  source: %SYSTEMROOT%\System32\bootux.dll
+  resource: UIFILE / "101" / lang 1033
+  size: 1272 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<BUXFrame resid="BUXFrameStd" layout="filllayout()">
+		<element id="atom(framecontent)" layout="borderlayout()">
+			<BUXKeyboard id="atom(keyboard)" />
+			<element layoutpos="client" id="atom(FrameMargin)" class="frame::framemargins" layout="borderlayout()" active="pointer">
+				<element layoutpos="left" id="atom(BackArrowFrame)" layout="flowlayout()">
+					<BUXButton class="frame::backbutton" id="atom(backarrow)" target="{back}" visible="false">
+						<element layoutpos="top" class="frame::backbutton::image" background="20575" />
+						<BUXText layoutpos="none" content="resstr(201)" />
+					</BUXButton>
+				</element>
+				<element layoutpos="client" id="atom(PageMargin)" class="frame::pagemargins" layout="borderlayout()" active="pointer">
+					<BUXText accessible="true" accrole="statictext" class="frame::pageheader" id="atom(PageHeader)" layoutpos="top" />
+					<element class="frame::pagecontent" id="atom(PageContent)" layoutpos="client" layout="filllayout()" />
+				</element>
+			</element>
+		</element>
+		<DarkFader id="atom(fader)" visible="false" />
+		<GridOverlay />
+	</BUXFrame>
+</duixml>

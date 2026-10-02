@@ -1,0 +1,18 @@
+<!--
+  source: %SYSTEMROOT%\System32\SystemSettingsRemoveDevice.exe
+  resource: UIFILE / "201" / lang 1033
+  size: 674 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="main" sheet="RemoveDeviceFlyoutStyle" layoutpos="top" layout="verticalflowlayout(0, 0, 1, 0)" width="300rp" accessible="true" padding="rect(18rp,12rp,20rp,0)">
+<RichText id="atom(idRemoveDeviceContent)" content="resstr(3001)" class="remove_description"/>
+</element>
+<stylesheets>
+<style resid="RemoveDeviceFlyoutStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if class="remove_description">
+<RichText font="resstr(6001, library(SystemSettingsRemoveDevice.exe))" foreground="ImmersiveLightPrimaryText" contentalign="topleft | wrapleft" accessible="true" accRole="statictext"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

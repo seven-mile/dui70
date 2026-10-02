@@ -1,0 +1,51 @@
+<!--
+  source: %SYSTEMROOT%\System32\WebcamUi.dll
+  resource: UIFILE / "204" / lang 1033
+  size: 2512 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="AppSettingsLayout" layout="filllayout()">
+		<AppSettingsPage id="atom(idAppSettings)" sheet="defaultSheet" visible="true" layout="filllayout()">
+			<element id="atom(idAppSettingsArea)" class="clsAppSettingsArea" layout="borderlayout()">
+				<element layout="borderlayout()" class="clsSelector">
+					<RichText id="atom(idResolutionSelectorTitle)" class="clsAppSettingsLabel" />
+					<TouchSelect id="atom(idResolutionSelector)" layoutpos="top" accname="resstr(1058)" accdesc="resstr(1059)" />
+				</element>
+				<element id="atom(idAudioSourceSelectorArea)" class="clsSelector" layout="borderlayout()">
+					<RichText class="clsAppSettingsLabel" layoutpos="top" content="resstr(1060)" />
+					<TouchSelect id="atom(idAudioSourceSelector)" layoutpos="top" accessible="true" accname="resstr(1061)" accdesc="resstr(1062)" />
+				</element>
+				<element id="atom(idVideoStabilizationSwitchArea)" layoutpos="top" layout="borderlayout()">
+					<RichText class="clsAppSettingsLabel" content="resstr(537, library(WebcamUi.dll))" />
+					<TouchSwitch id="atom(idVideoStabilizationToggle)" class="clsVideoStabilizationToggle" active="mouse|pointer|keyboard|nosyncfocus" accessible="true" accname="resstr(1063)" accdesc="resstr(1064)" />
+				</element>
+				<element layout="filllayout()" class="clsWebCamSettings">
+					<TouchHyperLink id="atom(idWebcamSettingsBtn)" class="clsMoreOptionsButton" active="mouse|pointer|keyboard|nosyncfocus" content="resstr(1065)" accessible="true" accrole="link" handleEnter="true" />
+				</element>
+			</element>
+		</AppSettingsPage>
+	</element>
+	<stylesheets>
+		<style resid="defaultSheet" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+			<if class="clsAppSettingsArea">
+				<element width="340rp" height="303rp" padding="rect(20rp,0rp,40rp,0rp)" contentalign="middlecenter" />
+			</if>
+			<if class="clsSelector">
+				<element layoutpos="top" margin="rect(0rp,0rp,0rp,25rp)" />
+			</if>
+			<if class="clsVideoStabilizationToggle">
+				<TouchSwitch layoutpos="top" />
+			</if>
+			<if class="clsAppSettingsLabel">
+				<RichText font="resstr(600, library(WebcamUi.dll))" foreground="20349" layoutpos="top" />
+			</if>
+			<if class="clsWebCamSettings">
+				<element layoutpos="bottom" padding="rect(0rp,0rp,0rp,20rp)" />
+			</if>
+			<if class="clsMoreOptionsButton">
+				<TouchHyperLink layoutpos="left" tooltip="true" contentalign="middleleft" font="resstr(600, library(WebcamUi.dll))" />
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

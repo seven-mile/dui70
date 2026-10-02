@@ -1,0 +1,364 @@
+<!--
+  source: %SYSTEMROOT%\System32\sharemediacpl.dll
+  resource: UIFILE / "201" / lang 1033
+  size: 22858 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+<style resid="ListItemEffects">
+<if class="ListItem">
+<if mousefocused="true">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 2), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 2), Highlight)"/>
+</if>
+<if mousewithin="true">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 2), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 2), Highlight)"/>
+</if>
+<if keyfocused="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<if mousefocused="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+<if mousewithin="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+</if>
+<if keywithin="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<if mousefocused="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+<if mousewithin="true">
+<ShareWithListItemUsers contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice contentalign="focusrect" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+</if>
+<if selected="true">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 3), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 3), Highlight)"/>
+<if keyfocused="false">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+</if>
+<if keywithin="false">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+</if>
+<if mousefocused="true">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+<if mousewithin="true">
+<ShareWithListItemUsers background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+<ShareWithListItemDevice background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" contentalign="middleleft | endellipsis" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<element accessible="true" accRole="link" contentalign="middleleft | endellipsis" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="middleleft | focusrect | endellipsis"/>
+<element contentalign="middleleft | focusrect | endellipsis"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if id="atom(AllowBlockCheckBox)">
+<CheckBoxButton contentalign="middleleft" padding="rect(1rp,1rp,1rp,1rp)" glyph="dtb(button, 3, 1)" label="resstr(10)"/>
+<if keyfocused="true">
+<CheckBoxButton contentalign="middleleft|focusrect"/>
+</if>
+<if mousewithin="true">
+<CheckBoxButton glyph="dtb(button, 3, 2)"/>
+</if>
+<if pressed="true">
+<CheckBoxButton glyph="dtb(button, 3, 3)"/>
+</if>
+<if enabled="false">
+<CheckBoxButton glyph="dtb(button, 3, 4)"/>
+</if>
+<if checked="true">
+<CheckBoxButton glyph="dtb(button, 3, 5)"/>
+<if mousewithin="true">
+<CheckBoxButton glyph="dtb(button, 3, 6)"/>
+</if>
+<if pressed="true">
+<CheckBoxButton glyph="dtb(button, 3, 7)"/>
+</if>
+<if enabled="false">
+<CheckBoxButton glyph="dtb(button, 3, 8)"/>
+</if>
+</if>
+</if>
+<if id="atom(CheckBoxLabel)">
+<element contentalign="middleleft" layoutpos="client"/>
+</if>
+<if id="atom(CheckBoxGlyph)">
+<element width="sysmetric(71)" height="sysmetric(72)" margin="rect(0rp,0rp,3rp,0rp)" contentalign="middleleft" layoutpos="left"/>
+</if> 
+<if class="hc_content_box">
+<Element borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="themeable(gtc(CONTROLPANELSTYLE,17,0,3821), activecaption)"/>
+</if>
+<if class="hc_red_content_banner_box">
+<Element background="themeable(gradient(RGB(172,1,0),RGB(222,1,0),1), activecaption)" width="20rp"/>
+</if>
+<if class="hc_yellow_content_banner_box">
+<Element background="themeable(gradient(RGB(242,177,0),RGB(255,206,73),1), activecaption)" width="20rp"/>
+</if>
+</style>
+</stylesheets>
+<ShareMediaCplPage resid="main" id="atom(ShareMedia)" layout="borderlayout()">
+<element sheet="cp_style" id="atom(ShareMediaContents)" layoutpos="client" accname="resstr(4)" class="cp_topbox" layout="borderlayout()">
+<element layout="borderlayout()" sheet="cp_style" class="cp_spoke_frame" layoutpos="client">
+<element layoutpos="top" layout="flowlayout(0,0,2)">
+<element id="atom(startPageContents)" class="cp_content_pane" layoutpos="client" layout="borderlayout()">
+<element class="cp_content_instruction" id="atom(ShareMediaTitle)" content="resstr(5)" layoutpos="top"/>
+<element id="atom(ShareMediaNormalArea)" layoutpos="top" layout="borderlayout()">
+<element layoutpos="top" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<element layoutpos="left" layout="borderlayout()">
+<element id="atom(SharingIcon)" content="icon(2957, 48, 48, library(wmploc.dll))" accname="resstr(93)" accessible="true" accrole="graphic" layoutpos="top"/>
+</element>
+<element layoutpos="top" layout="borderlayout()" padding="rect(2rp,0rp,0rp,0rp)">
+<element layoutpos="top" layout="borderlayout()">
+<element layoutpos="left" layout="gridlayout(2,1)">
+<element layoutpos="top" layout="borderlayout()">
+<element class="cp_content_text" id="atom(ShareMediaAsLabel)" contentalign="middleleft" content="resstr(45)" layoutpos="left" padding="rect(5rp,0rp,0rp,0rp)"/>
+<Edit id="atom(ShareMediaAs)" shortcut="auto" multiline="false" maxlength="49" width="200rp" active="mouse|keyboard" accessible="true" accname="resstr(94)" accdesc="resstr(87)" layoutpos="client" sheet="common" padding="rect(5rp,0rp,0rp,0rp)"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(CustomizeDefaultLink)" content="resstr(66)" layoutpos="left" padding="rect(5rp,3rp,0rp,0rp)"/>
+</element>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(ListHeaderArea)" layoutpos="top" layout="borderlayout()" contentalign="middleleft" padding="rect(0rp,15rp,0rp,0rp)">
+<element layoutpos="left" layout="borderlayout()">
+<element layout="flowlayout(0)">
+<element class="cp_content_text" contentalign="middleleft" sheet="cp_style" content="resstr(55)"/>
+<ComboBox id="atom(NetworkFilterCombo)" width="120rp" accessible="true" accrole="combobox" accname="resstr(95)" contentalign="middleleft" sheet="cp_style" margin="rect(5rp,0rp,0rp,0rp)"/>
+</element>
+</element>
+<element layout="flowlayout(1,0,1)">
+<CCPushButton id="atom(AllowAllButton)" content="resstr(49)" accname="resstr(49)" accdesc="resstr(51)" tooltip="true" sheet="cp_style" padding="rect(2rp,0rp,0rp,0rp)"/>
+<CCPushButton id="atom(BlockAllButton)" content="resstr(50)" accname="resstr(50)" accdesc="resstr(52)" tooltip="true" sheet="cp_style" padding="rect(2rp,0rp,0rp,0rp)"/>
+</element>
+</element>
+<element id="atom(ListViewArea)" layoutpos="top" layout="borderlayout()" padding="rect(0rp,5rp,0rp,0rp)">
+<ScrollViewer id="atom(ShareWithListScrollViewer)" xbarvisibility="never" ybarvisibility="always" xscrollable="false" yscrollable="true" layoutpos="client" borderstyle="solid" bordercolor="windowframe" borderthickness="rect(1rp,1rp,1rp,1rp)" sheet="common">
+<element id="atom(ShareWithList)" layout="borderlayout()" accessible="true" accname="listview" accrole="list">
+<Selector id="atom(ShareWithListSelector)" layout="borderlayout()" padding="rect(1rp,1rp,1rp,1rp)">
+</Selector>
+</element>
+</ScrollViewer>
+<element layoutpos="bottom" layout="borderlayout()" padding="rect(0rp,5rp,0rp,0rp)">
+<element layoutpos="top" layout="borderlayout()" margin="rect(0rp,0rp,0rp,10rp)">
+<element class="cp_content_text" id="atom(SharingStatusLabel)" content="resstr(47)" layoutpos="left" accessible="true" accrole="statictext" sheet="common" fontstyle="italic"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(ChoosePowerOptionsLink)" content="resstr(111)" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(LearnMoreAboutMediaSharingLink)" content="resstr(48)" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(MediaSharingPrivacyLink)" content="resstr(54)" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)"/>
+</element> 
+</element> 
+</element> 
+</element>
+<element id="atom(ShareMediaWarningArea)" layoutpos="none" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<element layoutpos="top" layout="borderlayout()" class="hc_content_box" sheet="ListItemEffects" id="atom(ShareMediaWarningContentBox)">
+<element layoutpos="left" layout="borderlayout()" sheet="ListItemEffects" class="hc_yellow_content_banner_box" id="atom(ShareMediaWarningBannerBox)"/>
+<element layout="borderlayout()" layoutpos="client" sheet="cp_style" padding="rect(15rp,15rp,10rp,10rp)">
+<element id="atom(ShareMediaWarningTitle)" layoutpos="top" class="cp_content_title_text" sheet="cp_style" content="resstr(63)" padding="rect(0rp,0rp,0rp,15rp)"/>
+<element id="atom(ShareMediaWarningText)" layoutpos="top" class="cp_content_text" sheet="cp_style" content="resstr(68)" padding="rect(0rp,0rp,0rp,10rp)"/>
+<element id="atom(EnableSharingElevationArea)" layoutpos="top" layout="borderlayout()" padding="rect(0rp,5rp,0rp,10rp)">
+<CCPushButton id="atom(TurnOnMediaSharing)" content="resstr(67)" layoutpos="left" accname="resstr(67)" sheet="cp_style"/>
+</element>
+<element id="atom(InitializingNetworkArea)" layoutpos="None" layout="borderlayout()" padding="rect(0rp,5rp,0rp,10rp)">
+<element id="atom(InitializingNetworkAnimation)" resid="InitializingNetworkAnimation" contentalign="middlecenter" layoutpos="left" background="argb(0,0,0,0)"/>
+<element id="atom(InitializingNetworkText)" class="cp_content_text" margin="rect(5rp,0rp,0rp,0rp)" content="resstr(112)" layoutpos="client" accname="resstr(112)" sheet="cp_style"/>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(ShareMediaErrorArea)" layoutpos="none" layout="borderlayout()" padding="rect(0rp,15rp,0rp,0rp)">
+<element layoutpos="top" layout="borderlayout()" class="hc_content_box" sheet="ListItemEffects" id="atom(ShareMediaErrorContentBox)">
+<element layoutpos="left" layout="borderlayout()" class="hc_red_content_banner_box" sheet="ListItemEffects" id="atom(ShareMediaErrorBannerBox)"/>
+<element layout="borderlayout()" layoutpos="client" sheet="cp_style" padding="rect(15rp,15rp,10rp,10rp)">
+<element id="atom(ShareMediaErrorTitle)" layoutpos="top" sheet="cp_style" class="cp_content_title_text" content="resstr(63)" padding="rect(0rp,0rp,0rp,15rp)"/>
+<element id="atom(ShareMediaErrorText)" layoutpos="top" class="cp_content_text" sheet="cp_style" content="resstr(79)" padding="rect(0rp,0rp,0rp,8rp)"/>
+<element id="atom(LaunchServicesLinkArea)" layoutpos="top" layout="borderlayout()" padding="rect(0rp,5rp,0rp,10rp)">
+<element id="atom(ShareMediaShieldIcon)" layoutpos="left" accessible="true" accrole="graphic" padding="rect(0rp,0rp,8rp,0rp)" content="icon(78, sysmetric(49), sysmetric(50), library(imageres.dll))"/>
+<element layoutpos="client" layout="borderlayout()">
+<button id="atom(LaunchServicesLink)" layoutpos="top" sheet="cp_style" content="resstr(107)" class="cp_content_link"/>
+</element>
+</element>
+</element>
+</element>
+</element>
+<element id="atom(FooterArea)" layoutpos="none" layout="borderlayout()" sheet="cp_style" padding="rect(35rp,5rp,0rp,0rp)">
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(LearnMoreAboutMediaSharingLink)" content="resstr(48)" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)"/>
+</element>
+<element layoutpos="top" layout="borderlayout()">
+<button class="cp_content_link" id="atom(MediaSharingPrivacyLink)" content="resstr(54)" layoutpos="left" padding="rect(0rp,3rp,0rp,0rp)"/>
+</element>
+</element> 
+</element>
+</element>
+</element>
+</element>
+<element layoutpos="bottom" layout="filllayout()" padding="rect(0rp,7rp,0rp,0rp)">
+<element sheet="cp_style" class="cp_command_sink" layout="borderlayout()">
+<element layoutpos="top" layout="flowlayout(0,0,2)">
+<element layout="flowLayout(0,0,1)" class="cp_command_button_box">
+<viewer>
+<element layout="flowlayout()">
+<CCPushButton id="atom(OKButton)" selected="false" shortcut="auto" content="resstr(2)" accessible="true" accdefaction="click"/>
+<CCPushButton id="atom(CancelButton)" margin="rect(10rp,0rp,0rp,0rp)" content="resstr(3)" accessible="true" accdefaction="click"/> 
+</element>
+</viewer>
+</element>
+</element>
+</element>
+</element> 
+</ShareMediaCplPage>
+<autobutton id="atom(MainButton)" resid="macro_sharing_list_item" layoutpos="top" accessible="true" accrole="ListItem" accname="resstr(96)" layout="borderlayout()" active="mouse|keyboard" class="ListItem" sheet="ListItemEffects" padding="rect(2rp,2rp,2rp,2rp)" accdefaction="invoke">
+<element layoutpos="top" layout="borderlayout()" contentalign="middleleft" background="argb(0,0,0,0)" padding="rect(8rp,4rp,8rp,4rp)">
+<element layoutpos="left" layout="borderlayout()">
+<element id="atom(ShareIcon)" contentalign="topcenter" layoutpos="top" accessible="true" accrole="graphic" accname="resstr(97)"/>
+</element>
+<element layoutpos="top" layout="borderlayout()" padding="rect(8rp,0rp,0rp,0rp)">
+<element layoutpos="client" layout="borderlayout()">
+<element layout="verticalflowlayout(0,0,0,2)">
+<button id="atom(ShareItemLink)" accname="DeviceInfoLink" class="cp_content_link" active="mouse|keyboard" sheet="ListItemEffects" padding="rect(0rp,0rp,0rp,3rp)"/>
+<element class="cp_content_text" id="atom(ShareAccessLabel)" accessible="true" accrole="statictext" accname="resstr(98)" contentalign="middleleft|wordellipsis" foreground="themeable(graytext, windowtext)" sheet="common" fontstyle="italic" padding="rect(0rp,0rp,0rp,3rp)"/>
+</element>
+</element>
+<element layoutpos="right" layout="borderlayout()">
+<element id="atom(CustomizeRemoveLinkArea)" layoutpos="none" layout="borderlayout()" contentalign="topcenter" padding="rect(5rp,0rp,10rp,0rp)">
+<element layout="verticalflowlayout(0,0,0,2)" layoutpos="top">
+<button class="cp_content_link" visible="false" id="atom(CustomizeDeviceLink)" active="mouse|keyboard" accname="resstr(44)" accdesc="resstr(82)" content="resstr(44)" sheet="ListItemEffects" padding="rect(4rp,0rp,0rp,3rp)"/>
+<button class="cp_content_link" visible="false" id="atom(RemovePlayerLink)" active="mouse|keyboard" accname="resstr(74)" accdesc="resstr(83)" content="resstr(74)" sheet="ListItemEffects" padding="rect(4rp,0rp,0rp,0rp)"/>
+</element>
+</element>
+<element layoutpos="top" layout="borderlayout()" sheet="ListItemEffects" contentalign="topcenter">
+<CheckBoxButton id="atom(AllowBlockCheckBox)" active="mouse|keyboard" accessible="true" accrole="checkbutton" accname="resstr(10)" accdesc="resstr(84)" layout="borderlayout()" layoutpos="client"/>
+</element>
+</element>
+</element>
+<element layoutpos="none" layout="borderlayout()" padding="rect(8rp,0rp,0rp,0rp)" id="atom(PowerManagementMessageBounds)">
+<element class="cp_content_text" id="atom(PowerManagementMessage)" content="resstr(77)" accessible="true" accname="resstr(100)" contentalign="wrapleft|wordellipsis" sheet="cp_style"/>
+</element>
+</element>
+</autobutton>
+</duixml>

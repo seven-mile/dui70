@@ -1,0 +1,121 @@
+<!--
+  source: %SYSTEMROOT%\System32\mmc.exe
+  resource: UIFILE / "6000" / lang 1033
+  size: 4611 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<hwndelement resid="ActionsPaneView" layout="borderlayout()">
+<scrollviewer sheet="taskpane" layoutpos="client" xscrollable="false" width="225rp">
+<element id="atom(sectionlist)" layout="verticalflowlayout(0,3,3)"/>
+</scrollviewer>
+</hwndelement>
+<actexpando resid="section" sheet="sectionss" layout="borderlayout()" padding="rect(0rp,0rp,0rp,5rp)">
+<button id="atom(header)" active="mouse" layoutpos="top" layout="borderlayout()">
+<element id="atom(title)" layoutpos="client"/>
+<element id="atom(arrow)" layoutpos="right"/>
+</button>
+<actclipper layout="borderlayout()">
+<element id="atom(tasklist)" layout="verticalflowlayout(0,3,3)"/>
+</actclipper>
+</actexpando>
+<element resid="region" sheet="regionss" id="atom(region)" layout="borderlayout()">
+<element id="atom(header)" layoutpos="top" layout="borderlayout()">
+<element id="atom(title)" layoutpos="client"/>
+</element>
+<element layout="borderlayout()">
+<element id="atom(tasklist)" layout="verticalflowlayout(0,3,3)"/>
+</element>
+</element>
+<taskbutton resid="sectiontask" active="mouse" sheet="sectiontaskss" layout="borderlayout()">
+<element id="atom(icon)" layoutpos="left"/>
+<element id="atom(bullet)" layoutpos="none"/>
+<element id="atom(checkmark)" layoutpos="none"/>
+<element id="atom(title)" layoutpos="client"/>
+<element id="atom(norgie)" layoutpos="right"/>
+</taskbutton>
+<element resid="sepsection" sheet="sectiontaskss" id="atom(sepsection)" layout="borderlayout()">
+<element id="atom(sepbar)" layout="flowlayout(0,0,3)">
+<element id="atom(separator)" layoutpos="left"></element>
+</element>
+</element>
+<element resid="descsection" sheet="sectiontaskss" layout="borderlayout()">
+<element id="atom(description)" layoutpos="client"/>
+</element>
+<stylesheets>
+<style resid="sectionss">
+<actexpando animation="rectanglev | s | fast"/>
+<button background="gradient(gradientactivecaption,activecaption,1)" foreground="captiontext" font="CaptionFont" padding="rect(5rp,0rp,1rp,0rp)" borderthickness="rect(0rp,1rp,0rp,0rp)" bordercolor="gradientactivecaption" cursor="hand"/>
+<if id="atom(title)">
+<element contentalign="middleleft | endellipsis"/>
+</if>
+<if id="atom(arrow)">
+<element height="24rp" font="12pt;Normal;None;Marlett" content="6" contentalign="middleright"/>
+<if selected="true">
+<element content="5"/>
+</if>
+</if>
+<actclipper alpha="255" animation="alpha | sizev | s | fast"/>
+<if selected="true">
+<actclipper alpha="255"/>
+</if>
+<if id="atom(tasklist)">
+<element animation="rectanglev | s | fast"/>
+</if>
+</style>
+<style resid="regionss">
+<if id="atom(region)">
+<element padding="rect(5rp,5rp,5rp,5rp)"/>
+</if>
+<if id="atom(header)">
+<element background="buttonface" foreground="buttontext" padding="rect(5rp,0rp,5rp,0rp)"/>
+</if>
+<if id="atom(title)">
+<element contentalign="middleleft | endellipsis" font="CaptionFont"/>
+</if>
+<if id="atom(tasklist)">
+<element borderthickness="rect(1rp,0rp,1rp,1rp)" bordercolor="buttonface"/>
+</if>
+</style>
+<style resid="sectiontaskss">
+<if id="atom(sepbar)">
+<element background="window" margin="rect(5rp,0rp,5rp,0rp)" padding="rect(5rp,0rp,5rp,0rp)"/>
+</if>
+<if id="atom(separator)">
+<element padding="rect(1rp,0rp,0rp,0rp)" borderthickness="rect(0rp,1rp,0rp,0rp)" bordercolor="buttonface"/>
+</if>
+<taskbutton background="window" foreground="buttontext" padding="rect(5rp,0rp,1rp,0rp)" cursor="hand"/>
+<if id="atom(description)">
+<element font="MenuFont" background="window" foreground="buttontext" contentalign="wrapleft" padding="rect(5rp,5rp,5rp,5rp)"/>
+</if>
+<if id="atom(icon)">
+<element width="16rp" height="24rp" contentalign="middleleft"/>
+</if>
+<if id="atom(bullet)">
+<element width="16rp" height="24rp" contentalign="middleleft" font="12pt;Normal;None;Marlett" content="h"/>
+</if>
+<if id="atom(checkmark)">
+<element width="16rp" height="24rp" contentalign="middleleft" font="12pt;Normal;None;Marlett" content="a"/>
+</if>
+<if id="atom(title)">
+<element font="MenuFont" contentalign="middleleft | endellipsis" padding="rect(8rp,0rp,4rp,0rp)"/>
+<if mousefocused="true">
+<element fontstyle="underline"/>
+</if>
+</if>
+<if id="atom(norgie)">
+<element width="16rp" height="24rp" contentalign="middleright" font="12pt;Normal;None;Marlett" content="4"/>
+</if>
+</style>
+<style resid="taskpane">
+<if id="atom(sectionlist)">
+<element background="window"/>
+</if>
+<if class="ScrollViewer">
+<CCHScrollBar layoutpos="ninebottom" accessible="true"/>
+<CCVScrollBar layoutpos="nineright" accessible="true"/>
+<viewer layoutpos="nineclient"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

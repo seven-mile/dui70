@@ -1,0 +1,82 @@
+<!--
+  source: %SYSTEMROOT%\System32\efsext.dll
+  resource: UIFILE / "900" / lang 1033
+  size: 1909 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element resid      = "consentMain"
+id         = "atom(idMainConsentUI)"
+layout     = "borderlayout()"
+accessible = "true"
+accrole    = "pane"
+behaviors  = "PVL::AnimationTrap()" >
+<RichText
+id="atom(idBody)"
+active="inactive"
+accessible="true"
+accrole="statictext"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,20rp)"
+constrainlayout="narrow"
+contentalign="topleft | wrapleft | endellipsis"
+content="resstr(904)"
+accname="resstr(904)"/>
+<TouchCheckBox
+ToggleOnClick="true"
+id="atom(idChkConsent)"
+active="keyboard|mouse|pointer"
+layoutpos="top"
+contentalign="topleft | wrapleft | endellipsis"
+content="resstr(905)"
+accname="resstr(905)"/>
+<Element
+minsize = "size(20rp,10rp)"
+class = "common_small_spacer"
+accessible = "false"
+layoutpos = "top">
+</Element>
+<TouchCheckBox
+ToggleOnClick="true"
+id="atom(idChkNoPrompt)"
+active="keyboard|mouse|pointer"
+layoutpos="top"
+contentalign="topleft | wrapleft | endellipsis"
+content="resstr(906)"
+accname="resstr(906)"/>
+<Element
+minsize = "size(10rp,20rp)"
+class = "common_small_spacer"
+accessible = "false"
+layoutpos = "top">
+</Element>
+<RichText
+id="atom(idErrorText)"
+active="inactive"
+accessible="true"
+accrole="statictext"
+layoutpos="top"
+margin="rect(0rp,0rp,0rp,20rp)"
+constrainlayout="narrow"
+contentalign="topleft | wrapleft | endellipsis"
+foreground="ImmersiveLightInlineErrorText"
+content="resstr(908)"
+accname="resstr(908)"/>
+<Element
+minsize = "size(10rp,20rp)"
+class = "common_small_spacer"
+accessible = "false"
+layoutpos = "top">
+</Element>
+<TouchHyperlink
+id="atom(idLearnMore)"
+active="keyboard|mouse|pointer"
+layoutpos="bottom"
+constrainlayout ="narrow"
+accessible      ="true"
+accrole         ="link"
+accdefaction    ="click"
+accname="resstr(907)"
+content="resstr(907)"/>
+</Element>
+</duixml>

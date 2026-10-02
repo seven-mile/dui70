@@ -1,0 +1,80 @@
+<!--
+  source: %SYSTEMROOT%\System32\racpldlg.dll
+  resource: UIFILE / "1000" / lang 1033
+  size: 4431 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<contactlist id="atom(ContactList)" bordercolor="themeable(activeborder, buttontext)" resid="contacts" layout="borderlayout()" background="window" padding="rect(0rp,0rp,0rp,0rp)" accName="ContactList">
+<scrollviewer id="atom(ScrollViewer)" layoutpos="client" sheet="scrollviewer" xbarvisibility="asneeded" ybarvisibility="asneeded" accessible="true" accname="List" accRole="list" margin="rect(0,0,0,0)" padding="rect(0,0,0,0)">
+<element id="atom(List)" layout="borderlayout()" layoutpos="top" padding="rect(7rp,7rp,7rp,7rp)" margin="rect(0,0,0,0)"/>
+</scrollviewer>
+</contactlist>
+<contact resid="ContactTile" layoutpos="top" layout="borderlayout()" sheet="ContactStyle" margin="rect(0,0,0,0)" padding="rect(0,0,0,0)" accName="Contact">
+<button id="atom(ContactButton)" layoutpos="top" layout="borderlayout()" accessible="true" accname="Someone New" margin="rect(0,0,0,0)" active="mouse|keyboard" accRole="listitem" padding="rect(0,0,0,0)">
+<element layoutpos="left" layout="flowlayout(0,0,0,0)">
+<element id="atom(Frame)" layout="flowlayout()" width="64rp" height="64rp" accessible="true" accRole="graphic" padding="rect(7rp,7rp,0rp,0rp)">
+<element layout="filllayout()" width="48rp" height="48rp" accessible="true" accRole="graphic">
+<element id="atom(Picture)" width="48rp" height="48rp" accessible="true" accRole="graphic"/>
+<element id="atom(Overlay)" width="48rp" height="48rp" accessible="true" accRole="graphic"/>
+</element>
+</element>
+</element>
+<element layoutpos="client" layout="borderlayout()" margin="rect(0rp,0rp,0rp,0rp)">
+<element id="atom(ContactName)" layoutpos="top" content="resstr(1601)" font="captionfont;120%;Normal;None" contentalign="endellipsis" padding="rect(0,2rp,0,0)"/>
+<element id="atom(ContactComputer)" layoutpos="top" content="resstr(1603)" font="smcaptionfont;100%;Normal;None" contentalign="endellipsis" margin="rect(0,2rp,0,0)" padding="rect(0,0,0,0)"/>
+<element id="atom(ContactDate)" layoutpos="top" content="resstr(1600)" font="smcaptionfont;100%;Normal;None" contentalign="endellipsis" margin="rect(0,2rp,0,0)" padding="rect(0,0,0,0)"/>
+</element>
+</button>
+</contact>
+<element resid="PasswordDialog" layout="verticalflowlayout(0,0,0,0)" font="gtf(TaskDialogStyle, 4, 0)">
+<element id="atom(ExplainText)" contentalign="wrapleft" accessible="true" accRole="statictext" content="resstr(1604)"/>
+<element padding="rect(0rp,8rp,0rp,4rp)" contentalign="wrapleft" accessible="true" accRole="statictext" content="resstr(1605)"/>
+<edit contentalign="wrapleft" themedborder="true" padding="rect(0rp,4rp,0rp, 8rp)" id="atom(PasswordEdit)" accessible="true" content="resstr(1606)" accname="resstr(1607)"/>
+</element>
+<stylesheets>
+<style resid="ContactStyle">
+<if enabled="true">
+<if id="atom(ContactButton)">
+<button padding="rect(1rp,1rp,2rp,2rp)"/>
+<if mousefocused="true">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 2), Highlight)"/>
+</if>
+<if keyfocused="true">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+<if mousefocused="true">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+</if>
+<if selected="true">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 3), Highlight)"/>
+<if keyfocused="false">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 5), Highlight)"/>
+</if>
+<if mousefocused="true">
+<button foreground="themeable(buttontext, highlighttext)" background="themeable(dtb(EXPLORER::LISTVIEW, 1, 6), Highlight)"/>
+</if>
+</if>
+<if pressed="true">
+<button padding="rect(2rp,2rp,1rp,1rp)"/>
+</if>
+</if>
+</if>
+<if enabled="false">
+<if id="atom(Picture)">
+<element alpha="128"/>
+</if>
+<if id="atom(ContactButton)">
+<element foreground="themeable(graytext, buttontext)"/>
+</if>
+</if>
+<element background="argb(0,0,0,0)"/>
+<contact contentalign="middleleft" accessible="true" accrole="34" padding="rect(2rp,2rp,2rp,2rp)" height="80rp" width="200rp"/>
+</style>
+<style resid="scrollviewer">
+<CCHScrollBar layoutpos="ninebottom" accessible="true"/>
+<CCVScrollBar layoutpos="nineright" accessible="true"/>
+<viewer layoutpos="nineclient"/>
+</style>
+</stylesheets>
+</duixml>

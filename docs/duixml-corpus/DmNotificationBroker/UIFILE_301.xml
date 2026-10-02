@@ -1,0 +1,25 @@
+<!--
+  source: %SYSTEMROOT%\System32\DmNotificationBroker.exe
+  resource: UIFILE / "301" / lang 1033
+  size: 1149 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+extern HINSTANCE               g_hInst;
+extern HINSTANCE               g_hInstRes;
+<element resid="OmaCpDialogTop" layout="borderlayout()" accessible="true" accrole="pane">
+<RichText id="atom(DmDialogContentId)" layoutpos="top" contentalign="wrapleft | noprefix" accessible="true" accrole="statictext" content="" font="gtf(TEXTSTYLE,1 , 0)"/>
+<element layout="verticalflowlayout(0,0,0,0)" active="pointer">
+<element height="17rp" active="pointer"/>
+<element id="atom(username_nopassword_spacer)" height="24rp" layoutpos="none" active="pointer"/>
+<RichText class="header_text" id="atom(upgradepassword_username)"/>
+<element id="atom(passwordsection)" layout="verticalflowlayout(0,0,0,0)" margin="rect(0,14rp,0,0)" active="pointer">
+<element layout="flowlayout(0,0,0,0)" behaviors="PVL::ImplicitAnimation()" active="pointer">
+<TouchEdit2 class="moderneditsmall" id="atom(UserPinInput)" passwordcharacter="9679" prompttext="" promptwithcaret="true" accname="" visible="false"/>
+<RichText id="atom(capslockwarning)" class="capslockwarning" visible="false"/>
+</element>
+</element>
+</element>
+</element>
+</duixml>

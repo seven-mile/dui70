@@ -1,0 +1,75 @@
+<!--
+  source: %SYSTEMROOT%\System32\DisplaySwitch.exe
+  resource: UIFILE / "9300" / lang 1033
+  size: 4063 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element resid="SelectorMain" id="atom(ProjectionUISelector)" layout="borderlayout()" class="clMain" sheet="ProjectionUIStyles">
+<RichText id="atom(ConfirmationText)" class="clBodyText" layoutpos="top" content="resstr(9322, library(DisplaySwitch.exe))"/>
+<Element layoutpos="client" layout="borderlayout()">
+<TouchScrollViewer id="atom(TouchScrollViewer)" layoutpos="client" active="pointer" xscrollable="false" yscrollable="true" ybarvisibility="asneeded" interactionmode="translatey|inertia" sheet="TouchScrollStyle">
+<TopologyList id="atom(TopologyList)" layout="borderlayout()" sheet="ProjectionUIStyles"/>
+</TouchScrollViewer>
+<element id="atom(ConnectToDifferentDisplayArea)" layoutpos="none" layout="borderlayout()" behaviors="PVL::ImplicitAnimation()">
+<TouchHyperlink id="atom(ConnectToDifferentDisplayLink)" layoutpos="left" HandleEnter="true" content="resstr(9329, library(DisplaySwitch.exe))"/>
+</element>
+</Element>
+</Element>
+<Element resid="ConfirmationMain" id="atom(ProjectionUIConfirmation)" class="clMain" layout="borderlayout()" sheet="ProjectionUIStyles">
+<RichText id="atom(ConfirmationText)" class="clBodyText" layoutpos="top" content="resstr(9332, library(DisplaySwitch.exe))"/>
+<Element layout="flowlayout(0,0,1,0)" layoutpos="top" padding="rect(40rp,14rp,40rp,0rp)">
+<TouchButton id="atom(YesButton)" content="resstr(9330, library(DisplaySwitch.exe))" margin="rect(0rp,0rp,20rp,0rp)"/>
+<TouchButton id="atom(NoButton)" class="default" content="resstr(9331, library(DisplaySwitch.exe))"/>
+</Element>
+<RichText id="atom(RevertText)" class="clBodyText" layoutpos="bottom"/>
+</Element>
+<Element resid="ErrorMain" id="atom(ProjectionUIError)" class="clMain" layout="filllayout()" sheet="ProjectionUIStyles">
+<RichText id="atom(ErrorText)" class="clBodyText"/>
+</Element>
+<TopologyTile resid="TopologyTile" layout="flowlayout(0,0,0,0)" layoutpos="top" active="mouse|pointer|keyboard|nosyncfocus" sheet="ProjectionUIStyles">
+<RichText id="atom(Icon)" width="90rp" height="90rp"/>
+<RichText id="atom(Title)"/>
+</TopologyTile>
+<stylesheets>
+<style resid="TouchScrollStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), ImmersiveBase)">
+<TouchScrollViewer accessible="true" accrole="pane"/>
+<Viewer layoutpos="nineclient"/>
+</style>
+<style resid="ProjectionUIStyles" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<if class="clMain">
+<Element padding="rect(0,4rp,0,0)" background="argb(0,0,0,0)"/>
+</if>
+<RichText font="resstr(9351, library(DisplaySwitch.exe))"/>
+<if class="clBodyText">
+<RichText padding="rect(40rp,0rp,40rp,20rp)" foreground="ImmersiveSaturatedPrimaryText" contentalign="wrapleft" constrainlayout="narrow" accessible="true" accrole="statictext"/>
+</if>
+<if id="atom(RevertText)">
+<RichText padding="rect(40rp,0rp,40rp,48rp)" foreground="ImmersiveSaturatedSecondaryText"/>
+</if>
+<TopologyList accessible="true" accrole="list"/>
+<TouchButton handleenter="true"/>
+<TopologyTile width="330rp" padding="rect(40rp,15rp,40rp,15rp)" background="argb(0,0,0,0)" foreground="ImmersiveSaturatedPrimaryText" handleenter="true" accessible="true" accrole="listitem"/>
+<if class="active">
+<TopologyTile background="ImmersiveSaturatedSelectionBackground" foreground="ImmersiveSaturatedSelectionPrimaryText"/>
+</if>
+<if mousefocused="true" pressed="false">
+<unless class="active">
+<TopologyTile background="ImmersiveSaturatedHoverBackground" foreground="ImmersiveSaturatedHoverPrimaryText"/>
+</unless>
+</if>
+<if showkeyfocus="true">
+<TopologyTile edgehighlightthickness="rect(2rp,2rp,2rp,2rp)" edgehighlightcolor="ImmersiveSaturatedFocusRect"/>
+</if>
+<if id="atom(Title)">
+<RichText padding="rect(10rp,25rp,0rp,0rp)" contentalign="wrapleft" constrainlayout="narrow"/>
+</if>
+<if id="atom(ConnectToDifferentDisplayArea)">
+<element padding="rect(40rp,20rp,0rp,24rp)"/>
+</if>
+<if id="atom(ConnectToDifferentDisplayLink)">
+<TouchHyperLink font="resstr(9352, library(DisplaySwitch.exe))" constrainlayout="narrow"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

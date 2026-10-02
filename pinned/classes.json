@@ -1,0 +1,415 @@
+{
+ "classes": [
+  "ACCESSIBLEROLE",
+  "AcceleratorBehavior",
+  "AccessibleButton",
+  "AnimationStrip",
+  "AutoButton",
+  "AutoLock",
+  "AutoThread",
+  "AutoVariant",
+  "BaseScrollBar",
+  "BaseScrollViewer",
+  "Bind",
+  "BorderLayout",
+  "Browser",
+  "BrowserSelectionProxy",
+  "Button",
+  "CCAVI",
+  "CCBase",
+  "CCBaseCheckRadioButton",
+  "CCBaseScrollBar",
+  "CCCheckBox",
+  "CCCommandLink",
+  "CCHScrollBar",
+  "CCListBox",
+  "CCListView",
+  "CCProgressBar",
+  "CCPushButton",
+  "CCRadioButton",
+  "CCSysLink",
+  "CCTrackBar",
+  "CCTreeView",
+  "CCVScrollBar",
+  "CSafeElementProxy",
+  "CallstackTracker",
+  "CheckBoxGlyph",
+  "ClassInfoBase",
+  "Clipper",
+  "Combobox",
+  "ContextMenuBehavior",
+  "CritSecLock",
+  "DCSurface",
+  "DUIFactory",
+  "DUIXmlParser",
+  "DialogElement",
+  "DialogElementCore",
+  "DuiAccessible",
+  "DuiNavigate",
+  "Edit",
+  "Element",
+  "ElementProvider",
+  "ElementProviderManager",
+  "ElementProxy",
+  "ElementWithHWND",
+  "EventManager",
+  "ExpandCollapseProvider",
+  "ExpandCollapseProxy",
+  "Expandable",
+  "Expando",
+  "ExpandoButtonGlyph",
+  "Expression",
+  "FillLayout",
+  "FlowLayout",
+  "FontCache",
+  "FontCheckOut",
+  "FunctionDefinition<class DirectUI::Value *>",
+  "FunctionDefinition<int>",
+  "FunctionDefinition<struct DirectUI::ScaledRECT>",
+  "FunctionDefinition<struct DirectUI::ScaledSIZE>",
+  "FunctionDefinition<unsigned long>",
+  "GridItemProvider",
+  "GridItemProxy",
+  "GridLayout",
+  "GridProvider",
+  "GridProxy",
+  "HWNDElement",
+  "HWNDElementAccessible",
+  "HWNDElementProvider",
+  "HWNDElementProxy",
+  "HWNDHost",
+  "HWNDHostAccessible",
+  "HWNDHostClientAccessible",
+  "IDataEngine",
+  "IDataEntry",
+  "IProvider",
+  "ISBLeak",
+  "IXElementCP",
+  "IXProviderCP",
+  "InvokeHelper",
+  "InvokeManager",
+  "InvokeProvider",
+  "InvokeProxy",
+  "ItemList",
+  "Layout",
+  "LinkedList",
+  "LinkedListNode",
+  "Macro",
+  "ModernProgressBar",
+  "ModernProgressBarRangeValueProxy",
+  "ModernProgressRing",
+  "Movie",
+  "NativeHWNDHost",
+  "NavReference",
+  "NavScoring",
+  "Navigator",
+  "NavigatorSelectionItemProxy",
+  "NineGridLayout",
+  "PText",
+  "PVLAnimation",
+  "Page",
+  "Pages",
+  "PatternProvider<class DirectUI::ExpandCollapseProvider, struct IExpandCollapseProvider, 1>",
+  "PatternProvider<class DirectUI::GridItemProvider, struct IGridItemProvider, 2>",
+  "PatternProvider<class DirectUI::GridProvider, struct IGridProvider, 3>",
+  "PatternProvider<class DirectUI::InvokeProvider, struct IInvokeProvider, 0>",
+  "PatternProvider<class DirectUI::RangeValueProvider, struct IRangeValueProvider, 4>",
+  "PatternProvider<class DirectUI::ScrollItemProvider, struct IScrollItemProvider, 6>",
+  "PatternProvider<class DirectUI::ScrollProvider, struct IScrollProvider, 5>",
+  "PatternProvider<class DirectUI::SelectionItemProvider, struct ISelectionItemProvider, 7>",
+  "PatternProvider<class DirectUI::SelectionProvider, struct ISelectionProvider, 8>",
+  "PatternProvider<class DirectUI::TableItemProvider, struct ITableItemProvider, 10>",
+  "PatternProvider<class DirectUI::TableProvider, struct ITableProvider, 9>",
+  "PatternProvider<class DirectUI::ToggleProvider, struct IToggleProvider, 11>",
+  "PatternProvider<class DirectUI::ValueProvider, struct IValueProvider, 12>",
+  "Progress",
+  "ProgressRangeValueProxy",
+  "ProviderProxy",
+  "Proxy",
+  "PushButton",
+  "RadioButtonGlyph",
+  "RangeValueProvider",
+  "RangeValueProxy",
+  "RefPointElement",
+  "RefcountBase",
+  "RepeatButton",
+  "Repeater",
+  "ResourceModuleHandles",
+  "RichText",
+  "RowLayout",
+  "SafeArrayAccessor<int>",
+  "Schema",
+  "ScrollBar",
+  "ScrollBarRangeValueProxy",
+  "ScrollItemProvider",
+  "ScrollItemProxy",
+  "ScrollProvider",
+  "ScrollProxy",
+  "ScrollViewer",
+  "SelectionItemProvider",
+  "SelectionItemProxy",
+  "SelectionProvider",
+  "SelectionProxy",
+  "Selector",
+  "SelectorNoDefault",
+  "SelectorSelectionItemProxy",
+  "SelectorSelectionProxy",
+  "SemanticZoomToggle",
+  "ShellBorderLayout",
+  "StyleSheet",
+  "StyledScrollViewer",
+  "Surface",
+  "TableItemProvider",
+  "TableItemProxy",
+  "TableLayout",
+  "TableProvider",
+  "TableProxy",
+  "TaskPage",
+  "TextGraphic",
+  "Thumb",
+  "ToggleProvider",
+  "ToggleProxy",
+  "TouchButton",
+  "TouchCheckBox",
+  "TouchCheckBoxGlyph",
+  "TouchCommandButton",
+  "TouchEdit2",
+  "TouchEditBase",
+  "TouchHWNDElement",
+  "TouchHyperLink",
+  "TouchRepeatButton",
+  "TouchScrollBar",
+  "TouchScrollViewer",
+  "TouchSelect",
+  "TouchSelectItem",
+  "TouchSlider",
+  "TouchSwitch",
+  "UnknownElement",
+  "Value",
+  "ValueProvider",
+  "ValueProxy",
+  "VerticalFlowLayout",
+  "Viewer",
+  "XBaby",
+  "XElement",
+  "XHost",
+  "XProvider",
+  "XResourceProvider"
+ ],
+ "inheritance": {
+  "BaseScrollViewer": [
+   "Element",
+   "IElementListener"
+  ],
+  "Button": [
+   "Element"
+  ],
+  "CCBaseScrollBar": [
+   "BaseScrollBar",
+   "CCBase"
+  ],
+  "CCHScrollBar": [
+   "BaseScrollBar",
+   "CCBase"
+  ],
+  "CCVScrollBar": [
+   "BaseScrollBar",
+   "CCBase"
+  ],
+  "DialogElement": [
+   "HWNDElement",
+   "IDialogElement",
+   "IElementListener"
+  ],
+  "DuiAccessible": [
+   "IAccIdentity",
+   "IAccessible",
+   "IEnumVARIANT",
+   "IOleWindow",
+   "IServiceProvider"
+  ],
+  "Edit": [
+   "Element"
+  ],
+  "ElementProvider": [
+   "IRawElementProviderAdviseEvents",
+   "IRawElementProviderFragment",
+   "IRawElementProviderSimple2",
+   "RefcountBase"
+  ],
+  "ExpandCollapseProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "GridItemProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "GridProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "HWNDElement": [
+   "Element"
+  ],
+  "HWNDElementAccessible": [
+   "IAccIdentity",
+   "IAccessible",
+   "IEnumVARIANT",
+   "IOleWindow",
+   "IServiceProvider"
+  ],
+  "HWNDElementProvider": [
+   "IRawElementProviderAdviseEvents",
+   "IRawElementProviderFragment",
+   "IRawElementProviderSimple2",
+   "RefcountBase"
+  ],
+  "HWNDHostAccessible": [
+   "IAccIdentity",
+   "IAccessible",
+   "IEnumVARIANT",
+   "IOleWindow",
+   "IServiceProvider"
+  ],
+  "HWNDHostClientAccessible": [
+   "IAccIdentity",
+   "IAccessible",
+   "IEnumVARIANT",
+   "IOleWindow",
+   "IServiceProvider"
+  ],
+  "InvokeProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "Progress": [
+   "Element"
+  ],
+  "PushButton": [
+   "Button"
+  ],
+  "RangeValueProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "ScrollBar": [
+   "BaseScrollBar",
+   "Element"
+  ],
+  "ScrollItemProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "ScrollProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "ScrollViewer": [
+   "Element",
+   "IElementListener"
+  ],
+  "SelectionItemProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "SelectionProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "StyledScrollViewer": [
+   "Element",
+   "IElementListener"
+  ],
+  "TableItemProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "TableProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "TaskPage": [
+   "IElementListener",
+   "IXProviderCP"
+  ],
+  "ToggleProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "TouchButton": [
+   "Element"
+  ],
+  "TouchCheckBox": [
+   "TouchButton"
+  ],
+  "ValueProvider": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "XBaby": [
+   "HWNDElement",
+   "IDialogElement",
+   "IElementListener"
+  ],
+  "XElement": [
+   "HWNDHost",
+   "IXElementCP"
+  ],
+  "XProvider": [
+   "IXProvider"
+  ],
+  "PatternProvider<class DirectUI::ExpandCollapseProvider, struct IExpandCollapseProvider, 1>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::GridItemProvider, struct IGridItemProvider, 2>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::GridProvider, struct IGridProvider, 3>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::InvokeProvider, struct IInvokeProvider, 0>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::RangeValueProvider, struct IRangeValueProvider, 4>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::ScrollItemProvider, struct IScrollItemProvider, 6>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::ScrollProvider, struct IScrollProvider, 5>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::SelectionItemProvider, struct ISelectionItemProvider, 7>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::SelectionProvider, struct ISelectionProvider, 8>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::TableItemProvider, struct ITableItemProvider, 10>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::TableProvider, struct ITableProvider, 9>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::ToggleProvider, struct IToggleProvider, 11>": [
+   "IProvider",
+   "RefcountBase"
+  ],
+  "PatternProvider<class DirectUI::ValueProvider, struct IValueProvider, 12>": [
+   "IProvider",
+   "RefcountBase"
+  ]
+ }
+}

@@ -1,0 +1,2351 @@
+<!--
+  source: %SYSTEMROOT%\System32\bootux.dll
+  resource: UIFILE / "600" / lang 1033
+  size: 70984 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<BUXPage resid="AdvancedBootOptionsPage" flags="ResetTravelog" attach="{BootMenuUX!CreateSelectOSPage}" class="menupage">
+		<BUXTitle content="resstr(1601)" />
+		<element layoutpos="top" layout="verticalflowlayout()" class="menupage::content">
+			<BUXButton class="menutile" id="atom(BareMetalRecovery)" attach="{BootMenuUX!CreateBareMetalRecoveryButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1018,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(635)" />
+				<BUXText class="menutile::description" content="resstr(636)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Continue)" ImageId="1005" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateDefaultOSButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1005,60rp,60rp,1,1)" />
+				<BUXText class="menutile::header" content="resstr(1600)" />
+				<BUXFormattedText class="menutile::description" content="resstr(1602)" insets="CollectionDefault" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Device)" target="AdvancedBootOptions_ChooseDevicePage" attach="{BootMenuUX!CreateDeviceListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1013,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1603)" />
+				<BUXText class="menutile::description" content="resstr(1604)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(OtherOS)" target="AdvancedBootOptions_LaunchOtherOSPage" attach="{BootMenuUX!CreateOSListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1024,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1605)" />
+				<BUXText class="menutile::description" content="resstr(1606)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Repair)" target="RepairRestorePage" attach="{BootMenuUX!CreateRecoveryToolsListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1021,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1608)" />
+				<BUXText class="menutile::description" id="atom(buttonDescription)" content="resstr(1700)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(DirectFactoryReset)" attach="{BootMenuUX!CreateDirectFactoryResetButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1021,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1710)" />
+				<BUXText class="menutile::description" content="resstr(1907)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(TurnOff)" ImageId="1025" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1025,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1609)" />
+			</BUXButton>
+			<OSButtonCollection class="collection::dataonly" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptionsNoResetPage" attach="{BootMenuUX!CreateSelectOSPage}" class="menupage">
+		<BUXTitle content="resstr(1601)" />
+		<element layoutpos="top" layout="verticalflowlayout()" class="menupage::content">
+			<BUXButton class="menutile" id="atom(BareMetalRecovery)" attach="{BootMenuUX!CreateBareMetalRecoveryButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1018,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(635)" />
+				<BUXText class="menutile::description" content="resstr(636)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Continue)" ImageId="1005" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateDefaultOSButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1005,60rp,60rp,1,1)" />
+				<BUXText class="menutile::header" content="resstr(1600)" />
+				<BUXFormattedText class="menutile::description" content="resstr(1602)" insets="CollectionDefault" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Device)" target="AdvancedBootOptions_ChooseDevicePage" attach="{BootMenuUX!CreateDeviceListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1013,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1603)" />
+				<BUXText class="menutile::description" content="resstr(1604)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(OtherOS)" target="AdvancedBootOptions_LaunchOtherOSPage" attach="{BootMenuUX!CreateOSListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1024,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1605)" />
+				<BUXText class="menutile::description" content="resstr(1606)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Repair)" target="RepairRestorePage" attach="{BootMenuUX!CreateRecoveryToolsListButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1021,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1608)" />
+				<BUXText class="menutile::description" id="atom(buttonDescription)" content="resstr(1700)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(TurnOff)" ImageId="1025" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1025,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1609)" />
+			</BUXButton>
+			<OSButtonCollection class="collection::dataonly" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_ChooseDevicePage" class="choicepage">
+		<BUXTitle content="resstr(1603)" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(DeviceCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="DeviceTile" attach="{BootMenuUX!CreateBootableDeviceButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="DeviceCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1610)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_LaunchOtherOSPage" class="choicepage">
+		<BUXTitle content="resstr(1698)" />
+		<OSButtonCollection class="collection::wrapped" id="atom(OSCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="OSCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1612)" />
+		</BUXButtonCollectionFlipper>
+		<BUXAnchor class="page::infolinkarea" layout="flowlayout()">
+			<BUXButton class="menuoption" id="atom(ChangeDefaults)" target="AdvancedBootOptions_ChangeDefaultBootSettings">
+				<BUXText class="menuoption::header" content="resstr(1613)" />
+			</BUXButton>
+		</BUXAnchor>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_ChooseOSNoAdvancedOptionsPage" class="choicepage">
+		<BUXTitle content="resstr(1698)" />
+		<OSButtonCollection class="collection::wrapped" id="atom(OSCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="OSCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1612)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="SystemReset_ChooseTargetOSPage" attach="{BootMenuUX!CreateWinReTargetOSPage}" class="choicepage::description">
+		<BUXTitle dynamic="RecoveryOperation" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1615)" />
+		<element class="choicepage::spacer" />
+		<OSButtonCollection class="collection::wrapped" id="atom(OSCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="OSTile" attach="{BootMenuUX!CreateWinReTargetOSButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="OSCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1612)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_ChangeDefaultOSPage" attach="{BootMenuUX!CreateSelectOSPage}" class="choicepage::description">
+		<BUXTitle content="resstr(1616)" />
+		<BUXFormattedText class="static::description::nudged" id="atom(defaultos)" content="resstr(1733)" insets="CollectionDefault" />
+		<element class="choicepage::spacer" />
+		<OSButtonCollection class="collection::wrapped" id="atom(OSCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="DefaultOSTile" attach="{BootMenuUX!CreateDefaultOSButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="OSCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1612)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<ChooseOSPage resid="Boot_ChooseOSPage" attach="{BootMenuUX!CreateSkippableSelectOSPage}" defaultaction="{BootMenuUX!CreateDefaultOSButton}" behaviors="BUX::Timer(0)" class="choicepage::description" active="pointer">
+		<BUXTitle content="resstr(1698)" />
+		<BUXText id="atom(timeout)" class="static::description::nudged" content="resstr(542)" behaviors="BUX::TimerListener(true)" />
+		<element class="choicepage::spacer" />
+		<OSButtonCollection class="collection::wrapped" id="atom(OSCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" active="pointer" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="OSCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1612)" />
+		</BUXButtonCollectionFlipper>
+		<BUXAnchor class="page::infolinkarea" layout="flowlayout()">
+			<BUXButton class="menuoption" id="atom(ChangeDefaults)" target="Boot_ChangeDefaultBootSettings">
+				<BUXText class="menuoption::header" content="resstr(1724)" />
+			</BUXButton>
+		</BUXAnchor>
+	</ChooseOSPage>
+	<BUXPage resid="Boot_ChangeDefaultBootSettings" attach="{BootMenuUX!CreateSelectOSPage}" class="menupage">
+		<BUXTitle content="resstr(1621)" />
+		<BUXButton class="menutile" id="atom(ChangeTimer)" target="AdvancedBootOptions_ChangeTimerPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1015,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1622)" />
+			<BUXFormattedText class="menutile::description" content="resstr(1731)" formatter="minutesandseconds" insets="DefaultOS_Timeout" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(ChangeDefaultOS)" target="AdvancedBootOptions_ChangeDefaultOSPage" attach="{BootMenuUX!CreateDefaultOSListButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1023,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1623)" />
+			<BUXFormattedText class="menutile::description" content="resstr(1732)" insets="CollectionDefault" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(AdvancedBootOptions)" target="AdvancedBootOptionsNoResetPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1019,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1735)" />
+			<BUXText class="menutile::description" content="resstr(1736)" />
+		</BUXButton>
+		<OSButtonCollection class="collection::dataonly" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+	</BUXPage>
+	<BUXButton resid="OSTile" class="menutile" refresh="defaultos">
+		<element class="menutile::spacer" />
+		<element class="menutile::image" id="atom(buttonImage)" width="60rp" height="60rp" />
+		<BUXText class="menutile::header::OS" id="atom(buttonTitle)" />
+		<BUXText class="menutile::description::OS" id="atom(buttonDescription)" />
+	</BUXButton>
+	<BUXButton resid="DefaultOSTile" class="menutile" refresh="defaultos" target="{back}">
+		<element class="menutile::spacer" />
+		<element class="menutile::image" id="atom(buttonImage)" width="60rp" height="60rp" />
+		<BUXText class="menutile::header::OS" id="atom(buttonTitle)" />
+		<BUXText class="menutile::description::OS" id="atom(buttonDescription)" />
+	</BUXButton>
+	<BUXButton resid="DeviceTile" class="menutile" ImageId="1013">
+		<element class="menutile::spacer" />
+		<element class="menutile::image" id="atom(buttonImage)" content="icon(1013,60rp,60rp)" />
+		<BUXText class="menutile::header" id="atom(buttonTitle)" />
+		<BUXText class="menutile::description" id="atom(buttonDescription)" />
+	</BUXButton>
+	<BUXPage resid="FirmwareSettingsPage" class="commitpage">
+		<BUXTitle content="resstr(546)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1618)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreateFirmwareSettingsButton}">
+				<BUXText class="commitbutton::header" content="resstr(1778)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_ChangeDefaultBootSettings" attach="{BootMenuUX!CreateSelectOSPage}" class="menupage">
+		<BUXTitle content="resstr(1621)" />
+		<BUXButton class="menutile" id="atom(ChangeTimer)" target="AdvancedBootOptions_ChangeTimerPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1015,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1622)" />
+			<BUXFormattedText class="menutile::description" content="resstr(1731)" formatter="minutesandseconds" insets="DefaultOS_Timeout" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(ChangeDefaultOS)" target="AdvancedBootOptions_ChangeDefaultOSPage" attach="{BootMenuUX!CreateDefaultOSListButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1023,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1623)" />
+			<BUXFormattedText class="menutile::description" content="resstr(1732)" insets="CollectionDefault" />
+		</BUXButton>
+		<OSButtonCollection class="collection::dataonly" ButtonFactory="OSTile" attach="{BootMenuUX!CreateBootableOSButtonCollection}" />
+	</BUXPage>
+	<BUXPage resid="AdvancedBootOptions_ChangeTimerPage" attach="{BootMenuUX!CreateSelectOSPage}" class="menupage::description">
+		<BUXTitle content="resstr(1622)" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1776)" formatter="minutesandseconds" insets="DefaultOS_Timeout" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(time5min)" attach="{BootMenuUX!CreateFiveMinuteTimeoutAction}" refresh="timerduration" target="{back}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1017,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1624)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(time30s)" attach="{BootMenuUX!CreateThirtySecondTimeoutAction}" refresh="timerduration" target="{back}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1017,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1625)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(time5s)" attach="{BootMenuUX!CreateFiveSecondTimeoutAction}" refresh="timerduration" target="{back}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1017,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1626)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="AdvancedStartupLaunchPage" attach="{BootMenuUX!CreateAdvancedStartupLaunchPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="LanguageSelectionPage" class="choicepage">
+		<BUXTitle content="resstr(1632)" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(LanguageCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="LanguageTile" attach="{BootMenuUX!CreateLanguageButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="LanguageCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1633)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXButton resid="LanguageTile" class="menutile" target="KeyboardSelectionPage">
+		<element class="menutile::spacer" />
+		<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+		<BUXText class="menutile::header" id="atom(buttonTitle)" />
+		<BUXText class="menutile::description" id="atom(buttonDescription)" />
+	</BUXButton>
+	<BUXPage resid="KeyboardSelectionPage" attach="{BootMenuUX!CreatePasswordPage}" class="choicepage" flags="ExcludeFromTravelog">
+		<BUXTitle content="resstr(1634)" />
+		<BUXButtonCollection class="keyboardcollection::wrapped" id="atom(KeyboardCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="KeyboardTileSimple" attach="{BootMenuUX!CreateKeyboardLayoutButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="KeyboardCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1635)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXButton resid="KeyboardTileSimple" layout="flowlayout()" class="keyboardtile">
+		<element class="keyboardtile::image" content="icon(1033,10rp,20rp,1,1)" />
+		<BUXText class="keyboardtile::header" id="atom(buttonTitle)" />
+	</BUXButton>
+	<BUXPage resid="UserLogonPage" attach="{BootMenuUX!CreateUserSelectionPage}" class="choicepage::description">
+		<BUXTitle content="resstr(1636)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1721)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescriptionFallback)" content="resstr(1840)" />
+		<element class="choicepage::spacer" />
+		<BUXButtonCollection class="collection::unwrapped" id="atom(UserCollection)" layout="verticalflowlayout(0)" ButtonFactory="UserLogonTile" attach="{BootMenuUX!CreateUserNameButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption::unwrapped" id="atom(next)" associatedcollection="UserCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1637)" />
+		</BUXButtonCollectionFlipper>
+		<BUXAnchor class="infolinkarea::unwrapped" layout="flowlayout()">
+			<BUXButton class="menuoption::unwrapped" id="atom(Help)" target="UserLogonHelpPage">
+				<BUXText class="menuoption::header" content="resstr(1638)" />
+			</BUXButton>
+		</BUXAnchor>
+	</BUXPage>
+	<BUXButton resid="UserLogonTile" flowhorizontal="true" layout="flowlayout()" class="usertile" ImageId="1031" target="UserPasswordPage">
+		<element class="usertile::image" id="atom(buttonImage)" content="icon(1031,10rp,20rp,1,1)" />
+		<BUXText class="usertile::header" id="atom(buttonTitle)" />
+	</BUXButton>
+	<BUXPage resid="UserLogonHelpPage" attach="{BootMenuUX!CreatePasswordPage}" class="commitpage">
+		<BUXTitle content="resstr(1636)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1639)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent1)" content="resstr(1640)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateRestartButton}">
+				<BUXText class="commitbutton::header" content="resstr(1748)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UserPasswordPage" attach="{BootMenuUX!CreatePasswordPage}" class="passwordpage" active="pointer">
+		<BUXTitle content="resstr(1719)" dynamic="RecoveryOperation" />
+		<BUXFormattedText class="static::header" id="atom(UserName)" content="resstr(1828)" insets="username" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(UserDetails)" dynamic="userdetails" accessible="false" />
+		<element class="edit::spacer" />
+		<BUXFormattedText class="static::description" id="atom(PageDescription)" content="resstr(1641)" insets="KeyboardLayout" />
+		<BUXEdit class="edit::general" connectedbutton="idCommit" passwordcharacter="9679" accname="resstr(649)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbuttonpair::clustered" layoutpos="left" layout="flowlayout(0, 1, 0)">
+					<BUXButton class="menuoption" id="atom(ChangeKeyboard)" target="KeyboardSelectionPage">
+						<BUXText class="menuoption::header" content="resstr(1642)" />
+					</BUXButton>
+				</element>
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idCommit)" ExecStyle="flipper" target="ExitPageDefault" attach="{BootMenuUX!CreatePasswordButton}">
+						<BUXText class="commitbutton::header" content="resstr(1620)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1777)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="WINRE_NoDiskErrorPage" class="commitpage">
+		<BUXTitle content="resstr(1810)" />
+		<BUXText class="static::header" id="atom(PageHeader)" content="resstr(1808)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1809)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(TurnOff)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<BUXText class="commitbutton::header" content="resstr(1796)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="WINRE_UnsupportedOSPage" attach="{BootMenuUX!CreatePasswordPage}" class="commitpage">
+		<BUXTitle content="resstr(1810)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1833)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" target="AdvancedBootOptionsPage">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="WINRE_UnsupportedOSPage" attach="{BootMenuUX!CreatePasswordPage}" class="commitpage">
+		<BUXTitle content="resstr(1810)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1833)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" target="AdvancedBootOptionsPage">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="WINRE_EarlyDirtyShutdownPage" class="commitpage">
+		<BUXTitle content="resstr(1810)" />
+		<BUXText class="static::header" id="atom(PageHeader)" content="resstr(1811)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1812)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Advanced)" attach="{BootMenuUX!CreateAdvancedOptionsButton}">
+				<BUXText class="commitbutton::header" content="resstr(1813)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateRestartButton}">
+				<BUXText class="commitbutton::header" content="resstr(1814)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="AdvancedStartupPage" class="commitpage">
+		<BUXTitle content="resstr(1817)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1818)" />
+		<element class="static::headerdescription::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1822)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1823)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1824)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1825)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1819)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1820)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1821)" />
+		</element>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" attach="{BootMenuUX!CreateAdvancedStartupButton}">
+				<BUXText class="commitbutton::header" content="resstr(1778)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="ARM_AdvancedStartupPage" class="commitpage">
+		<BUXTitle content="resstr(1817)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1818)" />
+		<element class="static::headerdescription::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1822)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1824)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1821)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1820)" />
+		</element>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" attach="{BootMenuUX!CreateAdvancedStartupButton}">
+				<BUXText class="commitbutton::header" content="resstr(1778)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SetWallpaperPage" attach="{BootMenuUX!CreateSetWallpaperPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="ClearWallpaperPage" attach="{BootMenuUX!CreateClearWallpaperPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="CloudPBRInitPage" attach="{BootMenuUX!CreateWiFiInitPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1870)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::header" id="atom(PageStatus)" content="resstr(1874)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRGettingInfoPage" attach="{BootMenuUX!CreateWiFiInitPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1870)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::header" id="atom(PageStatus)" content="resstr(1904)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRNetworksSelectionPage" class="choicepage::description" attach="{BootMenuUX!CreateUserSelectionPage">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1865)" />
+		<BUXText class="static::header" id="atom(PageDescriptionFallback)" content="resstr(1866)" />
+		<element class="choicepage::spacer" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(WirelessCollection)" layout="verticalflowlayout(0)" PageCount="5" ButtonFactory="WirelessTile" attach="{BootMenuUX!CreateWiFiNetworkButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" associatedcollection="WirelessCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1867)" />
+		</BUXButtonCollectionFlipper>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXButton resid="WirelessTile" flowhorizontal="true" layout="flowlayout()" class="usertile" ImageId="1031">
+		<element class="usertile::image" id="atom(buttonImage)" width="24rp" height="24rp" content="icon(1047,24rp,24rp,1,1)" />
+		<BUXText class="usertile::header" id="atom(buttonTitle)" />
+	</BUXButton>
+	<BUXPage resid="CloudPBRWifiKeyEntryPage" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1870)" dynamic="ssid" />
+		<BUXFormattedText class="static::header" id="atom(SSID)" content="resstr(1868)" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(NetworkDetails)" dynamic="NetworkDetails" />
+		<BUXEdit class="edit::general" connectedbutton="idConnect" passwordcharacter="9679" accname="resstr(648)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="CloudPBRGettingInfoPage" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRUnsecureConnectPage" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1870)" dynamic="ssid" />
+		<BUXFormattedText class="static::header" id="atom(SSID)" dynamic="ssid" />
+		<element class="edit::spacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1875)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="CloudPBRGettingInfoPage" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRSpacePage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback | ExcludeFromTravelog | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(630)" />
+		<element class="edit::spacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(644)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreatePBRfactoryResetContinueChecksButton}">
+				<BUXText class="commitbutton::header" content="resstr(1905)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRConfirmDownload" flags="BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(600)" />
+		<element class="edit::spacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(601)" />
+		<element class="edit::spacer" />
+		<element class="edit::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(603)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(604)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(605)" />
+		</element>
+		<element class="edit::spacer" />
+		<element class="edit::spacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(602)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreateDownloadCloudPBRConfirmButton}">
+				<BUXText class="commitbutton::header" content="resstr(1871)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRBMRWarning" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback | ExcludeFromTravelog | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(629)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreatePBRfactoryResetContinueChecksButton}">
+				<BUXText class="commitbutton::header" content="resstr(1890)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRError" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1879)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudPBRDownload" attach="{BootMenuUX!CreateCSRTFinalPage}" flags="ExcludeFromTravelog | EnableCallback | AllowCancel | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1870)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(658)" />
+		<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+			<ModernProgressRing />
+			<BUXText class="static::header" id="atom(Status)" content="resstr(1888)" />
+		</BUXStatus>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="RepairRestorePage" attach="{BootMenuUX!CreateTopLevelRecoveryToolsPage}" class="choicepage" id="atom(checkflipper)">
+		<BUXTitle content="resstr(1645)" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(TopLevelRecoveryToolCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="RecoveryToolTile" attach="{BootMenuUX!CreateTopLevelRecoveryToolsButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="TopLevelRecoveryToolCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1725)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="RestorePBRResetPage" attach="{BootMenuUX!CreatePBRResetPage}" class="choicepage" id="atom(checkflipper)">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1892)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(PBRResetButtonCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="RecoveryToolTile" attach="{BootMenuUX!CreatePBRResetButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="PBRResetButtonCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1725)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="UninstallOptionsPage" attach="{BootMenuUX!CreateUninstallPage}" class="choicepage" id="atom(checkflipper)">
+		<BUXTitle content="resstr(1913)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1892)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(UninstallButtonCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="RecoveryToolTile" attach="{BootMenuUX!CreateUninstallToolsButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="UninstallButtonCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1725)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXPage resid="BasicReset_HelpPage" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1780)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1781)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1782)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1783)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1784)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1785)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1786)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1787)" />
+		</element>
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1788)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1789)" />
+	</BUXPage>
+	<BUXPage resid="BasicReset_PrepPage" attach="{BootMenuUX!CreateBasicResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1891)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1644)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_LandingPage" attach="{BootMenuUX!CreateBasicResetLandingPage}" flags="ExcludeFromTravelog | ResetTravelog" />
+	<BUXPage resid="BasicReset_ConfirmPage" attach="{BootMenuUX!CreatePBRFinalPage}" class="commitpage::description" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1893)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1940)" />
+		<element class="static::descriptionheader::spacer" />
+		<BUXText class="static::description" id="atom(ListDescription)" content="resstr(614)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(616)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(617)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" dynamic="PBR_UsePayload" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" content="resstr(615)" />
+		</element>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(1710)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_ConfirmPageBitLocker" attach="{BootMenuUX!CreatePBRFinalPage}" class="commitpage::description" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1893)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1940)" />
+		<element class="static::descriptionheader::spacer" />
+		<BUXText class="static::description" id="atom(ListDescription)" content="resstr(614)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(616)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(617)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" dynamic="PBR_UsePayload" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" content="resstr(615)" />
+		</element>
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(Reason)" content="resstr(1794)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(1710)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_ConfirmBitlockerDownlevel" attach="{BootMenuUX!CreatePBRFinalPage}" class="commitpage::description" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1893)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1940)" />
+		<element class="static::descriptionheader::spacer" />
+		<BUXText class="static::description" id="atom(ListDescription)" content="resstr(614)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(616)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(617)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" dynamic="PBR_UsePayload" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" content="resstr(615)" />
+		</element>
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(Reason)" content="resstr(1795)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(1710)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_WaitForMediaPage" attach="{BootMenuUX!CreateBasicResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_CheckingMediaPage" attach="{BootMenuUX!CreateBasicResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element layout="filllayout()">
+			<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1681)" active="keyboard" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_WrongMediaPage" attach="{BootMenuUX!CreateBasicResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXStatus layout="flowlayout()">
+			<BUXText class="static::status::noringonit" id="atom(Status)" content="resstr(1729)" />
+		</BUXStatus>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_NotEnoughDiskSpacePage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1684)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_BinaryNotTrusted" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1941)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_NotSupportedInEdition" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1969)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_MediaBootUnsupportedOption" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1849)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_BaseMetalPage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1716)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_UserProfileErrorPage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1802)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 1, 1)">
+			<element class="commitbutton::hspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_GenericErrorPage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1767)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BasicReset_OsVolumeInaccessiblePage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1768)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="RepairAndRestoreMoreOptionsPage" class="choicepage" id="atom(checkflipper)">
+		<BUXTitle content="resstr(1648)" />
+		<BUXButtonCollection class="collection::wrapped" id="atom(RecoveryToolCollection)" layout="verticalflowlayout()" layoutpos="top" ButtonFactory="RecoveryToolTile" attach="{BootMenuUX!CreateAdvancedRecoveryToolsButtonCollection}" />
+		<BUXButtonCollectionFlipper class="menuoption" id="atom(next)" layoutpos="top" associatedcollection="RecoveryToolCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1725)" />
+		</BUXButtonCollectionFlipper>
+	</BUXPage>
+	<BUXButton resid="RecoveryToolTile" class="menutile">
+		<element class="menutile::spacer" />
+		<element class="menutile::image" id="atom(buttonImage)" width="60rp" height="60rp" content="icon(1000,60rp,60rp,1,1)" />
+		<BUXText class="menutile::header" id="atom(buttonTitle)" />
+		<BUXText class="menutile::description" id="atom(buttonDescription)" />
+	</BUXButton>
+	<BUXPage resid="SystemReset_LaunchBasicResetPage" attach="{BootMenuUX!CreateBasicSystemResetLaunchPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="SystemReset_LaunchFactoryResetPage" attach="{BootMenuUX!CreateBasicSystemResetLaunchPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="FactoryReset_HelpPage" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1790)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1791)" />
+		<element class="static::headerdescription::largespacer" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1792)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1793)" />
+	</BUXPage>
+	<BUXPage resid="FactoryReset_PrepPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1891)" />
+		<element layoutpos="top" class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1763)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="BareMetalRecovery_PrepPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1894)" />
+		<element layoutpos="top" class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1763)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_ConfirmPage" attach="{BootMenuUX!CreatePBRFinalPage}" class="commitpage" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1893)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1940)" />
+		<element class="static::descriptionheader::spacer" />
+		<BUXText class="static::description" id="atom(ListDescription)" content="resstr(618)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(619)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(621)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(620)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" dynamic="PBR_UsePayload" />
+		</element>
+		<BUXText class="static::description" id="atom(BitLockerMessage)" dynamic="PBR_BitlockerString" accessible="false" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(1710)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_ConfirmBMRPage" attach="{BootMenuUX!CreatePBRFinalPage}" class="commitpage" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1894)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1893)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1940)" />
+		<element class="static::descriptionheader::spacer" />
+		<BUXText class="static::description" id="atom(ListDescription)" content="resstr(637)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(638)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(639)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(640)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(641)" />
+		</element>
+		<BUXText class="static::description" id="atom(BitLockerMessage)" dynamic="PBR_BitlockerString" accessible="false" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(1900)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryResetBaremetalResetPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="menupage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1839)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(EnableRepartition)" attach="{BootMenuUX!CreatePBRfactoryResetBareMetalEnabled}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1841)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(DisableRepartition)" attach="{BootMenuUX!CreatePBRfactoryResetBareMetalDisabled}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1842)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="FactoryResetKeepProvPackages" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="menupage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1899)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(FormatSystem)" attach="{BootMenuUX!CreatePBRFactoryResetKeepPackagesButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1896)" />
+			<BUXText class="menutile::description" content="resstr(1897)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(FormatAll)" attach="{BootMenuUX!CreatePBRFactoryResetNotKeepPackagesButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1901)" />
+			<BUXText class="menutile::description" content="resstr(1898)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_FormatDrivesPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="menupage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1676)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(FormatSystem)" attach="{BootMenuUX!CreatePBRfactoryResetOsOnlyButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1677)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(FormatAll)" attach="{BootMenuUX!CreatePBRfactoryResetAllVolumesButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1678)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_WaitForMediaPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_CheckingMediaPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback | AllowCancel" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element layout="filllayout()">
+			<element layoutpos="right" class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+				<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+					<BUXText class="commitbutton::header" content="resstr(1711)" />
+				</BUXButton>
+			</element>
+			<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1681)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_WrongMediaPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="ExcludeFromTravelog | EnableCallback" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1679)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXStatus layout="flowlayout()">
+			<BUXText class="static::status::noringonit" id="atom(Status)" content="resstr(1729)" />
+		</BUXStatus>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_GenericErrorPage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1769)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryResetBMRError" class="commitpage::description">
+		<BUXTitle content="resstr(1894)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1895)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudBaremetalError" attach="{BootMenuUX!CreatePBRErrorPage}" class="commitpage::description" layout="verticalflowlayout()">
+		<element class="menutile::image" content="icon(1054, 150rp, 150rp)" background="argb(0, 0, 0, 0)" />
+		<BUXFormattedText class="static::header" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1942)" insets="PBRErrorResult" />
+		<element class="static::headerdescription::largespacer" height="20rp" />
+		<element class="menutile::image" width="250rp" height="250rp" content="graphic(1053, 0)" background="argb(0, 0, 0, 0)" />
+		<BUXFormattedText class="static::header" id="atom(PageDescription2)" contentalign="middlecenter|wrapcenter" content="resstr(1943)" insets="CBMRErrorUrl" />
+	</BUXPage>
+	<BUXPage resid="GenericDevice_ErrorPage" class="commitpage::description">
+		<BUXTitle content="resstr(1902)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1903)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PolicyDoesntAllowReset_ErrorPage" class="commitpage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1906)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryResetSysDriveErrorPage" class="commitpage">
+		<BUXTitle content="resstr(1894)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1843)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryResetDriveTooSmallPage" class="commitpage">
+		<BUXTitle content="resstr(1894)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1844)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryResetNoOSPartPage" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1845)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PBRWipeFailed" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1908)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1909)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_MediaBootUnsupportedOption" class="commitpage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1849)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_DataErasePage" class="menupage::description" flags="ExcludeFromTravelog|BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1804)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(DataEraseDisabled)" attach="{BootMenuUX!CreatePBRfactoryResetDataEraseDisabled}" target="FactoryReset_DataEraseLandingPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(585)" />
+			<BUXText class="menutile::description" content="resstr(586)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(DataEraseEnabled)" attach="{BootMenuUX!CreatePBRfactoryResetDataEraseEnabled}" target="FactoryReset_DataEraseLandingPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(583)" />
+			<BUXText class="menutile::description" content="resstr(584)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_DataErasePageBMR" class="menupage::description" flags="ExcludeFromTravelog|BackDisabled">
+		<BUXTitle content="resstr(1894)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1804)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(DataEraseDisabled)" attach="{BootMenuUX!CreatePBRfactoryResetDataEraseDisabled}" target="FactoryReset_DataEraseLandingPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(585)" />
+			<BUXText class="menutile::description" content="resstr(586)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(DataEraseEnabled)" attach="{BootMenuUX!CreatePBRfactoryResetDataEraseEnabled}" target="FactoryReset_DataEraseLandingPage">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1000,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(583)" />
+			<BUXText class="menutile::description" content="resstr(584)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="FactoryReset_DataEraseLandingPage" attach="{BootMenuUX!CreateFactoryResetLandingPage}" flags="ExcludeFromTravelog | ResetTravelog" />
+	<BUXPage resid="WinReSkipPage" attach="{BootMenuUX!CreateWinReSkipPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="GenericNetworksPage" class="choicepage::description" attach="{BootMenuUX!CreateUserSelectionPage}">
+		<BUXTitle content="resstr(1951)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1865)" dynamic="WifiConnectionDescription" />
+		<BUXText class="static::description::nudged" id="atom(PageDescriptionFallback)" content="resstr(1952)" />
+		<element class="choicepage::spacer" />
+		<BUXButtonCollection class="payloadcollection::wrapped" id="atom(WirelessCollection)" layout="verticalflowlayout(0)" ButtonFactory="WirelessTile" attach="{BootMenuUX!CreateGenericWiFiNetworksCollection}" />
+		<BUXButtonCollectionFlipper class="payloadmenuoption" id="atom(next)" associatedcollection="WirelessCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1867)" />
+		</BUXButtonCollectionFlipper>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="GenericWifiKeyPage" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1953)" dynamic="ssid" />
+		<BUXFormattedText class="static::description::nudged" id="atom(SSID)" content="resstr(1868)" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(NetworkDetails)" dynamic="NetworkDetails" />
+		<BUXEdit class="edit::general" connectedbutton="idConnect" passwordcharacter="9679" accname="resstr(648)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="ExitPageDefault" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="GenericUnsecureConnectPage" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1953)" dynamic="ssid" />
+		<BUXFormattedText class="static::description::nudged" id="atom(SSID)" dynamic="ssid" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1875)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="ExitPageDefault" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SRT_CloudRemediationConsentPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1947)" />
+		<BUXText class="static::header" id="atom(ReadyToReset)" content="resstr(1948)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(power)" content="resstr(1949)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 1, 1)">
+			<BUXButton class="commitbutton" id="atom(Continue)" ExecStyle="Terminate" attach="{BootMenuUX!CreateSrtAcceptConsentButton}">
+				<BUXText class="commitbutton::header" content="resstr(1950)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SRT_ConfirmSystemRestorePage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1742)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(ReadyToReset)" content="resstr(1743)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(power)" content="resstr(1744)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" target="ExitPageBlack">
+				<BUXText class="commitbutton::header" content="resstr(1745)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SRT_GenericErrorPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1742)" dynamic="RecoveryOperation" />
+		<BUXFormattedText class="static::header" id="atom(PageDescription)" content="resstr(1746)" insets="RecoveryOperation" />
+		<BUXText class="static::description" id="atom(PageContent1)" content="resstr(1747)" />
+		<BUXFormattedText class="static::description" id="atom(PageContent2)" content="resstr(1846)" insets="SRT_LogFilePath" />
+		<element class="description::commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(TurnOff)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<BUXText class="commitbutton::header" content="resstr(1796)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1749)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<NavigatePage resid="SRT_GenericErrorPage_CloudRemediation" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtCloudRemediationError" />
+		<element height="60rp" />
+		<BUXText class="static::submessage" id="atom(Dash)" contentalign="middlecenter|wrapcenter" content="resstr(1964)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::submessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(1955)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_CloudRemediation_Policy" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<element layout="verticalflowlayout(0, 2, 2, 2)" background="argb(50,255,255,255)">
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1956)" />
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription2)" contentalign="middlecenter|wrapcenter" content="resstr(1957)" />
+		</element>
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription3)" contentalign="middlecenter|wrapcenter" dynamic="SrtCloudRemediationError" />
+		<element height="60rp" />
+		<BUXText class="static::submessage" id="atom(Dash)" contentalign="middlecenter|wrapcenter" content="resstr(1964)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::submessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(1955)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_AutoRemediation" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtAutoRemediationError" />
+		<element height="60rp" />
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" dynamic="SRT_CountdownAction" />
+			<element height="60rp" />
+			<BUXText id="atom(PageContent3)" class="static::mainmessage" contentalign="middlecenter|wrapcenter" content="resstr(1959)" behaviors="BUX::TimerListener(true)" />
+		</CountDownPage>
+		<element height="60rp" />
+		<BUXText class="static::submessage" id="atom(Dash)" contentalign="middlecenter|wrapcenter" content="resstr(1964)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::submessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(1955)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_AutoRemediation_Policy" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<element layout="verticalflowlayout(0, 2, 2, 2)" background="argb(50,255,255,255)">
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1956)" />
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1957)" />
+		</element>
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtAutoRemediationError" />
+		<element height="60rp" />
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" dynamic="SRT_CountdownAction" />
+			<element height="60rp" />
+			<BUXText id="atom(PageContent3)" class="static::mainmessage" contentalign="middlecenter|wrapcenter" content="resstr(1959)" behaviors="BUX::TimerListener(true)" />
+		</CountDownPage>
+		<element height="60rp" />
+		<BUXText class="static::submessage" id="atom(Dash)" contentalign="middlecenter|wrapcenter" content="resstr(1964)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::submessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(1955)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_CloudRemediation2" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtCloudRemediationError" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" dynamic="SRT_SubStatus" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent3)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_CloudRemediation_Policy2" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<element layout="verticalflowlayout(0, 2, 2, 2)" background="argb(50,255,255,255)">
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1956)" />
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription2)" contentalign="middlecenter|wrapcenter" content="resstr(1957)" />
+		</element>
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription3)" contentalign="middlecenter|wrapcenter" dynamic="SrtCloudRemediationError" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="120rp" />
+		<BUXText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" dynamic="SRT_SubStatus" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent3)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_AutoRemediation2" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtAutoRemediationError" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="60rp" />
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" dynamic="SRT_CountdownAction" />
+			<element height="60rp" />
+			<BUXText id="atom(PageContent3)" class="static::mainmessage" contentalign="middlecenter|wrapcenter" content="resstr(1959)" behaviors="BUX::TimerListener(true)" />
+		</CountDownPage>
+		<element height="120rp" />
+		<BUXText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" dynamic="SRT_SubStatus" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent3)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<NavigatePage resid="SRT_GenericErrorPage_AutoRemediation_Policy2" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<element layout="verticalflowlayout(0, 2, 2, 2)" background="argb(50,255,255,255)">
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1956)" />
+			<BUXFormattedText class="static::submessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(1957)" />
+		</element>
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtAutoRemediationError" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+		<element height="60rp" />
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" dynamic="SRT_CountdownAction" />
+			<element height="60rp" />
+			<BUXText id="atom(PageContent3)" class="static::mainmessage" contentalign="middlecenter|wrapcenter" content="resstr(1959)" behaviors="BUX::TimerListener(true)" />
+		</CountDownPage>
+		<element height="120rp" />
+		<BUXText class="static::infomessage" id="atom(PageContent2)" contentalign="bottomcenter|wrapcenter" dynamic="SRT_SubStatus" />
+		<BUXFormattedText class="static::infomessage" id="atom(PageContent3)" contentalign="bottomcenter|wrapcenter" content="resstr(1846)" insets="SRT_LogFilePath" />
+	</NavigatePage>
+	<BUXPage resid="SRT_MoreRecoveryOptionsPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1960)" />
+		<element layoutpos="top" layout="verticalflowlayout()" class="menupage::content">
+			<BUXButton class="menutile" id="atom(Retry)" ExecStyle="Terminate" attach="{BootMenuUX!CreateSrtRetryCloudButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1059,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1961)" />
+				<BUXText class="menutile::description" content="resstr(1962)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1021,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1608)" />
+				<BUXText class="menutile::description" content="resstr(1963)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(TurnOff)" ImageId="1025" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1025,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1609)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SRT_MoreRecoveryOptionsPage2" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1960)" />
+		<element layoutpos="top" layout="verticalflowlayout()" class="menupage::content">
+			<BUXButton class="menutile" id="atom(Continue)" ImageId="1005" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateDefaultOSButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1005,60rp,60rp,1,1)" />
+				<BUXText class="menutile::header" content="resstr(1600)" />
+				<BUXFormattedText class="menutile::description" content="resstr(2001)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Retry)" ExecStyle="Terminate" attach="{BootMenuUX!CreateSrtRetryCloudButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1059,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1961)" />
+				<BUXText class="menutile::description" content="resstr(1962)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1021,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1608)" />
+				<BUXText class="menutile::description" content="resstr(1963)" />
+			</BUXButton>
+			<BUXButton class="menutile" id="atom(TurnOff)" ImageId="1025" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateShutdownButton}">
+				<element class="menutile::spacer" />
+				<element class="menutile::image" content="icon(1025,60rp,60rp)" />
+				<BUXText class="menutile::header" content="resstr(1609)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="SRT_SoftLandingPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}">
+		<BUXTitle content="resstr(1742)" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1847)" />
+		<BUXText class="static::description" id="atom(PageContent1)" content="resstr(1848)" />
+		<element class="description::commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateRestartButton}">
+				<BUXText class="commitbutton::header" content="resstr(1748)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1749)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_SkipUnlockPage" attach="{FveRecoverUX!FveCreateSkipUnlockPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<BUXPage resid="Bitlocker_UnlockSuccessPage" attach="{FveRecoverUX!FveCreateUnlockSuccessPage}" flags="ExcludeFromTravelog" class="nullpage" />
+	<AdditionalBitlockerRecoveryInfoPage resid="Bitlocker_AdditionalRecoveryInfoPage" attach="{FveRecoverUX!FveCreateAdditionalRecoveryInformationPage}" class="recoveryinfopage" active="pointer">
+		<BUXTitle content="resstr(1687)" />
+		<BUXText class="static::header" id="atom(Status)" content="resstr(1971)" />
+		<element class="bitlocker::spacer2" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<BUXText class="static::description" id="atom(CatchAll)" dynamic="bitlocker_catchallstring" />
+		<BUXText class="static::description::withurl" id="atom(UnlockIssuesLink)" dynamic="bitlocker_unlockissueslink" />
+		<element class="bitlocker::spacer2" />
+		<BUXText class="static::description" id="atom(ConcatErrorString)" dynamic="bitlocker_concaterrorstring" />
+		<BUXText class="static::description" id="atom(AdditionalInfo)" dynamic="bitlocker_additionalinfocontent" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 1, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Back)" target="{back}">
+				<BUXText class="commitbutton::header" content="resstr(1972)" />
+			</BUXButton>
+		</element>
+	</AdditionalBitlockerRecoveryInfoPage>
+	<BUXPage resid="Bitlocker_RootPage" attach="{FveRecoverUX!FveCreateUnlockStartPage}" class="menupage::description" flags="ResetTravelog">
+		<BUXTitle content="resstr(1687)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" dynamic="bitlocker_reason" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(EnterKey)" ImageId="1012" target="Bitlocker_EnterKeyPage" attach="{FveRecoverUX!FveCreateRecoveryPasswordUnlockOptionButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1012,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1688)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(LoadKey)" ImageId="1014" target="Bitlocker_LoadFromUSBPage" attach="{FveRecoverUX!FveCreateExternalKeyUnlockOptionButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1014,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1689)" />
+		</BUXButton>
+		<element class="bitlocker::spacer" />
+		<BUXFormattedText class="static::description::nudged" id="atom(VolumeIDLabel)" content="resstr(1770)" insets="bitlocker_volume_description" />
+		<BUXAnchor class="page::infolinkarea" layout="flowlayout()">
+			<BUXButton class="menuoption" id="atom(AdditionalRecoveryInfo)" target="Bitlocker_AdditionalRecoveryInfoPage">
+				<BUXText class="menuoption::header" content="resstr(1970)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(Skip)" target="Bitlocker_SkipUnlockPage">
+				<BUXText class="menuoption::header" content="resstr(1690)" />
+			</BUXButton>
+		</BUXAnchor>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_RootPage_Lockout" attach="{FveRecoverUX!FveCreateUnlockStartPage}" class="menupage::description" flags="ResetTravelog">
+		<BUXTitle content="resstr(1797)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" dynamic="bitlocker_reason" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(EnterKey)" ImageId="1012" target="Bitlocker_EnterKeyPage_DeviceLockout" attach="{FveRecoverUX!FveCreateRecoveryPasswordUnlockOptionButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1012,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1688)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(LoadKey)" ImageId="1014" target="Bitlocker_LoadFromUSBPage_DeviceLockout" attach="{FveRecoverUX!FveCreateExternalKeyUnlockOptionButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1014,60rp,60rp)" />
+			<BUXText class="menutile::header" content="resstr(1689)" />
+		</BUXButton>
+	</BUXPage>
+	<UsbBitlockerKeyPage resid="Bitlocker_LoadFromUSBPage" attach="{FveRecoverUX!FveCreateLoadFromUsbPage}" flags="ExcludeFromTravelog" class="commitpage">
+		<BUXTitle content="resstr(1687)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1691)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXFormattedText class="static::description" id="atom(VolumeIDLabel)" content="resstr(1770)" insets="bitlocker_volume_description" />
+		<element id="atom(progressBlock)" class="usbbitlocker::spacer" layout="flowlayout(0, 0)">
+			<ModernProgressRing />
+			<BUXText id="atom(unlocking)" class="static::status" content="resstr(1727)" />
+		</element>
+		<BUXError id="atom(errorBlock)" layout="verticalflowlayout()">
+			<BUXText class="static::error" content="resstr(533)" />
+		</BUXError>
+		<BUXAnchor class="page::infolinkarea" layout="borderlayout()">
+			<BUXButton class="menuoption" id="atom(ManualKey)" target="Bitlocker_EnterKeyPage" visible="false" layoutpos="top">
+				<BUXText class="menuoption::header" content="resstr(1775)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(Skip)" target="Bitlocker_SkipUnlockPage" layoutpos="top">
+				<BUXText class="menuoption::header" content="resstr(1690)" />
+			</BUXButton>
+		</BUXAnchor>
+	</UsbBitlockerKeyPage>
+	<UsbBitlockerKeyPage resid="Bitlocker_LoadFromUSBPage_DeviceLockout" attach="{FveRecoverUX!FveCreateLoadFromUsbPage}" flags="ExcludeFromTravelog" class="commitpage">
+		<BUXTitle content="resstr(1797)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1691)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(Reason)" dynamic="bitlocker_reason" />
+		<element id="atom(progressBlock)" class="usbbitlocker::spacer" layout="flowlayout(0, 0)">
+			<ModernProgressRing />
+			<BUXText id="atom(unlocking)" class="static::status" content="resstr(1727)" />
+		</element>
+		<BUXError id="atom(errorBlock)" layout="verticalflowlayout()">
+			<BUXText class="static::error" content="resstr(533)" />
+		</BUXError>
+		<BUXAnchor class="page::infolinkarea" layout="borderlayout()">
+			<BUXButton class="menuoption" id="atom(ManualKey)" target="Bitlocker_EnterKeyPage_DeviceLockout" visible="false" layoutpos="top">
+				<BUXText class="menuoption::header" content="resstr(1775)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(Skip)" attach="{BootMenuUX!CreateFactorySystemResetButton}" layoutpos="top">
+				<BUXText class="menuoption::header" content="resstr(1798)" />
+			</BUXButton>
+		</BUXAnchor>
+	</UsbBitlockerKeyPage>
+	<ManualBitlockerKeyPage resid="Bitlocker_EnterKeyPage" attach="{FveRecoverUX!FveCreateRecoveryPasswordPage}" class="passwordpage" active="pointer">
+		<BUXTitle content="resstr(1687)" dynamic="RecoveryOperation" />
+		<BUXFormattedText class="static::header" id="atom(Status)" content="resstr(1694)" insets="KeyboardLayout" />
+		<element class="bitlocker::spacer2" />
+		<BUXEdit class="edit::bitlocker" connectedbutton="unlockButton" maxlength="55" limittocharacters="1234567890" keyboardskin="1" accname="resstr(650)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<BUXText class="static::description" id="atom(Reason)" dynamic="bitlocker_reason" />
+		<BUXText class="static::description::withurl" id="atom(RetrieveRecoveryKeyHelp)" dynamic="bitlocker_retrievekey" />
+		<BUXText class="static::description" id="atom(ConcatErrorString)" dynamic="bitlocker_concaterrorstring" />
+		<element layout="filllayout()">
+			<element id="atom(inputBlock)" layout="filllayout()">
+				<element class="commitbuttonpair::clustered" layoutpos="left" layout="verticalflowlayout()">
+					<BUXFormattedText class="static::description" id="atom(VolumeIDLabel)" content="resstr(1770)" insets="bitlocker_volume_description" />
+				</element>
+				<element layout="flowlayout(0, 1, 1)" class="commitbutton::clustered" layoutpos="right">
+					<BUXButton class="commitbutton::secondary" id="atom(unlockButton)" enabled="false">
+						<BUXText class="commitbutton::header" content="resstr(1620)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus id="atom(progressBlock)" class="status::flippable2" layout="flowlayout(0, 1, 0)">
+				<ModernProgressRing />
+				<BUXText id="atom(unlocking)" class="static::status" content="resstr(1773)" />
+			</BUXStatus>
+		</element>
+		<BUXAnchor class="page::infolinkarea::unwrapped" layout="flowlayout()">
+			<BUXButton class="menuoption" id="atom(ChangeKeyboard)" target="KeyboardSelectionPage">
+				<BUXText class="menuoption::header" content="resstr(1642)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(Skip)" target="Bitlocker_SkipUnlockPage">
+				<BUXText class="menuoption::header" content="resstr(1690)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(AdditionalRecoveryInfo)" target="Bitlocker_AdditionalRecoveryInfoPage">
+				<BUXText class="menuoption::header" content="resstr(1970)" />
+			</BUXButton>
+		</BUXAnchor>
+	</ManualBitlockerKeyPage>
+	<ManualBitlockerKeyPage resid="Bitlocker_EnterKeyPage_DeviceLockout" attach="{FveRecoverUX!FveCreateRecoveryPasswordPage}" class="passwordpage" active="pointer">
+		<BUXTitle content="resstr(1797)" dynamic="RecoveryOperation" />
+		<BUXFormattedText class="static::header" id="atom(Status)" content="resstr(1694)" insets="KeyboardLayout" />
+		<element class="bitlocker::spacer2" />
+		<BUXEdit class="edit::bitlocker" connectedbutton="unlockButton" maxlength="55" limittocharacters="1234567890" keyboardskin="1" accname="resstr(650)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<BUXText class="static::description::withurl" dynamic="bitlocker_lockoutretrievekey" />
+		<element layout="filllayout()">
+			<element id="atom(inputBlock)" layout="filllayout()">
+				<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(unlockButton)" enabled="false">
+						<BUXText class="commitbutton::header" content="resstr(1800)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus layoutpos="bottom" id="atom(progressBlock)" class="status::flippable3" layout="flowlayout(0, 1, 0)">
+				<ModernProgressRing />
+				<BUXText id="atom(unlocking)" class="static::status" content="resstr(1773)" />
+			</BUXStatus>
+		</element>
+		<BUXAnchor class="page::infolinkarea" layout="borderlayout()">
+			<BUXButton class="menuoption" id="atom(ChangeKeyboard)" target="KeyboardSelectionPage">
+				<BUXText class="menuoption::header" content="resstr(1642)" />
+			</BUXButton>
+			<BUXButton class="menuoption" id="atom(Skip)" attach="{BootMenuUX!CreateFactorySystemResetButton}" layoutpos="top">
+				<BUXText class="menuoption::header" content="resstr(1798)" />
+			</BUXButton>
+		</BUXAnchor>
+	</ManualBitlockerKeyPage>
+	<BUXPage resid="BitLocker_ResealPage" flags="ResetTravelog" class="commitpage">
+		<BUXTitle content="resstr(1687)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1695)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1836)" />
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(1912)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="autoprogress" target="Bitlocker_ResealFailedPage" attach="{FveRecoverUX!FveCreateResealButtonAction}">
+				<BUXText class="commitbutton::header" content="resstr(1778)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_Lockout_Recover" flags="ResetTravelog" class="commitpage">
+		<BUXTitle content="resstr(1799)" dynamic="RecoveryOperation" />
+		<BUXText class="static::header" id="atom(PageDescription)" content="resstr(1695)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1693)" />
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(1929)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="autoprogress" target="Bitlocker_LockoutRecoveryFailedPage" attach="{FveRecoverUX!FveCreateLockoutRecoverButtonAction}">
+				<BUXText class="commitbutton::header" content="resstr(1827)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_ResealFailedPage" attach="{FveRecoverUX!FveCreateResealFailedPage}" class="commitpage" flags="ResetTravelog">
+		<BUXTitle content="resstr(1687)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description" id="atom(Error)" dynamic="bitlocker_resealerror" />
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1930)" />
+		<element class="description::commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" target="BitLocker_LandingPage">
+				<BUXText class="commitbutton::header" content="resstr(1620)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_LockoutRecoveryFailedPage" attach="{FveRecoverUX!FveCreateResealFailedPage}" class="commitpage" flags="ResetTravelog">
+		<BUXTitle content="resstr(1797)" dynamic="RecoveryOperation" />
+		<BUXText class="static::description" id="atom(Error)" dynamic="bitlocker_resealerror" />
+		<element class="bitlocker::spacer" />
+		<BUXText class="static::description" id="atom(PageContent)" content="resstr(1930)" />
+		<element class="description::commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" target="BitLocker_LandingPage">
+				<BUXText class="commitbutton::header" content="resstr(1620)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="Bitlocker_LandingPage" attach="{BootMenuUX!CreateBitlockerLandingPage}" flags="ExcludeFromTravelog | ResetTravelog" class="nullpage" />
+	<BUXPage resid="ErrorPageStd" flags="ExcludeFromTravelog | ResetTravelog" class="commitpage">
+		<BUXTitle content="resstr(1696)" />
+		<BUXText class="static::header" content="resstr(1834)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(idDescripton)" content="resstr(1697)" />
+		<BUXText class="static::description" id="atom(idHRESULT)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="Terminate" attach="{BootMenuUX!CreateRestartButton}">
+				<BUXText class="commitbutton::header" content="resstr(1835)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="EmptyPageBlack" flags="ExcludeFromTravelog | BackDisabled | SuppressCursor" background="black" />
+	<BUXPage resid="EmptyPageDefault" flags="ExcludeFromTravelog | BackDisabled | SuppressCursor" />
+	<BUXPage resid="ExitPageBlack" flags="ExcludeFromTravelog | BackDisabled | SuppressCursor" background="black">
+		<BUXExecute />
+	</BUXPage>
+	<BUXPage resid="ExitPageDefault" flags="ExcludeFromTravelog | BackDisabled | SuppressCursor">
+		<BUXExecute />
+	</BUXPage>
+	<BUXPage resid="ExitPageStd" flags="ExcludeFromTravelog | BackDisabled | SuppressCursor">
+		<BUXExecute id="atom(action)" />
+	</BUXPage>
+	<BUXPage resid="FlightRemoval_ConfirmPage" class="commitpage">
+		<BUXTitle content="resstr(1914)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(597)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(598)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreateFlightRemovalConfirmButton}">
+				<BUXText class="commitbutton::header" content="resstr(1915)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FlightRemoval_ProgressPage" attach="{BootMenuUX!CreateFlightRemovalProgressPage}" flags="ExcludeFromTravelog | EnableCallback | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1914)" />
+		<element layout="filllayout()">
+			<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1916)" active="keyboard" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FlightRemoval_ProgressPage_Restarting" attach="{BootMenuUX!CreateFlightRemovalProgressPage}" flags="ExcludeFromTravelog | EnableCallback | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1914)" />
+		<element layout="filllayout()">
+			<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1917)" active="keyboard" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FlightRemoval_ResultPage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1914)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(599)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="FlightRemoval_ErrorPage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1914)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1858)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_ConfirmPage" class="commitpage">
+		<BUXTitle content="resstr(1919)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1920)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1921)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" attach="{BootMenuUX!CreateUninstallQualityUpdateConfirmButton}">
+				<BUXText class="commitbutton::header" content="resstr(1922)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_PendingActionsPage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1919)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1923)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_NoUpdatePage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1919)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1924)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_ErrorPage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1919)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1925)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_ProgressPage" attach="{BootMenuUX!CreateFlightRemovalProgressPage}" flags="ExcludeFromTravelog | EnableCallback | BackDisabled" class="commitpage">
+		<BUXTitle content="resstr(1919)" />
+		<element layout="filllayout()">
+			<BUXStatus layoutpos="left" class="static::status::progress" layout="flowlayout(0, 0, 0)">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1928)" active="keyboard" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="UninstallQuality_CompletePage" class="commitpage" flags="BackDisabled">
+		<BUXTitle content="resstr(1919)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1926)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Done)" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1927)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadChoice" attach="{BootMenuUX!CreateWiFiInitPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="menupage::description">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1931)" />
+		<BUXText class="static::description::nudged" id="atom(WarningDescription)" content="resstr(1939)" />
+		<element class="menupage::spacer" />
+		<BUXButton class="menutile" id="atom(UsePayload)" attach="{BootMenuUX!CreatePBRUsePayloadButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1049,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1932)" />
+			<BUXText class="menutile::description" content="resstr(660)" />
+		</BUXButton>
+		<BUXButton class="menutile" id="atom(UseLocal)" attach="{BootMenuUX!CreatePBRUseReconstructionButton}">
+			<element class="menutile::spacer" />
+			<element class="menutile::image" content="icon(1026,60rp,60rp,1,1)" />
+			<BUXText class="menutile::header" content="resstr(1934)" />
+			<BUXText class="menutile::description" content="resstr(661)" />
+		</BUXButton>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadBasicResetCheckingConnection" attach="{BootMenuUX!CreateBasicResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1891)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1936)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadNetworks" class="choicepage::description" attach="{BootMenuUX!CreateUserSelectionPage">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1865)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescriptionFallback)" content="resstr(1937)" />
+		<element class="choicepage::spacer" />
+		<BUXButtonCollection class="payloadcollection::wrapped" id="atom(WirelessCollection)" layout="verticalflowlayout(0)" ButtonFactory="WirelessTile" attach="{BootMenuUX!CreatePayloadWiFiNetworksCollection}" />
+		<BUXButtonCollectionFlipper class="payloadmenuoption" id="atom(next)" associatedcollection="WirelessCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1867)" />
+		</BUXButtonCollectionFlipper>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRfactoryResetCancelOperationButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadWifiKey" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1891)" dynamic="ssid" />
+		<BUXFormattedText class="static::description::nudged" id="atom(SSID)" content="resstr(1868)" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(NetworkDetails)" dynamic="NetworkDetails" />
+		<BUXEdit class="edit::general" connectedbutton="idConnect" passwordcharacter="9679" accname="resstr(648)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="PayloadGettingInfo" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadUnsecureConnect" class="passwordpage" active="pointer" attach="{BootMenuUX!CreatePasswordPage}">
+		<BUXTitle content="resstr(1891)" dynamic="ssid" />
+		<BUXFormattedText class="static::description::nudged" id="atom(SSID)" dynamic="ssid" />
+		<element class="edit::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1875)" />
+		<BUXLiveText class="static::error" id="atom(PageInlineError)" accessible="false" content="resstr(651)" />
+		<element layout="filllayout()">
+			<element layout="filllayout()">
+				<element class="commitbutton::clustered" layoutpos="right" layout="flowlayout(0, 1, 1)">
+					<BUXButton class="commitbutton::secondary" id="atom(idConnect)" ExecStyle="flipper" target="PayloadGettingInfo" attach="{BootMenuUX!CreateWiFiConnectButton}">
+						<BUXText class="commitbutton::header" content="resstr(1873)" />
+					</BUXButton>
+				</element>
+			</element>
+			<BUXStatus class="status::flippable" layoutpos="bottom" layout="flowlayout(0, 1, 0)" visible="false">
+				<ModernProgressRing />
+				<BUXText class="static::status" id="atom(Status)" content="resstr(1863)" />
+			</BUXStatus>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PayloadGettingInfo" attach="{BootMenuUX!CreateWiFiInitPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1891)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1644)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadConnectionError" class="commitpage::description" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1937)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="ResetPayloadDownloadError" class="commitpage::description" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1891)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1938)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="DataSanitizationError" class="commitpage::description">
+		<BUXTitle content="resstr(1965)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1967)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="DataSanitizationComplete" class="commitpage::description">
+		<BUXTitle content="resstr(1966)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1968)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1918)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_GenericErrorPage" class="commitpage::description" attach="{BootMenuUX!CreateCPITRFinalPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="PitrError" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1974)" insets="PITRErrorCode" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1990)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_ErrorSnapshotInfoPage" class="commitpage::description" attach="{BootMenuUX!CreateCPITRFinalPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="PitrError" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1974)" insets="PITRErrorCode" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1991)" insets="PITRTargetSnapshotCreationTime" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1990)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_PreparingPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(1973)" />
+		<element layoutpos="top" class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1975)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_ConfirmPage" attach="{BootMenuUX!CreateCPITRFinalPage}" class="commitpage::description">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1976)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1977)" />
+		<element class="choicepage::header::spacer" />
+		<element layout="verticalflowlayout(0)" background="argb(255,12,77,145)" padding="rect(20rp,20rp,20rp,20rp)">
+			<element layout="flowlayout()">
+				<element background="20575" accrole="graphic" id="atom(buttonImage)" width="24rp" height="24rp" content="icon(1061,24rp,24rp,1,1)" />
+				<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1978)" />
+			</element>
+		</element>
+		<element class="choicepage::header::spacer" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1979)" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1980)" insets="PITRSnapshotCreationTime" />
+		<element class="choicepage::spacer" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription3)" content="resstr(1981)" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1980)" insets="PITRSnapshotOSVersion" />
+		<element class="choicepage::header::spacer" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1982)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(2007)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1983)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Back)" target="{back}">
+				<BUXText class="commitbutton::header" content="resstr(1985)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Continue)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateSnapshotApplyButton}">
+				<BUXText class="commitbutton::header" content="resstr(1984)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXButton resid="SnapshotTitle" flowhorizontal="true" layout="flowlayout()" class="usertile" ImageId="1031">
+		<element class="usertile::image" id="atom(buttonImage)" width="24rp" height="24rp" content="icon(1060,24rp,24rp,1,1)" />
+		<BUXText class="usertile::longHeader" id="atom(buttonTitle)" />
+	</BUXButton>
+	<BUXPage resid="PITR_SnapshotSelectionPage" class="choicepage::description" attach="{BootMenuUX!CreateUserSelectionPage}">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description::nudged" id="atom(PageDescription)" content="resstr(1986)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1983)" />
+		<BUXButtonCollection class="payloadcollection::wrapped" id="atom(SnapshotCollection)" layout="verticalflowlayout(0)" ButtonFactory="SnapshotTitle" attach="{BootMenuUX!CreateSnapshotsCollection}" />
+		<BUXButtonCollectionFlipper class="payloadmenuoption" id="atom(next)" associatedcollection="SnapshotCollection" layout="flowlayout()">
+			<BUXText class="menuoption::header" content="resstr(1987)" />
+		</BUXButtonCollectionFlipper>
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_SucceedPage" class="commitpage">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::header" id="atom(PageHeader)" content="resstr(1988)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1989)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Advanced)" ExecStyle="Terminate" target="ExitPageDefault">
+				<BUXText class="commitbutton::header" content="resstr(1990)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" ExecStyle="TerminateBlack" attach="{BootMenuUX!CreateRestartButton}">
+				<BUXText class="commitbutton::header" content="resstr(1814)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_WarningPage" class="commitpage">
+		<BUXTitle content="resstr(1973)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1992)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(1993)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(1994)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(1995)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" content="resstr(1996)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element class="commitbutton::hadjspacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1997)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(1998)" />
+		<BUXText class="static::description::nudged" id="atom(PageHeader)" content="resstr(1983)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Back)" target="{back}">
+				<BUXText class="commitbutton::header" content="resstr(1985)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" target="PITR_ConfirmPage">
+				<BUXText class="commitbutton::header" content="resstr(1999)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_ErrorEditionChangePage" class="commitpage::description" attach="{BootMenuUX!CreateCPITRFinalPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2002)" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(2003)" insets="PITROSEdition" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(2004)" insets="PITREdition" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1991)" insets="PITRTargetSnapshotCreationTime" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1990)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="PITR_RebootInterruptionPage" class="commitpage::description" attach="{BootMenuUX!CreateCPITRFinalPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(1973)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="PitrRetryDesc1" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="PitrRetryDesc2" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(1991)" insets="PITRTargetSnapshotCreationTime" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(2005)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Retry)" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(2006)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="BlockedAS_OSLocked" attach="{BootMenuUX!CreatePasswordPage}" class="commitpage">
+		<BUXTitle content="resstr(1810)" dynamic="RecoveryOperation" />
+		<BUXFormattedText class="static::description" id="atom(PageDescription)" content="resstr(2008)" insets="RecoveryOperation" />
+		<BUXFormattedText class="static::description" id="atom(PageDescription)" content="resstr(2009)" insets="TargetOSDrive" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Unlock)" target="Bitlocker_RootPage">
+				<BUXText class="commitbutton::header" content="resstr(2010)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Reboot)" ExecStyle="Terminate" attach="{BootMenuUX!CreateRestartNoTrustButton}">
+				<BUXText class="commitbutton::header" content="resstr(2011)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" target="AdvancedBootOptionsPage">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_PreparingPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(2012)" />
+		<element layoutpos="top" class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(2013)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_StartingNetworkPage" attach="{BootMenuUX!CreateFactoryResetFinalChecksPage}" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage">
+		<BUXTitle content="resstr(2012)" />
+		<element class="prep::spacer" layout="flowlayout()">
+			<ModernProgressRing />
+			<BUXText class="static::status" id="atom(PageStatus)" content="resstr(1936)" active="keyboard" />
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_TargetOSInfoPage" class="commitpage::description" attach="{BootMenuUX!CreateDeviceRebuildPage}">
+		<BUXTitle content="resstr(2012)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2016)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::description::nudged" id="atom(PageDescription2)" dynamic="CloudRebuild_OS_Info" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::description::nudged" id="atom(PageDescription2)" dynamic="CloudRebuild_Edition_Info" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::description::nudged" id="atom(PageDescription2)" dynamic="CloudRebuild_Language_Info" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" target="CloudRebuild_ConfirmPage">
+				<BUXText class="commitbutton::header" content="resstr(1620)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_ConfirmPage" class="commitpage">
+		<BUXTitle content="resstr(2012)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2017)" />
+		<element class="menutile::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2018)" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet1)" content="resstr(2019)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet2)" content="resstr(2020)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet3)" content="resstr(2021)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element layout="flowlayout()">
+			<BUXText class="static::bullet" content="resstr(502)" />
+			<BUXText class="static::bulletitem" id="atom(bullet4)" content="resstr(2022)" />
+		</element>
+		<element class="static::bullet::spacer" />
+		<element class="commitbutton::hadjspacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2023)" />
+		<element class="static::headerdescription::spacer" />
+		<BUXText class="static::description" id="atom(PageDescription)" content="resstr(2024)" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(2025)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Back)" target="{back}">
+				<BUXText class="commitbutton::header" content="resstr(2014)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Restart)" attach="{BootMenuUX!CreateBlackWallpaperButton}">
+				<BUXText class="commitbutton::header" content="resstr(2026)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_ErrorPage" class="commitpage::description" attach="{BootMenuUX!CreateWinREErrorPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(2012)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_ErrorMessage" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_AdditionalMessage" />
+		<element class="menutile::spacer" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(2027)" insets="ErrorPage_ErrorCode" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(2028)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_DownloadErrorPage" class="commitpage::description" attach="{BootMenuUX!CreateWinREErrorPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(2012)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_ErrorMessage" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_AdditionalMessage" />
+		<element class="menutile::spacer" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(2027)" insets="ErrorPage_ErrorCode" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(2028)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreateErrorRetryButton}">
+				<BUXText class="commitbutton::header" content="resstr(2015)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="CloudRebuild_InstallErrorPage" class="commitpage::description" attach="{BootMenuUX!CreateWinREErrorPage}" flags="ExcludeFromTravelog | BackDisabled">
+		<BUXTitle content="resstr(2012)" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_ErrorMessage" />
+		<BUXText class="static::description" id="atom(PageDescription)" dynamic="ErrorPage_AdditionalMessage" />
+		<element class="menutile::spacer" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(2029)" />
+		<element class="menutile::spacer" />
+		<BUXFormattedText class="static::description::nudged" id="atom(PageDescription2)" content="resstr(2027)" insets="ErrorPage_ErrorCode" />
+		<BUXText class="static::description" id="atom(PageContent2)" content="resstr(2028)" />
+		<element class="commitbutton::spacer" layout="flowlayout(0, 0, 1)">
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreatePBRCancelButton}">
+				<BUXText class="commitbutton::header" content="resstr(1711)" />
+			</BUXButton>
+			<element class="commitbutton::hadjspacer" />
+			<BUXButton class="commitbutton::secondary" id="atom(Cancel)" ExecStyle="Terminate" attach="{BootMenuUX!CreateErrorRetryButton}">
+				<BUXText class="commitbutton::header" content="resstr(2015)" />
+			</BUXButton>
+		</element>
+	</BUXPage>
+	<BUXPage resid="QMR_RRMP_ProgressPage" attach="{BootMenuUX!CreateCSRTFinalPage}" background="black" flags="EnableCallback|ExcludeFromTravelog|BackDisabled" class="progresspage" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2030)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2031)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2032)" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2033)" />
+		<element height="60rp" />
+		<element layoutpos="top" class="prep::spacer" layout="flowlayout()" contentalign="middlecenter|wrapcenter">
+			<ModernProgressRing />
+		</element>
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" dynamic="SrtProgressText" />
+	</BUXPage>
+	<NavigatePage resid="QMR_RRMP_ErrorPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2030)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2031)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2032)" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2033)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+	</NavigatePage>
+	<NavigatePage resid="QMR_RRMP_AutoRetry_ErrorPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" NavigateTo="SRT_MoreRecoveryOptionsPage2" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2030)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2031)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2032)" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2033)" />
+		<element height="60rp" />
+		<BUXAnchor background="20575" layout="verticalflowlayout(0, 2, 2, 2)">
+			<BUXButton class="menuoption" id="atom(MoreRecoveryOptions)" target="SRT_MoreRecoveryOptionsPage">
+				<BUXText class="static::mainmessage" id="atom(PageContent1)" contentalign="middlecenter|wrapcenter" content="resstr(2000)" />
+			</BUXButton>
+		</BUXAnchor>
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)" />
+	</NavigatePage>
+	<BUXPage resid="QMR_RRMP_NoUserAction_ErrorPage" class="commitpage" attach="{BootMenuUX!CreateCSRTFinalPage}" background="black" layout="verticalflowlayout(0, 2, 2, 2)">
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2030)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2031)" />
+		<element height="60rp" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2032)" />
+		<BUXText class="static::mainmessage" id="atom(PageDescription)" contentalign="middlecenter|wrapcenter" content="resstr(2033)" />
+		<CountDownPage contentalign="middlecenter|wrapcenter" attach="{BootMenuUX!CreateCSRTFinalPage}" defaultaction="{BootMenuUX!CreateSrtCountdownActionButton}" behaviors="BUX::Timer(0)" countdown="Countdown" background="black" layout="verticalflowlayout(0, 2, 2, 2)" />
+	</BUXPage>
+</duixml>

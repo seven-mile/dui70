@@ -1,0 +1,20 @@
+<!--
+  source: %SYSTEMROOT%\System32\easconsent.dll
+  resource: UIFILE / "10001" / lang 1033
+  size: 337 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="ConsentPopupStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)"/>
+</stylesheets>
+<RichText
+resid="ConsentPopup"
+sheet="ConsentPopupStyle"
+accessible="true"
+accrole="text"
+content="resstr(10005)"
+contentalign="wrapleft"
+layoutpos="top">
+</RichText>
+</duixml>

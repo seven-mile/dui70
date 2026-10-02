@@ -1,0 +1,15 @@
+<!--
+  source: %SYSTEMROOT%\System32\WindowsActionDialog.exe
+  resource: UIFILE / "201" / lang 1033
+  size: 302 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<?xml version="1.0" encoding="utf-8"?>
+<duixml>
+<RichText resid="PlatformRoot" id="atom(ModalDialogElement)" accessible="true" contentalign="endellipsis|wrapleft" sheet="DialogStyle"/>
+<stylesheets>
+<style resid="DialogStyle">
+<RichText font="resstr(1004)"/>
+</style>
+</stylesheets>
+</duixml>

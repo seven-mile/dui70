@@ -1,0 +1,22 @@
+<!--
+  source: %SYSTEMROOT%\System32\RADCUI.dll
+  resource: UIFILE / "2101" / lang 1033
+  size: 801 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+<element resid="main" id="atom(main)" layout="filllayout()" sheet="SubscribeWizardStyle" padding="rect(0rp, 0rp, 0rp, 96rp)" accessible="true" accrole="pane">
+<element id="atom(DialogMinimumHeightStabilizer)" height="50rp"/>
+<element id="atom(main_page)" layout="borderlayout()" visible="false"> 
+<element layoutpos="client" layout="filllayout()"> 
+<RichText id="atom(status_message)" accessible="true" accrole="statictext" content="resstr(15814)" layoutpos="top"/>
+</element> 
+</element> 
+</element>
+<stylesheets>
+<style resid="SubscribeWizardStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<RichText contentalign="topleft|wrapleft|endellipsis" foreground="ImmersiveLightPrimaryText" font="resstr(15812)"/> 
+</style>
+</stylesheets>
+</duixml>

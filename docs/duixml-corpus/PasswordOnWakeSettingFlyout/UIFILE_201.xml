@@ -1,0 +1,18 @@
+<!--
+  source: %SYSTEMROOT%\System32\PasswordOnWakeSettingFlyout.exe
+  resource: UIFILE / "201" / lang 1033
+  size: 686 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="PasswordOnWakeDialogStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<if class="change_description">
+<RichText foreground="ImmersiveLightPrimaryText" font="resstr(6001, library(PasswordOnWakeSettingFlyout.exe))" contentalign="topleft | wrapleft" accessible="true" accRole="statictext"/>
+</if>
+</style>
+</stylesheets>
+<Element resid="main" id="Atom(idContent)" layout="borderlayout()" sheet="PasswordOnWakeDialogStyle" padding="rect(20rp,17rp,20rp,14rp)" width="264rp">
+<RichText id="atom(idDescription)" layoutpos="client" content="resstr(3001)" accname="resstr(3001)" class="change_description"/>
+</Element>
+</duixml>

@@ -1,0 +1,659 @@
+<!--
+  source: %SYSTEMROOT%\System32\msctfuimanager.dll
+  resource: UIFILE / "16003" / lang 1033
+  size: 22377 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="EmojiSkinTonePanel.Layout" id="atom(EmojiSkinTonePanel.Layout)" layout="gridlayout(2, 3)" accessible="true" layoutpos="client" x="0rp" y="0rp" sheet="SkinTonePanelStyle" accname="resstr(16122, library(msctfuimanager.dll))">
+<TouchButton id="atom(EmojiSkinTonePanel.DefaultModifier)" content="resstr(16116, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16110, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FirstSecondModifier)" content="resstr(16117, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16111, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.ThirdModifier)" content="resstr(16118, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16112, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FourthModifier)" content="resstr(16119, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16113, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FifthModifier)" content="resstr(16120, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16114, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.SixthModifier)" content="resstr(16121, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16115, library(msctfuimanager.dll))"/>
+</element>
+<stylesheets>
+<style resid="SkinTonePanelStyle">
+<element  background="ImmersiveControlLightRadioButtonSelectedBackgroundDisabled"
+foreground="ImmersiveControlLightSelectPopupTextRest" />
+</style>
+<style resid="SkinToneButtonStyle">
+<TouchButton bordercolor="ImmersiveHardwareDarkKeyboardFunctionKeyBackground"
+font="12pt;Normal;;Segoe UI Emoji" ColorFontPaletteIndex="1" />
+<if mousefocused="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundPressed" />
+</if>
+<if selected="true">
+<TouchButton background="ImmersiveHardwareDarkKeyboardKeyBackgroundPressed" />
+</if>
+</style>
+</stylesheets>
+<CategoryListPane
+resid="CategoryList.Layout"
+id="atom(CategoryList.Layout)"
+layoutpos="none"
+layout="borderlayout()"
+contentalign="middlecenter"
+bordercolor="ImmersiveSystemAccent"
+borderthickness="rect(1rp,1rp,1rp,1rp)">
+<Element
+id="atom(CategoryList.CategorySetTabsContainer)"
+layoutpos="left"
+layout="verticalflowlayout(0, 2, 2, 2)"
+sheet="CategorySetTabsStyle">
+<TouchButton
+id="atom(CategorySetTabs.Emoticon)"
+active="mouse | pointer | nosyncfocus"/>
+<TouchButton
+id="atom(CategorySetTabs.Kaomoji)"
+active="mouse | pointer | nosyncfocus"/>
+<TouchButton
+id="atom(CategorySetTabs.Sticker)"
+active="mouse | pointer | nosyncfocus"/>
+<TouchButton
+id="atom(CategorySetTabs.ChsSymbols)"
+active="mouse | pointer | nosyncfocus"/>
+</Element>
+<Element
+id="atom(CategoryList.Layout.RightArea)"
+layoutpos="right"
+layout="borderlayout()"
+height="300rp" width="576rp">
+<Element
+layoutpos="top"
+id="atom(CategoryList.Layout.TopRightArea)"
+layout="borderlayout()"
+background="ImmersiveLightChromeLow"
+height="32rp" width="576rp">
+<Element
+id="atom(CategoryList.CategoryGroupTabsContainer)"
+layoutpos="left"
+layout="gridlayout(1, -1)"/>
+<Element
+id="atom(CategoryList.TitleButtonsContainer)"
+layoutpos="client"
+layout="borderlayout()"
+sheet="CategoryListTitleStyle">
+<TouchButton
+id="atom(CategoryList.CloseButton)"
+layoutpos="right"
+active="mouse | pointer | nosyncfocus"
+accname="resstr(16200, library(msctfuimanager.dll))"/>
+<TouchButton
+id="atom(CategoryList.PinButton)"
+layoutpos="right"
+active="mouse | pointer | nosyncfocus"/>
+</Element>
+</Element>
+<Element
+id="atom(CategoryList.CandidatesArea)"
+layoutpos="client"
+layout="filllayout()"
+height="268rp" width="576rp"
+accessible="true"
+accname="resstr(16104, library(msctfuimanager.dll))"
+accrole="client">
+<TouchScrollViewer
+id="atom(CategoryList.ScrollViewer)"
+active="Pointer | Mouse | nosyncfocus"
+layout="ninegridlayout()"
+layoutpos="client"
+sheet="CategoryListScrollViewerStyle"
+XScrollable="false"
+YScrollable="true"
+YBarVisibility="asneeded"
+InteractionMode="TranslateY | Inertia" >
+<Element
+layoutpos="client"
+layout="flowlayout(0, 0, 0, 2)"
+active="pointer | nosyncfocus"
+width="560rp">
+<Element
+id="atom(CategoryList.StickersContainer)"
+active="mouse | pointer | nosyncfocus"
+layoutpos="none"
+layout="gridlayout(-1,4)"
+padding="rect(16rp,16rp,0,16rp)"/>
+<ItemList
+id="atom(CategoryList.EmoticonsContainer)"
+active="mouse | pointer | nosyncfocus"
+layoutpos="none"
+layout="gridlayout(-1,10)"
+padding="rect(12rp,12rp,0,12rp)"/>
+<ItemList
+id="atom(CategoryList.KaomojiContainer)"
+active="mouse | pointer | nosyncfocus"
+layoutpos="none"
+layout="gridlayout(-1,4)"
+padding="rect(16rp,16rp,0,16rp)"/>
+</Element>
+</TouchScrollViewer>
+<Element
+id="atom(CategoryList.PromptPanel)"
+layout="flowlayout(0, 2, 2, 2)"
+layoutpos="none"
+sheet="CategoryListPromptPanelStyle"
+background="ImmersiveApplicationBackground">
+<ModernProgressRing
+id="atom(CategoryList.ProgressRing)"
+layoutpos="None"/>
+<Element
+id="atom(CategoryList.TimeOut)"
+layoutpos="None"
+layout="verticalflowlayout(0, 2, 2, 2)">
+<Element id="atom(Image)"/>
+<RichText id="atom(Title)" content="resstr(16152, library(msctfuimanager.dll))"/>
+<RichText id="atom(SubTitle)" content="resstr(16153, library(msctfuimanager.dll))"/>
+</Element>
+<Element
+id="atom(CategoryList.NoResult)"
+layoutpos="None"
+layout="verticalflowlayout(0, 2, 2, 2)">
+<Element id="atom(Image)"/>
+<RichText id="atom(Title)" content="resstr(16154, library(msctfuimanager.dll))"/>
+<RichText id="atom(SubTitle)" content="resstr(16155, library(msctfuimanager.dll))"/>
+</Element>
+</Element>
+</Element>
+<Element
+id="atom(CategoryList.TipPanel)"
+sheet="CategoryListTipPanelStyle"
+height="32rp" width="576rp"
+layoutpos="none"
+layout="borderlayout()">
+<TouchButton
+id="atom(EmoticonPredictionTip)"
+enabled="false"
+content="resstr(16169, library(msctfuimanager.dll))"/>
+<TouchButton
+id="atom(PrivacyStatement)"
+content="resstr(16217, library(msctfuimanager.dll))"
+active="mouse | pointer | nosyncfocus"/>
+<TouchButton
+id="atom(CopyRightStatement)"
+content="resstr(16164, library(msctfuimanager.dll))"
+active="mouse | pointer | nosyncfocus"/>
+<TouchHyperlink
+id="atom(DismissTip)"
+content="resstr(16170, library(msctfuimanager.dll))"
+active="mouse | pointer | nosyncfocus"/>
+<TouchHyperlink
+id="atom(ShowLessResults)"
+content="resstr(16167, library(msctfuimanager.dll))"
+active="mouse | pointer | nosyncfocus"/>
+</Element>
+<EmojiSkinTonePanel
+id="atom(EmojiSkinTonePanel)"
+active="mouse | pointer | nosyncfocus"
+layout="borderlayout()"
+layoutpos="absolute" />
+</Element>
+</CategoryListPane>
+<Element
+resid="CategoryList.StickerCopyrightConsent"
+sheet="CopyrightConsentStyle"
+width="562rp" height="100rp"
+background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"
+layout="verticalflowlayout(0, 2, 2, 2)">
+<Element layout="flowlayout(0, 0, 2, 2)">
+<RichText
+content="resstr(16213, library(msctfuimanager.dll))"
+padding="rect(0rp,0,-2rp,0)"/>
+<TouchHyperLink
+id="atom(CreativeLicCreativeCommonLicenseense)"
+content="resstr(16214, library(msctfuimanager.dll))"
+padding="rect(-2rp,0,-2rp,0)"
+active="mouse | pointer | nosyncfocus"/>
+<RichText
+content="resstr(16215, library(msctfuimanager.dll))"
+padding="rect(-2rp,0,0,0)"/>
+</Element>
+<RichText content="resstr(16216, library(msctfuimanager.dll))"/>
+<Element layout="flowlayout(0, 0, 2, 2)" margin="rect(0,10rp,0,0rp)">
+<TouchButton
+id="atom(ShowAllResultsAlways)"
+content="resstr(16166, library(msctfuimanager.dll))"
+selected="true"
+active="mouse | pointer | nosyncfocus"/>
+<TouchButton
+id="atom(ShowAllResultsOnce)"
+content="resstr(16165, library(msctfuimanager.dll))"
+active="mouse | pointer | nosyncfocus"/>
+</Element>
+</Element>
+<CategoryListPaneItem
+resid="CategoryList.CategroyGroupTab"
+sheet="CategoryGroupTabStyle"
+id="atom(CandidateString)"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+tooltip="true" />
+<CategoryListPaneItem
+resid="CategoryList.EmojiItem"
+layoutpos="client"
+layout="filllayout()"
+height="42rp" width="54rp"
+id="atom(Container)"
+sheet="CategoryListItemStyle"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16107, library(msctfuimanager.dll))">
+<TouchButton
+id="atom(CandidateString)"
+colorfontpaletteindex="0"
+active="inactive"/>
+<TouchHyperlink
+id="atom(CandidateIndex)"
+contentalign="topright"
+visible="false" enabled="false"/>
+</CategoryListPaneItem>
+<CategoryListPaneItem
+resid="CategoryList.KaomojiItem"
+layoutpos="client"
+layout="filllayout()"
+height="42rp" width="132rp"
+id="atom(Container)"
+sheet="CategoryListItemStyle"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16107, library(msctfuimanager.dll))">
+<TouchButton
+id="atom(CandidateString)"
+colorfontpaletteindex="-1"
+contentalign="middlecenter | endellipsis"
+active="inactive"/>
+<TouchHyperlink
+id="atom(CandidateIndex)"
+contentalign="topright"
+visible="false" enabled="false"/>
+</CategoryListPaneItem>
+<CategoryListPaneItem
+resid="CategoryList.ImageItem"
+id="atom(CandidateString)"
+layoutpos="client"
+layout="filllayout()"
+sheet="CategoryListStickerItemStyle"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16107, library(msctfuimanager.dll))">
+<Element
+id="atom(Image)"
+contentalign="middlecenter"/>
+<TouchButton
+id="atom(PinButton)"
+layoutpos="none"
+x="102rp" y="2rp"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"/>
+<TouchButton
+id="atom(Banner)"
+layoutpos="bottom"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"/>
+<TouchButton
+id="atom(Mask)"
+layoutpos="none"
+background="ImmersiveControlDarkCheckboxBackgroundHover"/>
+</CategoryListPaneItem>
+<stylesheets>
+<style resid="CategorySetTabsStyle">
+<Element
+background ="ImmersiveControlLightRadioButtonSelectedBackgroundDisabled"
+foreground="ImmersiveControlLightSelectPopupTextRest"/>
+<TouchButton
+height="48rp" width="48rp"
+contentalign="middlecenter"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+colorfontpaletteindex="0"
+tooltip="true"
+bordercolor="ImmersiveControlLightRadioButtonSelectedBackgroundDisabled"
+borderthickness="rect(4rp,0rp,0rp,0rp)"/>
+<if id="atom(CategorySetTabs.Emoticon)">
+<TouchButton
+content="&#xE76E;"
+font="12pt;;;Segoe MDL2 Assets"
+accname="resstr(16190, library(msctfuimanager.dll))"
+accdesc="resstr(16194, library(msctfuimanager.dll))"/>
+</if>
+<if id="atom(CategorySetTabs.Kaomoji)">
+<TouchButton
+content="&#xED59;"
+font="12pt;;;Segoe MDL2 Assets"
+accname="resstr(16191, library(msctfuimanager.dll))"
+accdesc="resstr(16195, library(msctfuimanager.dll))"/>
+</if>
+<if id="atom(CategorySetTabs.Sticker)">
+<TouchButton
+content="&#xEB9F;"
+font="12pt;;;Segoe MDL2 Assets"
+accname="resstr(16192, library(msctfuimanager.dll))"
+accdesc="resstr(16196, library(msctfuimanager.dll))"/>
+</if>
+<if id="atom(CategorySetTabs.ChsSymbols)">
+<TouchButton
+content="&#x2126;"
+font="12pt;;;Segoe UI Symbols"
+accname="resstr(16193, library(msctfuimanager.dll))"
+accdesc="resstr(16197, library(msctfuimanager.dll))"/>
+</if>
+<if mousefocused="true">
+<TouchButton bordercolor="ImmersiveInputSwitchLightButtonBackgroundHover"
+background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+<if selected="true">
+<TouchButton bordercolor="ImmersiveSystemAccent"
+foreground="ImmersiveSystemAccent"/>
+</if>
+<if pressed="true">
+<TouchButton bordercolor="ImmersiveInputSwitchLightButtonBackgroundPressed"
+background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+<if selected="true">
+<TouchButton bordercolor="ImmersiveSystemAccentDark1"/>
+</if>
+</if>
+</style>
+<style resid="CategoryListTitleStyle">
+<Element height="36rp"/>
+<if id="atom(CategoryList.CloseButton)">
+<TouchButton
+width="48rp" height="32rp"
+font="12pt;;;Segoe MDL2 Assets"
+content="&#xE10A;"
+background="argb(0,0,0,0)"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+tooltip="true"
+accname="resstr(16200, library(msctfuimanager.dll))"
+accdesc="resstr(16203, library(msctfuimanager.dll))"/>
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextSelected" background="ImmersiveHardwareTitleBarCloseButtonHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveHardwareTitleBarCloseButtonPressed" />
+</if>
+</if>
+<if id="atom(CategoryList.PinButton)">
+<TouchButton
+width="48rp" height="32rp"
+font="12pt;;;Segoe MDL2 Assets"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+tooltip="true"/>
+<if mousefocused="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundPressed" />
+</if>
+</if>
+</style>
+<style resid="CategoryListScrollViewerStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if class="ScrollViewer">
+<if vertical="true">
+<TouchScrollBar accessible="true" width="15rp" accrole="scrollbar" layoutpos="nineright"/>
+</if>
+<if vertical="false">
+<TouchScrollBar accessible="true" accrole="scrollbar" layoutpos="none"/>
+</if>
+<Viewer layoutpos="nineclient"/>
+</if>
+<if class="Thumb_Mouse">
+<if id="atom(Thumb)">
+<Thumb width="15rp" minsize="size(0,12rp)"/>
+</if>
+</if>
+<if class="Line">
+<if id="atom(LineUp)">
+<TouchRepeatButton height="15rp"/>
+</if>
+<if id="atom(LineDown)">
+<TouchRepeatButton height="15rp"/>
+</if>
+</if>
+<if class="Line_Arrow">
+<if id="atom(LineUp_Arrow)">
+<InternalRichText linespacing="15rp" baseline="14rp"/>
+</if>
+<if id="atom(LineDown_Arrow)">
+<InternalRichText linespacing="15rp" baseline="14rp"/>
+</if>
+</if>
+</style>
+<style resid="CategoryListItemStyle">
+<CategoryListPaneItem
+height="42rp" width="53rp"
+bordercolor="ImmersiveControlLightSelectPopupBackgroundHover"/>
+<TouchButton
+contentalign="middlecenter"
+typography="ss20=1,kern=1,dlig=1,liga=1" />
+<TouchHyperlink
+font="8pt;;;Segoe UI" padding="rect(0rp,4rp,4rp,0rp)"
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextRest"
+background="argb(0,0,0,0)"/>
+<if mousefocused="true">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextHover"
+background="ImmersiveSystemAccentLight3"/>
+<TouchHyperlink
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextHover"/>
+</if>
+<if selected="true">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccent"/>
+<TouchHyperlink
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextSelect"/>
+<if mousefocused="true" pressed="false">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccentLight1"/>
+<TouchHyperlink
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextSelect"/>
+</if>
+</if>
+<if pressed="true">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccentDark1"/>
+<TouchHyperlink
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextPressed"/>
+<if selected="true">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccentDark2"/>
+<TouchHyperlink
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextPressed"/>
+</if>
+</if>
+</style>
+<style resid="CategoryListStickerItemStyle">
+<CategoryListPaneItem
+width="122rp" height="98rp"
+margin="rect(14rp,12rp,0rp,0rp)"
+borderthickness="rect(2rp,2rp,2rp,2rp)"
+bordercolor="argb(0,0,0,0)"/>
+<if id="atom(PinButton)">
+<TouchButton
+width="20rp" height="20rp"
+font="10.5pt;;;Segoe MDL2 Assets"
+content="&#xE718;"
+contentalign="middlecenter"
+visible="false"
+foreground="ImmersiveHardwarePrimaryText"
+background="ImmersiveDarkAltMediumLow"/>
+</if>
+<if id="atom(Banner)">
+<TouchButton
+height="20rp"
+visible="false"
+font="7.5pt;;;Segoe UI"
+padding="rect(2rp,2rp,2rp,2rp)"
+foreground="ImmersiveHardwarePrimaryText"
+background="ImmersiveDarkAltMediumLow"/>
+</if>
+<if mousefocused="true">
+<CategoryListPaneItem 
+bordercolor="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+<TouchButton
+background="ImmersiveLightBaseMedium"/>
+<if id="atom(PinButton)">
+<TouchButton
+background="ImmersiveDarkAltMedium"/>
+</if>
+<if id="atom(Banner)">
+<TouchButton
+visible="true"
+background="ImmersiveDarkAltMedium"
+fontstyle="Underline"/>
+</if>
+</if>
+<if pressed="true">
+<CategoryListPaneItem 
+bordercolor="ImmersiveDarkAltMediumLow"/>
+<if id="atom(PinButton)">
+<TouchButton
+visible="true"
+background="ImmersiveDarkAltMediumHigh"
+foreground="ImmersiveLightChromeMedium" />
+</if>
+<if id="atom(Banner)">
+<TouchButton
+visible="true"
+background="ImmersiveDarkAltMediumHigh"
+foreground="ImmersiveLightChromeMedium"
+fontstyle="Underline"/>
+</if>
+<CategoryListPaneItem foreground="ImmersiveControlLightSelectPopupTextPressed"/>
+</if>
+<if selected="true">
+<if enabled="true">
+<CategoryListPaneItem 
+bordercolor="ImmersiveSystemAccent"/>
+<if pressed="true">
+<CategoryListPaneItem
+bordercolor="ImmersiveSystemAccentDark1"/>
+</if>
+</if>
+<if enabled="false">
+<CategoryListPaneItem
+bordercolor="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+</if>
+</style>
+<style resid="CategoryGroupTabStyle">
+<CategoryListPaneItem
+height="32rp" width="48rp"
+contentalign="middlecenter"
+foreground="ImmersiveControlLightSelectPopupTextRest"/>
+<if mousefocused="true">
+<CategoryListPaneItem
+background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+<if selected="true">
+<CategoryListPaneItem
+foreground="ImmersiveControlLightSelectPopupTextHover"
+background="ImmersiveStartDefaultLightFocusRect"/>
+<if mousefocused="true">
+<CategoryListPaneItem
+background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+</if>
+<if pressed="true">
+<CategoryListPaneItem
+background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+<if selected="true">
+<CategoryListPaneItem
+background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+</if>
+</if>
+<if enabled="false">
+<CategoryListPaneItem foreground="ImmersiveHardwareDarkKeyboardFunctionKeyTextDisabled" />
+</if>
+</style>
+<style resid="CategoryListPromptPanelStyle">
+<ModernProgressRing
+foreground="ImmersiveSystemAccent"
+height="50rp" width="50rp"/>
+<if id="atom(Title)">
+<RichText 
+font="15pt;Light;;Microsoft Yahei UI"
+foreground="ImmersiveLightSecondaryText"/>
+</if>
+<if id="atom(SubTitle)">
+<RichText
+font="11.25pt;Light;;Microsoft Yahei UI"
+foreground="ImmersiveControlLightToggleLabelDisabled"/>
+</if>
+<if id="atom(Image)">
+<Element width="120rp" height="120rp"/>
+</if>
+</style>
+<style resid="CategoryListTipPanelStyle">
+<Element
+font="8pt;Light;;Microsoft Yahei UI"
+padding="rect(10rp,7rp,20rp,7rp)"/>
+<TouchButton
+foreground="ImmersiveHardwareAppSwitcherHotTrack"/>
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkRest"/>
+<if mousefocused="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextHover"/>
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkHover" />
+</if>
+<if pressed="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextPressed"
+background="ImmersiveControlLightSelectPopupBackgroundPressed" />
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkPressed" />
+</if>
+</style>
+<style resid="CopyrightConsentStyle">
+<Element font="11.25;Light;;Microsoft Yahei UI"/>
+<TouchButton
+width="120rp" height="30rp"
+margin="rect(0,0,16rp,0)"
+borderthickness="rect(2rp,2rp,2rp,2rp)"
+background="ImmersiveInputSwitchLightRadioButtonBackgroundDisabledSelected"
+bordercolor="ImmersiveInputSwitchLightRadioButtonBackgroundDisabledSelected"/>
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkRest"/>
+<if mousefocused="true">
+<TouchButton
+bordercolor="ImmersiveFilesAppCommandRowPressed"/>
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkHover" />
+</if>
+<if selected="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccent"
+bordercolor="ImmersiveSystemAccent"/>
+<if mousefocused="true">
+<TouchButton
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+bordercolor="ImmersiveSystemAccentDark1"/>
+</if>
+</if>
+<if pressed="true">
+<TouchButton
+background="ImmersiveFilesAppCommandRowPressed" />
+<TouchHyperlink
+foreground="ImmersiveControlLightLinkPressed" />
+<if selected="true">
+<TouchButton
+foreground="ImmersiveHardwareDarkCandidateControlSecondaryTextPressed"
+bordercolor="ImmersiveSystemAccentDark1"
+background="ImmersiveSystemAccentDark1"/>
+</if>
+</if>
+</style>
+</stylesheets>
+</duixml>

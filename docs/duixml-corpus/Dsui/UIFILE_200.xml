@@ -1,0 +1,59 @@
+<!--
+  source: %SYSTEMROOT%\System32\Dsui.dll
+  resource: UIFILE / "200" / lang 1033
+  size: 3329 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="DSUI_style">
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="dsui_title">
+<RichText font="resstr(6001, library(dsui.dll))" foreground="argb(255,0,51,153)" contentalign="topleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="dsui_icon">
+<Element height="116" width="116" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="graytext" padding="rect(10,10,10,10)"/>
+</if>
+<if class="dsui_text">
+<RichText font="resstr(6002, library(dsui.dll))" foreground="windowtext" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+</style>
+</stylesheets>
+<element resid="Device Setup Details Page" id="atom(idDSUIDetailsPage)" layout="borderlayout()" padding="rect(0rp,0rp,20rp,0rp)" sheet="DSUI_style" width="574rp" height="180rp">
+<richtext id="atom(idHeaderTitle)" class="dsui_title" layoutpos="top" contentalign="wrapleft" margin="rect(0rp,0rp,0rp,25rp)"/>
+<element layoutpos="left" layout="flowlayout()">
+<element id="atom(idDeviceIcon)" class="dsui_icon" accessible="true" accRole="graphic" contentalign="topcenter"/>
+</element>
+<element layoutpos="client" layout="borderlayout()" padding="rect(16rp,9rp,0rp,0rp)">
+<richtext layoutpos="top" id="atom(idStatusText)" content="resstr(3503)" class="dsui_text" padding="rect(0rp,0rp,0rp,25rp)"/>
+<CCProgressBar id="atom(idSetupProgress)" layoutpos="top" contentalign="middlecenter" width="250rp" height="15rp" accessible="true" accname="Device Setup Details Progress"/>
+</element>
+</element>
+<element resid="Device Setup Error Handling Page" id="atom(idDSUIErrorHandlingPage)" layout="borderlayout()" padding="rect(0rp,0rp,20rp,0rp)" sheet="DSUI_style" width="574rp" height="180rp">
+<richtext id="atom(idHeaderTitle)" class="dsui_title" layoutpos="top" contentalign="wrapleft" margin="rect(0rp,0rp,0rp,25rp)"/>
+<element layoutpos="left" layout="flowlayout()">
+<element id="atom(idDeviceIconError)" class="dsui_icon" accessible="true" accRole="graphic" contentalign="topcenter"/>
+</element>
+<element layoutpos="client" layout="borderlayout()" padding="rect(16rp,9rp,0rp,0rp)">
+<richtext layoutpos="client" contentalign="wrapleft" id="atom(idErrorInfo)" class="dsui_text" content="" padding="rect(0rp,0rp,0rp,25rp)"/>
+<element layoutpos="top" layout="flowlayout()">
+<button id="atom(idFailedHelpLink)" class="cp_help_link" content="resstr(3512)"/>
+</element>
+</element>
+</element>
+</duixml>

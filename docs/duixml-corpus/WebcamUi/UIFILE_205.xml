@@ -1,0 +1,195 @@
+<!--
+  source: %SYSTEMROOT%\System32\WebcamUi.dll
+  resource: UIFILE / "205" / lang 1033
+  size: 10792 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<stylesheets>
+		<style resid="webcamui_style" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+			<if class="clsTopLevelPage">
+				<element background="20540" />
+			</if>
+			<if class="clsPreviewTextArea">
+				<element padding="rect(0rp,40rp,20rp,0rp)" background="20575" />
+			</if>
+			<if class="clsPreviewTextLargeModeSpacer">
+				<element padding="rect(100rp,0rp,0rp,0rp)" background="20575" />
+			</if>
+			<if class="clsPreviewTextHeader">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(20rp,0rp,0rp,0rp)" constrainlayout="narrow" font="resstr(616, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsPreviewTextHeaderSmall">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(20rp,0rp,0rp,0rp)" constrainlayout="narrow" font="resstr(619, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsPreviewTextLargeModeBodyPrimary">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(20rp,35rp,0rp,0rp)" constrainlayout="narrow" font="resstr(617, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsPreviewTextLargeModeBodySecondary">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(20rp,20rp,0rp,0rp)" constrainlayout="narrow" font="resstr(617, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsPreviewTextSmallModeBodyPrimary">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(60rp,0rp,0rp,0rp)" constrainlayout="narrow" font="resstr(618, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsPreviewTextSmallModeBodySecondary">
+				<RichText accessible="true" accrole="statictext" contentalign="wrapleft" padding="rect(60rp,20rp,0rp,0rp)" constrainlayout="narrow" font="resstr(618, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsCountdownBackground">
+				<element contentalign="middlecenter" background="argb(115,0,0,0)" />
+			</if>
+			<if class="clsCountdownText">
+				<RichText accessible="true" accrole="animation" contentalign="middlecenter" constrainlayout="narrow" font="resstr(615, library(WebcamUi.dll))" foreground="argb(255,255,255,255)" background="20575" />
+			</if>
+			<if class="clsFileDockedItemContent">
+				<element background="argb(255,60,60,60)" />
+			</if>
+			<if class="clsOrnament">
+				<element background="20575" borderthickness="rect(0rp,0rp,0rp,0rp)" />
+				<if custom="true">
+					<element background="20575" borderthickness="rect(4rp,4rp,4rp,4rp)" bordercolor="argb(255,38,160,218)" />
+				</if>
+			</if>
+			<if class="clsVideoIconOrnament">
+				<element padding="rect(13rp,0rp,20rp,15rp)" background="20575" content="sgraphic(405, 2)" />
+			</if>
+			<if class="clsTrimmingControl">
+				<TrimmingControl accessible="true" background="20575" TrimmedTrackColor="ImmersiveHardwarePlaybackBarTrim" UnplayedTrackColor="ImmersiveHardwarePlaybackBarRest" PlayedTrackColor="ImmersiveHardwarePlaybackBarProgressFill" HighlightTrimmedTrackColor="ImmersiveHardwarePlaybackBarTrim" HighlightUnplayedTrackColor="ImmersiveHardwarePlaybackBarRest" HighlightPlayedTrackColor="ImmersiveHardwarePlaybackBarProgressFill" margin="rect(2rp,0rp,2rp,0rp)" />
+			</if>
+			<if class="clsFileDockedNavigationButton">
+				<TouchButton font="resstr(607)" borderthickness="rect(1rp,1rp,1rp,1rp)" background="20547" foreground="20544" bordercolor="20541" contentalign="middlecenter" width="70rp" height="40rp" accessible="true" accrole="pushbutton" />
+				<if mousefocused="true">
+					<TouchButton background="20548" foreground="20545" bordercolor="20542" />
+				</if>
+				<if pressed="true">
+					<TouchButton background="20549" foreground="20546" bordercolor="20543" />
+				</if>
+				<if enabled="false">
+					<TouchButton background="20547" foreground="20544" bordercolor="20541" />
+				</if>
+				<if KeyFocused="true">
+					<TouchButton contentalign="focusrect|middlecenter" />
+				</if>
+			</if>
+			<if class="clsVideoCaptureDurationCounterText">
+				<RichText accessible="true" contentalign="middlecenter" margin="rect(0rp,0rp,20rp,0rp)" constrainlayout="normal" typography="tnum=1" font="resstr(602, library(WebcamUi.dll))" foreground="20405" background="20575" />
+			</if>
+			<if class="clsOrnamentText">
+				<RichText font="resstr(603, library(WebcamUi.dll))" padding="rect(0rp, 0rp, 0rp, 19rp)" foreground="argb(255,255,255,255)" />
+			</if>
+			<if class="clsPreviewControl">
+				<PreviewControl accessible="true" accrole="listitem" />
+			</if>
+			<if class="clsAppCommandBar">
+				<CommandBar background="20502" accessible="true" accrole="toolbar" />
+			</if>
+			<if class="clsRightPadding">
+				<element padding="rect(0rp,0rp,10rp,0rp)" />
+			</if>
+			<if class="clsExpandedPadding">
+				<element padding="rect(0rp,0rp,26rp,0rp)" />
+			</if>
+			<if class="clsVideoPlaybackTextArea">
+				<element background="argb(115,0,0,0)" />
+			</if>
+			<if class="clsVideoPlaybackTextLeftSpace">
+				<element background="20575" width="100rp" />
+			</if>
+			<if class="clsVideoPlaybackText">
+				<RichText font="resstr(618)" contentalign="wrapleft" foreground="20405" padding="rect(20rp, 148rp, 0rp, 20rp)" />
+			</if>
+			<if class="clsPlaybackControl">
+				<PlaybackVideoControl background="20575" accessible="true" accrole="graphic" />
+			</if>
+			<if class="clsPhotoCropControl">
+				<PhotoCropControl accessible="true" accrole="graphic" HandleRadius="19rp" CroppedAreaOutlineWidth="1rp" />
+				<if KeyFocused="true">
+					<PhotoCropControl contentalign="focusrect" />
+				</if>
+			</if>
+			<if class="clsPhotoCropCircle">
+				<CommandButton RestFontColorRuns="resstr(908)" HoverFontColorRuns="resstr(909)" PressedFontColorRuns="resstr(910)" DisabledFontColorRuns="resstr(911)" FontGlyphs="resstr(613)" Expanded="false" GlyphsHeight="38rp" width="38rp" height="38rp" background="20575" accessible="false" />
+			</if>
+			<if class="clsPhotoCropProgressIndicator">
+				<ModernProgressRing foreground="20114" background="20575" height="12rp" width="12rp" />
+			</if>
+			<if class="clsPlaybackDurationTxt">
+				<RichText padding="rect(0rp,13rp,0rp,0rp)" margin="rect(0rp,0rp,20rp,0rp)" contentalign="topleft" constrainlayout="normal" width="90rp" typography="tnum=1" font="resstr(604)" foreground="20405" background="20575" accessible="true" accrole="text" />
+			</if>
+			<if class="clsPlaybackCurrentPosTxt">
+				<RichText padding="rect(0rp,13rp,0rp,0rp)" contentalign="topright" constrainlayout="normal" width="90rp" typography="tnum=1" font="resstr(604)" foreground="20405" background="20575" accessible="true" accrole="text" />
+			</if>
+			<if class="clsPlaybackContainer">
+				<element padding="rect(60rp,5rp,10rp,0rp)" />
+			</if>
+			<if class="clsFocusRectLeft">
+				<element content="sgraphic(310, 2)" />
+			</if>
+			<if class="clsFocusRectRight">
+				<element content="sgraphic(311, 2)" />
+			</if>
+			<if class="clsFocusAnimationSpacer">
+				<element width="40rp" background="20575" />
+			</if>
+			<if class="clsTrimMarker">
+				<CommandButton RestFontColorRuns="resstr(908)" HoverFontColorRuns="resstr(909)" PressedFontColorRuns="resstr(910)" DisabledFontColorRuns="resstr(911)" FontGlyphs="resstr(612)" Expanded="false" GlyphsHeight="26rp" width="28rp" height="28rp" background="20575" accessible="true" accrole="pushbutton" />
+			</if>
+			<if class="clsThumb">
+				<CommandButton RestFontColorRuns="resstr(912)" HoverFontColorRuns="resstr(913)" PressedFontColorRuns="resstr(914)" DisabledFontColorRuns="resstr(915)" FontGlyphs="resstr(612)" Expanded="false" GlyphsHeight="46rp" width="42rp" height="46rp" background="20575" accessible="true" accrole="pushbutton" />
+			</if>
+			<if class="clsTrimProgress">
+				<ModernProgressBar accessible="true" accname="Trim Progress" foreground="20114" height="5rp" />
+			</if>
+			<if class="clsCaptureAnimation">
+				<element background="20575" />
+			</if>
+			<if class="clsPlaybackAnimation">
+				<element background="20540" />
+			</if>
+			<if class="clsPlaybackAnimationPreview">
+				<element background="argb(255,0,0,0)" />
+			</if>
+			<if class="clsPlaybackRing">
+				<ModernProgressRing foreground="20114" background="20575" height="12rp" width="12rp" />
+			</if>
+			<if class="clsCaptureProgress">
+				<ModernProgressBar foreground="20114" background="20575" height="6rp" />
+			</if>
+			<if class="clsCaptureProgressBarContainer">
+				<element background="20575" padding="rect(0rp, 20rp, 0rp, 0rp)" />
+			</if>
+			<if class="clsCommandButton">
+				<CommandButton margin="rect(0rp,0rp,0rp,0rp)" width="100rp" GlyphsHeight="42rp" padding="rect(2rp, 14rp, 2rp, 13rp)" background="20575" contentalign="middlecenter" RestFontColorRuns="resstr(900)" HoverFontColorRuns="resstr(901)" PressedFontColorRuns="resstr(902)" DisabledFontColorRuns="resstr(903)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" accessible="true" accrole="pushbutton" />
+				<if Expanded="false">
+					<CommandButton width="60rp" />
+				</if>
+			</if>
+			<if class="clsCommandButtonGlyphs">
+				<RichText font="resstr(609)" padding="rect(0rp,0rp,0rp,0rp)" contentalign="middlecenter" background="20575" constrainlayout="narrow" foreground="20405" />
+			</if>
+			<if class="clsCommandButtonLabel">
+				<RichText font="resstr(608)" padding="rect(0rp, 5rp, 0rp, 0rp)" contentalign="topcenter | wrapcenter" background="20575" foreground="20405" />
+			</if>
+			<if class="clsBackCommandButton">
+				<CommandButton margin="rect(26rp,52rp,0rp,0rp)" GlyphsHeight="50rp" padding="rect(0rp,0rp,0rp,0rp)" background="20575" contentalign="topcenter" RestFontColorRuns="resstr(900)" HoverFontColorRuns="resstr(901)" PressedFontColorRuns="resstr(902)" DisabledFontColorRuns="resstr(903)" FontGlyphs="resstr(611)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" accessible="true" accrole="pushbutton" />
+			</if>
+			<if class="clsCloseCommandButton">
+				<CommandButton margin="rect(26rp,52rp,0rp,0rp)" GlyphsHeight="50rp" width="50rp" padding="rect(0rp,0rp,0rp,0rp)" background="20575" contentalign="topcenter" RestFontColorRuns="resstr(900)" HoverFontColorRuns="resstr(901)" PressedFontColorRuns="resstr(902)" DisabledFontColorRuns="resstr(903)" FontGlyphs="resstr(614)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" accessible="true" accrole="pushbutton" />
+			</if>
+			<if class="clsPlayPauseCmdBtn">
+				<CommandButton margin="rect(0rp,0rp,0rp,0rp)" width="150rp" GlyphsHeight="150rp" padding="rect(0rp, 0rp, 0rp, 0rp)" background="20575" contentalign="middlecenter" RestFontColorRuns="resstr(920)" HoverFontColorRuns="resstr(921)" PressedFontColorRuns="resstr(922)" DisabledFontColorRuns="resstr(923)" CustomRestFontColorRuns="resstr(920)" CustomHoverFontColorRuns="resstr(921)" CustomPressedFontColorRuns="resstr(922)" CustomDisabledFontColorRuns="resstr(923)" FontGlyphs="resstr(610)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" Expanded="false" accessible="true" accrole="pushbutton" />
+			</if>
+			<if class="clsToggleCmdBtn">
+				<CommandButton margin="rect(0rp,0rp,0rp,0rp)" width="100rp" GlyphsHeight="42rp" padding="rect(2rp, 14rp, 2rp, 13rp)" background="20575" contentalign="middlecenter" RestFontColorRuns="resstr(900)" HoverFontColorRuns="resstr(901)" PressedFontColorRuns="resstr(902)" DisabledFontColorRuns="resstr(903)" CustomRestFontColorRuns="resstr(904)" CustomHoverFontColorRuns="resstr(905)" CustomPressedFontColorRuns="resstr(906)" CustomDisabledFontColorRuns="resstr(907)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" CustomRestLabelColor="ImmersiveHardwarePrimaryText" CustomDisabledLabelColor="ImmersiveHardwareButtonDisabled" accessible="true" accrole="pushbutton" />
+				<if Expanded="false">
+					<CommandButton width="60rp" />
+				</if>
+			</if>
+			<if class="clsTrimCancelCmdBtn">
+				<CommandButton margin="rect(0rp,0rp,0rp,0rp)" width="100rp" GlyphsHeight="42rp" padding="rect(2rp, 14rp, 2rp, 10rp)" borderthickness="rect(0rp,0rp,0rp,0rp)" background="20575" contentalign="middlecenter" RestFontColorRuns="resstr(900)" HoverFontColorRuns="resstr(901)" PressedFontColorRuns="resstr(902)" DisabledFontColorRuns="resstr(903)" RestLabelColor="ImmersiveHardwarePrimaryText" DisabledLabelColor="ImmersiveHardwareButtonDisabled" accessible="true" accrole="pushbutton" />
+				<if Expanded="false">
+					<CommandButton width="60rp" />
+				</if>
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

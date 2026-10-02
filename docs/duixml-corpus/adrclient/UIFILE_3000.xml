@@ -1,0 +1,23 @@
+<!--
+  source: %SYSTEMROOT%\System32\adrclient.dll
+  resource: UIFILE / "3000" / lang 1033
+  size: 1281 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="RequestAccess" layout="verticalflowlayout(0,0,0,0)" padding="rect(10rp,0rp,0rp,0rp)" margin="rect(0rp,0rp,00rp,10rp)" font="gtf(TaskDialogStyle, 4, 0)">
+<element layout="rowlayout(1)" layoutpos="top" margin="rect(0rp,0rp,0rp,10rp)">
+<element padding="rect(0rp,0rp,5rp,0rp)" accessible="true" accRole="statictext" content="resstr(1608)"/>
+<element id="atom(Location)" contentalign="endellipsis" accessible="true" accRole="statictext"/>
+</element>
+<element layout="rowlayout(1)" layoutpos="top" margin="rect(0rp,0rp,0rp,20rp)">
+<element accessible="true" accRole="statictext" content="resstr(1610)"/>
+<element layout="borderlayout()">
+<element id="atom(UserName)" margin="rect(0rp,0rp,10rp,0rp)" layoutpos="left" accessible="true" accRole="statictext"/>
+<CCSysLink layoutpos="none" id="atom(ChangeUser)" content="resstr(1612)" accessible="true" accname="resstr(1613)" accdesc="resstr(1614)"/> 
+</element>
+</element>
+<element layoutpos="top" accessible="true" accRole="statictext" content="resstr(1615)"/>
+<edit id="atom(UserComments)" active="mouse|keyboard" MaxLength="1000" layoutpos="top" multiline="true" height="100rp" themedborder="true" padding="rect(0rp,5rp,10rp,0rp)" accessible="true" accname="resstr(1617)"/>
+</element>
+</duixml>

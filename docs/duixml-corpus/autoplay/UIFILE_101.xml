@@ -1,0 +1,218 @@
+<!--
+  source: %SYSTEMROOT%\System32\autoplay.dll
+  resource: UIFILE / "101" / lang 1033
+  size: 13338 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<AutoplayCplPage resid="main" sheet="common" id="atom(pageMain)" layout="borderlayout()">
+<scrollviewer layoutpos="client" xscrollable="false" class="cp_topbox">
+<element sheet="cp_style" class="cp_topbox" width="1000rp" padding="rect(60rp,15rp,10rp,10rp)" layoutpos="client" layout="borderlayout()" accessible="true" accname="resstr(1)">
+<element layoutpos="top" layout="borderlayout()">
+<element layoutpos="right" layout="flowlayout(0,0,1)">
+<button id="atom(buttonHelp)" class="cp_help_glyph" acchelp="resstr(1112)" accName="resstr(1109)"/>
+</element>
+<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)">
+<element class="cp_content_instruction" content="resstr(1101)"/>
+<CCCheckBox id="atom(checkboxEnableAutoplay)" selected="true" margin="rect(0rp,15rp,0rp,0rp)" content="resstr(1100)" shortcut="auto" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</element>
+</element>
+<element id="atom(storageDeviceHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,25rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1117)" id="atom(StorageDevicesTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_STORAGE" expand="macroHandlerSetting"/>
+<CCCheckBox id="atom(checkboxEnableContentDiscovery)" selected="false" padding="rect(10rp,10rp,0rp,10rp)" content="resstr(1122)" shortcut="auto" background="themeable(dtb(CONTROLPANEL,2,0),window)" layoutpos="top"/>
+<element id="atom(advancedStorageHandlerSettings)" layoutpos="client" layout="verticalflowlayout()">
+<VolumeHandlerSetting ContentType="CT_IMAGEFILE" expand="indentedMacroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_VIDEOFILE" expand="indentedMacroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_AUDIOFILE" expand="indentedMacroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_MIXED" expand="indentedMacroHandlerSetting"/>
+</element>
+</element>
+<element id="atom(cameraStorageHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1123)" id="atom(CameraStorageTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_CAMERASTORAGE" expand="macroHandlerSetting"/>
+</element>
+<element id="atom(dvdHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1118)" id="atom(DVDsTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_DVDMOVIE" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_ENHANCEDDVD" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_BLANKDVDR" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_DVDAUDIO" expand="macroHandlerSetting"/>
+</element>
+<element id="atom(bluRayHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1119)" id="atom(BluRayTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_BLURAY" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_BLANKBDR" expand="macroHandlerSetting"/>
+</element>
+<element id="atom(cdHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,00rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1120)" id="atom(CDsTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_CDAUDIO" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_ENHANCEDCD" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_BLANKCDR" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_VCD" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting ContentType="CT_SVCD" expand="macroHandlerSetting"/>
+</element>
+<element id="atom(softwareHandlerSettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1121)" id="atom(SoftwareTitle)"/>
+</macro>
+<VolumeHandlerSetting ContentType="CT_AUTORUNINF" expand="macroHandlerSetting"/>
+</element>
+<element layoutpos="top" layout="borderlayout()" margin="rect(0rp,30rp,0rp,0rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1107)" id="atom(DevicesTitle)"/>
+</macro>
+<element id="atom(deviceHandlerSettings)" layoutpos="client" layout="verticalflowlayout()">
+</element>
+<element id="atom(textNoDevice)" class="cp_content_text" contentalign="middlecenter" content="resstr(1105)"/>
+</element>
+<element id="atom(proximitySettingsArea)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,32rp,0rp,0rp)">
+<element layoutpos="top" class="cp_content_instruction" content="resstr(1125)" margin="rect(0rp,0rp,0rp,0rp)"/>
+<element id="atom(proximitySettings)" layoutpos="top" layout="borderlayout()" margin="rect(0rp,20rp,0rp,31rp)">
+<macro expand="macroLineDivider">
+<bind connect="title" content="resstr(1124)" id="atom(ProximityTitle)"/>
+</macro>
+<VolumeHandlerSetting AlternateDefault="ProximityAlternate" ContentType="CT_IMAGEFILE" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting AlternateDefault="ProximityAlternate" ContentType="CT_VIDEOFILE" expand="macroHandlerSetting"/>
+<VolumeHandlerSetting AlternateDefault="ProximityAlternate" ContentType="CT_AUDIOFILE" expand="macroHandlerSetting"/>
+</element>
+</element>
+<element layoutpos="top" layout="verticalflowlayout(0,0,0,0)" margin="rect(0rp,10rp,0rp,0rp)">
+<CCPushButton id="atom(buttonReset)" margin="rect(0rp,10rp,0rp,10rp)" content="resstr(1102)" shortcut="auto"/>
+</element>
+</element>
+</scrollviewer>
+<element sheet="cp_style" class="cp_command_sink" layout="flowlayout(0,0,1)">
+<element class="cp_command_button_box" layout="flowlayout(0,0,1)">
+<viewer>
+<element layout="flowlayout()" padding="rect(0rp,0rp,20rp,0rp)">
+<CCPushButton id="atom(buttonSave)" content="resstr(1103)" shortcut="auto"/>
+<CCPushButton id="atom(buttonCancel)" content="resstr(1104)" shortcut="auto"/>
+</element>
+</viewer>
+</element>
+</element>
+</AutoplayCplPage>
+<element resid="macroLineDivider" sheet="cp_style" layoutpos="top" margin="rect(0rp,10rp,0rp,10rp)" layout="filllayout()">
+<element layout="borderlayout()" padding="rect(0rp,2rp,0rp,5rp)">
+<element class="cp_content_divider_line"/>
+</element>
+<element layout="flowlayout()">
+<element class="cp_content_divider_header" id="atom(Title)" content="resstr(1113)"/>
+</element>
+</element>
+<element resid="macroHandlerSetting" layoutpos="top" layout="flowlayout()" margin="rect(0rp,5rp,0rp,5rp)" padding="rect(10rp,0rp,0rp,0rp)">
+<element id="atom(icon)" margin="rect(0rp, 0rp, 5rp, 0rp)" accessible="true" accrole="graphic"/>
+<element id="atom(label)" class="cp_content_text" width="200rp" contentalign="middleleft" accessible="true" accrole="statictext" tooltip="true" active="mouse"/>
+<ComboBoxEx id="atom(combobox)" width="350rp" accessible="true" accRole="combobox" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+</element>
+<element resid="indentedMacroHandlerSetting" layoutpos="top" layout="flowlayout()" margin="rect(0rp,5rp,0rp,5rp)" padding="rect(60rp,0rp,0rp,0rp)">
+<element id="atom(icon)" margin="rect(0rp, 0rp, 5rp, 0rp)" accessible="true" accrole="graphic"/>
+<element id="atom(label)" class="cp_content_text" width="150rp" contentalign="middleleft" accessible="true" accrole="statictext" tooltip="true" active="mouse"/>
+<ComboBoxEx id="atom(combobox)" width="350rp" accessible="true" accRole="combobox" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+</element>
+<stylesheets>
+<style resid="cp_style">
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<NavigateButton overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCRadioButton transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<Edit transparent="true" themedborder="true" width="120rp" accessible="true" accrole="text" height="20rp" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)"/>
+<if class="cp_topbox">
+<Element accessible="true" accrole="client" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_hub_frame">
+<Element padding="rect(13rp,1rp,1rp,10rp)"/>
+</if>
+<if class="cp_spoke_frame">
+<Element padding="rect(0rp,19rp,0rp,10rp)"/>
+</if>
+<if class="cp_help_glyph">
+<Button height="18rp" width="18rp" content="icon(99,sysmetric(49),sysmetric(50),library(imageres.dll))" padding="rect(1rp,1rp,1rp,1rp)" cursor="hand" accRole="link" accdefaction="click" accState="0x00100000" tooltip="true"/>
+<if keyfocused="true">
+<Button contentalign="focusrect"/>
+</if>
+</if>
+<if class="cp_content_pane">
+<Element width="600rp" padding="rect(10rp,0rp,10rp,0rp)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+</if>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_v_spacer">
+<Element height="7rp"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<PText font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_title_text">
+<Element font="gtf(CONTROLPANELSTYLE, 19, 0)" foreground="gtc(CONTROLPANELSTYLE,19,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_help_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,7,1,3803)" font="gtf(CONTROLPANELSTYLE,7,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,7,4,3803)" font="gtf(CONTROLPANELSTYLE,7,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,7,2,3803)" font="gtf(CONTROLPANELSTYLE,7,2)"/>
+</if>
+</if>
+<if class="cp_content_link">
+<Button accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<Element accessible="true" accRole="link" accdefaction="click" foreground="gtc(CONTROLPANELSTYLE,10,1,3803)" font="gtf(CONTROLPANELSTYLE,10,1)" overhang="false"/>
+<if keyfocused="true">
+<Button contentalign="wrapleft | focusrect"/>
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+<if enabled="false">
+<Button foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+<Element foreground="gtc(CONTROLPANELSTYLE,10,4,3803)" font="gtf(CONTROLPANELSTYLE,10,4)"/>
+</if>
+<if mousefocused="true">
+<Button cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+<Element cursor="hand" foreground="gtc(CONTROLPANELSTYLE,10,2,3803)" font="gtf(CONTROLPANELSTYLE,10,2)"/>
+</if>
+</if>
+<if class="cp_content_divider_header">
+<Element background="themeable(dtb(CONTROLPANEL,2,0),window)" foreground="gtc(CONTROLPANELSTYLE,9,0,3803)" font="gtf(CONTROLPANELSTYLE, 9, 0)" padding="rect(0rp,0rp,2rp,0rp)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_divider_line">
+<Element height="1rp" width="565rp" background="themeable(dtb(CONTROLPANEL,17,0),buttonshadow)"/>
+</if>
+<if class="cp_content_banner_box">
+<Element padding="rect(7rp,7rp,7rp,7rp)" background="themeable(dtb(CONTROLPANEL,18,0),window)" borderthickness="rect(1rp,1rp,1rp,1rp)" bordercolor="gtc(CONTROLPANELSTYLE,17,0,3821)"/>
+</if>
+<if class="cp_command_sink">
+<Element layoutpos="bottom" background="themeable(dtb(CONTROLPANEL,12,0),window)"/>
+</if>
+<if class="cp_command_float">
+<Element layoutpos="top" background="themeable(dtb(CONTROLPANEL,13,0),window)"/>
+</if>
+<if class="cp_command_button_box">
+<Element padding="rect(0rp,10rp,10rp,10rp)" width="600rp"/> 
+</if>
+</style>
+</stylesheets>
+</duixml>

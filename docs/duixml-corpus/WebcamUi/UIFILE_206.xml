@@ -1,0 +1,12 @@
+<!--
+  source: %SYSTEMROOT%\System32\WebcamUi.dll
+  resource: UIFILE / "206" / lang 1033
+  size: 480 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<CommandButton resid="residCommandButtonTemplate" layout="borderlayout()" active="mouse|pointer|keyboard|nosyncfocus">
+		<RichText id="atom(idCBLabel)" class="clsCommandButtonLabel" layoutpos="client" accessible="false" />
+		<RichText id="atom(idCBGlyphs)" class="clsCommandButtonGlyphs" layoutpos="top" accessible="false" />
+	</CommandButton>
+</duixml>

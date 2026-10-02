@@ -1,0 +1,76 @@
+<!--
+  source: %SYSTEMROOT%\System32\Narrator.exe
+  resource: UIFILE / "10002" / lang 1033
+  size: 4142 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element resid="main" layout="borderlayout()" sheet="Narrator_style" accessible="true" accrole="pane">
+<Element id="atom(container)" background="window" layout="borderlayout()" layoutpos="client">
+<Element id="atom(container)" layout="borderlayout()" layoutpos="top">
+<Element id="atom(PageCommands)" visible="true" layout="borderlayout()" layoutpos="top" padding="rect(10rp, 0, 10rp, 0)">
+<Element id="atom(PageTitle_Commands)" content="resstr(3075)" class="cp_content_instruction" layoutpos="top"/>
+<Element content="resstr(3014)" class="cp_content_text" layoutpos="top" padding="rect(0, 0, 0, 10rp)"/>
+<Element layout="borderlayout()" visible="true" layoutpos="top" padding="rect(20rp, 20rp, 10rp, 10rp)">
+<Element content="resstr(3038)" class="cp_content_text" layoutpos="top" padding="rect(0, 0, 0, 10rp)" shortcut="auto"/>
+<CCListView id="atom(NarratorCommandsListView)" layoutpos="top" borderstyle="Solid" bordercolor="windowtext" borderthickness="rect(1rp, 1rp, 1rp, 1rp)" height="200rp" accessible="true" accname="resstr(3058)"/>
+<Element layout="borderlayout()" layoutpos="top" padding="rect(0, 10rp, 0, 0)">
+<CCPushButton content="resstr(3039)" layoutpos="left" id="atom(customizeshortcut)" active="keyboard|mouse"/>
+<CCPushButton content="resstr(3040)" layoutpos="right" id="atom(restoredefault)" active="keyboard|mouse"/>
+</Element>
+</Element>
+</Element>
+</Element>
+</Element>
+</Element>
+<stylesheets>
+<style resid="Narrator_style">
+<if class="mainInstructionText">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="wrapleft" accessible="true" accRole="statictext" padding="rect(10rp, 10rp, 10rp, 10rp)"/>
+<if keyfocused="true">
+<Element contentalign="wrapleft | focusrect"/>
+</if>
+</if>
+<AccessibleButton foreground="argb(0,0,0,0)" background="window" accessible="true" accrole="pushbutton" cursor="hand" contentalign="middleleft" height="66rp"/>
+<if keyfocused="true">
+<AccessibleButton contentalign="middleleft | focusrect" background="highlight"/>
+</if>
+<if mousefocused="true">
+<AccessibleButton background="highlight"/>
+</if>
+<if pressed="true">
+<AccessibleButton background="buttontext"/>
+</if>
+<if class="MainPageButtonTitle">
+<Element foreground="buttontext" background="argb(0,0,0,0)" layoutpos="top" padding="rect(10rp, 0, 0, 0)" font="CaptionFont;150%;Normal;None" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<if keyfocused="true">
+<Element foreground="highlighttext"/>
+</if>
+<if mousefocused="true">
+<Element foreground="highlighttext"/>
+</if>
+</if>
+<if class="MainPageButtonContent">
+<Element foreground="buttontext" background="argb(0,0,0,0)" layoutpos="top" padding="rect(10rp, 0, 10rp, 0)" font="gtf(CONTROLPANELSTYLE, 6, 0)" contentalign="wrapleft" accessible="true" accRole="statictext"/>
+<if keyfocused="true">
+<Element foreground="highlighttext"/>
+</if>
+<if mousefocused="true">
+<Element foreground="highlighttext"/>
+</if>
+</if>
+<Button accessible="true" contentalign="wrapleft"/>
+<Element overhang="false" background="argb(0,0,0,0)"/>
+<CCPushButton transparent="true" accessible="true" minsize="size(76rp,23rp)" font="gtf(CONTROLPANELSTYLE,14,0)" margin="rect(6rp,0rp,0rp,0rp)"/>
+<CCCheckBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0),window)"/>
+<ComboBox transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,14,0)"/>
+<CCSysLink transparent="true" accessible="true" font="gtf(CONTROLPANELSTYLE,6,0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" background="themeable(dtb(CONTROLPANEL,2,0), window)"/>
+<if class="cp_content_instruction">
+<Element contentalign="wrapleft" foreground="gtc(CONTROLPANELSTYLE,5,0,3803)" font="gtf(CONTROLPANELSTYLE, 5, 0)" accessible="true" accRole="statictext"/>
+</if>
+<if class="cp_content_text">
+<Element font="gtf(CONTROLPANELSTYLE, 6, 0)" foreground="gtc(CONTROLPANELSTYLE,6,0,3803)" contentalign="middleleft" accessible="true" accRole="statictext"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

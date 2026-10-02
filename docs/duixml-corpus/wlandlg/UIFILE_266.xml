@@ -1,0 +1,83 @@
+<!--
+  source: %SYSTEMROOT%\System32\wlandlg.dll
+  resource: UIFILE / "266" / lang 1033
+  size: 1932 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element
+resid="WlanDlg Get Key Page"
+id="atom(CFEWlanDlgGetKeyPage)"
+layout="Borderlayout()"
+sheet="ModernStyle"
+accessible="true"
+behaviors="PVL::AnimationTrap()">
+<RichText
+id="atom(IDC_PROFILE_MISMATCH_WARNING_MESSAGE)"
+class="WarningText"
+layoutpos="none"
+visible="false"
+margin="rect(0rp,0rp,0rp,7rp)"
+content="resstr(600)"
+contentalign="wrapleft"
+accrole="statictext"
+accessible="true">
+</RichText>
+<RichText
+id="atom(IDC_ERROR_MESSAGE)"
+class="WarningText"
+layoutpos="none"
+visible="false"
+margin="rect(0rp,0rp,0rp,7rp)"
+content="resstr(241)"
+contentalign="wrapleft"
+accrole="statictext"
+accessible="true">
+</RichText>
+<element
+id="atom(IDC_EDIT_KEY_PADDING)"
+layout="flowlayout()"
+width="265rp"
+class = "InputPaddingWithoutText"
+layoutPos="top">
+<touchedit2
+id="atom(IDC_EDIT_KEY)"
+layoutpos="top"
+passwordcharacter="9679"
+accname="resstr(278)"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"/>
+</element>
+</element>
+<stylesheets>
+<style resid="ModernStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<RichText constrainlayout="narrow"/>
+<if class="WarningText">
+<RichText
+foreground="ImmersiveSaturatedInlineErrorText"/>
+</if>
+<if class="InputPaddingWithoutText">
+<element
+padding="rect(0rp, 4rp, 0rp, 4rp)"/>
+</if>
+<if class="InputPaddingWithText">
+<element
+padding="rect(0rp, 0rp, 0rp, 4rp)"/>
+</if>
+</style>
+<style resid="ModernStyleLight" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<RichText constrainlayout="narrow"/>
+<if class="WarningText">
+<RichText
+foreground="ImmersiveLightInlineErrorText"/>
+</if>
+<if class="InputPaddingWithoutText">
+<element
+padding="rect(0rp, 4rp, 0rp, 4rp)"/>
+</if>
+<if class="InputPaddingWithText">
+<element
+padding="rect(0rp, 0rp, 0rp, 4rp)"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

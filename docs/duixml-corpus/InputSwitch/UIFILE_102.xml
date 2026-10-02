@@ -1,0 +1,428 @@
+<!--
+  source: %SYSTEMROOT%\System32\InputSwitch.dll
+  resource: UIFILE / "102" / lang 1033
+  size: 19431 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<Element id="atom(main)" resid="main" layout="BorderLayout()" behaviors="PVL::AnimationTrap()" accessible="true" CompositedText="false" accname="resstr(1016)">
+<InputSwitchRoot id="atom(InputSwitchAccRoot)" accessible="true" layout="BorderLayout()" layoutpos="client" accname="resstr(1016)">
+<Element id="atom(slider)" sheet="MainBody" layoutpos="top" layout="FlowLayout()" borderstyle="0" borderthickness="rect(0rp,0rp,0rp,0rp)">
+<Element id="atom(BoundingFrame)" layout="BorderLayout()" sheet="FiveItemWidthFrame">
+<Element layoutpos="top" height="5rp"/>
+<TouchScrollViewer id="atom(ModeTileScrollViewer)" layoutpos="client" sheet="ScrollViewerSheet" background="argb(0,0,0,0)" active="pointer" xscrollable="false" yscrollable="true" xbarvisibility="never" ybarvisibility="AsNeeded" accessible="true" accrole="pane">
+<Element id="atom(ModeTileContainer)" layout="BorderLayout()" accessible="true" accrole="pane" accname="resstr(1024)">
+</Element>
+</TouchScrollViewer>
+<Element layoutpos="bottom" layout="BorderLayout()" background="argb(0,0,0,0)">
+<Element id="atom(ModalityArea)" layoutpos="top" layout="BorderLayout()">
+<Element id="atom(ModalityAreaSeparator)" layoutpos="top" layout="BorderLayout()">
+<Element layoutpos="top" height="5rp"/>
+<Element layoutpos="top" layout="BorderLayout()">
+<Element layoutpos="left" height="1rp" width="12rp"/>
+<Element layoutpos="client" height="1rp" width="32rp" sheet="Separator"/>
+<Element layoutpos="right" height="1rp" width="12rp"/>
+</Element>
+<Element layoutpos="top" height="5rp"/>
+</Element>
+<Element id="atom(ModalityTileContainer)" layoutpos="top" layout="BorderLayout()" accessible="true" accrole="pane" active="mouse|pointer|keyboard|nosyncfocus" behaviors="DUI70::ScrubBehavior(sb_setkeyfocus)" accname="resstr(1025)">
+</Element>
+</Element>
+<Element id="atom(InfoArea)" layoutpos="top" layout="BorderLayout()" sheet="InfoArea">
+<Element layoutpos="top" height="5rp"/>
+<Element layoutpos="top" layout="BorderLayout()">
+<Element layoutpos="left" height="1rp" width="12rp"/>
+<Element layoutpos="client" height="1rp" width="32rp" sheet="Separator"/>
+<Element layoutpos="right" height="1rp" width="12rp"/>
+</Element>
+<Element layoutpos="top" height="5rp"/>
+<SettingsTile id="atom(SettingsLinkButton)" resid="SettingsLinkButton" layoutpos="top" height="48rp" layout="BorderLayout()" sheet="IsolatedButton" active="mouse|pointer|keyboard|nosyncfocus" accessible="true" accrole="pushbutton" accdefaction="press" accname="resstr(1502)">
+<Element layoutpos="left" layout="BorderLayout()" width="74rp">
+<Element layoutpos="top" layout="BorderLayout()" background="argb(0,0,0,0)">
+<RichText id="atom(IsolatedButtonIcon)" layoutpos="top" padding="rect(19rp,12rp,0rp,0rp)" accessible="false" contentalign="topleft" overhang="false" content="resstr(1041)"/>
+</Element>
+</Element>
+<Element layoutpos="client" layout="BorderLayout()">
+<RichText id="atom(IsolatedButtonText)" layoutpos="top" padding="rect(0rp,12rp,14rp,0rp)" accessible="false" contentalign="wrapleft|endellipsis" overhang="false" content="resstr(1502)"/>
+</Element>
+</SettingsTile>
+</Element>
+<Element id="atom(UIBottomSpacer)" layoutpos="top" height="5rp"/>
+</Element>
+</Element>
+</Element>
+</InputSwitchRoot>
+</Element>
+<TouchButton resid="ModeTile" layoutpos="top" layout="BorderLayout()" sheet="ModeTile" active="mouse|pointer|keyboard|nosyncfocus" accessible="true" accrole="pushbutton" accdefaction="press">
+<Element layoutpos="left" layout="BorderLayout()" width="74rp" padding="rect(0rp,0rp,14rp,0rp)">
+<Element id="atom(LanguageAbbreviationContainer)" height="30rp" layoutpos="top" layout="BorderLayout()" background="argb(0,0,0,0)">
+<RichText id="atom(LanguageAbbreviation)" height="30rp" padding="rect(0rp,2rp,0rp,0rp)" layoutpos="top" linespacing="28rp" baseline="24rp" accrole="statictext" contentalign="bottomcenter|endellipsis"/>
+</Element>
+<Element id="atom(LayoutAbbreviationContainer)" height="30rp" layoutpos="top" layout="VerticalFlowLayout(0,2,2,0)" background="argb(0,0,0,0)">
+<RichText id="atom(LayoutAbbreviation)" linespacing="30rp" baseline="16rp" accrole="statictext" contentalign="topcenter|endellipsis"/>
+</Element>
+<Element id="atom(ImeIconContainer)" layoutpos="none" layout="VerticalFlowLayout(0,2,2,0)" height="60rp" background="argb(0,0,0,0)">
+<Element id="atom(ImeIcon)" padding="rect(0rp,15rp,0rp,0rp)" background="argb(0,0,0,0)" accrole="statictext" accname="resstr(1026)"/>
+</Element>
+</Element>
+<Element id="atom(ModeTileRightColumn)" layoutpos="client" layout="BorderLayout()">
+<RichText id="atom(LanguageName)" layoutpos="top" height="30rp" linespacing="30rp" baseline="26rp" padding="rect(0rp,0rp,22rp,0rp)" background="argb(0,0,0,0)" accrole="statictext" contentalign="bottomleft|endellipsis" overhang="false"/>
+<RichText id="atom(LayoutName)" layoutpos="top" height="30rp" linespacing="30rp" baseline="16rp" padding="rect(0rp,0rp,22rp,0rp)" background="argb(0,0,0,0)" accrole="statictext" contentalign="topleft|endellipsis" overhang="false"/>
+</Element>
+</TouchButton>
+<TouchButton resid="ModalityTile" id="atom(ModalityTile)" layoutpos="left" layout="BorderLayout()" sheet="ModalityTile" background="argb(0,0,0,0)" active="keyboard" accessible="true" accrole="pushbutton" accdefaction="press">
+<RichText id="atom(ModalityIcon)" layoutpos="top" height="47rp" contentalign="topleft" overhang="false"/>
+</TouchButton>
+<Element resid="ModalityTileSpacer" layoutpos="left" layout="BorderLayout()" sheet="ModalityTile" width="12rp" height="47rp"/>
+<stylesheets>
+<style resid="FiveItemWidthFrame">
+<if id="atom(BoundingFrame)">
+<Element width="300rp"/>
+</if>
+</style>
+<style resid="ModeTile">
+<if TextGlowSize="1">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextRest"/>
+<if selected="true">
+<Element background="ImmersiveInputSwitchDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextHover"/>
+</if>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchDarkRadioButtonBackgroundSelected"/>
+<RichText foreground="ImmersiveInputSwitchDarkSelectionPrimaryText"/>
+</if>
+</if>
+<if TextGlowSize="2">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextRest"/>
+<if selected="true">
+<Element background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextHover"/>
+</if>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchLightRadioButtonBackgroundSelected"/>
+<RichText foreground="ImmersiveInputSwitchLightSelectionPrimaryText"/>
+</if>
+</if>
+<if TextGlowSize="3">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextRest"/>
+<if selected="true">
+<Element background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextHover"/>
+</if>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchColorDarkRadioButtonBackgroundSelected"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkSelectionPrimaryText"/>
+</if>
+</if>
+<if id="atom(LanguageAbbreviation)">
+<RichText font="resstr(2001)"/>
+</if>
+<if id="atom(LayoutAbbreviation)">
+<RichText font="resstr(2002)"/>
+</if>
+<if id="atom(LanguageName)">
+<RichText font="resstr(2003)"/>
+</if>
+<if id="atom(LayoutName)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="ModeTileDisabled">
+<if TextGlowSize="1">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchDarkDisabledText"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextHover"/>
+</if>
+<if selected="true">
+<Element background="ImmersiveInputSwitchDarkRadioButtonBackgroundDisabledSelected"/>
+<RichText foreground="ImmersiveInputSwitchDarkRadioButtonTextDisabledSelected"/>
+</if>
+</if>
+<if TextGlowSize="2">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchLightDisabledText"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextHover"/>
+</if>
+<if selected="true">
+<Element background="ImmersiveInputSwitchLightRadioButtonBackgroundDisabledSelected"/>
+<RichText foreground="ImmersiveInputSwitchLightRadioButtonTextDisabledSelected"/>
+</if>
+</if>
+<if TextGlowSize="3">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkDisabledText"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextHover"/>
+</if>
+<if selected="true">
+<Element background="ImmersiveInputSwitchColorDarkRadioButtonBackgroundDisabledSelected"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkRadioButtonTextDisabledSelected"/>
+</if>
+</if>
+<if id="atom(LanguageAbbreviation)">
+<RichText font="resstr(2001)"/>
+</if>
+<if id="atom(LayoutAbbreviation)">
+<RichText font="resstr(2002)"/>
+</if>
+<if id="atom(LanguageName)">
+<RichText font="resstr(2003)"/>
+</if>
+<if id="atom(LayoutName)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="ModeTileInactive">
+<if TextGlowSize="1">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchDarkDisabledText"/>
+</if>
+<if TextGlowSize="2">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchLightDisabledText"/>
+</if>
+<if TextGlowSize="3">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkDisabledText"/>
+</if>
+<if id="atom(LanguageAbbreviation)">
+<RichText font="resstr(2001)"/>
+</if>
+<if id="atom(LayoutAbbreviation)">
+<RichText font="resstr(2002)"/>
+</if>
+<if id="atom(LanguageName)">
+<RichText font="resstr(2003)"/>
+</if>
+<if id="atom(LayoutName)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="ModeTilePressed">
+<if TextGlowSize="1">
+<Element background="ImmersiveInputSwitchDarkButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextPressed"/>
+</if>
+<if TextGlowSize="2">
+<Element background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextPressed"/>
+</if>
+<if TextGlowSize="3">
+<Element background="ImmersiveInputSwitchColorDarkButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextPressed"/>
+</if>
+<if id="atom(LanguageAbbreviation)">
+<RichText font="resstr(2001)"/>
+</if>
+<if id="atom(LayoutAbbreviation)">
+<RichText font="resstr(2002)"/>
+</if>
+<if id="atom(LanguageName)">
+<RichText font="resstr(2003)"/>
+</if>
+<if id="atom(LayoutName)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="ModalityTile">
+<if TextGlowSize="1">
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextHover" background="ImmersiveInputSwitchDarkButtonBackgroundHover"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchDarkRadioButtonBackgroundSelected" background="argb(0,0,0,0)"/>
+</if>
+<if keyfocused="true" selected="true">
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextHover" background="ImmersiveInputSwitchDarkButtonBackgroundHover"/>
+</if>
+</if>
+<if TextGlowSize="2">
+<RichText foreground="ImmersiveInputSwitchLightButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchLightButtonTextHover" background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchLightRadioButtonBackgroundSelected" background="argb(0,0,0,0)"/>
+</if>
+<if keyfocused="true" selected="true">
+<RichText foreground="ImmersiveInputSwitchLightButtonTextHover" background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+</if>
+</if>
+<if TextGlowSize="3">
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextHover" background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchColorDarkRadioButtonBackgroundSelected" background="argb(0,0,0,0)"/>
+</if>
+<if keyfocused="true" selected="true">
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextHover" background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"/>
+</if>
+</if>
+<if class="ShortModalityTile">
+<element width="58rp" />
+</if>
+<if id="atom(ModalityIcon)">
+<RichText font="resstr(2018)" width="66rp" padding="rect(16rp,6rp,0rp,0rp)" />
+<if class="ShortModalityTile">
+<RichText font="resstr(2018)" width="60rp" padding="rect(14rp,6rp,0rp,0rp)"/>
+</if>
+</if>
+</style>
+<style resid="ModalityTileDisabled">
+<if TextGlowSize="1">
+<RichText foreground="ImmersiveInputSwitchDarkDisabledText" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchDarkDisabledText" background="argb(0,0,0,0)"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchDarkRadioButtonTextDisabledSelected" background="ImmersiveInputSwitchDarkRadioButtonBackgroundDisabledSelected"/>
+</if>
+</if>
+<if TextGlowSize="2">
+<RichText foreground="ImmersiveInputSwitchLightDisabledText" background="ImmersiveInputSwitchLightBackground"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchLightDisabledText" background="ImmersiveInputSwitchLightBackground"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchLightRadioButtonTextDisabledSelected" background="ImmersiveInputSwitchLightRadioButtonBackgroundDisabledSelected"/>
+</if>
+</if>
+<if TextGlowSize="3">
+<RichText foreground="ImmersiveInputSwitchColorDarkDisabledText" background="ImmersiveInputSwitchColorDarkBackground"/>
+<if keyfocused="true">
+<RichText foreground="ImmersiveInputSwitchColorDarkDisabledText" background="ImmersiveInputSwitchColorDarkBackground"/>
+</if>
+<if selected="true">
+<RichText foreground="ImmersiveInputSwitchColorDarkRadioButtonTextDisabledSelected" background="ImmersiveInputSwitchColorDarkRadioButtonBackgroundDisabledSelected"/>
+</if>
+</if>
+<if class="ShortModalityTile">
+<element width="60rp" />
+</if>
+<if id="atom(ModalityIcon)">
+<RichText font="resstr(2018)" width="66rp" padding="rect(16rp,6rp,0rp,0rp)" />
+<if class="ShortModalityTile">
+<RichText font="resstr(2018)" width="60rp" padding="rect(14rp,6rp,0rp,0rp)"/>
+</if>
+</if>
+</style>
+<style resid="ModalityTilePressed">
+<if TextGlowSize="1">
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextPressed" background="ImmersiveInputSwitchDarkButtonBackgroundPressed"/>
+</if>
+<if TextGlowSize="2">
+<RichText foreground="ImmersiveInputSwitchLightButtonTextPressed" background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+</if>
+<if TextGlowSize="3">
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextPressed" background="ImmersiveInputSwitchColorDarkButtonBackgroundPressed"/>
+</if>
+<if class="ShortModalityTile">
+<element width="58rp" />
+</if>
+<if id="atom(ModalityIcon)">
+<RichText font="resstr(2018)" width="66rp" padding="rect(16rp,6rp,0rp,0rp)" />
+<if class="ShortModalityTile">
+<RichText font="resstr(2018)" width="60rp" padding="rect(14rp,6rp,0rp,0rp)"/>
+</if>
+</if>
+</style>
+<style resid="IsolatedButtonSpacer">
+<Element background="argb(0,0,0,0)"/>
+</style>
+<style resid="IsolatedButton">
+<if TextGlowSize="1">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextHover" background="argb(0,0,0,0)"/>
+</if>
+</if>
+<if TextGlowSize="2">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchLightButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextHover" background="argb(0,0,0,0)"/>
+</if>
+</if>
+<if TextGlowSize="3">
+<Element background="argb(0,0,0,0)"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextRest" background="argb(0,0,0,0)"/>
+<if keyfocused="true">
+<Element background="ImmersiveInputSwitchColorDarkButtonBackgroundHover"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextHover" background="argb(0,0,0,0)"/>
+</if>
+</if>
+<if id="atom(IsolatedButtonIcon)">
+<RichText font="resstr(2007)"/>
+</if>
+<if id="atom(IsolatedButtonText)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="IsolatedButtonPressed">
+<if TextGlowSize="1">
+<Element background="ImmersiveInputSwitchDarkButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchDarkButtonTextPressed" background="argb(0,0,0,0)"/>
+</if>
+<if TextGlowSize="2">
+<Element background="ImmersiveInputSwitchLightButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchLightButtonTextPressed" background="argb(0,0,0,0)"/>
+</if>
+<if TextGlowSize="3">
+<Element background="ImmersiveInputSwitchColorDarkButtonBackgroundPressed"/>
+<RichText foreground="ImmersiveInputSwitchColorDarkButtonTextPressed" background="argb(0,0,0,0)"/>
+</if>
+<if id="atom(IsolatedButtonIcon)">
+<RichText font="resstr(2007)"/>
+</if>
+<if id="atom(IsolatedButtonText)">
+<RichText font="resstr(2003)"/>
+</if>
+</style>
+<style resid="MainBody">
+<if TextGlowSize="1">
+<Element background="ImmersiveInputSwitchDarkBackground" bordercolor="ImmersiveInputSwitchDarkWindowBorder"/>
+</if>
+<if TextGlowSize="2">
+<Element background="ImmersiveInputSwitchLightBackground" bordercolor="ImmersiveInputSwitchLightWindowBorder"/>
+</if>
+<if TextGlowSize="3">
+<Element background="ImmersiveInputSwitchColorDarkBackground" bordercolor="ImmersiveInputSwitchColorDarkWindowBorder"/>
+</if>
+</style>
+<style resid="InfoArea" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+</style>
+<style resid="Separator">
+<if TextGlowSize="1">
+<Element background="ImmersiveInputSwitchDarkSeparatorLine"/>
+</if>
+<if TextGlowSize="2">
+<Element background="ImmersiveInputSwitchLightSeparatorLine"/>
+</if>
+<if TextGlowSize="3">
+<Element background="ImmersiveInputSwitchColorDarkSeparatorLine"/>
+</if>
+</style>
+<style resid="ScrollViewerSheet" base="ressheet(ImmersiveStyles, library(dui70.dll), ImmersiveBase)">
+<if class="ScrollViewer">
+<Viewer layoutpos="ninefill"/>
+<if vertical="false">
+<TouchScrollBar layoutpos="none"/>
+</if>
+</if>
+</style>
+</stylesheets>
+</duixml>

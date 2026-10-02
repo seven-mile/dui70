@@ -1,0 +1,54 @@
+<!--
+  source: %SYSTEMROOT%\System32\wscapi.dll
+  resource: UIFILE / "6028" / lang 1033
+  size: 1272 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="NotificationDialog" base="ressheet(ImmersiveStyles, library(dui70.dll), Dark)">
+<if class="DialogText">
+<RichText
+background          = "argb(0,0,0,0)"
+contentalign        = "wrapleft | pathellipsis | wordellipsis"
+foreground          = "ImmersiveSaturatedPrimaryText"
+accessible          = "true"
+accrole             = "statictext"
+padding             = "rect(0rp,1rp,0rp,1rp)"
+font                =  "resstr(6027)"
+/>
+</if>     
+</style>
+</stylesheets>
+<element resid="main" 
+layout="verticalflowlayout(0,0,0,0)" 
+active="keyboard" 
+layoutpos="client"
+sheet="NotificationDialog"
+height="200rp">
+<RichText
+id="atom(NotificationDialog_Descrition_line_1)"
+content="resstr(6030)"
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>          
+<Element
+height="15rp"
+/>
+<RichText
+id="atom(NotificationDialog_Descrition_AV)"
+content=""
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>
+<RichText
+id="atom(NotificationDialog_Descrition_line_2)"
+content="resstr(6031)"
+class="DialogText"
+contentalign="wrapleft"
+accessible="true"
+accrole="statictext"/>      
+</element>
+</duixml>

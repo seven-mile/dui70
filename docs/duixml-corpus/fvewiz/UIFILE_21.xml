@@ -1,0 +1,22 @@
+<!--
+  source: %SYSTEMROOT%\System32\fvewiz.dll
+  resource: UIFILE / "21" / lang 1033
+  size: 1094 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<stylesheets>
+<style resid="local">
+<element font="gtf(TaskDialogStyle, 4, 0)" foreground="themeable(gtc(TaskDialog, 4, 0, 3803), WindowText)" background="themeable(dtb(TaskDialog, 1, 0), threedface)"/> 
+<if class="para">
+<element padding="themeable(gtmar(TaskDialog, 4, 0, 3602), rect(21rp,10rp,21rp,0rp))" contentalign="wrapleft"/>
+</if>
+</style>
+</stylesheets>
+<element resid="content" sheet="local" layout="borderlayout()">
+<element id="atom(saveusbpanel)" padding="themeable(gtmar(TaskDialog, 4, 0, 3602), rect(21rp,10rp,21rp,0rp))" layout="borderlayout()" layoutpos="bottom">
+<element id="atom(shortcut)" accessible="true" accrole="statictext" class="para" sheet="local" layoutpos="none" visible="false" content="resstr(1918)"/>
+<cclistview id="atom(listviewdrives)" accessible="true" accrole="list" accname="resstr(1920)" accDesc="resstr(2160)" active="mouse|keyboard" shortcut="auto" width="270rp" height="102rp" winstyle="16461" layoutpos="top" borderstyle="1" borderthickness="rect(1rp,1rp,1rp,1rp)" content="resstr(1919)"/>
+</element> 
+</element> 
+</duixml>

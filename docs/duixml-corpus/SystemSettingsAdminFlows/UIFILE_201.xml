@@ -1,0 +1,21 @@
+<!--
+  source: %SYSTEMROOT%\System32\SystemSettingsAdminFlows.exe
+  resource: UIFILE / "201" / lang 1033
+  size: 1024 bytes (duib v5 binary)
+  restored: yes (BML binary decoded to XML)
+-->
+<duixml>
+	<element resid="main" sheet="RemoveDeviceFlyoutStyle" layoutpos="top" layout="verticalflowlayout(0, 0, 1, 0)" width="300rp" accessible="true" padding="rect(18rp,12rp,20rp,0)">
+		<RichText id="atom(idRemoveDeviceContent)" content="resstr(3001)" class="remove_description" />
+	</element>
+	<element resid="removePrinterFlyout" sheet="RemoveDeviceFlyoutStyle" layoutpos="top" layout="verticalflowlayout(0, 0, 1, 0)" width="300rp" accessible="true" padding="rect(18rp,12rp,20rp,0)">
+		<RichText id="atom(idRemovePrinterContent)" content="resstr(3101)" class="remove_description" />
+	</element>
+	<stylesheets>
+		<style resid="RemoveDeviceFlyoutStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+			<if class="remove_description">
+				<RichText font="resstr(6001, library(SystemSettingsAdminFlows.exe))" foreground="20348" contentalign="topleft | wrapleft" accessible="true" accrole="statictext" />
+			</if>
+		</style>
+	</stylesheets>
+</duixml>

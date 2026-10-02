@@ -1,0 +1,250 @@
+<!--
+  source: %SYSTEMROOT%\System32\msctfuimanager.dll
+  resource: UIFILE / "16002" / lang 1033
+  size: 9586 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+<element resid="EmojiSkinTonePanel.Layout" id="atom(EmojiSkinTonePanel.Layout)" layout="gridlayout(2, 3)" accessible="true" layoutpos="client" x="0rp" y="0rp" sheet="SkinTonePanelStyle" accname="resstr(16122, library(msctfuimanager.dll))">
+<TouchButton id="atom(EmojiSkinTonePanel.DefaultModifier)" content="resstr(16116, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16110, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FirstSecondModifier)" content="resstr(16117, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16111, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.ThirdModifier)" content="resstr(16118, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16112, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FourthModifier)" content="resstr(16119, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16113, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.FifthModifier)" content="resstr(16120, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16114, library(msctfuimanager.dll))"/>
+<TouchButton id="atom(EmojiSkinTonePanel.SixthModifier)" content="resstr(16121, library(msctfuimanager.dll))" contentalign="middlecenter" sheet="SkinToneButtonStyle" active="mouse|pointer|nosyncfocus" accrole="pushbutton" accessible="true" accname="resstr(16115, library(msctfuimanager.dll))"/>
+</element>
+<stylesheets>
+<style resid="SkinTonePanelStyle">
+<element  background="ImmersiveControlLightRadioButtonSelectedBackgroundDisabled"
+foreground="ImmersiveControlLightSelectPopupTextRest" />
+</style>
+<style resid="SkinToneButtonStyle">
+<TouchButton bordercolor="ImmersiveHardwareDarkKeyboardFunctionKeyBackground"
+font="12pt;Normal;;Segoe UI Emoji" ColorFontPaletteIndex="1" />
+<if mousefocused="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveInputSwitchLightButtonBackgroundPressed" />
+</if>
+<if selected="true">
+<TouchButton background="ImmersiveHardwareDarkKeyboardKeyBackgroundPressed" />
+</if>
+</style>
+</stylesheets>
+<CCandidateSymbolView
+resid="CandidateSymbolView.Layout"
+id="atom(CandidateSymbolView.Layout)"
+layoutpos="none"
+layout="borderlayout()"
+contentalign="middlecenter"
+bordercolor="ImmersiveSystemAccent"
+borderthickness="rect(1rp,1rp,1rp,1rp)"
+CandidatesCountPerRow="10"
+RowsCountPerPage="5"
+width="510rp">
+<Element
+layoutpos="top"
+id="atom(CandidateSymbolView.TitleBar)"
+layout="borderlayout()">
+<Element
+id="atom(CandidateSymbolView.Title)"
+layoutpos="left"
+sheet="SymbolViewTitleBar"/>
+<Element layoutpos="right" layout="flowlayout(0, 0, 2, 2)" >
+<TouchButton
+id="atom(CandidateSymbolView.PinButton)"
+sheet="SymbolViewTitleBar"
+layoutpos="client"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"/>
+<TouchButton
+id="atom(CandidateSymbolView.CloseButton)"
+sheet="SymbolViewTitleBar"
+content="&#x2715;"
+layoutpos="client"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16109, library(msctfuimanager.dll))"/>
+</Element>
+</Element>
+<Element
+id="atom(CandidateSymbolView.CandidatesArea)"
+layoutpos="client"
+layout="filllayout()"
+padding="rect(5rp,4rp,5rp,4rp)"
+height="210rp"
+accessible="true"
+accname="resstr(16104, library(msctfuimanager.dll))"
+accrole="client">
+<TouchScrollViewer
+id="atom(CandidateSymbolView.ScrollViewer)"
+active="Pointer | Mouse | nosyncfocus"
+layout="ninegridlayout()"
+layoutpos="top"
+sheet="SymbolViewScrollViewerStyle"
+XScrollable="false"
+YScrollable="true"
+YBarVisibility="asneeded"
+InteractionMode="TranslateY | Inertia"
+SnapMode="Single" >
+<ItemList
+id="atom(CandidateSymbolView.ScrollViewer.ItemList)"
+active="mouse | pointer | nosyncfocus"
+layout="gridlayout(-1,10)"
+layoutpos="nineclient"
+visible="true"
+accessible="true"
+accname="resstr(16105, library(msctfuimanager.dll))"
+accrole="list"/>
+</TouchScrollViewer>
+</Element>
+<Element
+id="atom(CandidateSymbolView.CategoryBar)"
+layoutpos="bottom"
+layout="gridlayout(1, -1)"
+accessible="true"
+accname="resstr(16106, library(msctfuimanager.dll))"
+accrole="toolbar"/>
+<EmojiSkinTonePanel id="atom(EmojiSkinTonePanel)" layout="borderlayout()" layoutpos="absolute" />
+</CCandidateSymbolView>
+<CCandidateSymbolViewItem
+resid="CandidateSymbolView.CandidateItem"
+contentalign="middlecenter"
+sheet="SymbolViewScrollViewerItemStyle"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16107, library(msctfuimanager.dll))" />
+<CCandidateSymbolViewItem
+resid="CandidateSymbolView.CategoryButton"
+sheet="SymbolViewCategoryBarStyle"
+active="mouse | pointer | nosyncfocus"
+accessible="true" accrole="pushbutton"
+accname="resstr(16108, library(msctfuimanager.dll))" />
+<stylesheets>
+<style resid="SymbolViewScrollViewerItemStyle">
+<CCandidateSymbolViewItem
+height="40rp" width="50rp"
+colorfontpaletteindex="0"
+contentalign="middlecenter"
+bordercolor="ImmersiveControlLightSelectPopupBackgroundHover"
+typography="ss20=1,kern=1,dlig=1,liga=1"/>
+<if mousefocused="true">
+<CCandidateSymbolViewItem
+foreground="ImmersiveControlLightSelectPopupTextHover"
+background="ImmersiveSystemAccentLight3"/>
+</if>
+<if selected="true">
+<CCandidateSymbolViewItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccent"/>
+<if mousefocused="true" pressed="false">
+<CCandidateSymbolViewItem
+foreground="ImmersiveControlLightSelectPopupTextSelected"
+background="ImmersiveSystemAccentLight1"/>
+</if>
+</if>
+<if pressed="true">
+<CCandidateSymbolViewItem
+foreground="ImmersiveControlLightSelectPopupTextPressed"
+background="ImmersiveSystemAccentDark1"/>
+<if selected="true">
+<CCandidateSymbolViewItem
+foreground="ImmersiveControlLightSelectPopupTextPressed"
+background="ImmersiveSystemAccentDark3"/>
+</if>
+</if>
+</style>
+<style resid="SymbolViewCategoryBarStyle">
+<CCandidateSymbolViewItem
+height="35rp"
+contentalign="middlecenter" />
+<if selected="true">
+<CCandidateSymbolViewItem
+background="ImmersiveControlLightSelectPopupTextSelected"
+foreground="ImmersiveControlLightSelectPopupTextRest"
+colorfontpaletteindex="0"/>
+</if>
+<if selected="false">
+<CCandidateSymbolViewItem
+background="ImmersiveControlLightSelectPopupBackgroundHover"
+foreground="ImmersiveControlLightSelectPopupTextHover"
+colorfontpaletteindex="-1"/>
+<if mousefocused="true">
+<CCandidateSymbolViewItem
+background="ImmersiveSystemAccentLight3"
+colorfontpaletteindex="0"/>
+</if>
+<if pressed="true">
+<CCandidateSymbolViewItem
+background="ImmersiveSystemAccentDark1"
+colorfontpaletteindex="0"/>
+</if>
+</if>
+</style>
+<style resid="SymbolViewScrollViewerStyle" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if class="ScrollViewer">
+<if vertical="true">
+<TouchScrollBar
+accessible="true"
+width="12rp"
+accrole="scrollbar"
+layoutpos="nineright"/>
+</if>
+<if vertical="false">
+<TouchScrollBar
+accessible="true"
+accrole="scrollbar"
+layoutpos="none"/>
+</if>
+<Viewer
+layoutpos="nineclient"/>
+</if>
+<if class="Thumb_Mouse">
+<if id="atom(Thumb)">
+<Thumb width="12rp" minsize="size(0,12rp)"/>
+</if>
+</if>
+<if class="Line">
+<if id="atom(LineUp)">
+<TouchRepeatButton height="12rp"/>
+</if>
+<if id="atom(LineDown)">
+<TouchRepeatButton height="12rp"/>
+</if>
+</if>
+<if class="Line_Arrow">
+<if id="atom(LineUp_Arrow)">
+<InternalRichText linespacing="12rp" baseline="11rp"/>
+</if>
+<if id="atom(LineDown_Arrow)">
+<InternalRichText linespacing="12rp" baseline="11rp"/>
+</if>
+</if>
+</style>
+<style resid="SymbolViewTitleBar">
+<if id="atom(CandidateSymbolView.CloseButton)">
+<TouchButton width="30rp" height="30rp" fontsize="12pt" />
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextSelected" background="ImmersiveHardwareTitleBarCloseButtonHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveHardwareTitleBarCloseButtonPressed" />
+</if>
+</if>
+<if id="atom(CandidateSymbolView.PinButton)">
+<TouchButton width="30rp" height="30rp" font="12pt;;;Segoe MDL2 Assets"
+margin="rect(0rp,0rp,10rp,0rp)"/>
+<if mousefocused="true">
+<TouchButton foreground="ImmersiveControlLightSelectPopupTextSelected" background="ImmersiveHardwareTitleBarMinimizeButtonHover" />
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveHardwareTitleBarMinimizeButtonPressed" />
+</if>
+</if>
+<if id="atom(CandidateSymbolView.Title)">
+<Element font="12;Regular;;Microsoft YaHei UI" height="30rp" padding="rect(10rp,0rp,0rp,0rp)"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

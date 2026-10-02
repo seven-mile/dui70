@@ -1,0 +1,35 @@
+<!--
+  source: %SYSTEMROOT%\System32\IdCtrls.dll
+  resource: UIFILE / "2000" / lang 1033
+  size: 921 bytes (XML text resource)
+  restored: yes (plain-text resource)
+-->
+<duixml>
+#pragma once
+<stylesheets>
+<style resid="ModernStyle">
+<if class="ProgessText">
+<RichText
+font          = "resstr(103)"
+foreground    = "ImmersiveSaturatedPrimaryText"
+contentalign  = "middleleft | wrapleft | endellipsis"
+accessible    = "true"
+accRole       = "statictext"/>
+</if>
+</style>
+</stylesheets>
+<Element resid="main" id= "atom(main)" layout="flowlayout(1, 2, 2, 2)" layoutpos="client" padding="rect(0rp, 10rp, 0rp, 0rp)" sheet="ModernStyle">
+<ModernProgressRing
+id          = "atom(ModernProgressRing)"
+width       = "30rp"
+height      = "30rp"
+accname     = "Progress indicator"
+accrole     = "ProgressBar"
+visible     = "true"
+foreground  = "ImmersiveSaturatedPrimaryText"/>
+<RichText id          = "atom(ProgressText)"
+content     = "resstr(102)"
+class       = "ProgessText"
+margin      = "rect(10rp, 0rp, 0rp, 0rp)"/>
+</Element>
+</duixml>

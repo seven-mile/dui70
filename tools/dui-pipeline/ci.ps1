@@ -26,8 +26,8 @@
     compiler. This is what the ubuntu GitHub job can run.
 
 .PARAMETER AllowDirty
-    Skip G2's "tree must be clean" precheck. regen.py overwrites DirectUI/
-    wholesale, so running the gates on a tree with uncommitted edits would
+    Skip G2's "tree must be clean" precheck. regen.py rewrites the files it
+    generates, so running the gates on a tree with uncommitted edits would
     silently destroy them; the precheck refuses by default. Set this only when
     you accept that (e.g. to inspect the golden diff of a generator change).
 
@@ -395,7 +395,7 @@ $t0 = Get-Date
 # Record the pre-regen dirty state.
 #
 # This precheck is not merely hygiene -- it closes a real hole. regen.py
-# overwrites DirectUI/ wholesale, so an UNCOMMITTED hand-edit to the golden tree
+# rewrites every file it generates, so an UNCOMMITTED hand-edit to the golden tree
 # would be silently reverted by the regen step, and `git diff` would then
 # (correctly, but uselessly) report the tree as clean. The precheck is what
 # catches uncommitted edits. A COMMITTED hand-edit is caught by the diff below,
@@ -406,7 +406,7 @@ if ($preStatus.Count -gt 0 -and -not $AllowDirty) {
     Fail-Gate 'G2' 'golden regen' `
         'a clean DirectUI/ + pinned/ working tree before regenerating' `
         "$($preStatus.Count) path(s) already modified/untracked" `
-        (@('', 'regen.py overwrites DirectUI/ wholesale: an uncommitted hand-edit',
+        (@('', 'regen.py rewrites each file it generates: an uncommitted hand-edit',
            'would be silently reverted and the golden diff would look clean.',
            'Commit/stash first (or pass -AllowDirty to accept the risk).',
            '', 'Offending paths:') +

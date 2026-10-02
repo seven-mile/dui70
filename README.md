@@ -96,7 +96,7 @@ pwsh -File tools/dui-pipeline/run.ps1
     交互，普通 `Event` 按消息种类细分。
   - 布局：`BorderLayout` 已足够支撑大部分自适应布局；`gtc`/`gtf` 等 duixml 指令
     实际是 uxtheme 的 API。
-  - 动画：插值方法多但可动画属性少，位域取值见 `UITest/DuiEnums.h`。
+  - 动画：插值方法多但可动画属性少，位域取值见 `DirectUI/include/DuiEnums.h`。
   - 自制控件可以自己实现 `IClassInfo` 并重写 `Element` 虚方法，此时既能子类化
     `WndProc`，也能用 `Host` 套娃做 UserControl。
   - 兼容性：dui70 作为随系统 ship 的库（还有 ieui 等 fork），旧接口从版本 8 到

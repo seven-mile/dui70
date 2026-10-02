@@ -197,7 +197,11 @@ verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝
 迁移前 `UITest.vcxproj` 用 `ProjectReference` 指向**手写的** `DirectUI.vcxproj`，那是
 "DirectUI 是源码项目"时代的形态。该 vcxproj 已在 `dd1fd41` 删除，而且**生成树里
 根本不存在 vcxproj**——`DirectUI/` 是 `emit_headers.py`/`emit_stub.py` 的产物，随
-`regen.py` 整体重写，往里面放 vcxproj 会被下次 regen 抹掉。
+`regen.py` 只会重写它生成的
+那些文件（`dui70.def`、`include/*.h`、`src/*.cpp`），**不会删除**目录里别的东西
+——往 `DirectUI/` 放一个 vcxproj 它不会抹掉你，但会被 G2 的"regen 前工作树必须干净"
+预检拦下（未跟踪文件同样触发），而放进 `include/` 的额外头还会被 G3 的精确相等
+判为 extra。真正的护栏是这两道门禁，不是 regen 的删除行为。
 
 所以迁移后正确的形态只有一个：把 `DirectUI\include` 放进
 `AdditionalIncludeDirectories`、把 `dui70.lib` 作为链接输入（`DirectUI\dui70.def`

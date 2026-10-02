@@ -218,6 +218,20 @@ def cmd_totals(args: argparse.Namespace) -> int:
 
 
 # ------------------------------------------------------------------------- struct
+# Headers in DirectUI/include/ that classes.json does not imply, split by origin.
+#
+#   GENERATED_EXTRA -- written by emit_headers.py next to the per-class headers.
+#       Reproducible from pinned/, so regen must produce them.
+#   HANDWRITTEN     -- maintained by hand and NOT derivable from pinned/: dui70's
+#       runtime reflection is the only source. Being in this set means G3 demands
+#       the file EXISTS and G5 compiles it -- an entry added here is a deliberate
+#       widening of what "the generated tree" contains and must be reviewed as one.
+#
+# Kept at module scope so G3 (existence) and G5 (compile) read one registry.
+GENERATED_EXTRA = {"DirectUI", "Interfaces", "dui_abi_types"}
+HANDWRITTEN = {"DuiEnums"}
+
+
 def cmd_struct(args: argparse.Namespace) -> int:
     """G3: the generated tree must agree with the pinned contract on class count.
 
@@ -262,8 +276,6 @@ def cmd_struct(args: argparse.Namespace) -> int:
     standalone = [c for c in cls_list if c not in nested]
     want = {safe_name(c) for c in standalone}
 
-    # Non-class headers the emitter adds alongside the per-class ones.
-    EXTRA_HEADERS = {"DirectUI", "Interfaces", "dui_abi_types"}
 
     problems: list[str] = []
 
@@ -272,13 +284,21 @@ def cmd_struct(args: argparse.Namespace) -> int:
     # overwrote classes.json" incident this gate exists to catch. Requiring
     # equality means both directions fail: a missing artefact AND a stale extra.
     missing_hdr = sorted(want - headers)
-    extra_hdr = sorted(headers - want - EXTRA_HEADERS)
+    extra_hdr = sorted(headers - want - GENERATED_EXTRA - HANDWRITTEN)
     if missing_hdr:
         problems.append(f"{len(missing_hdr)} class header(s) missing from include/: "
                         f"{missing_hdr[:6]}")
     if extra_hdr:
         problems.append(f"{len(extra_hdr)} header(s) present but not implied by "
                         f"classes.json: {extra_hdr[:6]}")
+
+    # A registered hand-written header must exist. Exact equality cannot see its
+    # absence: it is subtracted from the "extra" set, so deleting it would leave
+    # nothing behind to complain about.
+    missing_hand = sorted(HANDWRITTEN - headers)
+    if missing_hand:
+        problems.append(f"{len(missing_hand)} registered hand-written header(s) "
+                        f"missing from include/: {missing_hand[:6]}")
 
     missing_tu = sorted(want - class_tus)
     extra_tu = sorted(class_tus - want)
@@ -356,7 +376,14 @@ def cmd_headers(args: argparse.Namespace) -> int:
     rng = random.Random(args.seed)
     sample = set(rng.sample(all_h, min(args.sample, len(all_h))))
     sample.add("DirectUI.h")            # public aggregate: always checked
-    for must in ("dui_abi_types.h",):
+    # Force-add the hand-written registry too: they are 1-of-N in a 12-header
+    # sample, so leaving them to the draw means they would usually NOT be
+    # compiled -- and these are the files most likely to drift.
+    #
+    # HANDWRITTEN holds header STEMS (G3 compares `p.stem`); `all_h` holds file
+    # NAMES, so the suffix must be added here. Without it the membership test is
+    # silently always false and this loop adds nothing.
+    for must in ("dui_abi_types.h", *(f"{h}.h" for h in sorted(HANDWRITTEN))):
         if must in all_h:
             sample.add(must)
     sample = sorted(sample)

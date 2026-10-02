@@ -1711,6 +1711,11 @@ def render_aggregate_header(classes: list, banner: str) -> str:
     lines.append("")
     lines.append('#include "dui_abi_types.h"')
     lines.append('#include "Interfaces.h"')
+    # DuiEnums.h is a handwritten registry file (not emitted by this pipeline):
+    # the aggregate header pulls it in so consumers get the enum surface, but the
+    # emitter never writes it. A name-collision assertion must guard this exact
+    # relationship (generated file set vs. referenced handwritten file).
+    lines.append('#include "DuiEnums.h"')
     for cls in classes:
         if is_duixml_nested(cls) or is_nested_pseudo_class(cls):
             # nested in a host class: declared inside the host's header

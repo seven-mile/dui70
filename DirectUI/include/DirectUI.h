@@ -5,6 +5,7 @@
 
 #include "dui_abi_types.h"
 #include "Interfaces.h"
+#include "DuiEnums.h"
 #include "AcceleratorBehavior.h"
 #include "AccessibleButton.h"
 #include "AnimationStrip.h"

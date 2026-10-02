@@ -84,7 +84,7 @@ Create 出来的裸 Layout* 随即被包进 Value(`18-properties-and-lifecycle.m
 
 ## 2. layoutpos:子元素报到的槽位协议【实锤】
 
-布局对象管孩子,但"这个孩子放哪个槽"的信息却在**孩子**身上——`layoutpos` 属性。字符串到值的映射(`docs/Layouts.txt` 已录,此处按语义重排):
+布局对象管孩子,但"这个孩子放哪个槽"的信息却在**孩子**身上——`layoutpos` 属性。字符串到值的映射(`docs/duixml-classinfo/Layouts.txt` 已录,此处按语义重排):
 
 | layoutpos | 值 | 语义 | 语料出现 |
 |---|---|---|---|
@@ -271,7 +271,7 @@ Lead 的问题:是不是 PNG 9-patch 拉伸?**不是。**证据链:
 | FillLayout/BorderLayout::Create 统一 0x30 字节 + 脏标志 | 实锤 | 0x613A0 / 0x61480 反汇编 |
 | FlowLayout::Create 四参存 +0x20/24/28/2C | 实锤 | 0x61200 反汇编 |
 | DoLayout 读 +0x2C 分支 | 实锤 | 0x1F040 @ 0x1F0B2 |
-| layoutpos 枚举值(nine*/auto/absolute/none) | 实锤 | docs/Layouts.txt + 语料 |
+| layoutpos 枚举值(nine*/auto/absolute/none) | 实锤 | docs/duixml-classinfo/Layouts.txt + 语料 |
 | GetAdjacent 检查 layoutpos=-3 | 实锤 | 0x7DA5B 反汇编 |
 | OnAdd 检查 layoutpos=-3 | 实锤 | 0x31BE8 反汇编 |
 | 九种布局频率统计 | 实锤 | docs/duixml-corpus 正则统计(本篇 §0) |

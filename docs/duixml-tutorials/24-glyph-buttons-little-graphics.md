@@ -31,7 +31,7 @@
 | ExpandoButtonGlyph | 无 |
 | TouchCheckBoxGlyph | 无(TouchCheckBox 的 CheckedState 由父类持有) |
 
-传统三 Glyph 连一个自有属性都没有。TouchCheckBoxGlyph 唯一的"内容"是继承来的:TouchCheckBox 的 CheckedState 属性(docs/TouchCheckBoxGlyphClass.g.txt 标注 Base Class TouchCheckBox,继承链 TouchCheckBoxGlyph → TouchCheckBox → TouchButton → RichText)。
+传统三 Glyph 连一个自有属性都没有。TouchCheckBoxGlyph 唯一的"内容"是继承来的:TouchCheckBox 的 CheckedState 属性(docs/duixml-classinfo/TouchCheckBoxGlyphClass.g.txt 标注 Base Class TouchCheckBox,继承链 TouchCheckBoxGlyph → TouchCheckBox → TouchButton → RichText)。
 
 ---
 
@@ -206,7 +206,7 @@ TouchCheckBoxGlyph 与传统三 Glyph 的唯一实质差异:**它有消费者**(
 
 | 结论 | 证据 | 位置 |
 |---|---|---|
-| 四 Glyph 继承链(3×Button、1×TouchCheckBox) | .g.txt | docs/CheckBoxGlyphClass.g.txt、RadioButtonGlyphClass.g.txt、ExpandoButtonGlyphClass.g.txt、TouchCheckBoxGlyphClass.g.txt |
+| 四 Glyph 继承链(3×Button、1×TouchCheckBox) | .g.txt | docs/duixml-classinfo/CheckBoxGlyphClass.g.txt、RadioButtonGlyphClass.g.txt、ExpandoButtonGlyphClass.g.txt、TouchCheckBoxGlyphClass.g.txt |
 | 语料频次(0/0/0/14,14 全在 dui70) | 语料统计 | .local/corpus/class-usage.json |
 | 传统 Glyph vtable ≈ Button(仅析构槽异;Initialize ICF 同址 0x8B1D0) | vftable 数据 + ICF 地址 | CheckBoxGlyph vftable 0x10F368、RadioButtonGlyph 0x10F1F0、ExpandoButtonGlyph 0x10F078;OnLost/OnReceivedDialogFocus 共享桩 0x66740 |
 | 路线 A(普通元素 + id=Glyph) | 语料 | sharemediacpl/UIFILE_201.xml:174-205 |

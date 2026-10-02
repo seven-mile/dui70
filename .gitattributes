@@ -61,3 +61,21 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+
+###############################################################################
+# duixml corpus: LF in the repository, LF on every platform.
+#
+# The XML bodies are PE UIFILE resources; the resource bytes are CRLF, and 36 of
+# the 149 files use a DOUBLED CRLF (\r\r\n) exactly as their authors wrote them.
+# Git alone cannot normalise that: its clean filter is a single-pass
+# \r\n -> \n, so \r\r\n would keep one CR -- which is why those 36 blobs still
+# carried a CR (and showed as ^M in diffs). The line endings are therefore
+# collapsed when the corpus is written (see the "line endings" section of
+# docs/duixml-corpus/README.md) and this rule pins the result, so the index is
+# CR-free and every checkout is byte-identical.
+#
+# Only line terminators change -- no tag, attribute, or text byte is touched, and
+# LF counts (hence every line-number citation) are preserved.
+# Byte-exact resource originals: .local/corpus/raw/
+###############################################################################
+docs/duixml-corpus/** text eol=lf

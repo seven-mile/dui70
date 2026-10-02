@@ -31,6 +31,21 @@ pinned/
   class-inventory.csv   类名普查（来自旧 build 的白名单，供 model.py 分类用）
 ```
 
+### 1.0 `class-inventory.csv` 是什么（不是生成依据，是分类 hint）
+
+248 行 `类名,方法数` 的**历史普查产物**：早期一次 build 里 dump 出的类清单，用来在
+`model.py` 里给符号做**类归属分类的辅助输入**（与 PDB publics 交叉比对），**不是**
+代码生成逻辑的一部分，也**不是**契约：
+
+- **谁定契约**：`classes.json`（195 类，人工策展、作为冻结输入）才是。改它才会改变
+  生成结果（G3/G4 的 `modname_total` 就由它推导）。
+- **改了 `class-inventory.csv` 会怎样**：只影响 `model.py` 把某些符号归到哪个类名下
+  （分类 hint），不会凭空增删导出或改 ABI；若与 `classes.json` 冲突，以
+  `classes.json` 为准。它**不是自动生成**的，也没有随 DLL 刷新而重建——它记录的是
+  当时那份 build 的观测。
+- 因此它**不参与** `repro.py` 的字节级断言（repro 只看 `exports.json`/`symbols.json`），
+  在 `pinned.sha256` 里有指纹仅代表"冻结不要动"，不代表"可从 msdl 重建"。
+
 ### 1.1 manifest.json
 
 ```json

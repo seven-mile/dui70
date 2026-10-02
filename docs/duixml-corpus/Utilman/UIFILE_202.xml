@@ -4,36 +4,36 @@
   size: 3494 bytes (XML text resource)
   restored: yes (plain-text resource)
 -->
-<duixml>
-<EaseOfAccessDialog resid="main" sheet="EaseOfAccessStyleSheet" layout="BorderLayout()" accessible="true" accrole="pane" borderthickness="rect(0rp, 0rp, 0rp, 0rp)" active="mouse|pointer">
-<TouchScrollViewer accessible="true" accrole="pane" layoutpos="top" active="mouse|pointer" YScrollable="true" XScrollable="false" YBarVisibility="AsNeeded" InteractionMode="TranslateY|Inertia">
-<Element id="atom(ContainerElement)" active="mouse|keyboard|pointer" accessible="true" padding="rect(0rp,5rp,0rp,5rp)" layout="BorderLayout()" bordercolor="activeborder">
-<TouchSwitch id="atom(Narrator)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(500)" custom="resstr(501)" accname="resstr(502)" accdesc="resstr(502)" accessible="true" accrole="PushButton"/>
-<TouchButton id="atom(MagnifierPane)" class="EOA_TouchButton" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(22rp,10rp,20rp,10rp)" borderthickness = "rect(0rp,0rp,0rp,0rp)" contentalign="middleleft" content="resstr(503)" custom="resstr(504)" accname="resstr(505)" accdesc="resstr(505)" accessible="true" accrole="pushbutton"/>
-<TouchButton id="atom(Osk)" class="EOA_TouchButton" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(22rp,10rp,20rp,10rp)" borderthickness = "rect(0rp,0rp,0rp,0rp)" contentalign="middleleft" content="resstr(506)" custom="resstr(507)" accname="resstr(508)" accdesc="resstr(508)" accessible="true" accrole="pushbutton"/>
-<TouchSwitch id="atom(HighContrast)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(509)" custom="resstr(510)" accname="resstr(511)" accdesc="resstr(511)" accessible="true" accrole="PushButton"/>
-<TouchSwitch id="atom(StickyKeys)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(512)" custom="resstr(513)" accname="resstr(514)" accdesc="resstr(514)" accessible="true" accrole="PushButton"/>
-<TouchSwitch id="atom(FilterKeys)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(515)" custom="resstr(516)" accname="resstr(517)" accdesc="resstr(517)" accessible="true" accrole="PushButton"/>
-</Element>
-</TouchScrollViewer>
-</EaseOfAccessDialog>
-<stylesheets>
-<style resid="EaseOfAccessStyleSheet" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
-<if class="EOA_TouchButton">
-<TouchButton font="resstr(520)" foreground="ImmersiveLightPrimaryText" background="ImmersiveLightBackground" height="-1"/>
-<if mousefocused="true">
-<TouchButton background="ImmersiveLightHoverBackground" foreground="ImmersiveLightHoverPrimaryText"/>
-</if>
-<if keyfocused="true">
-<TouchButton background="ImmersiveLightHoverBackground" foreground="ImmersiveLightHoverPrimaryText"/>
-</if>
-<if pressed="true">
-<TouchButton background="ImmersiveControlContextMenuBackgroundPressed" foreground="ImmersiveControlContextMenuTextPressed"/>
-</if>
-</if>
-<if class="EOA_TouchSwitch">
-<TouchSwitch font="resstr(520)" foreground="ImmersiveLightPrimaryText" background="ImmersiveLightBackground" height="-1"/>
-</if>
-</style>
-</stylesheets>
-</duixml>
+<duixml>
+<EaseOfAccessDialog resid="main" sheet="EaseOfAccessStyleSheet" layout="BorderLayout()" accessible="true" accrole="pane" borderthickness="rect(0rp, 0rp, 0rp, 0rp)" active="mouse|pointer">
+<TouchScrollViewer accessible="true" accrole="pane" layoutpos="top" active="mouse|pointer" YScrollable="true" XScrollable="false" YBarVisibility="AsNeeded" InteractionMode="TranslateY|Inertia">
+<Element id="atom(ContainerElement)" active="mouse|keyboard|pointer" accessible="true" padding="rect(0rp,5rp,0rp,5rp)" layout="BorderLayout()" bordercolor="activeborder">
+<TouchSwitch id="atom(Narrator)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(500)" custom="resstr(501)" accname="resstr(502)" accdesc="resstr(502)" accessible="true" accrole="PushButton"/>
+<TouchButton id="atom(MagnifierPane)" class="EOA_TouchButton" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(22rp,10rp,20rp,10rp)" borderthickness = "rect(0rp,0rp,0rp,0rp)" contentalign="middleleft" content="resstr(503)" custom="resstr(504)" accname="resstr(505)" accdesc="resstr(505)" accessible="true" accrole="pushbutton"/>
+<TouchButton id="atom(Osk)" class="EOA_TouchButton" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(22rp,10rp,20rp,10rp)" borderthickness = "rect(0rp,0rp,0rp,0rp)" contentalign="middleleft" content="resstr(506)" custom="resstr(507)" accname="resstr(508)" accdesc="resstr(508)" accessible="true" accrole="pushbutton"/>
+<TouchSwitch id="atom(HighContrast)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(509)" custom="resstr(510)" accname="resstr(511)" accdesc="resstr(511)" accessible="true" accrole="PushButton"/>
+<TouchSwitch id="atom(StickyKeys)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(512)" custom="resstr(513)" accname="resstr(514)" accdesc="resstr(514)" accessible="true" accrole="PushButton"/>
+<TouchSwitch id="atom(FilterKeys)" class="EOA_TouchSwitch" active="mouse|keyboard|pointer" layoutpos="top" padding="rect(20rp,10rp,20rp,0rp)" ontext="resstr(518)" offtext="resstr(519)" titletext="resstr(515)" custom="resstr(516)" accname="resstr(517)" accdesc="resstr(517)" accessible="true" accrole="PushButton"/>
+</Element>
+</TouchScrollViewer>
+</EaseOfAccessDialog>
+<stylesheets>
+<style resid="EaseOfAccessStyleSheet" base="ressheet(ImmersiveStyles, library(dui70.dll), Light)">
+<if class="EOA_TouchButton">
+<TouchButton font="resstr(520)" foreground="ImmersiveLightPrimaryText" background="ImmersiveLightBackground" height="-1"/>
+<if mousefocused="true">
+<TouchButton background="ImmersiveLightHoverBackground" foreground="ImmersiveLightHoverPrimaryText"/>
+</if>
+<if keyfocused="true">
+<TouchButton background="ImmersiveLightHoverBackground" foreground="ImmersiveLightHoverPrimaryText"/>
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveControlContextMenuBackgroundPressed" foreground="ImmersiveControlContextMenuTextPressed"/>
+</if>
+</if>
+<if class="EOA_TouchSwitch">
+<TouchSwitch font="resstr(520)" foreground="ImmersiveLightPrimaryText" background="ImmersiveLightBackground" height="-1"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

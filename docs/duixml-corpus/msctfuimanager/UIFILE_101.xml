@@ -4,35 +4,35 @@
   size: 1480 bytes (XML text resource)
   restored: yes (plain-text resource)
 -->
-<duixml>
-<element id="atom(main)" resid="main" sheet="styles" layout="FlowLayout()">
-<touchbutton id="atom(modebutton)" resid="modebutton" layout="FlowLayout()" loc.id="INPUTMODE_BUTTON" active="mouse|keyboard|pointer|nosyncfocus"
-tooltip="false" behaviors="DUI70::ContextMenuBehavior(cm_invokingpoint)">
-<element id="atom(modeicon)" loc.id="INPUTMODE_ICON"/>
-</touchbutton>
-</element>
-<stylesheets>
-<style resid="styles">
-<if id="atom(main)">
-<element background="argb(0,0,0,0)" contentalign="middlecenter" accessible="true" accrole="pane"/>
-</if>
-<if id="atom(modebutton)">
-<TouchButton contentalign="middlecenter" borderthickness="rect(2rp,2rp,2rp,2rp)" padding="rect(3rp,3rp,3rp,3rp)" 
-accessible="true" accrole="PushButton" accdefaction="resstr(104, library(dui70.dll))"/>
-<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundRest" bordercolor="ImmersiveLightBorder"/>
-<if mousewithin="true">
-<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundHover"/>
-</if>
-<if captured="true">
-<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundHover"/>
-</if>
-<if pressed="true">
-<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundPressed"/>
-</if>
-</if>
-<if id="atom(modeicon)">
-<element background="argb(0,0,0,0)" contentalign="middlecenter" width="24rp" height="24rp" accessible="true" accrole="statictext"/>
-</if>
-</style>
-</stylesheets>
-</duixml>
+<duixml>
+<element id="atom(main)" resid="main" sheet="styles" layout="FlowLayout()">
+<touchbutton id="atom(modebutton)" resid="modebutton" layout="FlowLayout()" loc.id="INPUTMODE_BUTTON" active="mouse|keyboard|pointer|nosyncfocus"
+tooltip="false" behaviors="DUI70::ContextMenuBehavior(cm_invokingpoint)">
+<element id="atom(modeicon)" loc.id="INPUTMODE_ICON"/>
+</touchbutton>
+</element>
+<stylesheets>
+<style resid="styles">
+<if id="atom(main)">
+<element background="argb(0,0,0,0)" contentalign="middlecenter" accessible="true" accrole="pane"/>
+</if>
+<if id="atom(modebutton)">
+<TouchButton contentalign="middlecenter" borderthickness="rect(2rp,2rp,2rp,2rp)" padding="rect(3rp,3rp,3rp,3rp)" 
+accessible="true" accrole="PushButton" accdefaction="resstr(104, library(dui70.dll))"/>
+<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundRest" bordercolor="ImmersiveLightBorder"/>
+<if mousewithin="true">
+<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundHover"/>
+</if>
+<if captured="true">
+<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundHover"/>
+</if>
+<if pressed="true">
+<TouchButton background="ImmersiveControlLightRichEditButtonBackgroundPressed"/>
+</if>
+</if>
+<if id="atom(modeicon)">
+<element background="argb(0,0,0,0)" contentalign="middlecenter" width="24rp" height="24rp" accessible="true" accrole="statictext"/>
+</if>
+</style>
+</stylesheets>
+</duixml>

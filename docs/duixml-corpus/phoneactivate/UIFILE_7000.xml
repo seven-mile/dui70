@@ -4,345 +4,345 @@
   size: 15143 bytes (XML text resource)
   restored: yes (plain-text resource)
 -->
-<duixml>
-<stylesheets>
-<style resid="PWL_style" base="ressheet(ImmersiveStyles, library(dui70.dll), dark)">
-<if class="norm_text">
-<RichText
-font="resstr(4002, library(phoneactivate.exe))"
-contentalign="topleft | wrapleft"
-accessible="true"
-accRole="statictext"
-/>
-</if>
-<if class="pwl_label">
-<RichText
-font="resstr(4000, library(phoneactivate.exe))"
-contentalign="topleft | wrapleft"
-accessible="true"
-accRole="statictext"
-/>
-</if>
-<if class="pwl_number">
-<RichText
-font="resstr(4001, library(phoneactivate.exe))"
-contentalign="topleft | wrapleft"
-accessible="true"
-accRole="statictext"
-/>
-</if>
-<if class="pwl_touch_hyper_link">
-<TouchHyperLink
-contentalign="topleft | wrapleft | endellipsis"
-accessible="true"
-cursor="hand"
-accdefaction="click"/>
-<if keyfocused="true">
-<TouchHyperLink
-contentalign="topleft | wrapleft | endellipsis | focusrect"/>
-</if>
-</if>
-</style>
-</stylesheets>
-<Element resid="PhoneActivation" id="atom(PhoneActivation)" layout="borderlayout()" MinSize ="size(80rp, 375rp)" layoutpos="top" sheet="PWL_style">
-<Element layout="flowlayout()" id="atom(ChooseRegion)" layoutpos = "top" contentalign = "wrapleft">
-<Element layoutpos="top" height="40rp"/>
-<TouchSelect   id= "atom(LocationCombobox)" width="360rp" layoutpos ="top" contentalign="wrapleft"/>
-</Element>
-<Element layout="borderlayout()" id="atom(Loading)" layoutpos = "none" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(LoadingText)" class ="norm_text" layoutpos ="left" contentalign="wrapleft"/>
-<ModernProgressRing id = "atom(ScanningProgressRing)"
-background="ImmersiveLightBackground"
-layoutpos = "left"
-class="moset_progress_ring"
-width="20rp"
-height="20rp"
-accname="ProgressBar"
-accrole = "ProgressBar"
-/>
-</Element>
-<Element layout="borderlayout()" id="atom(CallNumber)">
-<Element id="atom(CallNumberLayout)" layout="borderlayout()" layoutpos ="top">
-<Element layoutpos="top" height="8rp"/>
-<Richtext id="atom(Instructions)" class ="norm_text" layoutpos ="top" contentalign="wrapleft"/>
-<Element layoutpos="top" height="50rp"/>
-<Element layout="borderlayout()" id="atom(CallNumbersLabel)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Element layout="borderlayout()" id="atom(TollFreeLabelLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(TollFree)" class ="pwl_label" layoutpos ="left" contentalign="wrapleft"/>
-</Element>
-<Element layout="borderlayout()" id="atom(NumberLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(Number)" class ="pwl_number" layoutpos ="left" contentalign="wrapleft" padding="rect(0,0,0,0)" />
-</Element>
-<Element layoutpos="top" height="25rp"/>
-<Element layout="borderlayout()" id="atom(TollNumberLabelLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style" padding="rect(0,0,0,0)" >
-<Richtext id="atom(TollMain)" class ="pwl_label" layoutpos ="left" contentalign="wrapleft"/>
-</Element>
-<Element layout="borderlayout()" id="atom(TollNumberLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(TollNumber)" class ="pwl_number" layoutpos ="left" contentalign="wrapleft" padding="rect(0,0,0,0)" />
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(Numberlayout)"  sheet="PWL_style" layoutpos = "top">
-<Element layoutpos="top" height="20rp" sheet="PWL_style"/>
-<Richtext id="atom(IIDText)" class ="pwl_label" layoutpos ="top" contentalign="wrapleft" padding="rect(0,0,0,0)"/>
-<Element layoutpos="top" height="7rp" sheet="PWL_style"/>
-<Element layout="borderlayout()" id="atom(ElementOne)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(0,0,0,0)">
-<Richtext id="atom(Number1)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID1)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementTwo)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number2)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID2)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementThree)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number3)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID3)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementFour)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number4)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID4)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementFive)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number5)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID5)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0rp,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementSix)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number6)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID6)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementSeven)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number7)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID7)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementEight)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number8)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID8)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementNine)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
-<Richtext id="atom(Number9)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
-<Richtext id="atom(IID9)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
-</Element>
-</Element>
-<Element layoutpos="top" height="25rp"/>
-</Element>
-<Element layout="borderlayout()" id="atom(PrivacyLayout)" layoutpos = "bottom">
-<TouchHyperLink layoutpos ="bottom" class ="pwl_touch_hyper_link" id = "atom(PrivacyLink)" accessible = "true" active="mouse|keyboard|pointer"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(EnterNumber)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(InstructionsCID)" class ="norm_text" layoutpos ="top" contentalign="wrapleft"/>
-<Element layoutpos="top" height="38rp"/>
-<Element layout="borderlayout()" id="atom(ErrorMessage)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
-<Element    id="atom(CIDEditLabelWrapper)"
-layout      = "verticalflowlayout(0, 0, 0, 0)"
-layoutpos   = "top"
-minsize     = "size(0rp,5rp)"
->
-<RichText id        = "atom(ErrorCID)"
-class      = "norm_text"
-layoutpos   = "top"
-foreground="ImmersiveStartInlineErrorText" 
-/>
-<RichText id         ="atom(CIDEditLabel)"
-class      ="moset_control_description"
-layoutpos  ="top"
-/>
-</Element>
-</Element>
-<Element layoutpos="top" height="13rp"/>
-<Element layout="borderlayout()" id="atom(Textboxes)" layoutpos = "top" contentalign = "wrapleft">
-<Element layout="borderlayout()" id="atom(ElementA)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style">
-<Richtext id="atom(LetterA)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper1)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 10rp, 0rp)"
-contentalign="middlecenter"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit1)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-layoutpos="top"
-contentalign="middlecenter"
-height="32rp"
-active="mouse|keyboard|pointer"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementB)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterB)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper2)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit2)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementC)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterC)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper3)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit3)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementD)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterD)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper4)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit4)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementE)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterE)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper5)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit5)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementF)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterF)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper6)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit6)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementG)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterG)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper7)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit7)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>
-</Element>
-<Element layout="borderlayout()" id="atom(ElementH)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
-<Richtext id="atom(LetterH)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
-<Element    id="atom(CIDEditWrapper8)"
-layout      = "borderlayout()"
-layoutpos   = "top"
-active="pointer"
-margin="rect(0rp, 0rp, 0rp, 0rp)"
-behaviors="TouchID::TouchConfirmationID()"
->
-<TouchEdit2 id="atom(CIDEdit8)"
-accessible="true"
-accrole="Text"
-direction="0"
-maxlength="6"
-PromptWithCaret="true"
-layoutpos="top"
-height="32rp"
-active="mouse|keyboard|pointer"
-contentalign = "middlecenter"
-behaviors="Windows.UI.Popups::TouchEditContextMenu()"
-width="75rp"
-enabled="true"/>
-</Element>          
-</Element>
-</Element>
-</Element>
-</Element>
-</duixml>
+<duixml>
+<stylesheets>
+<style resid="PWL_style" base="ressheet(ImmersiveStyles, library(dui70.dll), dark)">
+<if class="norm_text">
+<RichText
+font="resstr(4002, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_label">
+<RichText
+font="resstr(4000, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_number">
+<RichText
+font="resstr(4001, library(phoneactivate.exe))"
+contentalign="topleft | wrapleft"
+accessible="true"
+accRole="statictext"
+/>
+</if>
+<if class="pwl_touch_hyper_link">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis"
+accessible="true"
+cursor="hand"
+accdefaction="click"/>
+<if keyfocused="true">
+<TouchHyperLink
+contentalign="topleft | wrapleft | endellipsis | focusrect"/>
+</if>
+</if>
+</style>
+</stylesheets>
+<Element resid="PhoneActivation" id="atom(PhoneActivation)" layout="borderlayout()" MinSize ="size(80rp, 375rp)" layoutpos="top" sheet="PWL_style">
+<Element layout="flowlayout()" id="atom(ChooseRegion)" layoutpos = "top" contentalign = "wrapleft">
+<Element layoutpos="top" height="40rp"/>
+<TouchSelect   id= "atom(LocationCombobox)" width="360rp" layoutpos ="top" contentalign="wrapleft"/>
+</Element>
+<Element layout="borderlayout()" id="atom(Loading)" layoutpos = "none" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(LoadingText)" class ="norm_text" layoutpos ="left" contentalign="wrapleft"/>
+<ModernProgressRing id = "atom(ScanningProgressRing)"
+background="ImmersiveLightBackground"
+layoutpos = "left"
+class="moset_progress_ring"
+width="20rp"
+height="20rp"
+accname="ProgressBar"
+accrole = "ProgressBar"
+/>
+</Element>
+<Element layout="borderlayout()" id="atom(CallNumber)">
+<Element id="atom(CallNumberLayout)" layout="borderlayout()" layoutpos ="top">
+<Element layoutpos="top" height="8rp"/>
+<Richtext id="atom(Instructions)" class ="norm_text" layoutpos ="top" contentalign="wrapleft"/>
+<Element layoutpos="top" height="50rp"/>
+<Element layout="borderlayout()" id="atom(CallNumbersLabel)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Element layout="borderlayout()" id="atom(TollFreeLabelLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(TollFree)" class ="pwl_label" layoutpos ="left" contentalign="wrapleft"/>
+</Element>
+<Element layout="borderlayout()" id="atom(NumberLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(Number)" class ="pwl_number" layoutpos ="left" contentalign="wrapleft" padding="rect(0,0,0,0)" />
+</Element>
+<Element layoutpos="top" height="25rp"/>
+<Element layout="borderlayout()" id="atom(TollNumberLabelLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style" padding="rect(0,0,0,0)" >
+<Richtext id="atom(TollMain)" class ="pwl_label" layoutpos ="left" contentalign="wrapleft"/>
+</Element>
+<Element layout="borderlayout()" id="atom(TollNumberLayout)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(TollNumber)" class ="pwl_number" layoutpos ="left" contentalign="wrapleft" padding="rect(0,0,0,0)" />
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(Numberlayout)"  sheet="PWL_style" layoutpos = "top">
+<Element layoutpos="top" height="20rp" sheet="PWL_style"/>
+<Richtext id="atom(IIDText)" class ="pwl_label" layoutpos ="top" contentalign="wrapleft" padding="rect(0,0,0,0)"/>
+<Element layoutpos="top" height="7rp" sheet="PWL_style"/>
+<Element layout="borderlayout()" id="atom(ElementOne)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(0,0,0,0)">
+<Richtext id="atom(Number1)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID1)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementTwo)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number2)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID2)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementThree)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number3)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID3)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementFour)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number4)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID4)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementFive)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number5)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID5)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0rp,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementSix)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number6)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID6)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementSeven)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number7)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID7)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementEight)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number8)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID8)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementNine)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(5rp,0,0,0)">
+<Richtext id="atom(Number9)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,0)"/>
+<Richtext id="atom(IID9)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,8rp,0,0)"/>
+</Element>
+</Element>
+<Element layoutpos="top" height="25rp"/>
+</Element>
+<Element layout="borderlayout()" id="atom(PrivacyLayout)" layoutpos = "bottom">
+<TouchHyperLink layoutpos ="bottom" class ="pwl_touch_hyper_link" id = "atom(PrivacyLink)" accessible = "true" active="mouse|keyboard|pointer"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(EnterNumber)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(InstructionsCID)" class ="norm_text" layoutpos ="top" contentalign="wrapleft"/>
+<Element layoutpos="top" height="38rp"/>
+<Element layout="borderlayout()" id="atom(ErrorMessage)" layoutpos = "top" contentalign = "wrapleft" sheet="PWL_style">
+<Element    id="atom(CIDEditLabelWrapper)"
+layout      = "verticalflowlayout(0, 0, 0, 0)"
+layoutpos   = "top"
+minsize     = "size(0rp,5rp)"
+>
+<RichText id        = "atom(ErrorCID)"
+class      = "norm_text"
+layoutpos   = "top"
+foreground="ImmersiveStartInlineErrorText" 
+/>
+<RichText id         ="atom(CIDEditLabel)"
+class      ="moset_control_description"
+layoutpos  ="top"
+/>
+</Element>
+</Element>
+<Element layoutpos="top" height="13rp"/>
+<Element layout="borderlayout()" id="atom(Textboxes)" layoutpos = "top" contentalign = "wrapleft">
+<Element layout="borderlayout()" id="atom(ElementA)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style">
+<Richtext id="atom(LetterA)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper1)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 10rp, 0rp)"
+contentalign="middlecenter"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit1)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+layoutpos="top"
+contentalign="middlecenter"
+height="32rp"
+active="mouse|keyboard|pointer"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementB)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterB)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper2)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit2)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementC)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterC)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper3)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit3)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementD)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterD)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper4)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit4)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementE)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterE)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper5)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit5)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementF)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterF)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper6)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit6)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementG)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterG)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper7)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit7)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>
+</Element>
+<Element layout="borderlayout()" id="atom(ElementH)" layoutpos = "left" contentalign = "wrapleft" sheet="PWL_style" padding="rect(10rp,0,0,0)">
+<Richtext id="atom(LetterH)" class ="norm_text" layoutpos ="top" contentalign="middlecenter" padding="rect(0,0,0,8rp)"/>
+<Element    id="atom(CIDEditWrapper8)"
+layout      = "borderlayout()"
+layoutpos   = "top"
+active="pointer"
+margin="rect(0rp, 0rp, 0rp, 0rp)"
+behaviors="TouchID::TouchConfirmationID()"
+>
+<TouchEdit2 id="atom(CIDEdit8)"
+accessible="true"
+accrole="Text"
+direction="0"
+maxlength="6"
+PromptWithCaret="true"
+layoutpos="top"
+height="32rp"
+active="mouse|keyboard|pointer"
+contentalign = "middlecenter"
+behaviors="Windows.UI.Popups::TouchEditContextMenu()"
+width="75rp"
+enabled="true"/>
+</Element>          
+</Element>
+</Element>
+</Element>
+</Element>
+</duixml>

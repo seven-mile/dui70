@@ -2,6 +2,12 @@
 
 从 Windows 11（build 26100）System32 中 64 个 DirectUI 消费者 PE 文件里系统性提取的 **149 个 UIFILE 资源**，全部还原为可读 XML。这是 duixml（DirectUI 声明式 UI 标记）的真实写作语料：控制面板页面、对话框、引导菜单、锁屏、任务栏弹窗、相机界面等，全部出自微软各产品团队之手。
 
+## 本库是什么、给谁用
+
+- **它是什么**：系统 PE 内嵌 UIFILE 资源的全量快照——duixml 写法的"真实世界语料"。`docs/duixml-tutorials/` 教程系列中所有语料统计（标签频次、类使用分布、值表达式函数计数、样式引用模式）全部出自本库；教程正文引用的每一份 XML 实例都能在这里按路径找到。
+- **它不是什么**：不是可构建的源码，不是 UI 测试套件。149 份 XML 仅供阅读、检索、统计——想运行它们需要宿主 DLL 的运行时配合（`resstr()` 字符串、`attach` 回调、宿主注册标签都在各自的 DLL 里）。
+- **怎么检索**：按目录名找来源 DLL（如 `WebcamUi/`），文件名即资源名（`UIFILE_200.xml` = 资源 UIFILE/200）。文件头元数据注释标注了来源模块、资源名/语言、原始大小与还原方式，grep `source:` 即可反查。
+
 ## 数字总览
 
 | 指标 | 数值 |
@@ -13,7 +19,7 @@
 | 还原成功率 | **149 / 149 = 100%** |
 | 原始资源总量 | 约 1.6 MB |
 
-提取范围：`.local/audit/dll-consumer-scan.txt` 列出的全部 109 个 dui70/duser 消费者（加载器扫描得出），加 dui70.dll、duser.dll 本体。duib（二进制 BML 压缩格式）使用自制解码器还原（格式细节见下文"duib 二进制格式"一节），解码器输出已与 `docs/duixml/` 中既有的手工文本（IMMERSIVESTYLES、duser.dll.xml）逐字节核对一致。
+提取范围：`.local/audit/dll-consumer-scan.txt` 列出的全部 109 个 dui70/duser 消费者（加载器扫描得出），加 dui70.dll、duser.dll 本体。duib（二进制 BML 压缩格式）使用自制解码器还原（格式细节见下文"duib 二进制格式"一节）；解码器输出与 `docs/duixml-corpus/verified-handextract/` 里的早期手工文本核对一致（**去掉元数据头、BOM、末尾换行后逐字节相等**，3/3；差异形态见"相关材料"节）。
 
 ## 目录结构
 
@@ -31,6 +37,8 @@ docs/duixml-corpus/
 ├── wscapi/              ← 安全中心通知（12 个）
 ├── autoplay/ bdeunlock/ fvecpl/ werconcpl/ ...（其余 56 个来源）
 ```
+
+完整清单：每份文件的元数据头注释即自描述；如需程序化处理，`.local/corpus/manifest.json` 有 149 条的结构化记录（DLL、资源名、语言、大小、形态）。
 
 ## duixml 语法模式总结（从 149 个真实语料归纳）
 
@@ -166,17 +174,59 @@ stringChunk: chunkSize(u32) stringsCount(u32) 偏移表(u32×N，实际未用) �
 
 5. **[WebcamUi/UIFILE_200.xml](WebcamUi/UIFILE_200.xml)** —— 相机界面主布局（duib 解码）。TouchScrollViewer 虚拟化（`behaviors="DUI70::TSVEnableVirtualization()"`）、Zoom/Snap 手势参数、`PVL::AnimationTrap()` 动画、ModernProgressRing 捕获指示，展示触摸时代的复杂交互全用声明完成。
 
-## 提取方法（可复现）
+## 提取方法与复现（可复现）
 
-1. 枚举：解析 PE 资源目录（`.local/corpus/enumres.py`），找 `UIFILE` 类型条目（注意 dui70 的两个是**命名资源** IMMERSIVESTYLES/SYSTEMSETTINGSSTYLES，不是数字 ID）
-2. 分类：读资源头 4 字节，`duib` = 二进制，`<duixml`/`<?xml` = 明文
-3. 解码：duib 走上文格式说明；明文直接保存
-4. 归档：每个文件加元数据头注释入库
+1. **候选清单**：`.local/audit/dll-consumer-scan.txt`（109 个 dui70/duser 消费者，按导入表扫描得出）+ dui70/duser 本体 = 111 个 PE。逐一解析 PE 资源目录，枚举全部资源类型后过滤出 UIFILE 条目。
+2. **边界实证（explorer）**：scan 的 missing 列表仅 explorer.exe 一项（不在 System32 直下）。实测：explorer.exe 本体资源极稀薄（EnumResourceTypesW 返回 0 个类型，LoadLibraryExW AS_IMAGE_RESOURCE）；ExplorerFrame.dll 在 scan-all.json 有完整条目——3 个资源、**0 个 UIFILE**。即 explorer.exe 与 ExplorerFrame.dll 均无 UIFILE（实测），DirectUI 语料天然不含 explorer 桌面（Win10+ 桌面走 immersive shell/dwm，不走 dui70 的 UIFILE 体系）。
+3. **资源类型考古注记**：UIFILE 不是 Win32 标准 RT_* 类型，而是**自定义命名资源类型**——资源目录里以 UTF-16 字符串 "UIFILE" 而非数字 ID 出现（所以 dumpbin /headers 看不到它，必须走资源目录树或 `FindResource(h, name, L"UIFILE")`）。名称层同样有数字 ID（多数，如 101/201/600）与命名资源（少数，如 dui70 的 IMMERSIVESTYLES/SYSTEMSETTINGSSTYLES、AuthBrokerUI 的 DUI_LAYOUTFILE）两种形态，归档时统一映射为 `UIFILE_<名>.xml` 文件名。
+4. **形态分类**：读资源头 4 字节——`duib` 魔数 = 二进制（15 个），`<duixml` / `<?xml` 前缀 = 明文（134 个）。
+5. **duib 解码**：按下文"duib 二进制格式"规格还原为 XML。
+6. **归档**：每份 XML 前置元数据注释（来源模块、资源名/语言、原始大小、还原方式）。
 
-数据快照：Windows 11 26100（x64，dui70.dll 10.0.26100.8875 系）。系统更新后资源可能变化。
+复现脚本与底稿（`.local/` 为 git-ignored 工作区存档，不在库内，但路径稳定）：
+
+- `.local/corpus/enumres.py` —— PE 资源目录枚举器（纯 Python，无外部依赖）
+- `.local/corpus/duib2xml.py` —— duib v5 解码器（解码语义参考 DuiTool 项目的 duib 阅读器结构，公共串表取自其 BDXCommonStringTable；输出与 `docs/duixml-corpus/verified-handextract/` 的手工文本核对一致，差量仅为元数据头/BOM/末尾换行）
+- `.local/corpus/raw/<dll>/<资源名>.bin` —— 原始资源字节（含 15 个 duib 二进制原件，解码前状态）
+- `.local/corpus/manifest.json` / `archive-results.json` —— 149 条资源的 DLL/名称/大小/形态清单
+- `.local/corpus/syntax-stats.json` / `ref-stats.json` / `class-usage.json` —— README 与教程系列引用的全部频次统计的底稿
+
+数据快照：Windows 11 26100（x64，dui70.dll 10.0.26100.8875 系）。系统更新后资源可能变化；如需对比其他 build，重跑上述脚本即可。
+
+## 行尾口径
+
+**XML 正文的内容 = 资源里的字节；行尾统一为 LF。** 本库在仓库中一律以 LF 存储
+（`.gitattributes`：`docs/duixml-corpus/** text eol=lf`），任何平台检出的字节相同。
+
+提取时明文资源按原字节保存，其行尾是 PE 资源里的原貌：**112 个文件是单一 CRLF
+（`\r\n`），另有 36 个是资源作者写下的双 CRLF（`\r\r\n`）**——例如
+`CertEnrollUI/UIFILE_130.xml`（1879 处）、`bdeunlock/UIFILE_201.xml`（249 处）、
+`wscapi/UIFILE_6010..6062.xml`。全部 36 个的双 CRLF 都逐一与 PE 资源字节核对过。
+duib 解码输出的 XML 统一为 CRLF。
+
+**入库时把这些行尾折叠为 LF**（`\r+\n` → `\n`）。这一步必须显式做，**不能只靠
+git 的 `text` 属性**：git 的 clean filter 是单趟 `\r\n` → `\n`，遇到 `\r\r\n` 只会
+删掉紧邻 LF 的那一个 CR、留下一个 CR——那正是 36 个文件在 diff 里显示 `^M` 的原因。
+折叠是安全的：全库不存在"不属于行尾的孤立 CR"（CR 只以 `\r\n`/`\r\r\n` 形态出现），
+所以折叠**不动任何标签、属性或文本字节，也不改变行数**——教程里
+`UIFILE_xxx.xml:NNN` 形式的行号引用（49 处，已逐条核对）在折叠前后指向同一行。
+
+> 想看**未经任何行尾处理**的资源原始字节，以 `.local/corpus/raw/<PE>/<资源号>.bin`
+> 为准（149 份快照，含 15 个 duib 二进制原件）。
+
+## 与教程系列的关系
+
+`docs/duixml-tutorials/`（24 篇）的语料侧全部建立在本库上：
+
+- **标签频次统计**（如 03 篇"154 个语料标签无对应类的开放 schema"、13 篇"borderlayout 65% 统治"）——出自本库全量标签计数（底稿 `.local/corpus/class-usage.json`）
+- **类使用分布**（54/179 类在语料出现 vs 125 仅 API）——出自本库标签 × `pinned/classes.json` 交叉
+- **XML 实例引用**——教程引用的每一份实例文件都指向本库的具体路径
+- **证据等级惯例**——教程系列全系列统一：**【实锤】**=反汇编/导入表/运行时观测直接证明；**【强推】**=有推断链的多方证据；**【猜想】**=合理假设并写明验证路径。本 README 中的语料实测数字（频次表、目录结构）均为语料库直接计数，对应教程语境下的**【实锤】**级。
 
 ## 相关材料
 
-- `docs/duixml/` —— 早期手工提取的 6 份样例（本语料库是其超集，且 duib 解码与之核对一致）
+- `docs/duixml-tutorials/` —— 教程系列（语料统计的消费方），其 README 有全系列索引
+- `docs/duixml-corpus/verified-handextract/` —— **早期手工提取的验证靶子**（3 份：`IMMERSIVESTYLES.xml`、`duser.dll.xml`、`SYSTEMSETTINGSSTYLES.xml`）。它们的解码独立于本库提取器、由人手读出，因此用作交叉验证。对应的 3 份本库文件（`dui70/UIFILE_IMMERSIVESTYLES.xml`、`duser/UIFILE_1010.xml`、`dui70/UIFILE_SYSTEMSETTINGSSTYLES.xml`）与之**逐字节一致**，只差三项确定且可复核的差异：本库文件多一个元数据头注释（`<!-- source: ... resource: ... -->`）、手工件带 UTF-8 BOM 而本库不带、本库文件末尾多一个换行。即：**去掉元数据头、BOM、末尾换行后逐字节相等**（3/3 已验证）。另有 3 份早期手工文本（AuthBrokerUI、dpapimig、shellstyle）在本库中**没有**对应物、也无逐字节断言，随旧目录一并移除。
 - `.local/audit/duser-landscape.md` §3.3 —— duser UIFILE 1010 与 dui70 解析器的关系分析
 - `.local/audit/dll-consumer-scan.txt` —— 109 个消费者的完整清单（扫描了全部，64 个有 UIFILE）
+- `.local/audit/duixml-tutorials-outline.md` —— 教程系列的全景 outline（family 分组 × 语料证据标注的分工底稿）

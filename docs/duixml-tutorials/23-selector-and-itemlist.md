@@ -23,7 +23,7 @@ Element → Repeater(: Macro;数据模板引擎)          ← 本文 §6 简述
 | WrappingList | 0(标签层;dui70 样式表 2 处按 id 命中) | —(由 TouchSelect 内部创建) |
 | repeater | 5 | fvecpl(全部) |
 
-(频次实测 `.local/corpus/class-usage.json`;继承链 `docs/SelectorClass.g.txt`/`ItemListClass.g.txt`/`WrappingListClass.g.txt`。)
+(频次实测 `.local/corpus/class-usage.json`;继承链 `docs/duixml-classinfo/SelectorClass.g.txt`/`ItemListClass.g.txt`/`WrappingListClass.g.txt`。)
 
 一个诚实的开场:**这个家族在语料里是稀有动物**。Selector 只有 14 处,SelectorNoDefault 全语料 1 处——因为大多数"列表"场景走了别的路(CCListView 寄生系统控件、Repeater 数据模板、或宿主 C++ 侧动态构建)。但 Selector 家族的机制恰恰是理解 DirectUI"选择语义"的钥匙:它把"选中"实现为一个**指向子元素的属性**,这个设计贯穿了 UIA 的 SelectionProvider 桥(`05-uia-pattern-providers.md` §4 的 SelectorSelectionProxy/SelectorSelectionItemProxy 特化)。
 
@@ -334,7 +334,7 @@ ItemList::GetAdjacent(0x1800B3F10):方向参数 bit0==1(纵向?)→ 调 Selector
 
 | 结论 | 证据 | 位置 |
 |---|---|---|
-| Selector/ItemList/WrappingList 继承链 | .g.txt | docs/SelectorClass.g.txt、ItemListClass.g.txt、WrappingListClass.g.txt、RepeaterClass.g.txt |
+| Selector/ItemList/WrappingList 继承链 | .g.txt | docs/duixml-classinfo/SelectorClass.g.txt、ItemListClass.g.txt、WrappingListClass.g.txt、RepeaterClass.g.txt |
 | 标签频次(14/1/5/5) | 语料统计 | .local/corpus/class-usage.json |
 | SetSelection = CreateElementRef + _SetValue(SelectionProp) | 反汇编 | 0x18007C130(CreateElementRef 0x18003C140;失败 0x8007000E) |
 | OnPropertyChanged 双分支(SelectionChange + Selected 投影;Children 悬空清理) | 反汇编 | 0x180072E20(SelectionProp 数据 0x18010A208、ChildrenProp 0x1801035D0、SelectedProp 0x18006A630、EventMsg 0x83FE @0x180072F2C、DUserSendEvent IAT 0x180195088、_RemoveLocalValue 0x180031070) |

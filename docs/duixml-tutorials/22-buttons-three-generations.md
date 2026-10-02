@@ -13,7 +13,7 @@
 | 文本引擎 | GDI DrawText 系(`08-ptext-and-the-old-text-era.md`) | 控件 HWND 自己画 | RichText/DWrite 管线(`07-richtext-and-the-dwrite-bridge.md`) |
 | 使用者画像 | 老控制面板/向导/对话框(26 个 DLL) | 控制面板全家桶(22 个 DLL) | Win8+ 现代 UI:bootux、msctfuimanager、InputSwitch、WebcamUi、bdeunlock… |
 
-(标签频次均为语料实测,`.local/corpus/class-usage.json`;继承链来自 `docs/*.g.txt` + symbols.json vtable 验证。)
+(标签频次均为语料实测,`.local/corpus/class-usage.json`;继承链来自 `docs/duixml-classinfo/*.g.txt` + symbols.json vtable 验证。)
 
 一个直接印象:**三个家族不是前后替代,而是长期共存**——duser.dll 的公共样式表(2009 年代)同时定义 pushbutton 与 CCHScrollBar;bootux(2012)同时用 TouchButton(96 处)和 BUXButton;今天的 dui70 里三套代码都在。
 
@@ -23,7 +23,7 @@
 
 ### 1.1 类表面与继承链
 
-从 symbols.json + `docs/*.g.txt` 实测的继承结构:
+从 symbols.json + `docs/duixml-classinfo/*.g.txt` 实测的继承结构:
 
 ```
 Element
@@ -291,7 +291,7 @@ PushButton::GetContentSize(0xD7F70)不走 Element 基类的 DrawTextW DT_CALCREC
 
 ### 3.1 继承革命:基类从 Element 换成 RichText
 
-三代最大的结构差异在继承根:`docs/TouchButtonClass.g.txt` 实测:
+三代最大的结构差异在继承根:`docs/duixml-classinfo/TouchButtonClass.g.txt` 实测:
 
 ```
 Element → RichText → TouchButton
@@ -458,19 +458,19 @@ TouchButton 方法数翻倍的主因:**输入设备的显式三分**(Win8 pointe
 | 结论 | 证据 | 位置 |
 |---|---|---|
 | 三代标签频次(1732/194/379 等) | 语料正则统计 | `.local/corpus/class-usage.json` |
-| 一代继承链(Button→accessiblebutton→autobutton→pushbutton 等) | .g.txt + symbols.json | `docs/ButtonClass.g.txt`、`docs/AutoButtonClass.g.txt` 等 |
+| 一代继承链(Button→accessiblebutton→autobutton→pushbutton 等) | .g.txt + symbols.json | `docs/duixml-classinfo/ButtonClass.g.txt`、`docs/duixml-classinfo/AutoButtonClass.g.txt` 等 |
 | AutoButton::OnEvent 按 AccRole 翻转 | 反汇编 | 0x1800D7BD0(subl 0x2c/0x2d 分支、notb、SetSelected) |
 | AccessibleButton c_rgar 5 项角色表(43/44/45/64/30) | .rdata dump | 0x180122A80,每项 0x14 字节 |
 | CCBase::CreateHWND = CreateWindowExW + 子类化 | 反汇编 | 0x18002BD50 → thunk 0x18002BDD8 → IAT 0x180119468(iat_map.txt: USER32!CreateWindowExW);AttachCtrlSubclassProc 0x18002BF80 |
 | CC* 16 类的 Win32 类名与默认 style | 各 ctor 反汇编 + UTF-16 直读 | CCPushButton 0x180086200('Button', 0x50000000)、CCRadioButton 0x1800DB950(0x50002409)、CCSysLink 0x1800DB9A0(0x50000001)、CCTrackBar 0x1800DB9F0(0x50001000)、CCAVI 0x1800DB860、CCListBox 0x1800DB8B0、CCListView 0x1800DB900、CCTreeView 0x1800A8400('SysTreeView32')、CCCommandLink 0x1800A81E0(0x50002000)、CCBaseCheckRadioButton 0x1800A8060、CCVScrollBar 0x180093A60(0x50000001)、CCProgressBar 0x18008EED0、CCHScrollBar 0x180089420、CCBaseScrollBar 0x18007D520('ScrollBar');字符串地址 0x11F5A8/0x1230B8/0x123E88/0x128E38/0x128E78/0x128E88/0x128EA8/0x128EC8/0x126788 |
 | WinStyle 属性 XML 直用 | 语料 | UserAccountControlSettings/UIFILE_203.xml:153 `WinStyle="0x0000021A"` |
 | CCBase GetWinStyle 读属性 | 反汇编 | 0x18002BF40 → GetValue(WinStyleProp@0x81010) |
-| TouchButton : RichText | .g.txt | docs/TouchButtonClass.g.txt:2 |
+| TouchButton : RichText | .g.txt | docs/duixml-classinfo/TouchButtonClass.g.txt:2 |
 | TouchButton 点击状态机(OnInput 分发/_FinishClick/FireClickEvent cmovne) | 反汇编 | 0x180064930 / 0x180064A58 / 0x180083190 |
 | TouchCheckBox 三重门控翻转 | 反汇编 | 0x1800BBE80(phase/sender/UID/ToggleOnClick/CheckedState) |
 | TouchRepeatButton 定时器三件套 + 50ms(0x3D4CCCCD) | 反汇编 | 0x1800BCA98 / 0x1800BC5B0 / 0x1800BC710(RepeatClick UID 0x1800BC210) |
 | TouchSwitch 组合结构(子树创建 + 改名五件套 + SliderUpdated 监听) | 反汇编 | Initialize 0x1800D2A80、OnEvent 0x1800D3010、SyncOnOffText 0x1800D36B0 |
-| TouchSwitch : Element(非 TouchButton) | .g.txt | docs/TouchSwitchClass.g.txt:2 |
+| TouchSwitch : Element(非 TouchButton) | .g.txt | docs/duixml-classinfo/TouchSwitchClass.g.txt:2 |
 | bootux BUXButton = 宿主工厂 | 引用 | `03-host-registered-tags.md` §4(attach 275 处、81/81 工厂验证) |
 | duser 公共样式表一代五态/复选/单选皮肤 | 语料 | duser/UIFILE_1010.xml:47-62/63-97/123-146 |
 | 一代 pushbutton 文本测量 GdiGetCharDimensions | 引用(P2 交接) | PushButton::GetContentSize 0xD7F70,调用点 0x1800D7FF6 |

@@ -192,6 +192,21 @@ DirectUI/
 顺序纪律：任何验证前必须 regen → lib.exe → 重链 exe（陈旧产物会假 PASS，
 verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝对路径。
 
+### 5.1 为什么是 `AdditionalIncludeDirectories` 而不是 `ProjectReference`
+
+迁移前 `UITest.vcxproj` 用 `ProjectReference` 指向**手写的** `DirectUI.vcxproj`，那是
+"DirectUI 是源码项目"时代的形态。该 vcxproj 已在 `dd1fd41` 删除，而且**生成树里
+根本不存在 vcxproj**——`DirectUI/` 是 `emit_headers.py`/`emit_stub.py` 的产物，随
+`regen.py` 整体重写，往里面放 vcxproj 会被下次 regen 抹掉。
+
+所以迁移后正确的形态只有一个：把 `DirectUI\include` 放进
+`AdditionalIncludeDirectories`、把 `dui70.lib` 作为链接输入（`DirectUI\dui70.def`
+经 `lib.exe` 生成，见 §5）。引用一个不存在的项目文件不是"更规范"，是坏的。
+
+另外注意：**CI 的 smoke 路径根本不经过 `UITest.vcxproj`**——`run.ps1` 调
+`gen_uitest_proj.ps1` 直接驱动 `cl.exe`/`link.exe`（见该脚本头注释及 `CI.md` §5.4）。
+因此 vcxproj 只服务本机 VS 用户，它是否过时不影响 CI 结论。
+
 ## 5. 使用者指南（DirectUI/README.md 摘要）
 
 ```cpp

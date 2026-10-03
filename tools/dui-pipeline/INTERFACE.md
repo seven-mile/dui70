@@ -29,6 +29,7 @@ pinned/
   symbols.json          符号模型（emit_headers/emit_stub 的唯一输入）
   classes.json          目标类清单 + 继承表（覆盖成本显式化）
   class-inventory.csv   类名普查（来自旧 build 的白名单，供 model.py 分类用）
+  vtable-slots.json     虚表槽位真值（J1 门禁输入；DLL+symbols 纯函数）
 ```
 
 ### 1.0 `class-inventory.csv` 是什么（不是生成依据，是分类 hint）
@@ -155,6 +156,47 @@ pinned/
 ```
 
 生成器为无状态纯函数。扩类 = 改此文件 + regen（覆盖成本显式化、可 review）。
+
+### 1.5 vtable-slots.json（J1 门禁的真值；**DLL bytes + symbols.json 的纯函数**）
+
+```json
+{
+  "schema": 1,
+  "classes": {
+    "Button": {
+      "rva": "0x00107F18",
+      "slots": ["_EButton",
+                ["IsRTL", "IsRTLReading"],
+                ["IsContentProtected", "IsMSAAEnabled", "OnCustomDraw"],
+                "GetContentStringAsDisplayed",
+                "OnPropertyChanging"]
+    }
+  },
+  "icf_groups": {"0x00104ED0": ["HWNDElementProvider", "TouchSelectPopupProvider"]}
+}
+```
+
+**性质（这是它作为契约的真义）**：
+
+- **纯函数、可重推导**：输出 = `dui70.dll 字节` + `pinned/symbols.json` 的
+  纯函数（`extract-vtable-slots.py`）。**不读** `DirectUI/include/**`
+  （读了自己要检测的排序 bug 就继承 bug）、**不读** `classes.json`
+  （hand-curated、不可重推导）。它**不是手写真值表**：repro 门禁 **R3'**
+  重推导并**逐字节比对**——手改表再重签 `pinned.sha256` 也逃不过 R3'
+  （G1 只证"与签名一致"，无外部真值；原型实测过这条攻击路径）。
+- **每槽恰一个元素，位置 == slot 序号**：`"Name"`（唯一解析）/
+  `["N1",...]`（ICF 多候选，**取并集**，绝不取 `[0]`）/
+  `[]`（未解析：thunk/int3/unknown）。`len(slots)` 恒等于真实槽数，
+  结构上不可能发生序列位移。
+- **icf_groups 是派生不是声明**：按 `rva` 等值分组（当前 4 组 / 9 类）。
+  **没有 icf-groups.json 豁免表**——门禁读一张不受重推导约束的手写豁免表
+  是新漏洞（把 103 类全写进去就能让 J1 空过）。改 rva 伪造共享关系会被
+  R3' 抓住。
+- **规模**（26100 pin）：175 类 / 4645 槽 / 830,595 B；ModernProgressBar
+  超 400 槽上限会**截断并打印告警**（绝不静默）。
+- **刷新流程**：换 DLL 版本后 `extract-vtable-slots.py --slots
+  pinned/vtable-slots.json` 重跑 + `ci_checks.py hash --write` 重签
+  （与产物同 commit）。
 
 ## 2. DirectUI/ —— 产品（golden）
 

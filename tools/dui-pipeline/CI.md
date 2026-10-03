@@ -82,6 +82,7 @@ python tools\dui-pipeline\ci_checks.py headers --help   # G5
 | **G3** | 结构性断言 | 生成树与 `classes.json` **精确一致** | 类数 + 每类产物双向相等 | 无 |
 | **G4** | ABI 保真 | 编译出的装饰名 vs `pinned/` 导出表 | modname N/N、extern-C N/N | MSVC |
 | **G5** | 头文件可编译 | 抽样头文件语法自洽 | `cl /Zs` rc=0 | MSVC |
+| **J1** | 虚表槽序（report-only） | 类头虚函数声明序 vs 真实 vtable 槽序 | verdict 记录进日志/artifact，exit 0（见 §2.7） | 无 |
 | **GB** | 时长预算 | 门禁不能悄悄变慢/变不稳 | 全链 < `-SecondsBudget`（默认 600s） | 无 |
 
 实测本机全量约 **60 秒**（G4 编译 190 个 TU 占 54s）。
@@ -156,6 +157,45 @@ python tools\dui-pipeline\ci_checks.py totals --json
 
 超预算时报出**最慢的门禁**。超预算通常不是"机器慢"，而是某个门禁变得
 不确定（联网、全量重编、杀软扫描）—— 那才是要查的。
+
+### 2.7 J1 —— 虚表槽序（**report-only 过渡态**）
+
+**背景**：生成器把类头虚函数按 symbols.json 字母序输出（`model.py:760`
+`sorted(all_names)` → `emit_headers.py` 按该序分段），而 C++ 的 vtable 槽序 =
+**声明序**。实测 **103 个可判定类中 82 个**头声明序与真实 vtable 槽序不同
+（W5：消费方经生成头调虚函数读错槽）。G4 只验**名字集**，对槽序不设防 ——
+J1 补的正是这条缝。
+
+**真值**：`pinned/vtable-slots.json`，见 §7 的 R3'。它**不是手写表**：
+`extract-vtable-slots.py` 的输出是 `dui70.dll 字节 + pinned/symbols.json`
+的**纯函数**（不读 `DirectUI/include/**`、不读 `classes.json`），由 repro
+门禁 R3' 重推导并**逐字节比对**。手改表再重签 `pinned.sha256` 也逃不过
+R3'（G1 单独看不见这类篡改，原型实测过）。
+
+**判据**（别名中性，对 ICF 免疫）：槽指针 RVA 反查 symbols.json **取候选
+并集**（ICF 让一个槽对上多个名字，Button slot2 = 16 个符号）；头声明与真
+实槽**交集**内比对**相对序**。生成器注入的合成虚函数（`IProvider::AddRef`、
+`On<cls>Virt`）**自动**被交集剔除 —— **没有硬编码豁免表**（名字表会把
+`ClassInfoBase` 的真实 `AddRef` 一起删掉，原型实测判定数 103→42）。
+
+**覆盖漏斗**（门禁必须逐层打印，防"175 全保真"误读）：
+
+```
+175 primary vftable 类 − 46 无头 → 129 − 8 ICF 共享(派生) → 121 − 18 无可判序 → 103 判定
+当前: same 21 / DIFFERENT 82
+```
+
+**report-only 语义**（`-SkipJ1` 可跳过）：verdict 照实打印
+`GATE J1: REPORT-ONLY: FAIL`，完整报告（漏斗/ICF 分组/未解析槽/被剔除声明
+及原因/逐类差异）写 `--json-out` artifact；**exit 0**。已知缺口不阻断
+当前 PR；切 fail-closed 是排序修复（P2）之后的独立决定。verdict **绝不**
+被打印成 PASS。
+
+**负控**（原型实测 7/7，见 `.local/audit/abi-gate-runbook.md`）：对调
+Button 两声明→FAIL 指名；删表条目→FAIL(missing)；空表→FAIL（集合相等
+不变量 + `--min-judged 103` 地板）；注入假类→FAIL；坏 JSON→exit 2；
+截断表→FAIL（覆盖率）；**Button 按真实槽序重排（内容不变）→ FAIL→PASS**
+—— 双向证明门禁测的是**顺序**，也证明"补全声明"修不好 W5。
 
 ---
 
@@ -474,9 +514,21 @@ pwsh -File tools\dui-pipeline\repro.ps1
 | **R1** | ①`dll.source_url` 与 `pdb.source_url` 都存在且是合法 msdl 形态 ②两份下载的 sha256/size == manifest（**硬断言，绝不静默接受别的修订**——19041 的教训）③DLL 的 PE 头现算槽位 == URL 里的槽位 ④DLL 内 RSDS 现算的 PDB 槽位 == URL 里的槽位 |
 | **R2** | ⑤**DLL 旁没有同名 PDB**（见 §7.3）⑥`llvm-pdbutil dump -publics` 成功且非空 ⑦`extract.py` 重推的 `exports.json` **逐字节相同** ⑧manifest 的 dll `sha256`/`size`/`arch` 与 pdb `sha256`/`size`/`guid`/`age` 全部一致 ⑨`model.py` 用**实测形态**确认过的 LLVM `undname` 重推 |
 | **R3** | ⑩重建的 `symbols.json` 与已提交版 **逐字节相同**（11983 行） |
+| **R3'** | ⑪`extract-vtable-slots.py` 重推的 `vtable-slots.json` 与已提交版**逐字节相同**（175 类 / 4645 槽） |
 
 `classes.json` 有意**不**参与比对：它是人工策展的 pinned 输入（195 类），
 不是 `model.py` 从 DLL/PDB 推导出来的东西，要求"重建"它是概念错误。
+
+**R3' 为什么必需（G1 单独不够，原型实测）**：`vtable-slots.json` 是 J1 的
+真值表。G1 只证明"文件与签名时一致"，**没有外部真值**——手改表里 3 处
+`AddRef`→`Release` 再**顺手重签 `pinned.sha256`**，G1 照样通过，而 J1 的
+判定已被改变（"G1 + 重签名 = 手写表木马"）。R3' 复用 R1 已下载并校验过的
+DLL 重新派生、逐字节比对，改一个字都逃不掉。它**绝不**继承 `classes.json`
+的豁免：这张表是 DLL 的**函数**，不是人工输入。
+
+**R3' 的输入边界（与 `extract-vtable-slots.py` 一致）**：只读 DLL 字节 +
+`pinned/symbols.json`；**不读** `DirectUI/include/**`（会继承它要检测的
+排序 bug）、**不读** `classes.json`（不可重推导）。
 
 ### 7.2 符号服务器地址的规范形态（易错点）
 

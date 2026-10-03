@@ -595,6 +595,76 @@ def compare_symbols(pinned: pathlib.Path, reb: pathlib.Path, n_publics: int) -> 
     return 1
 
 
+# ------------------------------------------------------------------- gate R3'
+def compare_vtable_slots(args, dll: pathlib.Path) -> int:
+    """R3': re-derive pinned/vtable-slots.json and byte-compare it.
+
+    vtable-slots.json is a pure function of the DLL bytes + symbols.json (see
+    extract-vtable-slots.py). Unlike classes.json (hand-curated, deliberately
+    exempt), it MUST be re-derivable: a hand edit to the table changes J1's
+    verdict, and re-signing pinned.sha256 would let G1 pass anyway -- R3' is
+    what closes that hole. Tamper proof measured on the prototype: editing
+    three AddRef entries to Release diverges from re-derivation and fails here.
+    """
+    committed = args.pinned / "vtable-slots.json"
+    if not committed.is_file():
+        fail("R3'", "committed vtable-slots.json exists", "missing",
+             "the table is a pipeline artifact; regenerate it with "
+             "extract-vtable-slots.py --slots pinned/vtable-slots.json")
+        return 1
+
+    work = args.work / "r3prime"
+    if work.exists():
+        shutil.rmtree(work)
+    work.mkdir(parents=True)
+    rebuilt = work / "vtable-slots.json"
+    cmd = [sys.executable, str(HERE / "extract-vtable-slots.py"),
+           "--dll", str(dll), "--symbols", str(args.pinned / "symbols.json"),
+           "--slots", str(rebuilt)]
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=600,
+                           cwd=str(REPO))
+    except (OSError, subprocess.SubprocessError) as exc:
+        fail("R3'", "extract-vtable-slots.py re-derives the table",
+             f"{type(exc).__name__}: {exc}")
+        return 1
+    if p.returncode != 0:
+        fail("R3'", "extract-vtable-slots.py re-derives the table",
+             f"rc={p.returncode}", (p.stdout or "")[-800:] + (p.stderr or "")[-800:])
+        return 1
+
+    rb = rebuilt.read_bytes()
+    cb = committed.read_bytes()
+    if rb == cb:
+        n = len(json.loads(cb.decode("utf-8"))["classes"])
+        ok("R3'", f"vtable-slots.json re-derived byte-identically "
+                  f"({n} classes, sha256 "
+                  f"{hashlib.sha256(cb).hexdigest()[:16]}...)")
+        return 0
+
+    # Destructure the divergence for the log: which classes differ.
+    a = json.loads(rb.decode("utf-8"))["classes"]
+    b = json.loads(cb.decode("utf-8"))["classes"]
+    only_rebuilt = sorted(set(a) - set(b))
+    only_committed = sorted(set(b) - set(a))
+    cls_diff = [c for c in sorted(set(a) & set(b)) if a[c] != b[c]]
+    detail = [f"rebuilt classes={len(a)} committed classes={len(b)}",
+              f"classes differing: {len(cls_diff)}",
+              f"only in rebuilt: {only_rebuilt[:5]}",
+              f"only in committed: {only_committed[:5]}"]
+    for c in cls_diff[:6]:
+        sa, sb = a[c]["slots"], b[c]["slots"]
+        detail.append(f"  {c}: rebuilt {len(sa)} slots vs committed {len(sb)}")
+        for k in range(min(len(sa), len(sb))):
+            if sa[k] != sb[k]:
+                detail.append(f"    slot {k}: rebuilt={json.dumps(sa[k])[:90]}")
+                detail.append(f"             committed={json.dumps(sb[k])[:90]}")
+                break
+    fail("R3'", "vtable-slots.json re-derived byte-identical to committed",
+         "differs", "\n".join(detail))
+    return 1
+
+
 # ------------------------------------------------------------------------ main
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
@@ -623,6 +693,13 @@ def main(argv=None) -> int:
     print("R2  re-derive pinned/ in an isolated dir (DLL + PDB publics)")
     print("=" * 74)
     if check_rebuild(args) != 0:
+        return 1
+    print()
+    print("=" * 74)
+    print("R3' re-derive pinned/vtable-slots.json (DLL bytes + symbols.json)")
+    print("=" * 74)
+    inputs = json.loads((args.work / "inputs.json").read_text(encoding="utf-8"))
+    if compare_vtable_slots(args, pathlib.Path(inputs["dll"])) != 0:
         return 1
     print()
     print("ALL REPRO ASSERTIONS PASS")

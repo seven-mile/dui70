@@ -14,12 +14,20 @@
       G3  structure         classes.json class count == generated tree
       G4  ABI fidelity      modname N/N + extern-C N/N (compile-derived)
       G5  headers           random sample syntax-checked with cl /Zs
+      J1  vtable slots      report-only: slot-order verdict recorded, exit 0
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
+    (J1 is transitional: it records its verdict -- currently 82/103 classes
+    have header virtual order different from the real vtable slot order --
+    into the log and a JSON artifact without failing the run. The printed
+    verdict is "REPORT-ONLY: FAIL", never a masked PASS.)
 
 .PARAMETER SkipHeaderCheck
     Skip G5 (useful on a machine without MSVC; G4 still needs it).
+
+.PARAMETER SkipJ1
+    Skip J1 (the report-only vtable slot-order gate).
 
 .PARAMETER GoldenOnly
     Run G1+G2 only -- the fast (<20s) subset that needs neither MSVC nor a
@@ -52,6 +60,7 @@ param(
     [string]$SdkVersion,
     [switch]$SkipHeaderCheck,
     [switch]$SkipAbiCheck,
+    [switch]$SkipJ1,
     [switch]$GoldenOnly,
     [switch]$AllowDirty,
     [switch]$SelfTest,
@@ -563,6 +572,53 @@ if ($SkipHeaderCheck) {
     }
     Write-Ok 'sampled headers compile (syntax-only)'
     Add-Gate 'G5' 'headers' 'PASS' $dt
+}
+
+# --------------------------------------------------------------------- J1 vtable
+# Report-only transitional mode: the vtable slot-order gate records its verdict
+# (currently 82/103 different-order) into the CI log and a JSON artifact, but
+# exit 0 -- the known ordering debt must not redden this PR. The verdict is
+# printed as "REPORT-ONLY: FAIL" and never masked as PASS. Switching to
+# enforced mode is a separate, deliberate decision after the ordering fix.
+if ($SkipJ1) {
+    Write-Head 'J1  vtable slot-order (skipped: -SkipJ1)'
+    Add-Gate 'J1' 'vtable slot-order' 'SKIP' 0 'via -SkipJ1'
+} else {
+    Write-Head 'J1  vtable slot-order (report-only)'
+    $t0 = Get-Date
+    $slots = Join-Path $script:Repo 'pinned/vtable-slots.json'
+    $j1Json = Join-Path $WorkDir 'j1-report.json'
+    if (-not (Test-Path $slots)) {
+        $dt = ((Get-Date) - $t0).TotalSeconds
+        # Report-only still requires its INPUT to exist; a missing ground-truth
+        # table is a tooling error (exit 2 semantics), not a verdict.
+        Fail-Gate 'J1' 'vtable slot-order' `
+            'pinned/vtable-slots.json exists (derive: extract-vtable-slots.py)' `
+            'missing' @(
+                'The table is a pure function of the pinned DLL + symbols.json;',
+                'regenerate: python tools/dui-pipeline/extract-vtable-slots.py',
+                "  --dll <pinned dui70.dll> --symbols pinned/symbols.json --slots $slots") $dt
+    }
+    $r = Invoke-Tool $py @($script:Checks, 'j1',
+        '--slots', $slots, '--report-only', '--json-out', $j1Json) -Echo
+    $dt = ((Get-Date) - $t0).TotalSeconds
+    if ($r.Rc -ne 0) {
+        $tail = ($r.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+        # rc != 0 in report-only mode means a tooling/input error (exit 2), not
+        # a verdict -- that still fails the run.
+        Fail-Gate 'J1' 'vtable slot-order' `
+            'report-only gate runs (tooling rc=0; verdict recorded, not enforced)' `
+            "tooling error (rc=$($r.Rc))" $tail $dt
+    }
+    $line = @($r.Out -split "`r?`n" | Where-Object { $_ -match '^GATE J1:' } | Select-Object -First 1)
+    $verdict = if ($line) { ($line -replace '^GATE J1:\s*','').Trim() } else { 'NO VERDICT LINE' }
+    if ($verdict -notmatch 'REPORT-ONLY: (PASS|FAIL)') {
+        Fail-Gate 'J1' 'vtable slot-order' `
+            'a "GATE J1: REPORT-ONLY: <verdict>" line' "got: $verdict" `
+            @('report-only mode must print the true verdict, never mask it as PASS') $dt
+    }
+    Write-Info "verdict recorded: $verdict (artifact: $j1Json)"
+    Add-Gate 'J1' 'vtable slot-order' 'REPORT' $dt "$verdict (report-only)"
 }
 
 # ------------------------------------------------------------------- budget

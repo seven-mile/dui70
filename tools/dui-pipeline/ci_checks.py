@@ -11,6 +11,7 @@ Subcommands
     totals    derive the expected modname / extern-C totals FROM pinned data
     headers   sample N generated headers and syntax-check them with cl.exe
     selftest  self-verification of this script's own verdict logic
+    j1        vtable slot-order gate (report-only transitional mode)
 
 Exit codes: 0 = green, 1 = gate failed, 2 = usage / environment error.
 All failure detail goes to stderr in the form
@@ -24,6 +25,7 @@ import hashlib
 import json
 import os
 import random
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -507,6 +509,221 @@ def cmd_selftest(args: argparse.Namespace) -> int:
         print("SELFTEST PASS  gate logic detects corruption, addition, deletion, and "
               "tracks the contract file")
         return 0
+
+
+# ------------------------------------------------------------------------ j1
+# J1: vtable slot-order gate (report-only in CI for now).
+#
+# Ground truth: pinned/vtable-slots.json -- a pure function of dui70.dll bytes
+# + pinned/symbols.json (see extract-vtable-slots.py), re-derived and
+# byte-compared by repro.py gate R3'. It is NOT a hand table.
+#
+# Judgement (alias-neutral, ICF-proof):
+#   slot_names[k] = every symbol member name whose rva equals slot k's pointer
+#                   (a UNION over candidates -- ICF folds many names onto one
+#                   RVA; taking names[0] produced the earlier biased 63/104)
+#   allnames      = union over the class's slots
+#   hdr_own       = the class's own virtual declarations, in header order,
+#                   excluding ~C destructors
+#   resolvable    = [x in hdr_own if x in allnames]   # synthetic injections
+#                                                   # drop out automatically
+#   real_own      = resolvable names in real slot order (first occurrence)
+#   verdict       = (real_own == resolvable) and len(resolvable) >= 2
+#
+# A declaration NOT present in the class's own real slots is a generator
+# injection (IProvider::AddRef, On<cls>Virt) or a genuine omission -- either
+# way it cannot be order-checked. It is counted and reported (never silently
+# dropped), and NO hardcoded synthetic-name table is used: names like AddRef
+# are REAL members of other classes (ClassInfoBase), so a name-based exclusion
+# list would delete real members and shrank judged coverage 103 -> 42 when
+# prototyped.
+#
+# Closure invariant (anti-tamper): the table's class set must EQUAL the set of
+# primary vftables in symbols.json. symbols.json is R3-protected, so the table
+# cannot silently omit or invent classes.
+#
+# Exit codes: 0 PASS, 1 FAIL (real verdict), 2 input/usage error.
+# --report-only: keep the true verdict in output/JSON but always exit 0 (CI
+# transitional mode; the FAIL is printed as "REPORT-ONLY: FAIL", never as PASS).
+VRE_J1 = re.compile(r"^\s*virtual\s+[^;{]*?([~]?\w+)\s*\(", re.M)
+PRIM_RE_J1 = re.compile(r"^\?\?_7([A-Za-z_]\w*)@DirectUI@@6B@$")
+
+
+def _j1_die(msg: str) -> int:
+    print(f"J1: ERROR  {msg}", file=sys.stderr)
+    return 2
+
+
+def cmd_j1(args: argparse.Namespace) -> int:
+    slots_path: Path = args.slots
+    inc: Path = args.include
+    for p, what in ((slots_path, "slots table"), (args.symbols, "symbols.json")):
+        if not p.is_file():
+            return _j1_die(f"{what} missing: {p}")
+    if not inc.is_dir():
+        return _j1_die(f"include dir missing: {inc}")
+
+    try:
+        doc = json.loads(slots_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return _j1_die(f"slots table is not valid JSON: {exc}")
+    try:
+        sym = json.loads(args.symbols.read_text(encoding="utf-8"))["symbols"]
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        return _j1_die(f"symbols.json unusable: {exc}")
+
+    classes = doc.get("classes")
+    if not isinstance(classes, dict):
+        return _j1_die('slots table has no "classes" object')
+
+    # ---- closure invariant: table covers EXACTLY the primary vftables
+    truth = set()
+    for s in sym:
+        if s.get("kind") == "vftable":
+            m = PRIM_RE_J1.match(s.get("mangled") or "")
+            if m:
+                truth.add(m.group(1))
+    got = set(classes)
+    missing = sorted(truth - got)
+    extra = sorted(got - truth)
+    if missing or extra:
+        print("J1      FAIL  table/symbols mismatch")
+        if missing:
+            print(f"        missing from table ({len(missing)}): {missing[:10]}")
+        if extra:
+            print(f"        not a primary vftable ({len(extra)}): {extra[:10]}")
+        print("GATE J1: FAIL")
+        if args.json_out:
+            _j1_write_json(args, "FAIL", judged=0, total=len(classes), same=0,
+                           differ=0, icf=0, no_header=0, lowvirt=0,
+                           dropped_total=0,
+                           problems=["table/symbols mismatch"], diffs=[],
+                           funnel=None)
+        return (0 if args.report_only else 1)
+
+    # ICF exclusion DERIVED from the table's own rva grouping (no exemption table)
+    by_rva: dict[str, list[str]] = {}
+    for c, v in classes.items():
+        rva = v.get("rva")
+        if not isinstance(rva, str):
+            return _j1_die(f"class {c} has no rva string")
+        by_rva.setdefault(rva, []).append(c)
+    icf_classes = {c for v in by_rva.values() if len(v) > 1 for c in v}
+
+    judged = same = differ = 0
+    no_header = icf = lowvirt = 0
+    dropped_total = 0
+    dropped_detail: list[str] = []
+    diffs: list[dict] = []
+
+    for cls in sorted(classes):
+        hp = inc / f"{cls}.h"
+        if not hp.is_file():
+            no_header += 1
+            continue
+        if cls in icf_classes:
+            icf += 1
+            continue
+        hdr = [m.group(1) for m in VRE_J1.finditer(hp.read_text(encoding="utf-8"))]
+        own = [x for x in hdr if not x.startswith("~") and x != cls]
+
+        slot_lists = classes[cls]["slots"]
+        if not isinstance(slot_lists, list):
+            return _j1_die(f"class {cls}: slots is not a list")
+        allnames: set[str] = set()
+        for s in slot_lists:
+            if isinstance(s, str):
+                allnames.add(s)
+            elif isinstance(s, list):
+                allnames.update(s)
+            else:
+                return _j1_die(f"class {cls}: bad slot entry {s!r}")
+
+        kept = [x for x in own if x in allnames]
+        if len(kept) < len(own) and len(dropped_detail) < 12:
+            gone = [x for x in own if x not in allnames]
+            dropped_detail.append(f"{cls}: {', '.join(gone[:4])}"
+                                  + (" ..." if len(gone) > 4 else ""))
+        dropped_total += len(own) - len(kept)
+
+        if len(kept) < 2:
+            lowvirt += 1
+            continue
+
+        seen: set[str] = set()
+        real: list[str] = []
+        for s in slot_lists:
+            cand = [s] if isinstance(s, str) else s
+            for nm in kept:
+                if nm in cand and nm not in seen:
+                    seen.add(nm)
+                    real.append(nm)
+        judged += 1
+        if real == kept:
+            same += 1
+        else:
+            differ += 1
+            if len(diffs) < args.max_report:
+                diffs.append({"class": cls, "real": real, "header": kept})
+
+    total = len(classes)
+    accounted = judged + no_header + icf + lowvirt
+    problems: list[str] = []
+    if accounted != total:
+        problems.append(f"{total - accounted} entries unaccounted")
+    if judged < args.min_judged:
+        problems.append(f"judged {judged} < floor {args.min_judged} "
+                        "(coverage shrank)")
+
+    funnel = {"total": total, "no_header": no_header, "icf": icf,
+              "lowvirt": lowvirt, "judged": judged}
+    print(f"J1      judged {judged}/{total}  (icf-excluded {icf}, "
+          f"no-header {no_header}, <2-own {lowvirt})")
+    print(f"        funnel: {total} primary vftables - {no_header} no-header "
+          f"-> {total - no_header} - {icf} icf -> {total - no_header - icf} "
+          f"- {lowvirt} <2-own -> {judged} judged")
+    print(f"        same-order {same}   DIFFERENT-ORDER {differ}")
+    print(f"        declarations absent from own real slots "
+          f"(not order-checkable, incl. synthetic): {dropped_total}")
+    for d in dropped_detail[:12]:
+        print(f"          {d}")
+    print(f"        icf groups derived from table: "
+          f"{sum(1 for v in by_rva.values() if len(v) > 1)}")
+    if differ:
+        print(f"        first {len(diffs)} divergences:")
+        for d in diffs:
+            print(f"          {d['class']:<24} real={d['real'][:4]}")
+            print(f"          {'':<24} hdr ={d['header'][:4]}")
+    for p in problems:
+        print(f"        PROBLEM: {p}", file=sys.stderr)
+
+    verdict = "PASS" if (differ == 0 and not problems) else "FAIL"
+    if args.json_out:
+        _j1_write_json(args, verdict, judged=judged, total=total, same=same,
+                       differ=differ, icf=icf, no_header=no_header,
+                       lowvirt=lowvirt, dropped_total=dropped_total,
+                       problems=problems, diffs=diffs, funnel=funnel)
+    if args.report_only:
+        # Transitional CI mode: the verdict is recorded, never masked as PASS.
+        print(f"GATE J1: REPORT-ONLY: {verdict}")
+        return 0
+    print(f"GATE J1: {verdict}")
+    return 0 if verdict == "PASS" else 1
+
+
+def _j1_write_json(args, verdict: str, *, judged: int, total: int, same: int,
+                   differ: int, icf: int, no_header: int, lowvirt: int,
+                   dropped_total: int, problems: list, diffs: list,
+                   funnel) -> None:
+    Path(args.json_out).write_text(
+        json.dumps({"gate": "J1", "mode": "report-only" if args.report_only
+                    else "enforced", "verdict": verdict, "judged": judged,
+                   "total": total, "same": same, "differ": differ, "icf": icf,
+                   "no_header": no_header, "lowvirt": lowvirt,
+                   "dropped_total": dropped_total, "problems": problems,
+                   "diffs": diffs, "funnel": funnel},
+                  ensure_ascii=False, indent=1) + "\n",
+        encoding="utf-8", newline="\n")
     print("SELFTEST FAIL", file=sys.stderr)
     return 1
 
@@ -545,6 +762,23 @@ def main(argv: list[str] | None = None) -> int:
     st = sub.add_parser("selftest", help="verify this script's own verdict logic")
     st.add_argument("--pinned", type=Path, default=DEFAULT_PINNED)
     st.set_defaults(func=cmd_selftest)
+
+    j1 = sub.add_parser(
+        "j1", help="vtable slot-order gate (report-only transitional mode)")
+    j1.add_argument("--slots", type=Path, default=DEFAULT_PINNED / "vtable-slots.json",
+                    help="ground-truth table (pinned/vtable-slots.json)")
+    j1.add_argument("--symbols", type=Path, default=DEFAULT_PINNED / "symbols.json")
+    j1.add_argument("--include", type=Path, default=DEFAULT_OUT / "include")
+    j1.add_argument("--min-judged", type=int, default=103,
+                    help="coverage floor; a drop means the table shrank")
+    j1.add_argument("--max-report", type=int, default=25,
+                    help="cap on per-class divergence entries in the report")
+    j1.add_argument("--report-only", action="store_true",
+                    help="transitional CI mode: print REPORT-ONLY: <verdict> and "
+                         "always exit 0 (the FAIL is recorded, never masked)")
+    j1.add_argument("--json-out", default=None,
+                    help="write the full report (funnel, ICF, divergences) as JSON")
+    j1.set_defaults(func=cmd_j1)
 
     args = ap.parse_args(argv)
     return args.func(args)

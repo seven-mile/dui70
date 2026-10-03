@@ -1575,14 +1575,23 @@ C_API_DECLS = [
     "void* WINAPI CreateDUIWrapper(void);",
     "void* WINAPI CreateDUIWrapperEx(unsigned short const* name, unsigned short const* info);",
     "void* WINAPI CreateDUIWrapperFromResource(int resId, unsigned short const* name, void* module);",
-    "void* WINAPI CreateDUIWrapperTouchEx(unsigned short const* name, unsigned short const* info, void* module);",
+    # ?CreateDUIWrapperTouchEx@DirectUI@@YAJPEAVElement@1@PEAVIXProviderCP@1@PEAPEAUIUnknown@@@Z
+    # (rva 0xD8E10, same address as the export): long(Element*, IXProviderCP*, IUnknown**).
+    "long WINAPI CreateDUIWrapperTouchEx(DirectUI::Element* element, DirectUI::IXProviderCP* provider, IUnknown** out);",
     # -- touch tooltip --
     "long WINAPI CreateTouchTooltip(void* element, int flags, void** tooltip);",
     # -- DUI70_* flat C API (scripting interop family) --
     "void* WINAPI DUI70_DUIXmlParserCreate(void);",
     "long  WINAPI DUI70_DUIXmlParserCreateElement(void* parser, void* parent, void** element);",
-    "void  WINAPI DUI70_DUIXmlParserDestroy(void* parser);",
-    "long  WINAPI DUI70_DUIXmlParserSetXMLFromResource(void* parser, int resId, void* module);",
+    # ??$HDelete@VElement@DirectUI@@@DirectUI@@YAXPEAVElement@0@@Z (rva 0x5FF20):
+    # loads vtable[0] (vector deleting dtor) and tail-calls the release path --
+    # the parameter is the Element to delete, not a parser.
+    "void WINAPI DUI70_DUIXmlParserDestroy(DirectUI::Element* element);",
+    # Export rva 0x88FD0 is a thunk: movzwl %dx (resId is u16), r8 = L"UIFILE"
+    # (resource type), r9 = original r8; callee is
+    # DUIXmlParser::SetXMLFromResource(name, type, HINSTANCE, HINSTANCE).
+    # Both HINSTANCEs come from the caller (FindResource pattern).
+    "long WINAPI DUI70_DUIXmlParserSetXMLFromResource(DirectUI::DUIXmlParser* parser, unsigned short resId, HINSTANCE mod1, HINSTANCE mod2);",
     "long  WINAPI DUI70_ElementAddListener(void* element, void* listener);",
     "void  WINAPI DUI70_ElementDestroy(void* element);",
     "long  WINAPI DUI70_ElementEndDefer(void* element);",
@@ -1600,14 +1609,22 @@ C_API_DECLS = [
     "long  WINAPI DUI70_ElementSetVisible(void* element, int visible);",
     "long  WINAPI DUI70_ElementStartDefer(void* element);",
     "int   WINAPI DUI70_IsTouchButtonClickEqual(int a, int b);",
-    "void* WINAPI DUI70_RichTextCreate(void);",
+    # ??$CreateElementT@VRichText@DirectUI@@@@YAJPEAVElement@@PEAKPEAPEAVRichText@@Z
+    # (rva 0x600A0): long(Element*, unsigned long*, RichText**). Same shape as
+    # DuiCreateObject: first instruction `andq $0,(%r8)` dereferences out.
+    "long WINAPI DUI70_RichTextCreate(DirectUI::Element* parent, unsigned long* flags, DirectUI::RichText** out);",
     "long  WINAPI DUI70_RichTextSetConstrainLayout(void* richtext, int constrain);",
     "void  WINAPI DUI70_ValueRelease(void* value);",
     # -- shadow text --
     "long WINAPI DUIDrawShadowText(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor);",
     "long WINAPI DrawShadowTextEx(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor, void* opts);",
     # -- object creation --
-    "long WINAPI DuiCreateObject(struct DirectUI::IClassInfo const* ci, void** out);",
+    # Signature verified from the DLL's own unexported C++ symbol at the same
+    # RVA as the export (?DuiCreateObject@@YAJAEBU_GUID@@0PEAPEAX@Z, both at
+    # 0x8B00) and from the disassembly (first instruction `andq $0,(%r8)`
+    # dereferences the third parameter). Two-argument calls leave r8 as
+    # garbage and access-violate before any GUID comparison runs.
+    "long WINAPI DuiCreateObject(struct _GUID const& clsid, struct _GUID const& riid, void** out);",
     "long WINAPI ElementFromGadget(void* gadget, struct DirectUI::Element** out);",
     # -- theme handle cache --
     "void WINAPI FlushThemeHandles(void);",

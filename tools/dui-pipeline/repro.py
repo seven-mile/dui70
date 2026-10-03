@@ -633,12 +633,20 @@ def compare_vtable_slots(args, dll: pathlib.Path) -> int:
              f"rc={p.returncode}", (p.stdout or "")[-800:] + (p.stderr or "")[-800:])
         return 1
 
-    rb = rebuilt.read_bytes()
-    cb = committed.read_bytes()
+    # LF-canonical comparison (same rule as G1/pinned.sha256): a fresh
+    # checkout on Windows CRLF-converts text files (.gitattributes `* text=auto`),
+    # and R2/R3 pass only because extract.py writes with the platform newline
+    # (CRLF on Windows) while extract-vtable-slots.py pins newline="n". A raw
+    # byte compare is therefore newline-mode-inconsistent across runners.
+    # Comparing after CRLF -> LF normalisation keeps the assertion
+    # content-exact and checkout-independent. (First CI run of this gate,
+    # PR #3, failed exactly here: 39224 CRLF pairs, 0 content diffs.)
+    rb = rebuilt.read_bytes().replace(b"\r\n", b"\n")
+    cb = committed.read_bytes().replace(b"\r\n", b"\n")
     if rb == cb:
         n = len(json.loads(cb.decode("utf-8"))["classes"])
         ok("R3'", f"vtable-slots.json re-derived byte-identically "
-                  f"({n} classes, sha256 "
+                  f"(LF-canonical; {n} classes, sha256 "
                   f"{hashlib.sha256(cb).hexdigest()[:16]}...)")
         return 0
 

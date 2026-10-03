@@ -20,23 +20,27 @@ namespace DirectUI
         CCCommandLink(CCCommandLink const&);
         CCCommandLink(unsigned long);
         virtual ~CCCommandLink(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
+
+        protected:
+        virtual void PostCreate(HWND__*);
+
+        public:
+        virtual void OnSelectedPropertyChanged(void);
         CCCommandLink& operator=(CCCommandLink&&);
         CCCommandLink& operator=(CCCommandLink const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         unsigned short const* GetNote(Value**);
         static PropertyInfo const* NoteProp(void);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnSelectedPropertyChanged(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         long SetNote(unsigned short const*);
 
         protected:
-        virtual void PostCreate(HWND__*);
         void SyncNoteAndGlyph(HWND__*);
 
         private:

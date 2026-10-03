@@ -19,13 +19,20 @@ namespace DirectUI
         AnimationStrip(AnimationStrip const&);
         AnimationStrip(void);
         virtual ~AnimationStrip(void);
+
+        protected:
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnDestroy(void);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+
+        public:
+        virtual IClassInfo* GetClassInfoW(void);
         AnimationStrip& operator=(AnimationStrip const&);
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* FrameDurationProp(void);
         static PropertyInfo const* FrameIndexProp(void);
         static PropertyInfo const* FrameWidthProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         int GetFrameDuration(void);
         int GetFrameIndex(void);
         int GetFrameWidth(void);
@@ -43,9 +50,6 @@ namespace DirectUI
         void AdvanceFrame(void);
         long LoadImagesIntoAnimationStrip(void);
         void OnAction(GMA_ACTIONINFO*);
-        virtual void OnDestroy(void);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         static void RawActionProc(GMA_ACTIONINFO*);
 
         private:

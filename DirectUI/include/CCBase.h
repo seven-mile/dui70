@@ -19,30 +19,32 @@ namespace DirectUI
         CCBase(CCBase const&);
         CCBase(unsigned long, unsigned short const*);
         virtual ~CCBase(void);
+        virtual bool OnCustomDraw(tagNMCUSTOMDRAWINFO*, __int64*);
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+
+        protected:
+        virtual void PostCreate(HWND__*);
+
+        public:
+        virtual void OnInput(InputEvent*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long DefaultAction(void);
+        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
+        virtual HWND__* CreateHWND(HWND__*);
         CCBase& operator=(CCBase const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
-        virtual HWND__* CreateHWND(HWND__*);
-        virtual long DefaultAction(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         int GetWinStyle(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual bool OnCustomDraw(tagNMCUSTOMDRAWINFO*, __int64*);
-        virtual void OnInput(InputEvent*);
-        virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetNotifyHandler(int (__cdecl *)(unsigned int, unsigned __int64, __int64, __int64*, void*), void*);
         long SetWinStyle(int);
         static PropertyInfo const* WinStyleProp(void);
-
-        protected:
-        virtual void PostCreate(HWND__*);
 
         private:
         static IClassInfo* s_pClassInfo;

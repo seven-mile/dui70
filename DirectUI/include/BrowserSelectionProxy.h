@@ -15,15 +15,17 @@ namespace DirectUI
     class BrowserSelectionProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         BrowserSelectionProxy(BrowserSelectionProxy&&);
         BrowserSelectionProxy(BrowserSelectionProxy const&);
         BrowserSelectionProxy(void);
         BrowserSelectionProxy& operator=(BrowserSelectionProxy&&);
         BrowserSelectionProxy& operator=(BrowserSelectionProxy const&);
-        virtual long DoMethod(int, char*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         long GetIsSelectionRequired(int*);

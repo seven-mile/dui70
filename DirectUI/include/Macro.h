@@ -22,17 +22,22 @@ namespace DirectUI
         Macro(Macro const&);
         Macro(void);
         virtual ~Macro(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual long Add(Element**, unsigned int);
+        virtual IClassInfo* GetClassInfoW(void);
+
+        protected:
+        virtual long BuildElement(void);
+
+        public:
         Macro& operator=(Macro&&);
         Macro& operator=(Macro const&);
-        virtual long Add(Element**, unsigned int);
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* ExpandProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         IDataEntry* GetDataEntry(void);
         unsigned short const* GetExpand(Value**);
         long Initialize(Element*, unsigned long*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetDataEntry(IDataEntry*, Element*);
@@ -41,7 +46,6 @@ namespace DirectUI
         void SetParser(DUIXmlParser*);
 
         protected:
-        virtual long BuildElement(void);
         void ResolveBindings(void);
         static void _BitAccurateFillRect(HDC__*, int, int, int, int, unsigned char, unsigned char, unsigned char, unsigned char, unsigned long);
         static bool _GetBitmapSize(HBITMAP__*, tagSIZE*);

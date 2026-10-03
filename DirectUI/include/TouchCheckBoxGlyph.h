@@ -17,13 +17,13 @@ namespace DirectUI
     public:
         TouchCheckBoxGlyph(void);
         virtual ~TouchCheckBoxGlyph(void);
-        static long Create(Element*, unsigned long*, Element**);
-        static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        long Initialize(Element*, unsigned long*);
-        virtual long Insert(Element**, unsigned int, unsigned int);
         virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
         virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual long Insert(Element**, unsigned int, unsigned int);
+        virtual IClassInfo* GetClassInfoW(void);
+        static long Create(Element*, unsigned long*, Element**);
+        static IClassInfo* GetClassInfoPtr(void);
+        long Initialize(Element*, unsigned long*);
         static long Register(void);
     };
 

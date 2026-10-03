@@ -17,21 +17,23 @@ namespace DirectUI
     public:
         ModernProgressRing(void);
         virtual ~ModernProgressRing(void);
+
+        protected:
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnDestroy(void);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual void OnHosted(Element*);
+        virtual void OnUnHosted(Element*);
+
+        public:
+        virtual IClassInfo* GetClassInfoW(void);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         bool IsActivityOccuring(void);
         bool IsAddLayeredRef(void);
         static long Register(void);
         long SetActivityOccuring(bool);
         long SetAddLayeredRef(bool);
-
-        protected:
-        virtual void OnDestroy(void);
-        virtual void OnHosted(Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnUnHosted(Element*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
     };
 
 } // namespace DirectUI

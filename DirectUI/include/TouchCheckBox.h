@@ -20,20 +20,20 @@ namespace DirectUI
     public:
         TouchCheckBox(void);
         virtual ~TouchCheckBox(void);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnEvent(Event*);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual long Insert(Element**, unsigned int, unsigned int);
+        virtual void GetImmersiveFocusRectOffsets(tagRECT*);
+        virtual IClassInfo* GetClassInfoW(void);
         static PropertyInfo const* CheckedStateProp(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         CheckedStateFlags GetCheckedState(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual void GetImmersiveFocusRectOffsets(tagRECT*);
         bool GetToggleOnClick(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual long Insert(Element**, unsigned int, unsigned int);
-        virtual void OnEvent(Event*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         static long Register(void);
         long SetCheckedState(CheckedStateFlags);
         long SetToggleOnClick(bool);

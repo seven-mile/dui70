@@ -18,13 +18,13 @@ namespace DirectUI
         RepeatButton(RepeatButton const&);
         RepeatButton(void);
         virtual ~RepeatButton(void);
+        virtual void OnInput(InputEvent*);
+        virtual IClassInfo* GetClassInfoW(void);
         RepeatButton& operator=(RepeatButton const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual void OnInput(InputEvent*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetStopThumbBehavior(void);

@@ -15,17 +15,19 @@ namespace DirectUI
     class ExpandCollapseProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ExpandCollapseProxy(ExpandCollapseProxy&&);
         ExpandCollapseProxy(ExpandCollapseProxy const&);
         ExpandCollapseProxy(void);
         ExpandCollapseProxy& operator=(ExpandCollapseProxy&&);
         ExpandCollapseProxy& operator=(ExpandCollapseProxy const&);
         static ExpandCollapseProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

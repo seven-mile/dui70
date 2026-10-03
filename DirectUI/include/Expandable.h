@@ -19,12 +19,12 @@ namespace DirectUI
         Expandable(Expandable const&);
         Expandable(void);
         virtual ~Expandable(void);
+        virtual IClassInfo* GetClassInfoW(void);
         Expandable& operator=(Expandable&&);
         Expandable& operator=(Expandable const&);
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* ExpandedProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         bool GetExpanded(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

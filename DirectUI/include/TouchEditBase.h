@@ -15,18 +15,26 @@ namespace DirectUI
     class TouchEditBase
     {
     public:
+        virtual bool IsContentProtected(void);
+        virtual unsigned short const* GetContentStringAsDisplayed(Value**);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual long Insert(Element**, unsigned int, unsigned int);
+        virtual void SetKeyFocus(void);
+        virtual long FinalizeCurrentIMEComposition(void);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long RefreshContent(void);
+        virtual long GetControllerFor(IUnknown**);
+        virtual long GetTextDocument(ITextDocument**);
+        virtual long GetTextServices(ITextServices**);
         static UID CaretMoved(void);
         static long Create(Element*, unsigned long*, Element**);
         static UID Cut(void);
         static PropertyInfo const* ElementMovesOnIHMNotifyProp(void);
         static UID Enter(void);
         static PropertyInfo const* FilterOnPasteProp(void);
-        virtual long FinalizeCurrentIMEComposition(void);
         static PropertyInfo const* ForceEditTextToLTRProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual unsigned short const* GetContentStringAsDisplayed(Value**);
-        virtual long GetControllerFor(IUnknown**);
         bool GetElementMovesOnIHMNotify(void);
         bool GetFilterOnPaste(void);
         bool GetForceEditTextToLTR(void);
@@ -43,25 +51,18 @@ namespace DirectUI
         Value* GetSelectionBackgroundColor(void);
         Value* GetSelectionForegroundColor(void);
         bool GetSyncContentWhileIMEComposing(void);
-        virtual long GetTextDocument(ITextDocument**);
         TouchEditTextMode GetTextMode(void);
-        virtual long GetTextServices(ITextServices**);
         static PropertyInfo const* IMEComposingProp(void);
         static PropertyInfo const* IgnoredKeyCombosProp(void);
-        virtual long Insert(Element**, unsigned int, unsigned int);
         static PropertyInfo const* IntegrateIMECandidateListProp(void);
-        virtual bool IsContentProtected(void);
         static PropertyInfo const* KeyboardNavigationCaptureProp(void);
         static PropertyInfo const* MaxLengthProp(void);
         static PropertyInfo const* MoveCaretToEndOnSyncContentProp(void);
         static PropertyInfo const* MultilineProp(void);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
         static PropertyInfo const* PasswordCharacterProp(void);
         static UID Paste(void);
         static PropertyInfo const* PreventFormatChangeUpdatingModifiedStateProp(void);
         static PropertyInfo const* ReadOnlyProp(void);
-        virtual long RefreshContent(void);
         static long Register(void);
         static PropertyInfo const* SelectionBackgroundColorProp(void);
         static PropertyInfo const* SelectionForegroundColorProp(void);
@@ -71,7 +72,6 @@ namespace DirectUI
         long SetIMEComposing(bool);
         long SetIgnoredKeyCombos(TouchEditFilteredKeyComboFlags, TouchEditFilteredKeyComboFlags);
         long SetIntegrateIMECandidateList(bool);
-        virtual void SetKeyFocus(void);
         long SetKeyboardNavigationCapture(TouchEditKeyboardNavigationCapture);
         long SetMaxLength(int);
         long SetMoveCaretToEndOnSyncContent(bool);

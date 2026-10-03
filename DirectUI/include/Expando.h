@@ -20,15 +20,15 @@ namespace DirectUI
         Expando(Expando const&);
         Expando(void);
         virtual ~Expando(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnEvent(Event*);
+        virtual long Add(Element**, unsigned int);
+        virtual IClassInfo* GetClassInfoW(void);
         Expando& operator=(Expando&&);
         Expando& operator=(Expando const&);
-        virtual long Add(Element**, unsigned int);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

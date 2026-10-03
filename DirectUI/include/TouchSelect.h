@@ -18,7 +18,16 @@ namespace DirectUI
     public:
         TouchSelect(void);
         virtual ~TouchSelect(void);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnInput(InputEvent*);
+        virtual void OnEvent(Event*);
         virtual long Add(Element**, unsigned int);
+        virtual long Insert(Element**, unsigned int, unsigned int);
+        virtual void OnHosted(Element*);
+        virtual void OnUnHosted(Element*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long GetElementProviderImpl(InvokeHelper*, ElementProvider**);
         long AddElement(Element*, unsigned short const*);
         long AddString(unsigned short const*);
         long AddString(unsigned short const*, Element**);
@@ -28,8 +37,6 @@ namespace DirectUI
         static long Create(Element*, unsigned long*, Element**);
         bool GetAnimatePopupOnDismiss(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual long GetElementProviderImpl(InvokeHelper*, ElementProvider**);
         unsigned long GetItemCount(void);
         long GetItemData(int, IUnknown**);
         int GetItemHeightInPopup(void);
@@ -37,15 +44,8 @@ namespace DirectUI
         Element* GetSelection(void);
         int GetSelectionIndex(void);
         long Initialize(Element*, unsigned long*);
-        virtual long Insert(Element**, unsigned int, unsigned int);
         bool IsPopupOpen(void);
         static PropertyInfo const* ItemHeightInPopupProp(void);
-        virtual void OnEvent(Event*);
-        virtual void OnHosted(Element*);
-        virtual void OnInput(InputEvent*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnUnHosted(Element*);
         long OpenPopup(void);
         static PropertyInfo const* PopupBoundsProp(void);
         static UID PopupChange(void);

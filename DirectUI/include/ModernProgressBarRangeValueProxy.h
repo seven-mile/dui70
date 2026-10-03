@@ -15,15 +15,17 @@ namespace DirectUI
     class ModernProgressBarRangeValueProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ModernProgressBarRangeValueProxy(ModernProgressBarRangeValueProxy&&);
         ModernProgressBarRangeValueProxy(ModernProgressBarRangeValueProxy const&);
         ModernProgressBarRangeValueProxy(void);
         ModernProgressBarRangeValueProxy& operator=(ModernProgressBarRangeValueProxy&&);
         ModernProgressBarRangeValueProxy& operator=(ModernProgressBarRangeValueProxy const&);
-        virtual long DoMethod(int, char*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

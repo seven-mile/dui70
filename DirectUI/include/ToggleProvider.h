@@ -22,12 +22,12 @@ namespace DirectUI
     public:
         ToggleProvider(void);
         virtual ~ToggleProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
         virtual long Toggle(void);
         virtual long get_ToggleState(ToggleState*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

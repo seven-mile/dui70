@@ -22,11 +22,11 @@ namespace DirectUI
     public:
         InvokeProvider(void);
         virtual ~InvokeProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long Invoke(void);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
+        virtual long Invoke(void);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

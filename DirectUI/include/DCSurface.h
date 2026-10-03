@@ -19,9 +19,9 @@ namespace DirectUI
         DCSurface(DCSurface const&);
         DCSurface(HDC__*);
         virtual ~DCSurface(void);
+        virtual Surface::EType GetType(void) const;
         DCSurface& operator=(DCSurface const&);
         HDC__* GetHDC(void);
-        virtual Surface::EType GetType(void) const;
     };
 
 } // namespace DirectUI

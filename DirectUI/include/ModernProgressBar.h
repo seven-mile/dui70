@@ -17,10 +17,19 @@ namespace DirectUI
     public:
         ModernProgressBar(void);
         virtual ~ModernProgressBar(void);
+
+        protected:
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnDestroy(void);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual void OnHosted(Element*);
+        virtual void OnUnHosted(Element*);
+
+        public:
+        virtual IClassInfo* GetClassInfoW(void);
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* DeterminateProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         int GetMaximum(void);
         int GetMinimum(void);
         int GetPosition(void);
@@ -46,13 +55,6 @@ namespace DirectUI
         long SetSmoothFillAnimation(bool);
         long SetState(int);
         static PropertyInfo const* StateProp(void);
-
-        protected:
-        virtual void OnDestroy(void);
-        virtual void OnHosted(Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnUnHosted(Element*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
     };
 
 } // namespace DirectUI

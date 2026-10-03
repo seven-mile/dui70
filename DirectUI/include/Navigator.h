@@ -21,16 +21,16 @@ namespace DirectUI
         Navigator(Navigator const&);
         Navigator(void);
         virtual ~Navigator(void);
+        virtual void OnEvent(Event*);
+        virtual IClassInfo* GetClassInfoW(void);
         Navigator& operator=(Navigator&&);
         Navigator& operator=(Navigator const&);
         static UID ActionInitiated(void);
         static long Create(Element*, unsigned long*, Element**);
         Browser* GetBrowser(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         unsigned short const* GetTargetPage(Value**);
         long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         long SetTargetPage(unsigned short const*);

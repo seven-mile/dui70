@@ -19,19 +19,21 @@ namespace DirectUI
         CCBaseCheckRadioButton(CCBaseCheckRadioButton const&);
         CCBaseCheckRadioButton(unsigned long);
         virtual ~CCBaseCheckRadioButton(void);
-        CCBaseCheckRadioButton& operator=(CCBaseCheckRadioButton&&);
-        CCBaseCheckRadioButton& operator=(CCBaseCheckRadioButton const&);
-        static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         virtual bool OnReceivedDialogFocus(IDialogElement*);
-        static long Register(void);
-        static void SetClassInfoPtr(IClassInfo*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
 
         protected:
         virtual void PostCreate(HWND__*);
+
+        public:
+        CCBaseCheckRadioButton& operator=(CCBaseCheckRadioButton&&);
+        CCBaseCheckRadioButton& operator=(CCBaseCheckRadioButton const&);
+        static IClassInfo* GetClassInfoPtr(void);
+        static long Register(void);
+        static void SetClassInfoPtr(IClassInfo*);
 
         private:
         static IClassInfo* s_pClassInfo;

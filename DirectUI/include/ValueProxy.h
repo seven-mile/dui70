@@ -15,17 +15,19 @@ namespace DirectUI
     class ValueProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ValueProxy(ValueProxy&&);
         ValueProxy(ValueProxy const&);
         ValueProxy(void);
         ValueProxy& operator=(ValueProxy&&);
         ValueProxy& operator=(ValueProxy const&);
         static ValueProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         long GetIsReadOnly(int*);

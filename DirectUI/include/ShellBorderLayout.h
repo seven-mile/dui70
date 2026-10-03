@@ -21,13 +21,13 @@ namespace DirectUI
         ShellBorderLayout(ShellBorderLayout const&);
         ShellBorderLayout(void);
         virtual ~ShellBorderLayout(void);
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         ShellBorderLayout& operator=(ShellBorderLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
 
         private:
         long _CalcTabOrder(Element*);

@@ -20,19 +20,21 @@ namespace DirectUI
         Repeater(Repeater const&);
         Repeater(void);
         virtual ~Repeater(void);
+        virtual IClassInfo* GetClassInfoW(void);
+
+        protected:
+        virtual long BuildElement(void);
+
+        public:
         Repeater& operator=(Repeater&&);
         Repeater& operator=(Repeater const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetDataEngine(IDataEngine*);
         void SetGraphicType(unsigned char);
-
-        protected:
-        virtual long BuildElement(void);
 
         private:
         static IClassInfo* s_pClassInfo;

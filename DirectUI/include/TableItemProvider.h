@@ -22,12 +22,12 @@ namespace DirectUI
     public:
         TableItemProvider(void);
         virtual ~TableItemProvider(void);
+        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long AddRef(void);
+        virtual unsigned long Release(void);
+        virtual long GetRowHeaderItems(tagSAFEARRAY**);
         virtual long GetColumnHeaderItems(tagSAFEARRAY**);
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long GetRowHeaderItems(tagSAFEARRAY**);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
     };
 
 } // namespace DirectUI

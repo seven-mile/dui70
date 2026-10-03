@@ -23,44 +23,51 @@ namespace DirectUI
         HWNDElement(HWNDElement const&);
         HWNDElement(void);
         virtual ~HWNDElement(void);
-        HWNDElement& operator=(HWNDElement const&);
-        virtual void ActivateTooltip(Element*, unsigned long);
+        virtual bool IsMSAAEnabled(void);
         virtual bool CanSetFocus(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnImmersiveColorSchemeChanged(void);
+        virtual void OnGroupChanged(int, bool);
+        virtual void OnInput(InputEvent*);
+        virtual void OnDestroy(void);
+        virtual void OnEvent(Event*);
+        virtual void UpdateTooltip(Element*);
+        virtual void ActivateTooltip(Element*, unsigned long);
+        virtual void RemoveTooltip(Element*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long GetAccessibleImpl(IAccessible**);
+        virtual HWND__* GetHWND(void);
+        virtual void OnThemeChanged(ThemeChangedEvent*);
+        virtual void OnNoChildWithShortcutFound(KeyboardEvent*);
+        virtual void OnGetDlgCode(tagMSG*, __int64*);
+        virtual void OnWmThemeChanged(unsigned __int64, __int64);
+        virtual void OnWmSettingChanged(unsigned __int64, __int64);
+        virtual void OnCompositionChanged(void);
+        virtual long CreateStyleParser(DUIXmlParser**);
+        virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
+        virtual void GetWindowClassNameAndStyle(unsigned short const**, unsigned int*);
+
+        protected:
+        virtual void _OnUIStateChanged(unsigned short, unsigned short);
+
+        public:
+        HWNDElement& operator=(HWNDElement const&);
         static UID CompositionChange(void);
         static long Create(HWND__*, bool, unsigned int, Element*, unsigned long*, Element**);
-        virtual long CreateStyleParser(DUIXmlParser**);
         void DelayActivateTooltip(void);
         Element* ElementFromPoint(tagPOINT*);
         static bool FindShortcut(unsigned short, Element*, Element**, int*, int*, int);
         void FlushWorkingSet(void);
-        virtual long GetAccessibleImpl(IAccessible**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         static HWNDElement* GetFocusedHWNDElement(void);
-        virtual HWND__* GetHWND(void);
         static Element* GetKeyFocusedElement(void);
         unsigned short GetUIState(void);
-        virtual void GetWindowClassNameAndStyle(unsigned short const**, unsigned int*);
         bool GetWrapKeyboardNavigate(void);
         static UID ImmersiveColorSchemeChange(void);
         long Initialize(HWND__*, bool, unsigned int, Element*, unsigned long*);
         bool IsFirstElement(Element*);
         bool IsLastElement(Element*);
-        virtual bool IsMSAAEnabled(void);
-        virtual void OnCompositionChanged(void);
-        virtual void OnDestroy(void);
-        virtual void OnEvent(Event*);
-        virtual void OnGetDlgCode(tagMSG*, __int64*);
-        virtual void OnGroupChanged(int, bool);
-        virtual void OnImmersiveColorSchemeChanged(void);
-        virtual void OnInput(InputEvent*);
-        virtual void OnNoChildWithShortcutFound(KeyboardEvent*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnThemeChanged(ThemeChangedEvent*);
-        virtual void OnWmSettingChanged(unsigned __int64, __int64);
-        virtual void OnWmThemeChanged(unsigned __int64, __int64);
         static long Register(void);
-        virtual void RemoveTooltip(Element*);
         static void SetClassInfoPtr(IClassInfo*);
         void SetFocus(bool);
         void SetParentSizeControl(bool);
@@ -73,9 +80,7 @@ namespace DirectUI
         static __int64 StaticWndProc(HWND__*, unsigned int, unsigned __int64, __int64);
         static UID ThemeChange(void);
         void ToggleUIState(bool, bool);
-        virtual void UpdateTooltip(Element*);
         static UID WindowDpiChanged(void);
-        virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
         static PropertyInfo const* WrapKeyboardNavigateProp(void);
 
         protected:
@@ -84,7 +89,6 @@ namespace DirectUI
         void _FireWindowDpiChangeEvent(void);
         int _GetPerMonitorScaleFactorForDesktopWindow(HWND__*);
         void _HandleImmersiveColorSchemeChange(void);
-        virtual void _OnUIStateChanged(unsigned short, unsigned short);
 
         private:
         int _UpdateDesktopScaleFactor(void);

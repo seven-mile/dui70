@@ -21,14 +21,14 @@ namespace DirectUI
         TableLayout(TableLayout const&);
         TableLayout(void);
         virtual ~TableLayout(void);
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         TableLayout& operator=(TableLayout const&);
         static long Create(int, int*, Value**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         CellInfo* GetCellInfo(int);
         void Initialize(int, int, int, int*);
         static long InternalCreate(int, int, int, int*, Layout**);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
     };
 
 } // namespace DirectUI

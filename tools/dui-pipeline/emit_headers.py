@@ -836,152 +836,324 @@ ELEMENT_PILOT_SLOT_ORDER = [
     "HandleUiaEventListener",          # 43
     "GetUiaFocusDelegate",             # 44 (ICF fold group)
 ]
+# MIGRATION ASSERTION ONLY (W5 full-contract v1): the table above is NO
+# LONGER a generation source -- generation now consumes
+# pinned/vtable-slots.json via contract_reorder below. It is retained
+# exclusively as a cross-check that the contract-derived Element order
+# equals the independently call-site-audited pilot evidence; divergence
+# fails the build instead of silently changing the ABI.
 
 
-def _element_pilot_slot_of(sym: dict) -> int:
-    """1-based vtable slot of an Element virtual per ELEMENT_PILOT_SLOT_ORDER.
+# ---------------------------------------------------------------------------
+# W5 full vtable-contract consumption (v1)
+#
+# The slot-order ground truth is pinned/vtable-slots.json: a pure function of
+# dui70.dll bytes + pinned/symbols.json, re-derived and byte-compared by
+# repro.py gate R3'. NO per-class hand table participates in generation.
+#
+# Layout rules (MSVC, measured by controlled compile+disasm experiments and
+# the Element call-site audit, .local/build/ci-probe/slot-abi-audit.py):
+#   1. A member-name OVERLOAD SET is ONE UNIT anchored at its FIRST declared
+#      member (virtual or not): the set's virtuals take their vtable slots
+#      at the anchor position. Mixed sets (nonvirtual + virtual overloads,
+#      e.g. Element::Add) therefore emit as contiguous units.
+#   2. Distinct-name virtuals: slot order == declaration order.
+#   3. Same-name VIRTUAL overloads: slot order == REVERSE declaration order
+#      within the run; the real DLL hosts the CONST overload at the LOWER
+#      slot for Element's OnPropertyChanging/OnPropertyChanged pairs, so
+#      pairs are emitted non-const FIRST.
+#   4. Pure nonvirtual members never affect slots.
+#
+# Slot binding: a member NAME binds to the first slot whose candidate set
+# (a union over the ICF fold list) contains it; the slot-0 entry (_E<Class>
+# markers) belongs to the destructor set. A name bound to several slots is
+# an overload run: per rule 3 the const-first-parameter overload takes the
+# LOWER slot. Virtuals whose name never appears in the class's table
+# (generator synthetics like On<Class>Virt, GetProxyCreator injections)
+# keep their relative order after the bound units -- they are NOT
+# order-checkable by J1 and are counted in the generation report. Classes
+# whose overload counts exceed their bound slots fail CLOSED with a
+# class/slot list (never silently dropped).
 
-    Overload runs (OnPropertyChanging/OnPropertyChanged) occupy consecutive
-    slots with the CONST overload at the LOWER slot (RVA-audited: slot 4 =
-    PEBU body 0x0001CD10, slot 5 = PEAU body 0x0003BBE0, same for 6/7).
+def _is_vtable_virtual(s: dict) -> bool:
+    return bool(s.get("is_virtual")) and not classify_dtor(s) \
+        and s.get("kind") != "ctor"
+
+
+def _first_param_const(s: dict) -> bool:
+    params = s.get("params") or []
+    return bool(params) and "const" in (params[0] or "")
+
+
+def _bind_own_units(cls: str, unit_names: list,
+                    n_virtuals: dict, slot_lists: list):
+    """Bind the class's own virtual-bearing units to vtable slots.
+
+    Returns (name_slot, unbindable, name_slots_actual):
+      name_slot         unit name -> base slot of its virtual run
+      unbindable        unit names with no candidate slot (reported, kept
+                        in original order; never guessed)
+      name_slots_actual unit name -> ALL singleton slots the name occupies
+
+    A unit with k virtuals occupies k CONSECUTIVE slots (an overload run)
+    unless it has k distinct singleton slots (a SPLIT run with one body per
+    slot, e.g. Edit::CreateHWND at 54/56). Bindings:
+      * singleton slots (bare-string entries) bind their names mandatorily;
+      * a k-run may sit at base s only if the name appears at every slot
+        s..s+k-1 and none of those slots is claimed by another unit;
+      * remaining (fold-ambiguous) units are matched to free candidate
+        slots by exact backtracking, leftmost-first for determinism;
+      * impossible assignments raise with the class/slot list
+        (fail-closed).
     """
-    name = sym["member"]
-    slots = [i + 1 for i, n in enumerate(ELEMENT_PILOT_SLOT_ORDER) if n == name]
-    if len(slots) == 1:
-        return slots[0]
-    first_param_const = "const" in (sym.get("params") or [""])[0]
-    return slots[0] if first_param_const else slots[1]
+    n = len(slot_lists)
+    appears: dict[str, set[int]] = {}
+    for idx, entry in enumerate(slot_lists):
+        cands = [entry] if isinstance(entry, str) else list(entry or [])
+        for nm in cands:
+            if nm in unit_names:
+                appears.setdefault(nm, set()).add(idx)
+
+    name_slots: dict[str, list[int]] = {}
+    for idx, entry in enumerate(slot_lists):
+        if not isinstance(entry, str) or entry not in unit_names:
+            continue
+        name_slots.setdefault(entry, []).append(idx)
+
+    unbindable = [u for u in unit_names if not appears.get(u)]
+
+    claimed: dict[int, str] = {}
+
+    def unit_slots(name: str, base: int) -> list[int] | None:
+        k = n_virtuals.get(name, 1)
+        sl = name_slots.get(name)
+        if sl and len(sl) >= k:
+            # split/over singleton slots: use the lowest k singleton slots
+            ss = sorted(sl)[:k]
+            if all(claimed.get(s) in (None, name) for s in ss):
+                return ss
+        if base + k <= n and all(
+                base + i in appears.get(name, ()) for i in range(k)):
+            ss = list(range(base, base + k))
+            if all(claimed.get(s) in (None, name) for s in ss):
+                return ss
+        return None
+
+    def place(name: str, slots: list[int]) -> None:
+        for s in slots:
+            claimed[s] = name
+
+    # 1) singleton-anchored units first (their slot is mandatory), then
+    #    unanchored units by fewest candidates; ties by name. Anchoring
+    #    first prevents a fold-only unit from stealing a run's tail slot
+    #    (e.g. Element's _SelfLayoutDoLayout must not take slot 7 away
+    #    from the OnPropertyChanged pair anchored at singleton slot 6).
+    order = sorted(unit_names, key=lambda u: (
+        0 if u in name_slots else 1, len(appears.get(u, ())), u))
+    ambiguous: list[str] = []
+    for u in order:
+        if u in unbindable:
+            continue
+        k = n_virtuals.get(u, 1)
+        ss = None
+        sl = sorted(name_slots.get(u) or [])
+        if sl:
+            ss = unit_slots(u, sl[0])
+        if ss is None:
+            # try every candidate base
+            for b in sorted(appears.get(u, ())):
+                ss = unit_slots(u, b)
+                if ss is not None:
+                    break
+        if ss is not None:
+            place(u, ss)
+        else:
+            ambiguous.append(u)
+
+    # 2) ambiguous units: exact backtracking over free candidate slots.
+    ambiguous.sort(key=lambda u: (len(appears.get(u, ())), u))
+
+    def solve(k: int) -> bool:
+        if k == len(ambiguous):
+            return True
+        u = ambiguous[k]
+        for b in sorted(appears.get(u, ())):
+            ss = unit_slots(u, b)
+            if ss is None:
+                continue
+            place(u, ss)
+            if solve(k + 1):
+                return True
+            for s in ss:
+                if claimed.get(s) == u:
+                    del claimed[s]
+        return False
+
+    if ambiguous and not solve(0):
+        raise SystemExit(
+            f"contract_reorder: {cls}: cannot bind fold-ambiguous units "
+            f"{ambiguous} to distinct free slots "
+            f"(candidates={{{', '.join(f'{u}:{sorted(appears.get(u, ()))}' for u in ambiguous[:6])}}}) "
+            "-- refusing to guess an order")
+
+    name_slot: dict[str, int] = {}
+    for s, u in claimed.items():
+        if u not in name_slot or s < name_slot[u]:
+            name_slot[u] = s
+    return name_slot, unbindable, name_slots
 
 
-def element_pilot_reorder(members: list) -> list:
-    """Reorder DirectUI::Element's member declarations into the real vtable
-    slot order (W5 fix, Element pilot).
+def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
+    """Reorder one class's member declarations into real vtable slot order
+    (W5 full-contract v1). `members` is the per-class callable list;
+    `slot_lists` is this class's entry from pinned/vtable-slots.json
+    (position == slot index; each entry is a name, an ICF fold list, or []).
+    Returns the reordered list. Raises SystemExit with a class/slot list if
+    an overload run cannot be explained by the contract (fail-closed)."""
 
-    MSVC vtable layout rules (measured by controlled compile+disasm
-    experiments, verified on Element by the call-site disassembly audit
-    .local/build/ci-probe/slot-abi-audit.py, 44/44 signature-bound slots):
-
-      1. A member-name OVERLOAD SET behaves as ONE UNIT anchored at its
-         FIRST declared member -- virtual or not. The set's virtual members
-         occupy the vtable slots at the anchor position. (Measured: with
-         `Add(Element*); Add(Element*,cmp); ...; virtual Add(Element**,uint)`
-         declared 150 lines apart, the virtual Add takes the anchor's slot,
-         not its own line position.)
-      2. Distinct-name virtuals: slot order == declaration order.
-      3. Same-name VIRTUAL overloads: slot order == REVERSE declaration
-         order within the run (the last-declared overload takes the LOWER
-         slot). The real DLL hosts the CONST overload at the lower slot
-         (4/6), so virtual overload pairs are emitted non-const FIRST,
-         const LAST.
-      4. Pure non-virtual members (names with no virtual overload) never
-         affect slots.
-
-    Emission model (per access bucket, since virtuals never change access):
-    each bucket emits its virtual-bearing overload sets FIRST, in slot
-    order, as contiguous units -- the set's non-virtual overload lines
-    first (they anchor the unit), then its virtuals. The bucket's pure
-    non-virtual members follow in their original symbols.json order.
-    render_class_header then emits the buckets in member-walk order, which
-    for Element is public(slots 1-26) -> protected(27-33) -> public(34-44)
-    -> private: exactly the real class layout.
-
-    `members` is the per-class callable list; returns a reordered copy.
-    """
-    by_name = {}
+    by_name: dict[str, list] = {}
     for s in members:
         by_name.setdefault(s["member"], []).append(s)
 
-    def _is_vtable_virtual(s):
-        return bool(s.get("is_virtual")) and not classify_dtor(s) \
-            and s.get("kind") != "ctor"
-
-    if sorted(n for n, g in by_name.items()
-              if any(_is_vtable_virtual(s) for s in g)) != \
-            sorted(set(ELEMENT_PILOT_SLOT_ORDER)):
-        # member set no longer matches the audited evidence -- refuse rather
-        # than emit a silently-wrong order
-        have = sorted(n for n, g in by_name.items()
-                      if any(_is_vtable_virtual(s) for s in g))
-        missing = sorted(set(ELEMENT_PILOT_SLOT_ORDER) - set(have))
-        extra = sorted(set(have) - set(ELEMENT_PILOT_SLOT_ORDER))
-        raise SystemExit(
-            "element_pilot_reorder: Element virtual member set diverged from "
-            f"the audited slot evidence (missing={missing} extra={extra}); "
-            "re-derive ELEMENT_PILOT_SLOT_ORDER from "
-            "element-slot-evidence.json before regenerating")
-
-    # per-set emission unit: non-virtual overload lines first (the anchor is
-    # the unit's first line), then virtuals ordered by target slot with the
-    # reverse-declaration rule for same-name virtual overload pairs (emit
-    # non-const first => const takes the lower slot)
-    unit_order = {}
+    # --- binding: bipartite match own virtual units to distinct slots ----
+    n_virtuals: dict[str, int] = {}
     for name, group in by_name.items():
+        n_virtuals[name] = sum(1 for s in group if _is_vtable_virtual(s))
+    unit_names = [n for n, k in n_virtuals.items() if k > 0]
+    name_slot, binder_unbound, name_slots_actual = _bind_own_units(
+        cls, unit_names, n_virtuals, slot_lists)
+
+    # --- unit construction ----------------------------------------------
+    unit_order: dict[str, list] = {}
+    set_slots: dict[str, list] = {}   # name -> slots of its VIRTUALS
+    unbound: list[str] = []           # virtual-bearing names w/o bound slot
+    for name, group in by_name.items():
+        virt = [s for s in group if _is_vtable_virtual(s)]
         nonvirt = [s for s in group if not _is_vtable_virtual(s)]
-        virt = sorted((s for s in group if _is_vtable_virtual(s)),
-                      key=_element_pilot_slot_of)
+        if not virt:
+            unit_order[name] = list(group)
+            continue
+        s0 = name_slot.get(name)
+        if s0 is None:
+            # generator synthetic or structurally unbindable (no candidate
+            # slot): keep order, report (do NOT guess a slot)
+            unbound.append(name)
+            unit_order[name] = nonvirt + virt
+            continue
         if len(virt) > 1:
-            virt = list(reversed(virt))
-        unit_order[name] = nonvirt + virt
+            # overload run: slots come from the binder. For an ADJACENT
+            # run (s0, s0+1, ...) the measured MSVC rule applies -- the
+            # CONST first-param overload takes the LOWER slot, so emit
+            # non-const FIRST. For a SPLIT run (distinct bodies at
+            # non-adjacent singleton slots, e.g. Edit::CreateHWND 54/56)
+            # emit in slot order directly.
+            ss = sorted(name_slots_actual.get(name) or
+                        list(range(s0, s0 + len(virt))))
+            if len(ss) == len(virt) and ss == list(range(ss[0], ss[0] + len(virt))):
+                # adjacent run: non-const first (const takes lower slot)
+                virt_sorted = sorted(virt, key=lambda s: (
+                    1 if _first_param_const(s) else 0))
+            else:
+                virt_sorted = virt  # original declaration order
+            set_slots[name] = ss[:len(virt)]
+        else:
+            virt_sorted = virt
+            set_slots[name] = [s0]
+        unit_order[name] = nonvirt + virt_sorted
 
-    # slot order of a virtual-bearing set = min slot of its virtuals
-    def _set_slot(name):
-        return min(_element_pilot_slot_of(s) for s in by_name[name]
-                   if _is_vtable_virtual(s))
+    def _unit_slot(name: str):
+        ss = set_slots.get(name)
+        return min(ss) if ss else None
 
-    # bucket walk: access buckets in member-walk order, virtual sets in slot
-    # order at the head of their bucket, pure-nonvirtual sets after them in
-    # original order
-    bucket_seq = []
-    for s in members:
-        a = access_of(s)
-        if not bucket_seq or bucket_seq[-1][0] != a:
-            bucket_seq.append((a, []))
-    # Interleaved emission (the audited real class layout):
-    #   public virtuals slots 1-26 (+ their nonvirtual overload partners)
-    #   -> protected virtuals slots 27-33 (+ partners)
-    #   -> public virtuals slots 34-44 (+ partners)
-    #   -> remaining public nonvirtuals -> protected nonvirtuals -> private
-    # Pure-nonvirtual sets NEVER interleave into a virtual run (they hold no
-    # slot; their original order is preserved within their tail block).
-    out = []
-    emitted = set()
+    # --- emission -------------------------------------------------------
+    out: list = []
+    emitted: set = set()
 
-    def _vsets_between(acc, lo, hi):
-        names = [n for n, g in by_name.items()
-                 if n not in emitted
-                 and any(_is_vtable_virtual(s) and access_of(s) == acc
-                         for s in g)
-                 and lo <= _set_slot(n) <= hi]
-        return sorted(names, key=_set_slot)
-
-    def _emit_vsets(acc, lo, hi):
-        for n in _vsets_between(acc, lo, hi):
-            out.extend(unit_order[n])
-            emitted.add(n)
-
-    # slot 0: the destructor set (ctors + dtor; the dtor is the set's only
-    # virtual and takes slot 0) leads the class
+    # slot 0: the destructor set (ctors + dtor) leads the class when the
+    # class has a destructor declaration
     for s in members:
         if classify_dtor(s):
             out.extend(unit_order[s["member"]])
             emitted.add(s["member"])
             break
-    _emit_vsets("public", 1, 26)
-    _emit_vsets("protected", 27, 33)
-    _emit_vsets("public", 34, 44)
-    # the remaining members are all pure nonvirtuals; keep each access group
-    # contiguous (public tail, then protected, then private) in original
-    # order within the group, so the walk yields exactly
-    # public -> protected -> public -> private
+
+    # virtual-bearing units in slot order
+    bound_names = sorted(
+        (n for n in set_slots if n not in emitted),
+        key=lambda n: _unit_slot(n))
+    for n in bound_names:
+        out.extend(unit_order[n])
+        emitted.add(n)
+
+    # unbound virtual-bearing units next (stable, original order)
+    for n in unbound:
+        if n in emitted:
+            continue
+        out.extend(unit_order[n])
+        emitted.add(n)
+
+    # remaining pure-nonvirtual sets, access-grouped, original order
     for acc in ("public", "protected", "private"):
         for s in members:
             if s["member"] in emitted or access_of(s) != acc:
                 continue
             out.extend(unit_order[s["member"]])
             emitted.add(s["member"])
-    assert len(out) == len(members), (len(out), len(members))
+
+    assert len(out) == len(members), (cls, len(out), len(members))
     assert {id(x) for x in out} == {id(x) for x in members}
     return out
+
+
+def contract_report(cls: str, members: list, slot_lists: list) -> dict:
+    """Binding statistics for the generation report (which classes are
+    fully contract-bound, which carry unbindable virtuals)."""
+    slot_of: set = set()
+    for idx, entry in enumerate(slot_lists):
+        if idx == 0:
+            continue
+        cands = [entry] if isinstance(entry, str) else list(entry or [])
+        slot_of.update(cands)
+    bound = unbound = 0
+    unbound_names: list = []
+    for s in members:
+        if not _is_vtable_virtual(s):
+            continue
+        if s["member"] in slot_of:
+            bound += 1
+        else:
+            unbound += 1
+            if s["member"] not in unbound_names:
+                unbound_names.append(s["member"])
+    return {"class": cls, "bound": bound, "unbound": unbound,
+            "unbound_names": unbound_names,
+            "slots": len(slot_lists)}
+
+
+# --- migration assertion: the contract-derived Element virtual set must
+# equal the audited pilot evidence table (kept as data only, see above).
+def assert_element_pilot_migration(cls: str, members: list,
+                                   slot_lists: list) -> None:
+    if cls != "Element":
+        return
+    names = [s["member"] for s in members if _is_vtable_virtual(s)]
+    derived: list = []
+    seen: set = set()
+    for idx, entry in enumerate(slot_lists):
+        if idx == 0:
+            continue
+        cands = [entry] if isinstance(entry, str) else list(entry or [])
+        for nm in names:
+            if nm in cands and nm not in seen:
+                seen.add(nm)
+                derived.append(nm)
+    audited = sorted(set(ELEMENT_PILOT_SLOT_ORDER))
+    if sorted(set(derived)) != audited:
+        raise SystemExit(
+            "migration assertion: contract-derived Element virtual set "
+            "diverged from the audited pilot table "
+            f"(contract-only={sorted(set(derived) - set(audited))} "
+            f"audited-only={sorted(set(audited) - set(derived))})")
 
 
 # Classes whose self-referencing mangled names use U (struct) rather than V
@@ -1089,7 +1261,8 @@ def base_list(inheritance: dict, cls: str) -> list:
 def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
                         inheritance: dict, banner: str,
-                        has_own_vftable: bool = False) -> str:
+                        has_own_vftable: bool = False,
+                        slot_lists: list | None = None) -> str:
     """Render one class header file content."""
     tpl = is_template_class(cls)
     tid = template_id(cls) if tpl else cls
@@ -1170,13 +1343,14 @@ def render_class_header(cls: str, members: list, data_members: list,
     # Access is recovered from the mangled name (access_of); sections are
     # emitted in public -> protected -> private order (matches the old
     # output exactly, keeping the golden diff stable).
-    # W5 P2 pilot: for Element the virtuals are first reordered into the
-    # real vtable slot order (element_pilot_reorder); the access split below
-    # then emits virtual runs that follow slot order per section, with the
-    # protected run re-opened as an interleaved section so the overall
-    # declaration order equals slot order (audited: 44/44 slots).
-    if cls == "Element":
-        members = element_pilot_reorder(members)
+    # W5 full-contract v1: when the class has a primary vftable in
+    # pinned/vtable-slots.json, its member declarations are reordered into
+    # real vtable slot order by contract_reorder (generalized from the
+    # Element pilot; the pilot table survives only as a migration
+    # assertion). Classes without a table keep the canonical order.
+    if slot_lists is not None:
+        assert_element_pilot_migration(cls, members, slot_lists)
+        members = contract_reorder(cls, members, slot_lists)
     sections = {"public": [], "protected": [], "private": []}
     for sym in members:
         acc = access_of(sym)
@@ -1239,6 +1413,30 @@ def render_class_header(cls: str, members: list, data_members: list,
         lines.append(f"        virtual long On{cls[:24]}Virt(void) {{ return 0; }}")
         lines.append("")
 
+    if cls == "Element":
+        # W2 contract note (documented, NOT probed at runtime): the first
+        # parameter of Element::Create is a creation-flags bitfield (Win7
+        # evidence domain), not a class id/atom/category:
+        #   CRF_BIT0 (0x1)  skip the DUser gadget triple-creation path
+        #   CRF_BIT1 (0x2)  write Element+0x97 bit0 (a layout optimization)
+        #   bits 2..31      dead bits in the pinned binary
+        # The 4th parameter is an OUT handle for the DeferCycle (NULL is
+        # legal). The XML path (DUIXmlParser::CreateElement) does NOT route
+        # through Element::Create; DuiCreateObject is an independent
+        # GUID-table factory. Flag semantics are version-bound to the
+        # pinned dui70.dll and must be re-verified across versions. No
+        # dynamic probe with flags=1 is performed by this pipeline.
+        lines.append("        // Element::Create(unsigned flags, ...): flags is a")
+        lines.append("        // CREATION-FLAGS bitfield (Win7 evidence domain, version-")
+        lines.append("        // bound; re-verify across DLL versions):")
+        lines.append("        //   CRF_BIT0 = 0x1  skip DUser gadget triple-creation")
+        lines.append("        //   CRF_BIT1 = 0x2  write Element+0x97 bit0 (layout opt)")
+        lines.append("        //   bits 2..31     dead bits in the pinned binary")
+        lines.append("        // 4th param: DeferCycle OUT handle (NULL is legal).")
+        lines.append("        // XML CreateElement does not route through here;")
+        lines.append("        // DuiCreateObject is an independent GUID-table factory.")
+        lines.append("")
+
     if cls == "CallstackTracker":
         # IMGHLPFN_LOAD is really a dbghelp function-pointer typedef; the
         # PDB reports it as a nested struct holding the loader procs.
@@ -1284,14 +1482,11 @@ def render_class_header(cls: str, members: list, data_members: list,
     for dsym in data_members:
         data_by_access.setdefault(access_of(dsym), []).append(dsym)
 
-    if cls == "Element":
-        # W5 P2 pilot interleaved access layout: the real vtable slot order
-        # runs public(1-26) -> protected(27-33) -> public(34-44), so the
-        # class body re-opens the public section after the protected run.
-        # members are already in slot order (element_pilot_reorder); group
-        # them by access preserving the walk order, then emit each group --
-        # which yields exactly the audited three-run layout. Data members
-        # join the end of their access group.
+    if slot_lists is not None:
+        # W5 full-contract v1: members are in contract slot order; emit
+        # access groups in WALK order (grouping consecutive same-access
+        # members), which reproduces interleaved layouts like Element's
+        # public(1-26) -> protected(27-33) -> public(34-44) naturally.
         groups = []  # [(access, [syms...])] in walk order
         for sym in members:
             a = access_of(sym)
@@ -2015,7 +2210,22 @@ def main(argv=None) -> int:
     symbols = load_symbols(args.pinned / "symbols.json")
     tr = TypeTranslator(classes)
 
+    # W5 full-contract v1: the vtable slot-order ground truth. The table is
+    # a pure function of the DLL bytes + symbols.json (extract-vtable-
+    # slots.py), re-derived and byte-compared by repro.py gate R3' -- the
+    # emitter CONSUMES it, never duplicates it. Missing table = error: a
+    # silent fallback to alphabetical order would reintroduce W5.
+    slots_doc_path = args.pinned / "vtable-slots.json"
+    if not slots_doc_path.is_file():
+        print("emit_headers: ERROR  pinned/vtable-slots.json missing "
+              "(the W5 contract); refusing to emit alphabetical order",
+              file=sys.stderr)
+        return 2
+    slots_doc = json.loads(slots_doc_path.read_text(encoding="utf-8"))
+    slot_tables = slots_doc.get("classes") or {}
+
     stats = {}
+    contract_rows = []
     for cls in classes:
         if is_duixml_nested(cls):
             # nested in DUIXmlParser: emitted by its header/TU, not standalone
@@ -2039,11 +2249,21 @@ def main(argv=None) -> int:
             for s in symbols
             if s.get("class") == cls and s.get("is_exported")
         )
+        entry = slot_tables.get(cls)
+        slot_lists = entry.get("slots") if isinstance(entry, dict) else None
+        if slot_lists is not None and not isinstance(slot_lists, list):
+            print(f"emit_headers: ERROR  contract entry for {cls} is not a "
+                  "slot list", file=sys.stderr)
+            return 2
         content = render_class_header(cls, members, data_members, tr,
                                       classes, inheritance, banner,
-                                      has_own_vftable=has_own_vftable)
+                                      has_own_vftable=has_own_vftable,
+                                      slot_lists=slot_lists)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
+        if slot_lists is not None:
+            contract_rows.append(
+                contract_report(cls, members, slot_lists))
 
     # shared prelude + interfaces + aggregate
     (out_dir / "dui_abi_types.h").write_text(render_abi_types_header(banner), encoding="utf-8", newline="\n")
@@ -2051,6 +2271,21 @@ def main(argv=None) -> int:
     (out_dir / "DirectUI.h").write_text(render_aggregate_header(classes, banner), encoding="utf-8", newline="\n")
 
     print(f"emit_headers: wrote {len(stats) + 3} files to {out_dir}")
+    # W5 contract binding report (known-signature vs unbindable virtuals)
+    n_cls = len(contract_rows)
+    n_bound = sum(r["bound"] for r in contract_rows)
+    n_unbound = sum(r["unbound"] for r in contract_rows)
+    full = [r for r in contract_rows if r["unbound"] == 0]
+    partial = [r for r in contract_rows if r["unbound"] > 0]
+    print(f"  vtable contract: {n_cls} classes with primary vftables, "
+          f"{len(full)} fully bound, {len(partial)} with unbindable "
+          f"virtuals ({n_unbound} decls, kept in original order); "
+          f"{n_bound} bound virtuals ordered by real slots")
+    for r in partial:
+        print(f"    {r['class']:<28} bound={r['bound']:3d} "
+              f"unbound={r['unbound']:2d} "
+              f"({', '.join(r['unbound_names'][:6])}"
+              f"{'...' if len(r['unbound_names']) > 6 else ''})")
     for cls in classes:
         s = stats.get(cls)
         if not s:

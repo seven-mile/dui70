@@ -19,6 +19,9 @@ namespace DirectUI
         CCRadioButton(CCRadioButton const&);
         CCRadioButton(void);
         virtual ~CCRadioButton(void);
+        virtual void OnInput(InputEvent*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         CCRadioButton& operator=(CCRadioButton&&);
         CCRadioButton& operator=(CCRadioButton const&);
         static PropertyInfo const* AutoGroupingProp(void);
@@ -26,9 +29,6 @@ namespace DirectUI
         static long Create(Element*, unsigned long*, Element**);
         bool GetAutoGrouping(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual void OnInput(InputEvent*);
-        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         static long Register(void);
         long SetAutoGrouping(bool);
         static void SetClassInfoPtr(IClassInfo*);

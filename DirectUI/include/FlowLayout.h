@@ -21,14 +21,14 @@ namespace DirectUI
         FlowLayout(FlowLayout const&);
         FlowLayout(void);
         virtual ~FlowLayout(void);
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         FlowLayout& operator=(FlowLayout const&);
         static long Create(int, int*, Value**);
         static long Create(bool, unsigned int, unsigned int, unsigned int, Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         int GetLine(Element*, Element*);
         void Initialize(bool, unsigned int, unsigned int, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         protected:
         tagSIZE BuildCacheInfo(Element*, int, int, Surface*, bool);

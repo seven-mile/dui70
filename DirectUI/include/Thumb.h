@@ -18,14 +18,14 @@ namespace DirectUI
         Thumb(Thumb const&);
         Thumb(void);
         virtual ~Thumb(void);
+        virtual void OnInput(InputEvent*);
+        virtual IClassInfo* GetClassInfoW(void);
         Thumb& operator=(Thumb const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static UID Drag(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual void OnInput(InputEvent*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SupressRightButtonDrag(bool);

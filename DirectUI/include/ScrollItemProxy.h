@@ -15,17 +15,19 @@ namespace DirectUI
     class ScrollItemProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ScrollItemProxy(ScrollItemProxy&&);
         ScrollItemProxy(ScrollItemProxy const&);
         ScrollItemProxy(void);
         ScrollItemProxy& operator=(ScrollItemProxy&&);
         ScrollItemProxy& operator=(ScrollItemProxy const&);
         static ScrollItemProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

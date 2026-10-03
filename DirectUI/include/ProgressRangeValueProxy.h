@@ -15,15 +15,17 @@ namespace DirectUI
     class ProgressRangeValueProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ProgressRangeValueProxy(ProgressRangeValueProxy&&);
         ProgressRangeValueProxy(ProgressRangeValueProxy const&);
         ProgressRangeValueProxy(void);
         ProgressRangeValueProxy& operator=(ProgressRangeValueProxy&&);
         ProgressRangeValueProxy& operator=(ProgressRangeValueProxy const&);
-        virtual long DoMethod(int, char*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

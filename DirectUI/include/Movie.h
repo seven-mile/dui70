@@ -19,6 +19,11 @@ namespace DirectUI
         Movie(Movie const&);
         Movie(void);
         virtual ~Movie(void);
+        virtual void OnDestroy(void);
+        virtual void OnEvent(Event*);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual void OnHosted(Element*);
+        virtual IClassInfo* GetClassInfoW(void);
         Movie& operator=(Movie const&);
         static UID AdvanceFrame(void);
         static PropertyInfo const* AutoStartProp(void);
@@ -31,7 +36,6 @@ namespace DirectUI
         bool GetAutoStart(void);
         bool GetAutoStop(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         int GetCompositingQuality(void);
         bool GetDrawOutlines(void);
         int GetInterpolationMode(void);
@@ -43,10 +47,6 @@ namespace DirectUI
         static PropertyInfo const* InterpolationModeProp(void);
         long LoadFromPath(unsigned short const*);
         long LoadFromResource(HINSTANCE__*, int);
-        virtual void OnDestroy(void);
-        virtual void OnEvent(Event*);
-        virtual void OnHosted(Element*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         static PropertyInfo const* PathProp(void);
         void Pause(void);
         static PropertyInfo const* PixelOffsetModeProp(void);

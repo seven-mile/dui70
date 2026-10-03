@@ -18,12 +18,12 @@ namespace DirectUI
     public:
         ItemList(void);
         virtual ~ItemList(void);
-        static long Create(Element*, unsigned long*, Element**);
-        virtual Element* GetAdjacent(Element*, int, NavReference const*, unsigned long);
-        static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        bool IsReorderable(void);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual Element* GetAdjacent(Element*, int, NavReference const*, unsigned long);
+        virtual IClassInfo* GetClassInfoW(void);
+        static long Create(Element*, unsigned long*, Element**);
+        static IClassInfo* GetClassInfoPtr(void);
+        bool IsReorderable(void);
         static long Register(void);
         long SetReorderable(bool);
     };

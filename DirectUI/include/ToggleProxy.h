@@ -15,17 +15,19 @@ namespace DirectUI
     class ToggleProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ToggleProxy(ToggleProxy&&);
         ToggleProxy(ToggleProxy const&);
         ToggleProxy(void);
         ToggleProxy& operator=(ToggleProxy&&);
         ToggleProxy& operator=(ToggleProxy const&);
         static ToggleProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         long GetToggleState(ToggleState*);

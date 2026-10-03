@@ -19,12 +19,12 @@ namespace DirectUI
         Pages(Pages const&);
         Pages(void);
         virtual ~Pages(void);
+        virtual long Add(Element**, unsigned int);
+        virtual IClassInfo* GetClassInfoW(void);
         Pages& operator=(Pages&&);
         Pages& operator=(Pages const&);
-        virtual long Add(Element**, unsigned int);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         unsigned int GetCount(void);
         Element* GetPage(unsigned int);
         Element* GetPage(unsigned short const*);

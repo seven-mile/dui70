@@ -15,15 +15,17 @@ namespace DirectUI
     class ScrollBarRangeValueProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ScrollBarRangeValueProxy(ScrollBarRangeValueProxy&&);
         ScrollBarRangeValueProxy(ScrollBarRangeValueProxy const&);
         ScrollBarRangeValueProxy(void);
         ScrollBarRangeValueProxy& operator=(ScrollBarRangeValueProxy&&);
         ScrollBarRangeValueProxy& operator=(ScrollBarRangeValueProxy const&);
-        virtual long DoMethod(int, char*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

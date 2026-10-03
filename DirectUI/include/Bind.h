@@ -20,12 +20,12 @@ namespace DirectUI
         Bind(Bind const&);
         Bind(void);
         virtual ~Bind(void);
+        virtual IClassInfo* GetClassInfoW(void);
         Bind& operator=(Bind&&);
         Bind& operator=(Bind const&);
         static PropertyInfo const* ConnectProp(void);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         unsigned short const* GetConnect(Value**);
         unsigned short const* GetProperty(Value**);
         long Initialize(Element*, unsigned long*);

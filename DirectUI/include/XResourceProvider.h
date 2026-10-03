@@ -17,6 +17,9 @@ namespace DirectUI
     class XResourceProvider
     {
     public:
+        virtual long CreateDUICP(HWNDElement*, HWND__*, HWND__*, Element**, DUIXmlParser**);
+        virtual long CreateParserCP(DUIXmlParser**);
+        virtual void DestroyCP(void);
         XResourceProvider(XResourceProvider&&);
         XResourceProvider(XResourceProvider const&);
         XResourceProvider(void);
@@ -24,9 +27,6 @@ namespace DirectUI
         XResourceProvider& operator=(XResourceProvider const&);
         static long Create(XResourceProvider**);
         static long Create(HINSTANCE__*, unsigned short const*, unsigned short const*, unsigned short const*, XResourceProvider**);
-        virtual long CreateDUICP(HWNDElement*, HWND__*, HWND__*, Element**, DUIXmlParser**);
-        virtual long CreateParserCP(DUIXmlParser**);
-        virtual void DestroyCP(void);
         long Initialize(HINSTANCE__*, unsigned short const*, unsigned short const*, unsigned short const*);
     };
 

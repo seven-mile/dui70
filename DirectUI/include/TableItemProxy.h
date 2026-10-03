@@ -15,17 +15,19 @@ namespace DirectUI
     class TableItemProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         TableItemProxy(TableItemProxy&&);
         TableItemProxy(TableItemProxy const&);
         TableItemProxy(void);
         TableItemProxy& operator=(TableItemProxy&&);
         TableItemProxy& operator=(TableItemProxy const&);
         static TableItemProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

@@ -15,26 +15,26 @@ namespace DirectUI
     class BaseScrollBar
     {
     public:
+        virtual void LineUp(unsigned int);
+        virtual void LineDown(unsigned int);
+        virtual void PageUp(unsigned int);
+        virtual void PageDown(unsigned int);
+        virtual void Home(void);
+        virtual void End(void);
         BaseScrollBar(BaseScrollBar&&);
         BaseScrollBar(BaseScrollBar const&);
         BaseScrollBar(void);
         BaseScrollBar& operator=(BaseScrollBar&&);
         BaseScrollBar& operator=(BaseScrollBar const&);
-        virtual void End(void);
         int GetPageInc(void);
-        virtual void Home(void);
         bool IsPinned(void);
         bool IsScrollable(void);
-        virtual void LineDown(unsigned int);
-        virtual void LineUp(unsigned int);
         void OnMaximumChanged(Value*);
         void OnMinimumChanged(Value*);
         void OnPageChanged(Value*);
         bool OnPageChanging(Value*);
         void OnPositionChanged(Value*);
         bool OnPositionChanging(Value*);
-        virtual void PageDown(unsigned int);
-        virtual void PageUp(unsigned int);
         static UID Scroll(void);
         void SetPinned(bool);
     };

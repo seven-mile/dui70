@@ -19,26 +19,32 @@ namespace DirectUI
         CCTreeView(CCTreeView const&);
         CCTreeView(unsigned long);
         virtual ~CCTreeView(void);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+
+        protected:
+        virtual long _OnGetInfoTip(tagNMTVGETINFOTIPW const*);
+
+        public:
+        virtual IClassInfo* GetClassInfoW(void);
+
+        protected:
+        virtual long _OnItemChanged(tagTVITEMCHANGE const*);
+
+        public:
+        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         CCTreeView& operator=(CCTreeView&&);
         CCTreeView& operator=(CCTreeView const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         unsigned int GetItemState(_TREEITEM*const);
         unsigned long GetStyle(void);
         _TREEITEM* InsertItem(unsigned short*, unsigned int, _TREEITEM*const, _TREEITEM*const);
         _TREEITEM* InsertItem(tagTVINSERTSTRUCTW const*);
-        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetItemState(_TREEITEM*, unsigned int);
         unsigned long SetStyle(unsigned long);
-
-        protected:
-        virtual long _OnGetInfoTip(tagNMTVGETINFOTIPW const*);
-        virtual long _OnItemChanged(tagTVITEMCHANGE const*);
 
         private:
         static IClassInfo* s_pClassInfo;

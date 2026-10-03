@@ -22,15 +22,26 @@ namespace DirectUI
         Edit(Edit const&);
         Edit(void);
         virtual ~Edit(void);
+        virtual bool IsContentProtected(void);
+        virtual unsigned short const* GetContentStringAsDisplayed(Value**);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnInput(InputEvent*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual unsigned int MessageCallback(tagGMSG*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
+
+        protected:
+        virtual HWND__* CreateHWND(HWND__*);
+        virtual HWND__* CreateHWND(HWND__*, bool);
+
+        public:
         Edit& operator=(Edit const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* DirtyProp(void);
         static UID Enter(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
-        virtual unsigned short const* GetContentStringAsDisplayed(Value**);
         bool GetDirty(void);
         int GetMaxLength(void);
         bool GetMultiline(void);
@@ -38,13 +49,8 @@ namespace DirectUI
         bool GetThemedBorder(void);
         bool GetWantTabs(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual bool IsContentProtected(void);
         static PropertyInfo const* MaxLengthProp(void);
-        virtual unsigned int MessageCallback(tagGMSG*);
         static PropertyInfo const* MultilineProp(void);
-        virtual void OnInput(InputEvent*);
-        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static PropertyInfo const* PasswordCharacterProp(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
@@ -56,10 +62,6 @@ namespace DirectUI
         long SetWantTabs(bool);
         static PropertyInfo const* ThemedBorderProp(void);
         static PropertyInfo const* WantTabsProp(void);
-
-        protected:
-        virtual HWND__* CreateHWND(HWND__*);
-        virtual HWND__* CreateHWND(HWND__*, bool);
 
         private:
         unsigned int GetTextHeight(void);

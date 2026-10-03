@@ -26,13 +26,13 @@ namespace DirectUI
         AccessibleButton(AccessibleButton const&);
         AccessibleButton(void);
         virtual ~AccessibleButton(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual IClassInfo* GetClassInfoW(void);
         AccessibleButton& operator=(AccessibleButton&&);
         AccessibleButton& operator=(AccessibleButton const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         void Recalc(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

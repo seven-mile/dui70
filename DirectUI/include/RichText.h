@@ -17,6 +17,13 @@ namespace DirectUI
     public:
         RichText(void);
         virtual ~RichText(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnEvent(Event*);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual void OnHosted(Element*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long GetForegroundColorRef(unsigned long*);
         static PropertyInfo const* AliasedRenderingProp(void);
         static PropertyInfo const* BaselineProp(void);
         static PropertyInfo const* ColorFontPaletteIndexProp(void);
@@ -28,10 +35,7 @@ namespace DirectUI
         static PropertyInfo const* FontSizeRunsProp(void);
         static PropertyInfo const* FontWeightRunsProp(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         IDWriteFactory* GetFactory(void);
-        virtual long GetForegroundColorRef(unsigned long*);
         unsigned long GetLineCount(void);
         unsigned short GetShortcutChar(void);
         unsigned long GetTrimmedLineCount(void);
@@ -39,11 +43,7 @@ namespace DirectUI
         static PropertyInfo const* LineSpacingProp(void);
         static PropertyInfo const* LocaleProp(void);
         static PropertyInfo const* MapRunsToClustersProp(void);
-        virtual void OnEvent(Event*);
-        virtual void OnHosted(Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static PropertyInfo const* OverhangOffsetProp(void);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         static long Register(void);
         long SetAliasedRendering(bool);
         long SetBaseline(int);

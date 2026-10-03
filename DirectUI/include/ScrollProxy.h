@@ -17,17 +17,19 @@ namespace DirectUI
     class ScrollProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         ScrollProxy(ScrollProxy&&);
         ScrollProxy(ScrollProxy const&);
         ScrollProxy(void);
         ScrollProxy& operator=(ScrollProxy&&);
         ScrollProxy& operator=(ScrollProxy const&);
         static ScrollProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         BaseScrollBar* GetScrollBar(bool);

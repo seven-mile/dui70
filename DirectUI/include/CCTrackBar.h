@@ -20,20 +20,25 @@ namespace DirectUI
         CCTrackBar(CCTrackBar const&);
         CCTrackBar(void);
         virtual ~CCTrackBar(void);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
+
+        protected:
+        virtual void PostCreate(HWND__*);
+
+        public:
         CCTrackBar& operator=(CCTrackBar&&);
         CCTrackBar& operator=(CCTrackBar const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         int GetLineSize(void);
         int GetRangeMax(void);
         int GetRangeMin(void);
         int GetThumbPosition(void);
         static PropertyInfo const* LineSizeProp(void);
-        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
         static PropertyInfo const* RangeMaxProp(void);
         static PropertyInfo const* RangeMinProp(void);
         static long Register(void);
@@ -43,9 +48,6 @@ namespace DirectUI
         long SetRangeMin(int);
         long SetThumbPosition(int);
         static PropertyInfo const* ThumbPositionProp(void);
-
-        protected:
-        virtual void PostCreate(HWND__*);
 
         private:
         static IClassInfo* s_pClassInfo;

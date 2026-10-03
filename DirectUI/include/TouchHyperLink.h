@@ -17,13 +17,13 @@ namespace DirectUI
     public:
         TouchHyperLink(void);
         virtual ~TouchHyperLink(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void GetImmersiveFocusRectOffsets(tagRECT*);
+        virtual IClassInfo* GetClassInfoW(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual void GetImmersiveFocusRectOffsets(tagRECT*);
         bool GetVisited(void);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         long SetVisited(bool);
         static PropertyInfo const* VisitedProp(void);

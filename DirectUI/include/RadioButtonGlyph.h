@@ -18,14 +18,14 @@ namespace DirectUI
         RadioButtonGlyph(RadioButtonGlyph const&);
         RadioButtonGlyph(void);
         virtual ~RadioButtonGlyph(void);
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
+        virtual IClassInfo* GetClassInfoW(void);
         RadioButtonGlyph& operator=(RadioButtonGlyph const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

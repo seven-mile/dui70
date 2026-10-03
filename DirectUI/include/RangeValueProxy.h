@@ -15,17 +15,19 @@ namespace DirectUI
     class RangeValueProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+        RangeValueProxy(void);
+
+        public:
         RangeValueProxy(RangeValueProxy&&);
         RangeValueProxy(RangeValueProxy const&);
         RangeValueProxy& operator=(RangeValueProxy&&);
         RangeValueProxy& operator=(RangeValueProxy const&);
         static RangeValueProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        RangeValueProxy(void);
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

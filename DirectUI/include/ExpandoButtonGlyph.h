@@ -18,14 +18,14 @@ namespace DirectUI
         ExpandoButtonGlyph(ExpandoButtonGlyph const&);
         ExpandoButtonGlyph(void);
         virtual ~ExpandoButtonGlyph(void);
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
+        virtual IClassInfo* GetClassInfoW(void);
         ExpandoButtonGlyph& operator=(ExpandoButtonGlyph const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

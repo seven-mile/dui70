@@ -14,10 +14,10 @@ namespace DirectUI
     class SemanticZoomToggle
     {
     public:
-        static long Create(Element*, unsigned long*, Element**);
-        virtual long DefaultAction(void);
-        static IClassInfo* GetClassInfoPtr(void);
         virtual IClassInfo* GetClassInfoW(void);
+        virtual long DefaultAction(void);
+        static long Create(Element*, unsigned long*, Element**);
+        static IClassInfo* GetClassInfoPtr(void);
         long Initialize(Element*, unsigned long*);
         static long Register(void);
         static UID Toggle(void);

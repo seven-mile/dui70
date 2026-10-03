@@ -18,10 +18,11 @@ namespace DirectUI
         NativeHWNDHost(NativeHWNDHost const&);
         NativeHWNDHost(void);
         virtual ~NativeHWNDHost(void);
+        virtual HWND__* CreateHostWindow(unsigned long, unsigned short const*, unsigned short const*, unsigned long, int, int, int, int, HWND__*, HMENU__*, HINSTANCE__*, void*);
+        virtual long OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         NativeHWNDHost& operator=(NativeHWNDHost const&);
         static long Create(unsigned short const*, unsigned short const*, HWND__*, HICON__*, int, int, int, int, int, int, HINSTANCE__*, unsigned int, NativeHWNDHost**);
         static long Create(unsigned short const*, HWND__*, HICON__*, int, int, int, int, int, int, unsigned int, NativeHWNDHost**);
-        virtual HWND__* CreateHostWindow(unsigned long, unsigned short const*, unsigned short const*, unsigned long, int, int, int, int, HWND__*, HMENU__*, HINSTANCE__*, void*);
         void Destroy(void);
         static unsigned int DestroyMsg(void);
         void DestroyWindow(void);
@@ -31,7 +32,6 @@ namespace DirectUI
         void Host(Element*);
         long Initialize(unsigned short const*, unsigned short const*, HWND__*, HICON__*, int, int, int, int, int, int, HINSTANCE__*, unsigned int);
         long Initialize(unsigned short const*, HWND__*, HICON__*, int, int, int, int, int, int, unsigned int);
-        virtual long OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         int RestoreFocus(void);
         void SaveFocus(void);
         void SetDefaultFocusID(unsigned short const*);

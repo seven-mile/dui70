@@ -19,14 +19,14 @@ namespace DirectUI
         CCProgressBar(CCProgressBar const&);
         CCProgressBar(void);
         virtual ~CCProgressBar(void);
+        virtual void OnInput(InputEvent*);
+        virtual IClassInfo* GetClassInfoW(void);
         CCProgressBar& operator=(CCProgressBar&&);
         CCProgressBar& operator=(CCProgressBar const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual void OnInput(InputEvent*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

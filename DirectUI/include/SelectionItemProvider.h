@@ -22,15 +22,15 @@ namespace DirectUI
     public:
         SelectionItemProvider(void);
         virtual ~SelectionItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long AddToSelection(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
-        virtual long RemoveFromSelection(void);
         virtual long Select(void);
+        virtual long AddToSelection(void);
+        virtual long RemoveFromSelection(void);
         virtual long get_IsSelected(int*);
         virtual long get_SelectionContainer(IRawElementProviderSimple**);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

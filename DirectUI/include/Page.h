@@ -19,11 +19,11 @@ namespace DirectUI
         Page(Page const&);
         Page(void);
         virtual ~Page(void);
+        virtual IClassInfo* GetClassInfoW(void);
         Page& operator=(Page&&);
         Page& operator=(Page const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

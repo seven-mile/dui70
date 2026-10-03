@@ -22,15 +22,15 @@ namespace DirectUI
     public:
         GridItemProvider(void);
         virtual ~GridItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
+        virtual long get_Row(int*);
         virtual long get_Column(int*);
         virtual long get_ColumnSpan(int*);
-        virtual long get_ContainingGrid(IRawElementProviderSimple**);
-        virtual long get_Row(int*);
         virtual long get_RowSpan(int*);
+        virtual long get_ContainingGrid(IRawElementProviderSimple**);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

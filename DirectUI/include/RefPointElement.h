@@ -19,6 +19,8 @@ namespace DirectUI
         RefPointElement(RefPointElement const&);
         RefPointElement(void);
         virtual ~RefPointElement(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual IClassInfo* GetClassInfoW(void);
         RefPointElement& operator=(RefPointElement const&);
         static PropertyInfo const* ActualReferencePointProp(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
@@ -26,11 +28,9 @@ namespace DirectUI
         static Element* FindRefPoint(Element*, tagPOINT*);
         tagPOINT const* GetActualReferencePoint(Value**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         tagPOINT const* GetReferencePoint(Value**);
         long Initialize(unsigned int, Element*, unsigned long*);
         static RefPointElement* Locate(Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static PropertyInfo const* ReferencePointProp(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

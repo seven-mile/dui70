@@ -28,16 +28,18 @@ namespace DirectUI
     public:
         HWNDElementProvider(void);
         virtual ~HWNDElementProvider(void);
+        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long AddRef(void);
-        static long Create(HWNDElement*, InvokeHelper*, HWNDElementProvider**);
+        virtual unsigned long Release(void);
         virtual long ElementProviderFromPoint(double, double, IRawElementProviderFragment**);
         virtual long GetFocus(IRawElementProviderFragment**);
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
 
         protected:
         virtual long Init(HWNDElement*, InvokeHelper*);
+
+        public:
+        static long Create(HWNDElement*, InvokeHelper*, HWNDElementProvider**);
     };
 
 } // namespace DirectUI

@@ -22,13 +22,13 @@ namespace DirectUI
     public:
         ExpandCollapseProvider(void);
         virtual ~ExpandCollapseProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long Collapse(void);
-        virtual long Expand(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
+        virtual long Expand(void);
+        virtual long Collapse(void);
         virtual long get_ExpandCollapseState(ExpandCollapseState*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

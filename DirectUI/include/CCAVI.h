@@ -19,19 +19,21 @@ namespace DirectUI
         CCAVI(CCAVI const&);
         CCAVI(void);
         virtual ~CCAVI(void);
+        virtual IClassInfo* GetClassInfoW(void);
+
+        protected:
+        virtual void PostCreate(HWND__*);
+
+        public:
         CCAVI& operator=(CCAVI&&);
         CCAVI& operator=(CCAVI const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         void Play(HWND__*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void Stop(void);
-
-        protected:
-        virtual void PostCreate(HWND__*);
 
         private:
         void OpenAnimation(HWND__*);

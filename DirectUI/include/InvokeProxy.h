@@ -15,17 +15,19 @@ namespace DirectUI
     class InvokeProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         InvokeProxy(InvokeProxy&&);
         InvokeProxy(InvokeProxy const&);
         InvokeProxy(void);
         InvokeProxy& operator=(InvokeProxy&&);
         InvokeProxy& operator=(InvokeProxy const&);
         static InvokeProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

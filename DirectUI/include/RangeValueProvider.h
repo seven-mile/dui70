@@ -22,17 +22,17 @@ namespace DirectUI
     public:
         RangeValueProvider(void);
         virtual ~RangeValueProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
         virtual long SetValue(double);
+        virtual long get_Value(double*);
         virtual long get_IsReadOnly(int*);
-        virtual long get_LargeChange(double*);
         virtual long get_Maximum(double*);
         virtual long get_Minimum(double*);
+        virtual long get_LargeChange(double*);
         virtual long get_SmallChange(double*);
-        virtual long get_Value(double*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

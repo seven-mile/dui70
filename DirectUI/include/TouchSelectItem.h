@@ -17,9 +17,9 @@ namespace DirectUI
     public:
         TouchSelectItem(void);
         virtual ~TouchSelectItem(void);
+        virtual IClassInfo* GetClassInfoW(void);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long GetItemData(IUnknown**);
         unsigned short const* GetTextContentOverride(Value**);
         static long Register(void);

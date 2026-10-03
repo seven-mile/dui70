@@ -19,14 +19,14 @@ namespace DirectUI
         CCCheckBox(CCCheckBox const&);
         CCCheckBox(unsigned long);
         virtual ~CCCheckBox(void);
+        virtual void OnInput(InputEvent*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         CCCheckBox& operator=(CCCheckBox&&);
         CCCheckBox& operator=(CCCheckBox const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual void OnInput(InputEvent*);
-        virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

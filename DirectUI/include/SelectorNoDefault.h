@@ -19,17 +19,17 @@ namespace DirectUI
         SelectorNoDefault(SelectorNoDefault const&);
         SelectorNoDefault(void);
         virtual ~SelectorNoDefault(void);
+        virtual void OnKeyFocusMoved(Element*, Element*);
+        virtual void OnEvent(Event*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long SetSelection(Element*);
         SelectorNoDefault& operator=(SelectorNoDefault&&);
         SelectorNoDefault& operator=(SelectorNoDefault const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
-        virtual void OnKeyFocusMoved(Element*, Element*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
-        virtual long SetSelection(Element*);
 
         private:
         static IClassInfo* s_pClassInfo;

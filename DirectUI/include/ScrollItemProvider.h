@@ -22,11 +22,11 @@ namespace DirectUI
     public:
         ScrollItemProvider(void);
         virtual ~ScrollItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
         virtual long ScrollIntoView(void);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

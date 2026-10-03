@@ -22,13 +22,13 @@ namespace DirectUI
     public:
         SelectionProvider(void);
         virtual ~SelectionProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long GetSelection(tagSAFEARRAY**);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
+        virtual long GetSelection(tagSAFEARRAY**);
         virtual long get_CanSelectMultiple(int*);
         virtual long get_IsSelectionRequired(int*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

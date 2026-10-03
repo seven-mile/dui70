@@ -19,16 +19,16 @@ namespace DirectUI
         CCSysLink(CCSysLink const&);
         CCSysLink(void);
         virtual ~CCSysLink(void);
+        virtual void OnInput(InputEvent*);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
         CCSysLink& operator=(CCSysLink&&);
         CCSysLink& operator=(CCSysLink const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
-        virtual void OnInput(InputEvent*);
-        virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
 

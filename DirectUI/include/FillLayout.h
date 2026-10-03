@@ -21,13 +21,13 @@ namespace DirectUI
         FillLayout(FillLayout const&);
         FillLayout(void);
         virtual ~FillLayout(void);
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         FillLayout& operator=(FillLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         void Initialize(void);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
     };
 
 } // namespace DirectUI

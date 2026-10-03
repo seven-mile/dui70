@@ -19,13 +19,13 @@ namespace DirectUI
         CCListView(CCListView const&);
         CCListView(void);
         virtual ~CCListView(void);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
         CCListView& operator=(CCListView&&);
         CCListView& operator=(CCListView const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         long Initialize(unsigned int, Element*, unsigned long*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

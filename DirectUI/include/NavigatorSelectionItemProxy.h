@@ -16,15 +16,17 @@ namespace DirectUI
     class NavigatorSelectionItemProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         NavigatorSelectionItemProxy(NavigatorSelectionItemProxy&&);
         NavigatorSelectionItemProxy(NavigatorSelectionItemProxy const&);
         NavigatorSelectionItemProxy(void);
         NavigatorSelectionItemProxy& operator=(NavigatorSelectionItemProxy&&);
         NavigatorSelectionItemProxy& operator=(NavigatorSelectionItemProxy const&);
-        virtual long DoMethod(int, char*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         long AddToSelection(Browser*);

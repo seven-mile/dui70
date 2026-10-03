@@ -22,13 +22,13 @@ namespace DirectUI
     public:
         ValueProvider(void);
         virtual ~ValueProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
         virtual long SetValue(unsigned short const*);
-        virtual long get_IsReadOnly(int*);
         virtual long get_Value(unsigned short**);
+        virtual long get_IsReadOnly(int*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

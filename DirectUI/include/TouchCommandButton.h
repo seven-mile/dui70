@@ -15,17 +15,17 @@ namespace DirectUI
     class TouchCommandButton
     {
     public:
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
+        virtual long Insert(Element**, unsigned int, unsigned int);
+        virtual IClassInfo* GetClassInfoW(void);
         TouchCommandButton(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         unsigned short const* GetSubContent(Value**);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual long Insert(Element**, unsigned int, unsigned int);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
-        virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         static long Register(void);
         long SetSubContent(unsigned short const*);
         static PropertyInfo const* SubContentProp(void);

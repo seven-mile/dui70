@@ -17,12 +17,16 @@ namespace DirectUI
         Proxy(Proxy const&);
         Proxy(void);
         virtual ~Proxy(void);
+
+        protected:
+        virtual void OnInvoke(unsigned int, void*);
+
+        public:
         Proxy& operator=(Proxy const&);
         static long SyncCallback(HGADGET__*, void*, EventMsg*);
 
         protected:
         void Invoke(unsigned int, void*);
-        virtual void OnInvoke(unsigned int, void*);
     };
 
 } // namespace DirectUI

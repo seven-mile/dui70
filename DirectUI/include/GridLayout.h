@@ -21,13 +21,13 @@ namespace DirectUI
         GridLayout(GridLayout const&);
         GridLayout(void);
         virtual ~GridLayout(void);
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         GridLayout& operator=(GridLayout const&);
         static long Create(int, int, Layout**);
         static long Create(int, int*, Value**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         void Initialize(int, int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         protected:
         unsigned int GetCurrentCols(int);

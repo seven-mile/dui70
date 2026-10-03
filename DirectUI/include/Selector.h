@@ -20,22 +20,22 @@ namespace DirectUI
         Selector(Selector const&);
         Selector(void);
         virtual ~Selector(void);
-        Selector& operator=(Selector const&);
-        static long Create(Element*, unsigned long*, Element**);
-        virtual Element* GetAdjacent(Element*, int, NavReference const*, unsigned long);
-        static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        Element* GetSelection(void);
-        long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         virtual void OnInput(InputEvent*);
         virtual void OnKeyFocusMoved(Element*, Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnEvent(Event*);
+        virtual Element* GetAdjacent(Element*, int, NavReference const*, unsigned long);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long SetSelection(Element*);
+        Selector& operator=(Selector const&);
+        static long Create(Element*, unsigned long*, Element**);
+        static IClassInfo* GetClassInfoPtr(void);
+        Element* GetSelection(void);
+        long Initialize(Element*, unsigned long*);
         static long Register(void);
         static UID SelectionChange(void);
         static PropertyInfo const* SelectionProp(void);
         static void SetClassInfoPtr(IClassInfo*);
-        virtual long SetSelection(Element*);
 
         private:
         static IClassInfo* s_pClassInfo;

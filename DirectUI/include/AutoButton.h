@@ -19,13 +19,13 @@ namespace DirectUI
         AutoButton(AutoButton const&);
         AutoButton(void);
         virtual ~AutoButton(void);
+        virtual void OnEvent(Event*);
+        virtual IClassInfo* GetClassInfoW(void);
         AutoButton& operator=(AutoButton&&);
         AutoButton& operator=(AutoButton const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         static UID Toggle(void);

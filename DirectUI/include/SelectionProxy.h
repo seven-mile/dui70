@@ -15,17 +15,19 @@ namespace DirectUI
     class SelectionProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+        SelectionProxy(void);
+
+        public:
         SelectionProxy(SelectionProxy&&);
         SelectionProxy(SelectionProxy const&);
         SelectionProxy& operator=(SelectionProxy&&);
         SelectionProxy& operator=(SelectionProxy const&);
         static SelectionProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        SelectionProxy(void);
-        virtual void Init(Element*);
     };
 
 } // namespace DirectUI

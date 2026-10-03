@@ -18,11 +18,11 @@ namespace DirectUI
         UnknownElement(UnknownElement const&);
         UnknownElement(void);
         virtual ~UnknownElement(void);
+        virtual IClassInfo* GetClassInfoW(void);
         UnknownElement& operator=(UnknownElement const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(unsigned int, Element*, unsigned long*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

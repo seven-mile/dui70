@@ -19,20 +19,22 @@ namespace DirectUI
         Viewer(Viewer const&);
         Viewer(void);
         virtual ~Viewer(void);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void OnInput(InputEvent*);
+        virtual void OnEvent(Event*);
+        virtual bool EnsureVisible(int, int, int, int);
+        virtual void _SelfLayoutDoLayout(int, int);
+        virtual tagSIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
         Viewer& operator=(Viewer const&);
         static long Create(Element*, unsigned long*, Element**);
-        virtual bool EnsureVisible(int, int, int, int);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         int GetXOffset(void);
         bool GetXScrollable(void);
         int GetYOffset(void);
         bool GetYScrollable(void);
         long Initialize(Element*, unsigned long*);
-        virtual void OnEvent(Event*);
-        virtual void OnInput(InputEvent*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetEnsureVisibleUseLayoutCoordinates(bool);
@@ -44,8 +46,6 @@ namespace DirectUI
         static PropertyInfo const* XScrollableProp(void);
         static PropertyInfo const* YOffsetProp(void);
         static PropertyInfo const* YScrollableProp(void);
-        virtual void _SelfLayoutDoLayout(int, int);
-        virtual tagSIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
 
         private:
         Element* _GetContent(void);

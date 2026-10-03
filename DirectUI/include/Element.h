@@ -19,6 +19,16 @@ namespace DirectUI
     class Element
     {
     public:
+        // Element::Create(unsigned flags, ...): flags is a
+        // CREATION-FLAGS bitfield (Win7 evidence domain, version-
+        // bound; re-verify across DLL versions):
+        //   CRF_BIT0 = 0x1  skip DUser gadget triple-creation
+        //   CRF_BIT1 = 0x2  write Element+0x97 bit0 (layout opt)
+        //   bits 2..31     dead bits in the pinned binary
+        // 4th param: DeferCycle OUT handle (NULL is legal).
+        // XML CreateElement does not route through here;
+        // DuiCreateObject is an independent GUID-table factory.
+
         Element(Element const&);
         Element(void);
         virtual ~Element(void);

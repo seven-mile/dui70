@@ -22,13 +22,13 @@ namespace DirectUI
     public:
         TableProvider(void);
         virtual ~TableProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long GetColumnHeaders(tagSAFEARRAY**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long GetRowHeaders(tagSAFEARRAY**);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
         virtual unsigned long Release(void);
+        virtual long GetRowHeaders(tagSAFEARRAY**);
+        virtual long GetColumnHeaders(tagSAFEARRAY**);
         virtual long get_RowOrColumnMajor(RowOrColumnMajor*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

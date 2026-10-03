@@ -21,16 +21,16 @@ namespace DirectUI
         BorderLayout(BorderLayout const&);
         BorderLayout(void);
         virtual ~BorderLayout(void);
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         BorderLayout& operator=(BorderLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         void Initialize(void);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         private:
         void SetClient(Element*);

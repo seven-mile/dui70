@@ -17,18 +17,18 @@ namespace DirectUI
     class TouchRepeatButton
     {
     public:
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual void FireClickEvent(unsigned int, unsigned int, TouchButton::ClickDevice, tagPOINT*);
+        virtual void FireRightClickEvent(unsigned int, tagPOINT*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual long DefaultAction(void);
         TouchRepeatButton(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);
-        virtual long DefaultAction(void);
         static PropertyInfo const* DisableMouseInRectCheckProp(void);
-        virtual void FireClickEvent(unsigned int, unsigned int, TouchButton::ClickDevice, tagPOINT*);
-        virtual void FireRightClickEvent(unsigned int, tagPOINT*);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         bool GetDisableMouseInRectCheck(void);
         long Initialize(unsigned int, Element*, unsigned long*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         static UID RepeatClick(void);
         long SetDisableMouseInRectCheck(bool);

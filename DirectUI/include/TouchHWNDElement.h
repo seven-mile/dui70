@@ -17,13 +17,28 @@ namespace DirectUI
     public:
         TouchHWNDElement(void);
         virtual ~TouchHWNDElement(void);
+        virtual bool IsMSAAEnabled(void);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         virtual void ActivateTooltip(Element*, unsigned long);
+        virtual void OnInput(InputEvent*);
+        virtual void OnKeyFocusMoved(Element*, Element*);
+        virtual void OnDestroy(void);
+        virtual void OnEvent(Event*);
+        virtual unsigned int MessageCallback(tagGMSG*);
+        virtual void RemoveTooltip(Element*);
+        virtual void UpdateTooltip(Element*);
+        virtual IClassInfo* GetClassInfoW(void);
+        virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
+
+        protected:
+        virtual void _OnUIStateChanged(unsigned short, unsigned short);
+
+        public:
         static long Create(HWND__*, bool, unsigned int, Element*, unsigned long*, Element**);
         long DismissIHMAsync(void);
         static PropertyInfo const* FlagsProp(void);
         static UID ForwardingWindowMessage(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         TouchHWNDElementFlags GetFlags(void);
         long GetIHMRect(tagRECT*);
         IHMState GetIHMState(void);
@@ -33,22 +48,14 @@ namespace DirectUI
         long HideTouchTooltip(void);
         static UID IHMNotify(void);
         long Initialize(HWND__*, bool, unsigned int, Element*, unsigned long*);
-        virtual bool IsMSAAEnabled(void);
         bool IsRegisteredForAnimationStatusChanges(void);
         static PropertyInfo const* LightDismissIHMProp(void);
-        virtual unsigned int MessageCallback(tagGMSG*);
         static UID MonitorPowerSettingsChange(void);
-        virtual void OnDestroy(void);
-        virtual void OnEvent(Event*);
-        virtual void OnInput(InputEvent*);
-        virtual void OnKeyFocusMoved(Element*, Element*);
-        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         static UID ProcessingKeyboardNavigation(void);
         static long Register(void);
         void RegisterForAnimationStatusChanges(void);
         long RegisterForIHMChanges(void);
         long RegisterForMonitorPowerChanges(void);
-        virtual void RemoveTooltip(Element*);
         static UID RichTooltipShowing(void);
         static UID ScaleChanged(void);
         long SetFlags(TouchHWNDElementFlags, TouchHWNDElementFlags);
@@ -64,15 +71,12 @@ namespace DirectUI
         void UnregisterForAnimationStatusChanges(void);
         void UnregisterForIHMChanges(void);
         long UnregisterForMonitorPowerChanges(void);
-        virtual void UpdateTooltip(Element*);
         void UsePerMonitorScaling(HMONITOR__*);
         static PropertyInfo const* WindowAccessGradientColorProp(void);
-        virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
 
         protected:
         void _ClearTooltipState(void);
         void _DestroyTooltip(void);
-        virtual void _OnUIStateChanged(unsigned short, unsigned short);
     };
 
 } // namespace DirectUI

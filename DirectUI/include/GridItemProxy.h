@@ -15,17 +15,19 @@ namespace DirectUI
     class GridItemProxy
     {
     public:
+        virtual long DoMethod(int, char*);
+
+        protected:
+        virtual void Init(Element*);
+
+        public:
         GridItemProxy(GridItemProxy&&);
         GridItemProxy(GridItemProxy const&);
         GridItemProxy(void);
         GridItemProxy& operator=(GridItemProxy&&);
         GridItemProxy& operator=(GridItemProxy const&);
         static GridItemProxy* Create(Element*);
-        virtual long DoMethod(int, char*);
         static bool IsPatternSupported(Element*);
-
-        protected:
-        virtual void Init(Element*);
 
         private:
         long GetColumn(int*);

@@ -15,6 +15,7 @@ namespace DirectUI
     class TouchSlider
     {
     public:
+        virtual IClassInfo* GetClassInfoW(void);
         static PropertyInfo const* BufferingProp(void);
         void CancelCurrentDrag(void);
         static long Create(Element*, unsigned long*, Element**);
@@ -22,7 +23,6 @@ namespace DirectUI
         void FireEventOnMouseOrPointerRelease(void);
         int GetBuffering(void);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         Element* GetFillpartElement(void);
         bool GetIsContinuous(void);
         bool GetIsPressed(void);

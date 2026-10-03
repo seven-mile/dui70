@@ -20,12 +20,12 @@ namespace DirectUI
         PText(PText const&);
         PText(void);
         virtual ~PText(void);
+        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        virtual IClassInfo* GetClassInfoW(void);
         PText& operator=(PText const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
-        virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
         void SetDataEntry(IDataEntry*);

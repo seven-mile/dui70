@@ -19,6 +19,8 @@ namespace DirectUI
         CCListBox(CCListBox const&);
         CCListBox(void);
         virtual ~CCListBox(void);
+        virtual tagSIZE GetContentSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
         CCListBox& operator=(CCListBox&&);
         CCListBox& operator=(CCListBox const&);
         int AddString(unsigned short const*);
@@ -26,8 +28,6 @@ namespace DirectUI
         static long Create(Element*, unsigned long*, Element**);
         int DeleteString(int);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentSize(int, int, Surface*);
         int GetCount(void);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);

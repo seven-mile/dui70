@@ -19,16 +19,16 @@ namespace DirectUI
         Clipper(Clipper const&);
         Clipper(void);
         virtual ~Clipper(void);
+        virtual void _SelfLayoutDoLayout(int, int);
+        virtual tagSIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
+        virtual IClassInfo* GetClassInfoW(void);
         Clipper& operator=(Clipper&&);
         Clipper& operator=(Clipper const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         long Initialize(Element*, unsigned long*);
         static long Register(void);
         static void SetClassInfoPtr(IClassInfo*);
-        virtual void _SelfLayoutDoLayout(int, int);
-        virtual tagSIZE _SelfLayoutUpdateDesiredSize(int, int, Surface*);
 
         private:
         static IClassInfo* s_pClassInfo;

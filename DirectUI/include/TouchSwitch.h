@@ -15,9 +15,9 @@ namespace DirectUI
     class TouchSwitch
     {
     public:
+        virtual IClassInfo* GetClassInfoW(void);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);
-        virtual IClassInfo* GetClassInfoW(void);
         unsigned short const* GetOffText(Value**);
         unsigned short const* GetOnText(Value**);
         unsigned short const* GetTitleText(Value**);

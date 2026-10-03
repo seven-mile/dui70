@@ -14,9 +14,33 @@ namespace DirectUI
     class StyleSheet
     {
     public:
-    public:
-        virtual long OnStyleSheetVirt(void) { return 0; }
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_6(void) = 0;
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_StyleSheet_8(void) = 0;
         StyleSheet(StyleSheet&&);
         StyleSheet(StyleSheet const&);
         StyleSheet(void);

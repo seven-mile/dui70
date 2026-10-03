@@ -20,7 +20,136 @@ namespace DirectUI
         Repeater(Repeater const&);
         Repeater(void);
         virtual ~Repeater(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_6(void) = 0;
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_8(void) = 0;
+        // ABI placeholder: real slot 9 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_9(void) = 0;
+        // ABI placeholder: real slot 10 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_10(void) = 0;
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_11(void) = 0;
+        // ABI placeholder: real slot 12 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_12(void) = 0;
+        // ABI placeholder: real slot 13 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_13(void) = 0;
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_15(void) = 0;
+        // ABI placeholder: real slot 16 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_16(void) = 0;
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_23(void) = 0;
+        // ABI placeholder: real slot 24 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_24(void) = 0;
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_26(void) = 0;
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_27(void) = 0;
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_30(void) = 0;
+        // ABI placeholder: real slot 31 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_31(void) = 0;
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Repeater_44(void) = 0;
 
         protected:
         virtual long BuildElement(void);

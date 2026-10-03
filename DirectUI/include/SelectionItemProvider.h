@@ -20,17 +20,23 @@ namespace DirectUI
         : public IProvider, public RefcountBase
     {
     public:
+        // W5 CONTRACT: REJECTED -- this class cannot be
+        // expressed in real-slot order with the current
+        // pipeline model; canonical order is deliberate.
+        // reason: exported virtual(s) not in the primary
+        // vtable (secondary/MI subobject table): GetProxyCreator
+
         SelectionItemProvider(void);
         virtual ~SelectionItemProvider(void);
-        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long AddRef(void);
-        virtual unsigned long Release(void);
-        virtual long Select(void);
         virtual long AddToSelection(void);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
+        virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long Release(void);
         virtual long RemoveFromSelection(void);
+        virtual long Select(void);
         virtual long get_IsSelected(int*);
         virtual long get_SelectionContainer(IRawElementProviderSimple**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

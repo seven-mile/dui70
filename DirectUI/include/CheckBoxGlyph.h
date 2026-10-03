@@ -18,9 +18,138 @@ namespace DirectUI
         CheckBoxGlyph(CheckBoxGlyph const&);
         CheckBoxGlyph(void);
         virtual ~CheckBoxGlyph(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_1(void) = 0;
         virtual bool OnLostDialogFocus(IDialogElement*);
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_4(void) = 0;
         virtual bool OnReceivedDialogFocus(IDialogElement*);
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_6(void) = 0;
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_8(void) = 0;
+        // ABI placeholder: real slot 9 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_9(void) = 0;
+        // ABI placeholder: real slot 10 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_10(void) = 0;
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_11(void) = 0;
+        // ABI placeholder: real slot 12 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_12(void) = 0;
+        // ABI placeholder: real slot 13 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_13(void) = 0;
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_15(void) = 0;
+        // ABI placeholder: real slot 16 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_16(void) = 0;
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_23(void) = 0;
+        // ABI placeholder: real slot 24 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_24(void) = 0;
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_26(void) = 0;
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_27(void) = 0;
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_30(void) = 0;
+        // ABI placeholder: real slot 31 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_31(void) = 0;
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_44(void) = 0;
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_45(void) = 0;
+        // ABI placeholder: real slot 46 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_46(void) = 0;
         CheckBoxGlyph& operator=(CheckBoxGlyph const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

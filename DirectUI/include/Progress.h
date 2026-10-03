@@ -24,6 +24,15 @@ namespace DirectUI
         virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
         virtual tagSIZE GetContentSize(int, int, Surface*);
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Progress_45(void) = 0;
+        // ABI placeholder: real slot 46 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Progress_46(void) = 0;
+        // ABI placeholder: real slot 47 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Progress_47(void) = 0;
         Progress& operator=(Progress const&);
         static long Create(Element*, unsigned long*, Element**);
         static IClassInfo* GetClassInfoPtr(void);

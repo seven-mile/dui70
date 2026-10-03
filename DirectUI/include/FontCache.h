@@ -14,9 +14,18 @@ namespace DirectUI
     class FontCache
     {
     public:
-    public:
-        virtual long OnFontCacheVirt(void) { return 0; }
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_FontCache_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_FontCache_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_FontCache_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_FontCache_3(void) = 0;
         FontCache(FontCache&&);
         FontCache(FontCache const&);
         FontCache(void);

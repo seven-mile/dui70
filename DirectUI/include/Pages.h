@@ -19,8 +19,134 @@ namespace DirectUI
         Pages(Pages const&);
         Pages(void);
         virtual ~Pages(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_6(void) = 0;
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_8(void) = 0;
+        // ABI placeholder: real slot 9 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_9(void) = 0;
+        // ABI placeholder: real slot 10 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_10(void) = 0;
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_11(void) = 0;
+        // ABI placeholder: real slot 12 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_12(void) = 0;
+        // ABI placeholder: real slot 13 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_13(void) = 0;
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_15(void) = 0;
         virtual long Add(Element**, unsigned int);
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_23(void) = 0;
+        // ABI placeholder: real slot 24 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_24(void) = 0;
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_26(void) = 0;
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_27(void) = 0;
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_30(void) = 0;
+        // ABI placeholder: real slot 31 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_31(void) = 0;
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Pages_44(void) = 0;
         Pages& operator=(Pages&&);
         Pages& operator=(Pages const&);
         static long Create(Element*, unsigned long*, Element**);

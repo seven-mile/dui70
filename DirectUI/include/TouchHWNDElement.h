@@ -17,23 +17,278 @@ namespace DirectUI
     public:
         TouchHWNDElement(void);
         virtual ~TouchHWNDElement(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_1(void) = 0;
         virtual bool IsMSAAEnabled(void);
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_5(void) = 0;
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         virtual void ActivateTooltip(Element*, unsigned long);
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_8(void) = 0;
         virtual void OnInput(InputEvent*);
         virtual void OnKeyFocusMoved(Element*, Element*);
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_11(void) = 0;
         virtual void OnDestroy(void);
         virtual void OnEvent(Event*);
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_15(void) = 0;
+        // ABI placeholder: real slot 16 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_16(void) = 0;
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_23(void) = 0;
         virtual unsigned int MessageCallback(tagGMSG*);
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_26(void) = 0;
         virtual void RemoveTooltip(Element*);
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_30(void) = 0;
         virtual void UpdateTooltip(Element*);
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_44(void) = 0;
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_45(void) = 0;
+        // ABI placeholder: real slot 46 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_46(void) = 0;
+        // ABI placeholder: real slot 47 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_47(void) = 0;
+        // ABI placeholder: real slot 48 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_48(void) = 0;
+        // ABI placeholder: real slot 49 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_49(void) = 0;
+        // ABI placeholder: real slot 50 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_50(void) = 0;
+        // ABI placeholder: real slot 51 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_51(void) = 0;
+        // ABI placeholder: real slot 52 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_52(void) = 0;
+        // ABI placeholder: real slot 53 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_53(void) = 0;
+        // ABI placeholder: real slot 54 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_54(void) = 0;
+        // ABI placeholder: real slot 55 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_55(void) = 0;
         virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
+        // ABI placeholder: real slot 57 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_57(void) = 0;
 
         protected:
         virtual void _OnUIStateChanged(unsigned short, unsigned short);
 
         public:
+        // ABI placeholder: real slot 59 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_59(void) = 0;
+        // ABI placeholder: real slot 60 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_60(void) = 0;
+        // ABI placeholder: real slot 61 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_61(void) = 0;
+        // ABI placeholder: real slot 62 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_62(void) = 0;
+        // ABI placeholder: real slot 63 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_63(void) = 0;
+        // ABI placeholder: real slot 64 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_64(void) = 0;
+        // ABI placeholder: real slot 65 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_65(void) = 0;
+        // ABI placeholder: real slot 66 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_66(void) = 0;
+        // ABI placeholder: real slot 67 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_67(void) = 0;
+        // ABI placeholder: real slot 68 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_68(void) = 0;
+        // ABI placeholder: real slot 69 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_69(void) = 0;
+        // ABI placeholder: real slot 70 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_70(void) = 0;
+        // ABI placeholder: real slot 71 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_71(void) = 0;
+        // ABI placeholder: real slot 72 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_72(void) = 0;
+        // ABI placeholder: real slot 73 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_73(void) = 0;
+        // ABI placeholder: real slot 74 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_74(void) = 0;
+        // ABI placeholder: real slot 75 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_75(void) = 0;
+        // ABI placeholder: real slot 76 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_76(void) = 0;
+        // ABI placeholder: real slot 77 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_77(void) = 0;
+        // ABI placeholder: real slot 78 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_78(void) = 0;
+        // ABI placeholder: real slot 79 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_79(void) = 0;
+        // ABI placeholder: real slot 80 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_80(void) = 0;
+        // ABI placeholder: real slot 81 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_81(void) = 0;
+        // ABI placeholder: real slot 82 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_82(void) = 0;
+        // ABI placeholder: real slot 83 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_83(void) = 0;
+        // ABI placeholder: real slot 84 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_84(void) = 0;
+        // ABI placeholder: real slot 85 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_85(void) = 0;
+        // ABI placeholder: real slot 86 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_86(void) = 0;
+        // ABI placeholder: real slot 87 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_87(void) = 0;
+        // ABI placeholder: real slot 88 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_88(void) = 0;
+        // ABI placeholder: real slot 89 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_89(void) = 0;
+        // ABI placeholder: real slot 90 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_90(void) = 0;
+        // ABI placeholder: real slot 91 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_91(void) = 0;
+        // ABI placeholder: real slot 92 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_92(void) = 0;
+        // ABI placeholder: real slot 93 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_93(void) = 0;
+        // ABI placeholder: real slot 94 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_94(void) = 0;
+        // ABI placeholder: real slot 95 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_95(void) = 0;
+        // ABI placeholder: real slot 96 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_96(void) = 0;
+        // ABI placeholder: real slot 97 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_97(void) = 0;
+        // ABI placeholder: real slot 98 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_98(void) = 0;
         static long Create(HWND__*, bool, unsigned int, Element*, unsigned long*, Element**);
         long DismissIHMAsync(void);
         static PropertyInfo const* FlagsProp(void);

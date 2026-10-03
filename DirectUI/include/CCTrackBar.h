@@ -20,10 +20,172 @@ namespace DirectUI
         CCTrackBar(CCTrackBar const&);
         CCTrackBar(void);
         virtual ~CCTrackBar(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_3(void) = 0;
         virtual bool OnPropertyChanging(PropertyInfo const*, int, Value*, Value*);
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_5(void) = 0;
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_8(void) = 0;
+        // ABI placeholder: real slot 9 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_9(void) = 0;
+        // ABI placeholder: real slot 10 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_10(void) = 0;
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_11(void) = 0;
+        // ABI placeholder: real slot 12 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_12(void) = 0;
+        // ABI placeholder: real slot 13 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_13(void) = 0;
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_15(void) = 0;
+        // ABI placeholder: real slot 16 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_16(void) = 0;
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_23(void) = 0;
+        // ABI placeholder: real slot 24 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_24(void) = 0;
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_26(void) = 0;
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_27(void) = 0;
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_30(void) = 0;
+        // ABI placeholder: real slot 31 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_31(void) = 0;
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_44(void) = 0;
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_45(void) = 0;
+        // ABI placeholder: real slot 46 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_46(void) = 0;
         virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
+        // ABI placeholder: real slot 48 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_48(void) = 0;
+        // ABI placeholder: real slot 49 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_49(void) = 0;
+        // ABI placeholder: real slot 50 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_50(void) = 0;
+        // ABI placeholder: real slot 51 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_51(void) = 0;
+        // ABI placeholder: real slot 52 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_52(void) = 0;
+        // ABI placeholder: real slot 53 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_53(void) = 0;
+        // ABI placeholder: real slot 54 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_54(void) = 0;
+        // ABI placeholder: real slot 55 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_55(void) = 0;
+        // ABI placeholder: real slot 56 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_56(void) = 0;
+        // ABI placeholder: real slot 57 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_57(void) = 0;
+        // ABI placeholder: real slot 58 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCTrackBar_58(void) = 0;
 
         protected:
         virtual void PostCreate(HWND__*);

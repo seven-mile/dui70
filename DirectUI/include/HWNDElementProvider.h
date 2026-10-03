@@ -26,20 +26,24 @@ namespace DirectUI
         : public IRawElementProviderAdviseEvents, public IRawElementProviderFragment, public IRawElementProviderSimple2, public RefcountBase
     {
     public:
+        // W5 CONTRACT: REJECTED -- this class cannot be
+        // expressed in real-slot order with the current
+        // pipeline model; canonical order is deliberate.
+        // reason: exported virtual(s) not in the primary
+        // vtable (secondary/MI subobject table): GetProxyCreator, Init
+
         HWNDElementProvider(void);
         virtual ~HWNDElementProvider(void);
-        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long AddRef(void);
-        virtual unsigned long Release(void);
+        static long Create(HWNDElement*, InvokeHelper*, HWNDElementProvider**);
         virtual long ElementProviderFromPoint(double, double, IRawElementProviderFragment**);
         virtual long GetFocus(IRawElementProviderFragment**);
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
+        virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long Release(void);
 
         protected:
         virtual long Init(HWNDElement*, InvokeHelper*);
-
-        public:
-        static long Create(HWNDElement*, InvokeHelper*, HWNDElementProvider**);
     };
 
 } // namespace DirectUI

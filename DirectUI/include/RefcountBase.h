@@ -14,6 +14,15 @@ namespace DirectUI
     public:
         RefcountBase(void);
         virtual ~RefcountBase(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RefcountBase_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RefcountBase_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RefcountBase_3(void) = 0;
         long AddRef(void);
         long Release(void);
     };

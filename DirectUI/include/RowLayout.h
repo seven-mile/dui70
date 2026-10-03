@@ -18,17 +18,23 @@ namespace DirectUI
     class RowLayout
     {
     public:
+        // W5 CONTRACT: REJECTED -- this class cannot be
+        // expressed in real-slot order with the current
+        // pipeline model; canonical order is deliberate.
+        // reason: virtual destructor would take slot 0,
+        // but the real table's slot 0 is a method
+
         RowLayout(RowLayout const&);
         RowLayout(void);
         virtual ~RowLayout(void);
-        virtual void DoLayout(Element*, int, int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         RowLayout& operator=(RowLayout const&);
         static long Create(int, unsigned int, unsigned int, Layout**);
         static long Create(int, int*, Value**);
         static long Create(unsigned int, unsigned int, Layout**);
+        virtual void DoLayout(Element*, int, int);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         long Initialize(int, unsigned int, unsigned int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
     };
 
 } // namespace DirectUI

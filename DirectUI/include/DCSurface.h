@@ -20,6 +20,15 @@ namespace DirectUI
         DCSurface(HDC__*);
         virtual ~DCSurface(void);
         virtual Surface::EType GetType(void) const;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_DCSurface_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_DCSurface_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_DCSurface_4(void) = 0;
         DCSurface& operator=(DCSurface const&);
         HDC__* GetHDC(void);
     };

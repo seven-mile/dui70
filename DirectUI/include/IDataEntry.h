@@ -17,6 +17,12 @@ namespace DirectUI
         IDataEntry(IDataEntry const&);
         IDataEntry(void);
         virtual ~IDataEntry(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IDataEntry_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IDataEntry_2(void) = 0;
         IDataEntry& operator=(IDataEntry const&);
     };
 

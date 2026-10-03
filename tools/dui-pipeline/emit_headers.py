@@ -875,6 +875,9 @@ ELEMENT_PILOT_SLOT_ORDER = [
 # whose overload counts exceed their bound slots fail CLOSED with a
 # class/slot list (never silently dropped).
 
+slot_tables_global: dict = {}  # set by main(): contract tables
+
+
 def _is_vtable_virtual(s: dict) -> bool:
     return bool(s.get("is_virtual")) and not classify_dtor(s) \
         and s.get("kind") != "ctor"
@@ -886,7 +889,9 @@ def _first_param_const(s: dict) -> bool:
 
 
 def _bind_own_units(cls: str, unit_names: list,
-                    n_virtuals: dict, slot_lists: list):
+                    n_virtuals: dict, slot_lists: list,
+                    base_prefix: int = 0,
+                    base_names: set | None = None):
     """Bind the class's own virtual-bearing units to vtable slots.
 
     Returns (name_slot, unbindable, name_slots_actual):
@@ -913,6 +918,16 @@ def _bind_own_units(cls: str, unit_names: list,
         for nm in cands:
             if nm in unit_names:
                 appears.setdefault(nm, set()).add(idx)
+    # a class with a modeled base: a name the base chain does NOT
+    # declare is a NEW virtual -- it can only extend the table at
+    # slots >= base_prefix (C++ cannot inject it into the inherited
+    # region). Base-chain names (overrides) may bind anywhere.
+    if base_prefix > 0 and base_names is not None:
+        for nm in list(appears):
+            if nm not in base_names:
+                appears[nm] = {s for s in appears[nm] if s >= base_prefix}
+                if not appears[nm]:
+                    del appears[nm]
 
     name_slots: dict[str, list[int]] = {}
     for idx, entry in enumerate(slot_lists):
@@ -1003,7 +1018,9 @@ def _bind_own_units(cls: str, unit_names: list,
     return name_slot, unbindable, name_slots
 
 
-def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
+def contract_reorder(cls: str, members: list, slot_lists: list,
+                     base_prefix: int = 0,
+                     base_names: set | None = None) -> list:
     """Reorder one class's member declarations into real vtable slot order
     (W5 full-contract v1). `members` is the per-class callable list;
     `slot_lists` is this class's entry from pinned/vtable-slots.json
@@ -1021,7 +1038,8 @@ def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
         n_virtuals[name] = sum(1 for s in group if _is_vtable_virtual(s))
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
     name_slot, binder_unbound, name_slots_actual = _bind_own_units(
-        cls, unit_names, n_virtuals, slot_lists)
+        cls, unit_names, n_virtuals, slot_lists,
+        base_prefix=base_prefix, base_names=base_names)
 
     # --- unit construction ----------------------------------------------
     unit_order: dict[str, list] = {}
@@ -1041,21 +1059,18 @@ def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
             unit_order[name] = nonvirt + virt
             continue
         if len(virt) > 1:
-            # overload run: slots come from the binder. For an ADJACENT
-            # run (s0, s0+1, ...) the measured MSVC rule applies -- the
-            # CONST first-param overload takes the LOWER slot, so emit
-            # non-const FIRST. For a SPLIT run (distinct bodies at
-            # non-adjacent singleton slots, e.g. Edit::CreateHWND 54/56)
-            # emit in slot order directly.
-            ss = sorted(name_slots_actual.get(name) or
-                        list(range(s0, s0 + len(virt))))
-            if len(ss) == len(virt) and ss == list(range(ss[0], ss[0] + len(virt))):
-                # adjacent run: non-const first (const takes lower slot)
-                virt_sorted = sorted(virt, key=lambda s: (
-                    1 if _first_param_const(s) else 0))
-            else:
-                virt_sorted = virt  # original declaration order
-            set_slots[name] = ss[:len(virt)]
+            # overload run occupies CONSECUTIVE slots starting at the
+            # unit's base (MSVC assigns same-name overloads to adjacent
+            # slots in first-declaration order). Extra singleton
+            # occurrences of the name beyond base+k-1 belong to OTHER
+            # classes' same-named bodies (ICF) and are ignored here.
+            # Measured MSVC rule for adjacent pairs: the CONST
+            # first-param overload takes the LOWER slot, so emit
+            # non-const FIRST.
+            ss = list(range(s0, s0 + len(virt)))
+            virt_sorted = sorted(virt, key=lambda s: (
+                1 if _first_param_const(s) else 0))
+            set_slots[name] = ss
         else:
             virt_sorted = virt
             set_slots[name] = [s0]
@@ -1066,31 +1081,81 @@ def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
         return min(ss) if ss else None
 
     # --- emission -------------------------------------------------------
+    # v2: emit an ordered ITEM stream where a placeholder marker
+    # ("__PH__<slot>") occupies every real slot that no own unit covers.
+    # The header renders placeholders as pure-virtual
+    # __DuiAbiSlot_<Class>_<slot>(void) = 0; declarations -- layout-only,
+    # never a callable API.
     out: list = []
     emitted: set = set()
 
+    covered = set()
+    for n, ss in set_slots.items():
+        covered.update(ss)
+    # slots provided by a modeled base (the base's table is this table's
+    # prefix) are inherited -- the C++ base clause supplies them; never
+    # placeholders
+    if base_prefix > 0:
+        covered.update(range(0, min(base_prefix, len(slot_lists))))
+
+    def _ph(slot: int) -> None:
+        out.append(f"__PH__{slot}")
+
     # slot 0: the destructor set (ctors + dtor) leads the class when the
-    # class has a destructor declaration
+    # class has a destructor declaration and the table's slot 0 is the
+    # vdtor marker; if slot 0 is a real method no dtor set exists here.
+    dtor_emitted = False
     for s in members:
         if classify_dtor(s):
             out.extend(unit_order[s["member"]])
             emitted.add(s["member"])
+            dtor_emitted = True
             break
 
-    # virtual-bearing units in slot order
-    bound_names = sorted(
-        (n for n in set_slots if n not in emitted),
-        key=lambda n: _unit_slot(n))
-    for n in bound_names:
-        out.extend(unit_order[n])
-        emitted.add(n)
+    # walk the table slot by slot; at each covered base slot emit the
+    # unit (its full run), at each uncovered slot emit a placeholder.
+    # Units with a virtual-dtor set: slot 0 is the vdtor (the dtor set
+    # was emitted above); other units start at their base slot.
+    base_to_units: dict[int, list] = {}
+    for n in set_slots:
+        b = min(set_slots[n])
+        base_to_units.setdefault(b, []).append(n)
+    if dtor_emitted:
+        # the emitted dtor set owns slot 0 when the table's slot 0 is the
+        # vdtor marker (_E<Class>); no placeholder for it
+        s0e = slot_lists[0]
+        s0_is_vdtor = (isinstance(s0e, str) and s0e.startswith("_E")) or (
+            isinstance(s0e, list) and any(
+                isinstance(x, str) and x.startswith("_E") for x in s0e))
+        if s0_is_vdtor:
+            covered.add(0)
 
-    # unbound virtual-bearing units next (stable, original order)
-    for n in unbound:
-        if n in emitted:
-            continue
-        out.extend(unit_order[n])
-        emitted.add(n)
+    for slot in range(len(slot_lists)):
+        if slot in covered:
+            for n in sorted(base_to_units.get(slot, []),
+                            key=lambda x: x):
+                if n in emitted:
+                    continue
+                out.extend(unit_order[n])
+                emitted.add(n)
+        else:
+            _ph(slot)
+
+    # any unit whose base wasn't reached (shouldn't happen; fail closed)
+    leftover = [n for n in set_slots if n not in emitted]
+    if leftover:
+        raise SystemExit(
+            f"contract_reorder: {cls}: units never emitted: {leftover[:6]}")
+
+    # unbound virtual-bearing units next (stable, original order): these
+    # are generator synthetics (On*Virt etc.) -- in v2 a class whose
+    # header virtuals cannot be placed in the real table is REJECTED
+    # upstream, so reaching here means the class was classified bound
+    # and any leftover unit is a bug; fail closed.
+    if unbound:
+        raise SystemExit(
+            f"contract_reorder: {cls}: v2 classified bound but {len(unbound)} "
+            f"unit(s) have no candidate slot: {unbound[:6]} -- refuse to emit")
 
     # remaining pure-nonvirtual sets, access-grouped, original order
     for acc in ("public", "protected", "private"):
@@ -1100,9 +1165,84 @@ def contract_reorder(cls: str, members: list, slot_lists: list) -> list:
             out.extend(unit_order[s["member"]])
             emitted.add(s["member"])
 
-    assert len(out) == len(members), (cls, len(out), len(members))
-    assert {id(x) for x in out} == {id(x) for x in members}
+    n_members = sum(1 for x in out if not isinstance(x, str))
+    assert n_members == len(members), (cls, n_members, len(members))
+    assert {id(x) for x in out if not isinstance(x, str)} == {id(x) for x in members}
     return out
+
+
+def contract_classify(cls: str, members: list, slot_lists: list,
+                      exported_virtuals: set,
+                      base_prefix: int = 0,
+                      base_names: set | None = None) -> dict:
+    """v2 classification for one class against its contract table.
+
+    Returns one of:
+      {"mode": "bound", ...}        own units bound; placeholders fill the
+                                    remaining real slots
+      {"mode": "rejected", ...}     C++ cannot express the real layout with
+                                    this pipeline's model; the class is
+                                    emitted in canonical order and listed
+                                    (never silently)
+    Rejection reasons (checked in order):
+      external_virtuals   the class exports virtuals that are not in its
+                          primary table (they live in secondary/MI
+                          subobject tables this pipeline does not model)
+      vdtor_conflict      the table's slot 0 holds a real method but the
+                          class declares a virtual destructor (the dtor
+                          would take slot 0 and shift the whole table)
+    IClassInfo/ClassInfoBase is deliberately excluded from vdtor-conflict
+    rejection: it is the L2 problem (tracked separately, not masked here).
+    """
+    if cls == "ClassInfoBase":
+        # L2 (IClassInfo slot0 +1 layout) is tracked as a SEPARATE
+        # subproblem: not placeholder-masked, not vdtor-rejected. It keeps
+        # canonical order with an explicit L2 banner.
+        return {"mode": "l2"}
+
+    tabnames: set = set()
+    for s in slot_lists:
+        tabnames |= ({s} if isinstance(s, str) else set(s))
+    ext = sorted(x for x in (exported_virtuals or set())
+                 if x != cls and x not in tabnames)
+    if ext:
+        return {"mode": "rejected", "reason": "external_virtuals",
+                "external": ext}
+
+    # vdtor conflict: slot 0 is a real method, not an _E marker
+    s0 = slot_lists[0]
+    is_vdtor_entry = (isinstance(s0, str) and s0.startswith("_E")) or (
+        isinstance(s0, list) and any(
+            isinstance(x, str) and x.startswith("_E") for x in s0))
+    has_vdtor_decl = any(classify_dtor(s) for s in members)
+    if not is_vdtor_entry and has_vdtor_decl:
+        return {"mode": "rejected", "reason": "vdtor_conflict",
+                "slot0": s0 if isinstance(s0, str) else sorted(s0)[:3]}
+
+    # bound: compute which slots the own units cover
+    by_name: dict[str, list] = {}
+    for s in members:
+        by_name.setdefault(s["member"], []).append(s)
+    n_virtuals = {n: sum(1 for s in g if _is_vtable_virtual(s))
+                  for n, g in by_name.items()}
+    unit_names = [n for n, k in n_virtuals.items() if k > 0]
+    name_slot, unbindable, name_slots_actual = _bind_own_units(
+        cls, unit_names, n_virtuals, slot_lists,
+        base_prefix=base_prefix, base_names=base_names)
+    covered = set()
+    for n, s0v in name_slot.items():
+        k = n_virtuals.get(n, 1)
+        covered.update(range(s0v, s0v + k))
+    # slots provided by a modeled base (its own table is the prefix of
+    # this class's table) are INHERITED -- never placeholders
+    if base_prefix > 0:
+        covered.update(range(0, min(base_prefix, len(slot_lists))))
+    placeholders = [i for i in range(len(slot_lists))
+                    if i not in covered]
+    return {"mode": "bound", "name_slot": name_slot,
+            "unbindable": unbindable,
+            "placeholders": sorted(placeholders),
+            "slots": len(slot_lists)}
 
 
 def contract_report(cls: str, members: list, slot_lists: list) -> dict:
@@ -1262,12 +1402,15 @@ def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
                         inheritance: dict, banner: str,
                         has_own_vftable: bool = False,
-                        slot_lists: list | None = None) -> str:
+                        slot_lists: list | None = None,
+                        base_prefix: int = 0,
+                        exported_virtuals_by_class: dict | None = None) -> str:
     """Render one class header file content."""
     tpl = is_template_class(cls)
     tid = template_id(cls) if tpl else cls
     bases = base_list(inheritance, cls)
     global_cls = cls in GLOBAL_SCOPE_CLASSES
+    items = None  # v2: contract item stream (members + __PH__ markers)
     if global_cls:
         # members reference DirectUI types fully qualified; the class itself
         # lives at global scope (no @DirectUI@@ in its mangled members)
@@ -1348,11 +1491,57 @@ def render_class_header(cls: str, members: list, data_members: list,
     # real vtable slot order by contract_reorder (generalized from the
     # Element pilot; the pilot table survives only as a migration
     # assertion). Classes without a table keep the canonical order.
+    rejected_info = None
     if slot_lists is not None:
-        assert_element_pilot_migration(cls, members, slot_lists)
-        members = contract_reorder(cls, members, slot_lists)
+        # v2: classification decides the path. Rejected classes keep the
+        # canonical order and carry an explicit banner (never silent).
+        cls_exp_virt = set()
+        for s in members:
+            if s.get("is_virtual") and s.get("is_exported"):
+                cls_exp_virt.add(s["member"])
+        cls_exp_virt.discard(cls)  # dtor name is not a separate member
+        base_names = None
+        if base_prefix:
+            # a base-declared virtual = a name that BOTH appears in some
+            # ancestor's table entries AND is exported by that ancestor
+            # as a virtual (fold aliases from unrelated classes fail the
+            # second test; ICF-folded true declarations pass both).
+            # Walk the WHOLE base chain: an override may target any
+            # ancestor's virtual.
+            base_names = set()
+            chain = list(base_list(inheritance, cls))
+            seen_b = set()
+            while chain:
+                b = chain.pop(0)
+                if b in seen_b:
+                    continue
+                seen_b.add(b)
+                be = slot_tables_global.get(b)
+                if isinstance(be, dict) and isinstance(be.get("slots"), list):
+                    tab_names = set()
+                    for s in be["slots"]:
+                        tab_names |= ({s} if isinstance(s, str) else set(s))
+                    bv = (exported_virtuals_by_class or {}).get(b, set())
+                    base_names |= (tab_names & bv)
+                chain.extend(base_list(inheritance, b))
+        classification = contract_classify(
+            cls, members, slot_lists, cls_exp_virt,
+            base_prefix=base_prefix or 0, base_names=base_names)
+        if classification["mode"] in ("rejected", "l2"):
+            rejected_info = classification
+            slot_lists = None  # canonical order; banner below
+        else:
+            assert_element_pilot_migration(cls, members, slot_lists)
+            items = contract_reorder(cls, members, slot_lists,
+                                     base_prefix=base_prefix or 0,
+                                     base_names=base_names)
+            # v2 item stream: member dicts + "__PH__<slot>" markers, in
+            # real slot order (with or without placeholders)
+            members = items
     sections = {"public": [], "protected": [], "private": []}
     for sym in members:
+        if isinstance(sym, str):
+            continue
         acc = access_of(sym)
         sections.setdefault(acc, []).append(sym)
 
@@ -1402,13 +1591,14 @@ def render_class_header(cls: str, members: list, data_members: list,
         lines.append("        virtual unsigned long AddRef(void) = 0;")
         lines.append("")
 
-    if has_own_vftable and not any(
+    table_driven = bool(slot_lists)
+    if (has_own_vftable and not table_driven and not any(
         re.search(r"@DirectUI@@[EMU]E", s.get("mangled") or "") for s in members
-    ):
-        # vftable-only polymorphic class (ISBLeak / FontCache / StyleSheet /
-        # IXElementCP / IXProviderCP pattern): no virtual method is exported,
-        # so the real class's virtuals are inline (emitted only via the
-        # vtable slots). One inline virtual provides the ??_7 symbol.
+    )):
+        # vftable-only polymorphic class WITHOUT a contract table: one
+        # inline virtual provides the ??_7 symbol. (With a table the real
+        # slots are expressed by contract placeholders instead -- the
+        # invented On*Virt would add a phantom slot.)
         lines.append("    public:")
         lines.append(f"        virtual long On{cls[:24]}Virt(void) {{ return 0; }}")
         lines.append("")
@@ -1482,26 +1672,54 @@ def render_class_header(cls: str, members: list, data_members: list,
     for dsym in data_members:
         data_by_access.setdefault(access_of(dsym), []).append(dsym)
 
-    if slot_lists is not None:
-        # W5 full-contract v1: members are in contract slot order; emit
-        # access groups in WALK order (grouping consecutive same-access
-        # members), which reproduces interleaved layouts like Element's
-        # public(1-26) -> protected(27-33) -> public(34-44) naturally.
-        groups = []  # [(access, [syms...])] in walk order
-        for sym in members:
-            a = access_of(sym)
+    if rejected_info is not None:
+        # v2: explicit rejected/L2 banner (never silent original-order)
+        if rejected_info.get("mode") == "l2":
+            lines.append("        // W5 CONTRACT: L2 IClassInfo slot0 layout")
+            lines.append("        // problem -- tracked as a separate")
+            lines.append("        // subproblem (not placeholder-masked).")
+            lines.append("")
+        else:
+            lines.append("        // W5 CONTRACT: REJECTED -- this class cannot be")
+            lines.append("        // expressed in real-slot order with the current")
+            lines.append("        // pipeline model; canonical order is deliberate.")
+        if rejected_info.get("reason") == "external_virtuals":
+            ext = ", ".join(rejected_info["external"][:8])
+            lines.append(f"        // reason: exported virtual(s) not in the primary")
+            lines.append(f"        // vtable (secondary/MI subobject table): {ext}")
+        else:
+            lines.append("        // reason: virtual destructor would take slot 0,")
+            lines.append("        // but the real table's slot 0 is a method")
+        lines.append("")
+    if items is not None and slot_lists is not None:
+        # v2: item stream in contract slot order; placeholders render as
+        # layout-only pure virtuals. Access groups in WALK order; a
+        # placeholder always opens/continues the PUBLIC section (pure
+        # virtuals are addressable from any user).
+        groups = []  # [(access, [items...])] in walk order
+        for it in members:
+            a = access_of(it) if not isinstance(it, str) else "public"
             if groups and groups[-1][0] == a:
-                groups[-1][1].append(sym)
+                groups[-1][1].append(it)
             else:
-                groups.append((a, [sym]))
-        for gi, (a, syms) in enumerate(groups):
+                groups.append((a, [it]))
+        for gi, (a, its) in enumerate(groups):
             if gi > 0:
                 lines.append("")
                 lines.append(f"        {a}:")
-            for sym in syms:
-                md = MemberDecl(sym, cls)
-                decl = md.full_decl(tr)
-                lines.append(f"        {decl}")
+            for it in its:
+                if isinstance(it, str):
+                    m = re.match(r"__PH__(\d+)$", it)
+                    assert m, it
+                    lines.append(f"        // ABI placeholder: real slot "
+                                 f"{m.group(1)} has no recoverable signature.")
+                    lines.append(f"        // ABI placeholder: never call.")
+                    lines.append(f"        virtual void __DuiAbiSlot_{cls}_"
+                                 f"{m.group(1)}(void) = 0;")
+                else:
+                    md = MemberDecl(it, cls)
+                    decl = md.full_decl(tr)
+                    lines.append(f"        {decl}")
             for dsym in data_by_access.get(a) or []:
                 lines.append(f"        {render_data_decl(dsym, tr, cls)}")
             data_by_access[a] = []  # emitted once
@@ -2223,9 +2441,17 @@ def main(argv=None) -> int:
         return 2
     slots_doc = json.loads(slots_doc_path.read_text(encoding="utf-8"))
     slot_tables = slots_doc.get("classes") or {}
+    global slot_tables_global
+    slot_tables_global = slot_tables
 
     stats = {}
     contract_rows = []
+    v2_rows = []
+    # class -> exported virtual member names (for base-declared checks)
+    exp_virt_by_class: dict = {}
+    for s in symbols:
+        if s.get("is_virtual") and s.get("is_exported") and s.get("class"):
+            exp_virt_by_class.setdefault(s["class"], set()).add(s["member"])
     for cls in classes:
         if is_duixml_nested(cls):
             # nested in DUIXmlParser: emitted by its header/TU, not standalone
@@ -2255,15 +2481,37 @@ def main(argv=None) -> int:
             print(f"emit_headers: ERROR  contract entry for {cls} is not a "
                   "slot list", file=sys.stderr)
             return 2
+        # v2 exported-virtual set for classification (from symbols.json,
+        # the canonical source -- not a hand table)
+        cls_exp_virt = {s["member"] for s in symbols
+                        if s.get("class") == cls and s.get("is_virtual")
+                        and s.get("is_exported")}
+        cls_exp_virt.discard(cls)
+        classification = None
+        base_prefix = 0
+        if slot_lists is not None:
+            for b in base_list(inheritance, cls):
+                be = slot_tables.get(b)
+                if isinstance(be, dict) and isinstance(be.get("slots"), list):
+                    base_prefix = max(base_prefix, len(be["slots"]))
+            classification = contract_classify(
+                cls, members, slot_lists, cls_exp_virt,
+                base_prefix=base_prefix)
         content = render_class_header(cls, members, data_members, tr,
                                       classes, inheritance, banner,
                                       has_own_vftable=has_own_vftable,
-                                      slot_lists=slot_lists)
+                                      slot_lists=slot_lists,
+                                      base_prefix=base_prefix,
+                                      exported_virtuals_by_class=exp_virt_by_class)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
         if slot_lists is not None:
             contract_rows.append(
                 contract_report(cls, members, slot_lists))
+            if classification and classification["mode"] == "bound":
+                v2_rows.append(dict(classification, cls=cls))
+            elif classification:
+                v2_rows.append(dict(classification, cls=cls))
 
     # shared prelude + interfaces + aggregate
     (out_dir / "dui_abi_types.h").write_text(render_abi_types_header(banner), encoding="utf-8", newline="\n")
@@ -2271,6 +2519,26 @@ def main(argv=None) -> int:
     (out_dir / "DirectUI.h").write_text(render_aggregate_header(classes, banner), encoding="utf-8", newline="\n")
 
     print(f"emit_headers: wrote {len(stats) + 3} files to {out_dir}")
+    # v2 classification report: full-bound / placeholder-bound / rejected
+    n_tab = len(v2_rows)
+    full_bound = [r for r in v2_rows if r["mode"] == "bound"
+                  and not r["placeholders"]]
+    ph_bound = [r for r in v2_rows if r["mode"] == "bound"
+                and r["placeholders"]]
+    rejected = [r for r in v2_rows if r["mode"] == "rejected"]
+    l2 = [r for r in v2_rows if r["mode"] == "l2"]
+    n_ph = sum(len(r["placeholders"]) for r in ph_bound)
+    print(f"  v2 contract: {n_tab} classes with tables -> "
+          f"full-bound {len(full_bound)}, placeholder-bound {len(ph_bound)} "
+          f"({n_ph} placeholders), rejected {len(rejected)}, "
+          f"l2-deferred {len(l2)}")
+    for r in rejected:
+        if r["reason"] == "external_virtuals":
+            print(f"    REJECTED {r['cls']:<26} external virtuals: "
+                  f"{', '.join(r['external'][:6])}")
+        else:
+            print(f"    REJECTED {r['cls']:<26} vdtor-conflict "
+                  f"(slot0={r.get('slot0')})")
     # W5 contract binding report (known-signature vs unbindable virtuals)
     n_cls = len(contract_rows)
     n_bound = sum(r["bound"] for r in contract_rows)

@@ -14,9 +14,15 @@ namespace DirectUI
     struct ISBLeak
     {
     public:
-    public:
-        virtual long OnISBLeakVirt(void) { return 0; }
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ISBLeak_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ISBLeak_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ISBLeak_2(void) = 0;
         ISBLeak(ISBLeak&&);
         ISBLeak(ISBLeak const&);
         ISBLeak(void);

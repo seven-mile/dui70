@@ -20,20 +20,26 @@ namespace DirectUI
         : public IProvider, public RefcountBase
     {
     public:
+        // W5 CONTRACT: REJECTED -- this class cannot be
+        // expressed in real-slot order with the current
+        // pipeline model; canonical order is deliberate.
+        // reason: exported virtual(s) not in the primary
+        // vtable (secondary/MI subobject table): GetProxyCreator
+
         ScrollProvider(void);
         virtual ~ScrollProvider(void);
-        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long AddRef(void);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
+        virtual long QueryInterface(_GUID const&, void**);
         virtual unsigned long Release(void);
         virtual long Scroll(ScrollAmount, ScrollAmount);
         virtual long SetScrollPercent(double, double);
         virtual long get_HorizontalScrollPercent(double*);
-        virtual long get_VerticalScrollPercent(double*);
         virtual long get_HorizontalViewSize(double*);
-        virtual long get_VerticalViewSize(double*);
         virtual long get_HorizontallyScrollable(int*);
+        virtual long get_VerticalScrollPercent(double*);
+        virtual long get_VerticalViewSize(double*);
         virtual long get_VerticallyScrollable(int*);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
     };
 
 } // namespace DirectUI

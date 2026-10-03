@@ -17,6 +17,9 @@ namespace DirectUI
         Surface(Surface const&);
         Surface(void);
         virtual ~Surface(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Surface_1(void) = 0;
         Surface& operator=(Surface const&);
         static Surface::EType GetSurfaceType(unsigned int);
         static unsigned int GetSurfaceType(Surface::EType);

@@ -18,16 +18,22 @@ namespace DirectUI
     class ShellBorderLayout
     {
     public:
+        // W5 CONTRACT: REJECTED -- this class cannot be
+        // expressed in real-slot order with the current
+        // pipeline model; canonical order is deliberate.
+        // reason: virtual destructor would take slot 0,
+        // but the real table's slot 0 is a method
+
         ShellBorderLayout(ShellBorderLayout const&);
         ShellBorderLayout(void);
         virtual ~ShellBorderLayout(void);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         ShellBorderLayout& operator=(ShellBorderLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
 
         private:
         long _CalcTabOrder(Element*);

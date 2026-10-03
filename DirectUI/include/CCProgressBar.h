@@ -19,8 +19,194 @@ namespace DirectUI
         CCProgressBar(CCProgressBar const&);
         CCProgressBar(void);
         virtual ~CCProgressBar(void);
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_6(void) = 0;
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_7(void) = 0;
+        // ABI placeholder: real slot 8 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_8(void) = 0;
         virtual void OnInput(InputEvent*);
+        // ABI placeholder: real slot 10 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_10(void) = 0;
+        // ABI placeholder: real slot 11 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_11(void) = 0;
+        // ABI placeholder: real slot 12 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_12(void) = 0;
+        // ABI placeholder: real slot 13 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_13(void) = 0;
+        // ABI placeholder: real slot 14 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_14(void) = 0;
+        // ABI placeholder: real slot 15 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_15(void) = 0;
+        // ABI placeholder: real slot 16 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_16(void) = 0;
+        // ABI placeholder: real slot 17 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_17(void) = 0;
+        // ABI placeholder: real slot 18 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_18(void) = 0;
+        // ABI placeholder: real slot 19 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_19(void) = 0;
+        // ABI placeholder: real slot 20 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_20(void) = 0;
+        // ABI placeholder: real slot 21 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_21(void) = 0;
+        // ABI placeholder: real slot 22 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_22(void) = 0;
+        // ABI placeholder: real slot 23 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_23(void) = 0;
+        // ABI placeholder: real slot 24 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_24(void) = 0;
+        // ABI placeholder: real slot 25 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_25(void) = 0;
+        // ABI placeholder: real slot 26 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_26(void) = 0;
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_27(void) = 0;
+        // ABI placeholder: real slot 28 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_28(void) = 0;
+        // ABI placeholder: real slot 29 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_29(void) = 0;
+        // ABI placeholder: real slot 30 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_30(void) = 0;
+        // ABI placeholder: real slot 31 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_31(void) = 0;
+        // ABI placeholder: real slot 32 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_32(void) = 0;
+        // ABI placeholder: real slot 33 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_33(void) = 0;
+        // ABI placeholder: real slot 34 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 36 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_36(void) = 0;
+        // ABI placeholder: real slot 37 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_37(void) = 0;
+        // ABI placeholder: real slot 38 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_38(void) = 0;
+        // ABI placeholder: real slot 39 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_39(void) = 0;
+        // ABI placeholder: real slot 40 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_40(void) = 0;
+        // ABI placeholder: real slot 41 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_41(void) = 0;
+        // ABI placeholder: real slot 42 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_42(void) = 0;
+        // ABI placeholder: real slot 43 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_43(void) = 0;
+        // ABI placeholder: real slot 44 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_44(void) = 0;
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_45(void) = 0;
+        // ABI placeholder: real slot 46 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_46(void) = 0;
+        // ABI placeholder: real slot 47 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_47(void) = 0;
+        // ABI placeholder: real slot 48 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_48(void) = 0;
+        // ABI placeholder: real slot 49 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_49(void) = 0;
+        // ABI placeholder: real slot 50 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_50(void) = 0;
+        // ABI placeholder: real slot 51 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_51(void) = 0;
+        // ABI placeholder: real slot 52 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_52(void) = 0;
+        // ABI placeholder: real slot 53 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_53(void) = 0;
+        // ABI placeholder: real slot 54 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_54(void) = 0;
+        // ABI placeholder: real slot 55 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_55(void) = 0;
+        // ABI placeholder: real slot 56 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_56(void) = 0;
+        // ABI placeholder: real slot 57 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_57(void) = 0;
+        // ABI placeholder: real slot 58 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_58(void) = 0;
+        // ABI placeholder: real slot 59 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_59(void) = 0;
+        // ABI placeholder: real slot 60 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_60(void) = 0;
+        // ABI placeholder: real slot 61 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_61(void) = 0;
+        // ABI placeholder: real slot 62 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_62(void) = 0;
+        // ABI placeholder: real slot 63 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_63(void) = 0;
+        // ABI placeholder: real slot 64 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CCProgressBar_64(void) = 0;
         CCProgressBar& operator=(CCProgressBar&&);
         CCProgressBar& operator=(CCProgressBar const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

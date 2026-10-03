@@ -23,10 +23,7 @@ namespace DirectUI
         HWNDElement(HWNDElement const&);
         HWNDElement(void);
         virtual ~HWNDElement(void);
-        virtual bool IsMSAAEnabled(void);
-        virtual bool CanSetFocus(void);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void OnImmersiveColorSchemeChanged(void);
         virtual void OnGroupChanged(int, bool);
         virtual void OnInput(InputEvent*);
         virtual void OnDestroy(void);
@@ -38,11 +35,14 @@ namespace DirectUI
         virtual long GetAccessibleImpl(IAccessible**);
         virtual HWND__* GetHWND(void);
         virtual void OnThemeChanged(ThemeChangedEvent*);
+        virtual void OnImmersiveColorSchemeChanged(void);
         virtual void OnNoChildWithShortcutFound(KeyboardEvent*);
         virtual void OnGetDlgCode(tagMSG*, __int64*);
         virtual void OnWmThemeChanged(unsigned __int64, __int64);
         virtual void OnWmSettingChanged(unsigned __int64, __int64);
         virtual void OnCompositionChanged(void);
+        virtual bool CanSetFocus(void);
+        virtual bool IsMSAAEnabled(void);
         virtual long CreateStyleParser(DUIXmlParser**);
         virtual __int64 WndProc(HWND__*, unsigned int, unsigned __int64, __int64);
         virtual void GetWindowClassNameAndStyle(unsigned short const**, unsigned int*);

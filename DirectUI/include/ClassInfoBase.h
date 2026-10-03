@@ -14,29 +14,36 @@ namespace DirectUI
     class ClassInfoBase
     {
     public:
+        // W5 CONTRACT: L2 IClassInfo slot0 layout
+        // problem -- tracked as a separate
+        // subproblem (not placeholder-masked).
+
+        // reason: virtual destructor would take slot 0,
+        // but the real table's slot 0 is a method
+
         ClassInfoBase(ClassInfoBase const&);
         ClassInfoBase(void);
         virtual ~ClassInfoBase(void);
+        ClassInfoBase& operator=(ClassInfoBase const&);
+        virtual void AddChild(void);
         virtual void AddRef(void);
-        virtual int Release(void);
+        virtual void AssertPIZeroRef(void) const;
+        static bool ClassExist(IClassInfo**, PropertyInfo const*const*, unsigned int, IClassInfo*, HINSTANCE__*, unsigned short const*, bool);
+        virtual void Destroy(void);
         virtual PropertyInfo const* EnumPropertyInfo(unsigned int);
         virtual PropertyInfo const* GetByClassIndex(unsigned int);
-        virtual unsigned int GetPICount(void) const;
-        virtual unsigned int GetGlobalIndex(void) const;
-        virtual unsigned short const* GetName(void) const;
-        virtual bool IsValidProperty(PropertyInfo const*) const;
-        virtual bool IsSubclassOf(IClassInfo*) const;
-        virtual void Destroy(void);
-        virtual HINSTANCE__* GetModule(void) const;
-        virtual bool IsGlobal(void) const;
-        virtual void AddChild(void);
-        virtual void RemoveChild(void);
         virtual int GetChildren(void) const;
-        virtual void AssertPIZeroRef(void) const;
-        ClassInfoBase& operator=(ClassInfoBase const&);
-        static bool ClassExist(IClassInfo**, PropertyInfo const*const*, unsigned int, IClassInfo*, HINSTANCE__*, unsigned short const*, bool);
+        virtual unsigned int GetGlobalIndex(void) const;
+        virtual HINSTANCE__* GetModule(void) const;
+        virtual unsigned short const* GetName(void) const;
+        virtual unsigned int GetPICount(void) const;
         long Initialize(HINSTANCE__*, unsigned short const*, bool, PropertyInfo const*const*, unsigned int);
+        virtual bool IsGlobal(void) const;
+        virtual bool IsSubclassOf(IClassInfo*) const;
+        virtual bool IsValidProperty(PropertyInfo const*) const;
         long Register(void);
+        virtual int Release(void);
+        virtual void RemoveChild(void);
     };
 
 } // namespace DirectUI

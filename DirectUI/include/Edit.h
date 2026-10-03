@@ -29,13 +29,55 @@ namespace DirectUI
         virtual tagSIZE GetContentSize(int, int, Surface*);
         virtual unsigned int MessageCallback(tagGMSG*);
         virtual IClassInfo* GetClassInfoW(void);
+        // ABI placeholder: real slot 45 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_45(void) = 0;
         virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
+        // ABI placeholder: real slot 47 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_47(void) = 0;
+        // ABI placeholder: real slot 48 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_48(void) = 0;
+        // ABI placeholder: real slot 49 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_49(void) = 0;
+        // ABI placeholder: real slot 50 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_50(void) = 0;
+        // ABI placeholder: real slot 51 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_51(void) = 0;
+        // ABI placeholder: real slot 52 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_52(void) = 0;
+        // ABI placeholder: real slot 53 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_53(void) = 0;
 
         protected:
         virtual HWND__* CreateHWND(HWND__*);
         virtual HWND__* CreateHWND(HWND__*, bool);
 
         public:
+        // ABI placeholder: real slot 56 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_56(void) = 0;
+        // ABI placeholder: real slot 57 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_57(void) = 0;
+        // ABI placeholder: real slot 58 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_58(void) = 0;
+        // ABI placeholder: real slot 59 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_59(void) = 0;
+        // ABI placeholder: real slot 60 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_60(void) = 0;
+        // ABI placeholder: real slot 61 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_61(void) = 0;
         Edit& operator=(Edit const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

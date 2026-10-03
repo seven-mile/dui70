@@ -21,6 +21,9 @@ namespace DirectUI
         virtual void Init(Element*);
 
         public:
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ValueProxy_2(void) = 0;
         ValueProxy(ValueProxy&&);
         ValueProxy(ValueProxy const&);
         ValueProxy(void);

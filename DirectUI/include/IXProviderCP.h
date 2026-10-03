@@ -14,9 +14,15 @@ namespace DirectUI
     class IXProviderCP
     {
     public:
-    public:
-        virtual long OnIXProviderCPVirt(void) { return 0; }
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IXProviderCP_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IXProviderCP_1(void) = 0;
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IXProviderCP_2(void) = 0;
         IXProviderCP(IXProviderCP&&);
         IXProviderCP(IXProviderCP const&);
         IXProviderCP(void);

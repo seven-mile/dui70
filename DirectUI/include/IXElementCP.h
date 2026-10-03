@@ -14,9 +14,12 @@ namespace DirectUI
     class IXElementCP
     {
     public:
-    public:
-        virtual long OnIXElementCPVirt(void) { return 0; }
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IXElementCP_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_IXElementCP_1(void) = 0;
         IXElementCP(IXElementCP&&);
         IXElementCP(IXElementCP const&);
         IXElementCP(void);

@@ -766,6 +766,224 @@ POLYMORPHIC_BASE_CLASSES = {
     "IProvider",
 }
 
+# ---------------------------------------------------------------------------
+# W5 P2 pilot: Element vtable slot order
+#
+# The generator emits virtuals in symbols.json alphabetical order, but C++
+# vtable slot order == declaration order. For DirectUI::Element the real
+# dui70.dll primary vftable (0x001037C0, 45 slots) was measured slot-by-slot
+# (RVA-exact against symbols.json; call-site disassembly audit
+# .local/build/ci-probe/slot-abi-audit.py). This table is that evidence:
+# slot -> member name (slot 0 is the vector deleting dtor, produced by the
+# `virtual ~Element` declaration, not listed here).
+#
+# PILOT SCOPE (frozen by review): this is a per-class EVIDENCE mapping for
+# the Element pilot only -- NOT a general mechanism and NOT a hand-written
+# exemption for the J1 gate (J1 still derives its truth from
+# pinned/vtable-slots.json, which stays RVA-derived). Generalizing ICF
+# occupant derivation to the other 102 classes is future work.
+#
+# ICF fold groups (same function address in several slots; measured):
+#   7/27   OnPropertyChanged(non-const) / _SelfLayoutDoLayout
+#   25/38/39  GetElementProviderImpl / GetUIAElementProvider / QueryInterface
+#   37/44  DefaultAction / GetUiaFocusDelegate
+#   1  IsRTLReading (non-virtual IsRTL folded onto the same address)
+#   35 GetClassInfoW (static GetClassInfoPtr folded onto the same address)
+# The occupant per slot below is the audited assignment.
+ELEMENT_PILOT_SLOT_ORDER = [
+    "IsRTLReading",                    #  1
+    "IsContentProtected",              #  2
+    "GetContentStringAsDisplayed",     #  3
+    "OnPropertyChanging",              #  4 (const overload -- see note below)
+    "OnPropertyChanging",              #  5 (non-const)
+    "OnPropertyChanged",               #  6 (const)
+    "OnPropertyChanged",               #  7 (non-const)
+    "OnGroupChanged",                  #  8
+    "OnInput",                         #  9
+    "OnKeyFocusMoved",                 # 10
+    "OnMouseFocusMoved",               # 11
+    "OnDestroy",                       # 12
+    "OnEvent",                         # 13
+    "Paint",                           # 14
+    "GetContentSize",                  # 15
+    "Add",                             # 16
+    "Insert",                          # 17
+    "Remove",                          # 18
+    "GetAdjacent",                     # 19
+    "EnsureVisible",                   # 20
+    "SetKeyFocus",                     # 21
+    "AddBehavior",                     # 22
+    "RemoveBehavior",                  # 23
+    "MessageCallback",                 # 24
+    "GetElementProviderImpl",          # 25 (ICF fold group)
+    "GetImmersiveFocusRectOffsets",    # 26
+    "_SelfLayoutDoLayout",             # 27 (ICF fold group)
+    "_SelfLayoutUpdateDesiredSize",    # 28
+    "OnHosted",                        # 29
+    "OnUnHosted",                      # 30
+    "UpdateTooltip",                   # 31
+    "ActivateTooltip",                 # 32
+    "RemoveTooltip",                   # 33
+    "GetKeyFocused",                   # 34
+    "GetClassInfoW",                   # 35 (static GetClassInfoPtr folded)
+    "GetAccessibleImpl",               # 36
+    "DefaultAction",                   # 37 (ICF fold group)
+    "GetUIAElementProvider",           # 38 (ICF fold group)
+    "QueryInterface",                  # 39 (ICF fold group)
+    "HandleUiaDestroyListener",        # 40
+    "HandleUiaPropertyListener",       # 41
+    "HandleUiaPropertyChangingListener",  # 42
+    "HandleUiaEventListener",          # 43
+    "GetUiaFocusDelegate",             # 44 (ICF fold group)
+]
+
+
+def _element_pilot_slot_of(sym: dict) -> int:
+    """1-based vtable slot of an Element virtual per ELEMENT_PILOT_SLOT_ORDER.
+
+    Overload runs (OnPropertyChanging/OnPropertyChanged) occupy consecutive
+    slots with the CONST overload at the LOWER slot (RVA-audited: slot 4 =
+    PEBU body 0x0001CD10, slot 5 = PEAU body 0x0003BBE0, same for 6/7).
+    """
+    name = sym["member"]
+    slots = [i + 1 for i, n in enumerate(ELEMENT_PILOT_SLOT_ORDER) if n == name]
+    if len(slots) == 1:
+        return slots[0]
+    first_param_const = "const" in (sym.get("params") or [""])[0]
+    return slots[0] if first_param_const else slots[1]
+
+
+def element_pilot_reorder(members: list) -> list:
+    """Reorder DirectUI::Element's member declarations into the real vtable
+    slot order (W5 fix, Element pilot).
+
+    MSVC vtable layout rules (measured by controlled compile+disasm
+    experiments, verified on Element by the call-site disassembly audit
+    .local/build/ci-probe/slot-abi-audit.py, 44/44 signature-bound slots):
+
+      1. A member-name OVERLOAD SET behaves as ONE UNIT anchored at its
+         FIRST declared member -- virtual or not. The set's virtual members
+         occupy the vtable slots at the anchor position. (Measured: with
+         `Add(Element*); Add(Element*,cmp); ...; virtual Add(Element**,uint)`
+         declared 150 lines apart, the virtual Add takes the anchor's slot,
+         not its own line position.)
+      2. Distinct-name virtuals: slot order == declaration order.
+      3. Same-name VIRTUAL overloads: slot order == REVERSE declaration
+         order within the run (the last-declared overload takes the LOWER
+         slot). The real DLL hosts the CONST overload at the lower slot
+         (4/6), so virtual overload pairs are emitted non-const FIRST,
+         const LAST.
+      4. Pure non-virtual members (names with no virtual overload) never
+         affect slots.
+
+    Emission model (per access bucket, since virtuals never change access):
+    each bucket emits its virtual-bearing overload sets FIRST, in slot
+    order, as contiguous units -- the set's non-virtual overload lines
+    first (they anchor the unit), then its virtuals. The bucket's pure
+    non-virtual members follow in their original symbols.json order.
+    render_class_header then emits the buckets in member-walk order, which
+    for Element is public(slots 1-26) -> protected(27-33) -> public(34-44)
+    -> private: exactly the real class layout.
+
+    `members` is the per-class callable list; returns a reordered copy.
+    """
+    by_name = {}
+    for s in members:
+        by_name.setdefault(s["member"], []).append(s)
+
+    def _is_vtable_virtual(s):
+        return bool(s.get("is_virtual")) and not classify_dtor(s) \
+            and s.get("kind") != "ctor"
+
+    if sorted(n for n, g in by_name.items()
+              if any(_is_vtable_virtual(s) for s in g)) != \
+            sorted(set(ELEMENT_PILOT_SLOT_ORDER)):
+        # member set no longer matches the audited evidence -- refuse rather
+        # than emit a silently-wrong order
+        have = sorted(n for n, g in by_name.items()
+                      if any(_is_vtable_virtual(s) for s in g))
+        missing = sorted(set(ELEMENT_PILOT_SLOT_ORDER) - set(have))
+        extra = sorted(set(have) - set(ELEMENT_PILOT_SLOT_ORDER))
+        raise SystemExit(
+            "element_pilot_reorder: Element virtual member set diverged from "
+            f"the audited slot evidence (missing={missing} extra={extra}); "
+            "re-derive ELEMENT_PILOT_SLOT_ORDER from "
+            "element-slot-evidence.json before regenerating")
+
+    # per-set emission unit: non-virtual overload lines first (the anchor is
+    # the unit's first line), then virtuals ordered by target slot with the
+    # reverse-declaration rule for same-name virtual overload pairs (emit
+    # non-const first => const takes the lower slot)
+    unit_order = {}
+    for name, group in by_name.items():
+        nonvirt = [s for s in group if not _is_vtable_virtual(s)]
+        virt = sorted((s for s in group if _is_vtable_virtual(s)),
+                      key=_element_pilot_slot_of)
+        if len(virt) > 1:
+            virt = list(reversed(virt))
+        unit_order[name] = nonvirt + virt
+
+    # slot order of a virtual-bearing set = min slot of its virtuals
+    def _set_slot(name):
+        return min(_element_pilot_slot_of(s) for s in by_name[name]
+                   if _is_vtable_virtual(s))
+
+    # bucket walk: access buckets in member-walk order, virtual sets in slot
+    # order at the head of their bucket, pure-nonvirtual sets after them in
+    # original order
+    bucket_seq = []
+    for s in members:
+        a = access_of(s)
+        if not bucket_seq or bucket_seq[-1][0] != a:
+            bucket_seq.append((a, []))
+    # Interleaved emission (the audited real class layout):
+    #   public virtuals slots 1-26 (+ their nonvirtual overload partners)
+    #   -> protected virtuals slots 27-33 (+ partners)
+    #   -> public virtuals slots 34-44 (+ partners)
+    #   -> remaining public nonvirtuals -> protected nonvirtuals -> private
+    # Pure-nonvirtual sets NEVER interleave into a virtual run (they hold no
+    # slot; their original order is preserved within their tail block).
+    out = []
+    emitted = set()
+
+    def _vsets_between(acc, lo, hi):
+        names = [n for n, g in by_name.items()
+                 if n not in emitted
+                 and any(_is_vtable_virtual(s) and access_of(s) == acc
+                         for s in g)
+                 and lo <= _set_slot(n) <= hi]
+        return sorted(names, key=_set_slot)
+
+    def _emit_vsets(acc, lo, hi):
+        for n in _vsets_between(acc, lo, hi):
+            out.extend(unit_order[n])
+            emitted.add(n)
+
+    # slot 0: the destructor set (ctors + dtor; the dtor is the set's only
+    # virtual and takes slot 0) leads the class
+    for s in members:
+        if classify_dtor(s):
+            out.extend(unit_order[s["member"]])
+            emitted.add(s["member"])
+            break
+    _emit_vsets("public", 1, 26)
+    _emit_vsets("protected", 27, 33)
+    _emit_vsets("public", 34, 44)
+    # the remaining members are all pure nonvirtuals; keep each access group
+    # contiguous (public tail, then protected, then private) in original
+    # order within the group, so the walk yields exactly
+    # public -> protected -> public -> private
+    for acc in ("public", "protected", "private"):
+        for s in members:
+            if s["member"] in emitted or access_of(s) != acc:
+                continue
+            out.extend(unit_order[s["member"]])
+            emitted.add(s["member"])
+    assert len(out) == len(members), (len(out), len(members))
+    assert {id(x) for x in out} == {id(x) for x in members}
+    return out
+
+
 # Classes whose self-referencing mangled names use U (struct) rather than V
 # (class): ??0ISBLeak@DirectUI@@QEAA@AEBU01@@Z. Their declarations must use
 # the 'struct' tag or every member mangles with the wrong tag letter.
@@ -952,6 +1170,13 @@ def render_class_header(cls: str, members: list, data_members: list,
     # Access is recovered from the mangled name (access_of); sections are
     # emitted in public -> protected -> private order (matches the old
     # output exactly, keeping the golden diff stable).
+    # W5 P2 pilot: for Element the virtuals are first reordered into the
+    # real vtable slot order (element_pilot_reorder); the access split below
+    # then emits virtual runs that follow slot order per section, with the
+    # protected run re-opened as an interleaved section so the overall
+    # declaration order equals slot order (audited: 44/44 slots).
+    if cls == "Element":
+        members = element_pilot_reorder(members)
     sections = {"public": [], "protected": [], "private": []}
     for sym in members:
         acc = access_of(sym)
@@ -1059,23 +1284,58 @@ def render_class_header(cls: str, members: list, data_members: list,
     for dsym in data_members:
         data_by_access.setdefault(access_of(dsym), []).append(dsym)
 
-    first = True
-    for acc in ("public", "protected", "private"):
-        syms = sections.get(acc) or []
-        data_syms = data_by_access.get(acc) or []
-        if not syms and not data_syms:
-            continue
-        if not first:
-            lines.append("")
-            lines.append(f"        {acc}:")
-        first = False
+    if cls == "Element":
+        # W5 P2 pilot interleaved access layout: the real vtable slot order
+        # runs public(1-26) -> protected(27-33) -> public(34-44), so the
+        # class body re-opens the public section after the protected run.
+        # members are already in slot order (element_pilot_reorder); group
+        # them by access preserving the walk order, then emit each group --
+        # which yields exactly the audited three-run layout. Data members
+        # join the end of their access group.
+        groups = []  # [(access, [syms...])] in walk order
+        for sym in members:
+            a = access_of(sym)
+            if groups and groups[-1][0] == a:
+                groups[-1][1].append(sym)
+            else:
+                groups.append((a, [sym]))
+        for gi, (a, syms) in enumerate(groups):
+            if gi > 0:
+                lines.append("")
+                lines.append(f"        {a}:")
+            for sym in syms:
+                md = MemberDecl(sym, cls)
+                decl = md.full_decl(tr)
+                lines.append(f"        {decl}")
+            for dsym in data_by_access.get(a) or []:
+                lines.append(f"        {render_data_decl(dsym, tr, cls)}")
+            data_by_access[a] = []  # emitted once
+        # access buckets never visited by members still need their data
+        for a in ("public", "protected", "private"):
+            if data_by_access.get(a):
+                lines.append("")
+                lines.append(f"        {a}:")
+                for dsym in data_by_access[a]:
+                    lines.append(f"        {render_data_decl(dsym, tr, cls)}")
+                data_by_access[a] = []
+    else:
+        first = True
+        for acc in ("public", "protected", "private"):
+            syms = sections.get(acc) or []
+            data_syms = data_by_access.get(acc) or []
+            if not syms and not data_syms:
+                continue
+            if not first:
+                lines.append("")
+                lines.append(f"        {acc}:")
+            first = False
 
-        for sym in syms:
-            md = MemberDecl(sym, cls)
-            decl = md.full_decl(tr)
-            lines.append(f"        {decl}")
-        for dsym in data_syms:
-            lines.append(f"        {render_data_decl(dsym, tr, cls)}")
+            for sym in syms:
+                md = MemberDecl(sym, cls)
+                decl = md.full_decl(tr)
+                lines.append(f"        {decl}")
+            for dsym in data_syms:
+                lines.append(f"        {render_data_decl(dsym, tr, cls)}")
 
     lines.append("    };")
     lines.append("")

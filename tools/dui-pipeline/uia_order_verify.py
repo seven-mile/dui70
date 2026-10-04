@@ -258,77 +258,210 @@ def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
                 if b or en:
                     pdata_extents.append((b, en))
     bad = 0
-    checked = 0
+    checked = {"pdata-bounded": 0, "symbol-bounded-safe": 0}
     for cls, e_ in mi["derived"].items():
         cvr = e_.get("ctor_vftable_references")
-        if not cvr or cvr.get("scan") != "pdata-bounded":
+        if not cvr:
+            continue
+        mode = cvr.get("scan")
+        if mode not in checked:
             continue
         b, en = (int(cvr["function_extent"][0], 16),
                  int(cvr["function_extent"][1], 16))
         ctor = int(cvr["ctor_rva"], 16)
         refs = cvr.get("references", [])
-        checked += 1
+        checked[mode] += 1
         # every reference offset must land inside the extent
         if any(not (b <= ctor + r["offset"] < en) for r in refs):
             bad += 1
-        # extent must actually be the .pdata entry containing the ctor
-        if not any(bb <= ctor < ee and (bb, ee) == (b, en)
-                   for bb, ee in pdata_extents):
+        if not (b <= ctor < en):
             bad += 1
-    print(f"selftest T1: {checked} pdata-bounded entries, "
-          f"{bad} with out-of-extent references/extent mismatch")
-    if bad or not checked:
+        # pdata-bounded extents must BE the .pdata entry containing
+        # the ctor; symbol-bounded extents must NOT exceed the next
+        # symbol (conservatively inside [ctor, ctor+0x200])
+        if mode == "pdata-bounded":
+            if not any(bb <= ctor < ee and (bb, ee) == (b, en)
+                       for bb, ee in pdata_extents):
+                bad += 1
+        else:
+            if en - b > 0x200:
+                bad += 1
+    print(f"selftest T1: {checked['pdata-bounded']} pdata-bounded + "
+          f"{checked['symbol-bounded-safe']} symbol-bounded-safe, "
+          f"{bad} violations")
+    if bad or not (checked["pdata-bounded"] or
+                   checked["symbol-bounded-safe"]):
         print("selftest T1: FAIL")
         ok = False
     else:
-        print("selftest T1: PASS (all references inside .pdata extents)")
+        print("selftest T1: PASS (all references inside reported "
+              "extents; pdata extents = actual .pdata entries; "
+              "symbol-bounded extents conservative <= 0x200)")
 
-    # ---- T2: alias candidates preserved ----
-    alias_seen = 0
-    for cls, e_ in mi["derived"].items():
-        cvr = e_.get("ctor_vftable_references") or {}
-        for r in cvr.get("references", []):
-            if len(r.get("candidates", [])) > 1:
-                alias_seen += 1
-    # structural floor: SOME class in this binary references an RVA
-    # with multiple alias vftables (ICF); if none, the test cannot
-    # prove alias preservation on this input -- report honestly.
-    if alias_seen:
-        print(f"selftest T2: PASS ({alias_seen} references carry "
-              f"multiple alias candidates -- none dropped)")
+    # ---- T2: REAL paired control (deletion + alias) ----
+    # Pair 1 (deletion): re-derive the references with the extractor
+    # on the same committed inputs and compare the FULL reference set
+    # against the committed artifact -- a deleted/extra reference in
+    # the artifact must diverge. This is a true-value cross-check,
+    # not a len>1 structural observation.
+    # Pair 2 (alias): mutate a copy of the artifact by replacing one
+    # reference's candidate list with a SINGLE alias (dropping the
+    # others); the re-derivation comparison must CATCH the dropped
+    # alias.
+    mutroot = root / "t2"
+    mutroot.mkdir(parents=True, exist_ok=True)
+    rebuilt = mutroot / "mi-tables.json"
+    rx = subprocess.run(
+        [sys.executable, str(here / "extract-mi-tables.py"),
+         "--dll", str(dll), "--symbols", str(pinned / "symbols.json"),
+         "--lengths", str(pinned / "mi-interface-lengths.json"),
+         "--out", str(rebuilt)],
+        capture_output=True, text=True)
+    if rx.returncode != 0:
+        print("selftest T2: FAIL (re-derivation failed)")
+        ok = False
     else:
-        print("selftest T2: INCONCLUSIVE (no alias RVA referenced in "
-              "this binary's ctors) -- structural check only")
-        # structural check: extractor keeps candidates as a list
-        src = (here / "extract-mi-tables.py").read_text(encoding="utf-8")
-        if '"candidates": cands' not in src:
-            print("selftest T2: FAIL (candidates list not present)")
+        re_der = json.loads(rebuilt.read_text(encoding="utf-8"))["derived"]
+        com = mi["derived"]
+        ref_diff = []
+        for c in sorted(set(re_der) | set(com)):
+            a = (re_der.get(c, {}).get("ctor_vftable_references")
+                 or {}).get("references")
+            b = (com.get(c, {}).get("ctor_vftable_references")
+                 or {}).get("references")
+            if a != b:
+                ref_diff.append(c)
+        if ref_diff:
+            print(f"selftest T2: FAIL (committed references diverge "
+                  f"from re-derivation: {ref_diff[:4]})")
             ok = False
+        else:
+            print(f"selftest T2: PASS pair 1 (committed reference set "
+                  f"= re-derivation, {sum(1 for e in com.values() if e.get('ctor_vftable_references'))} classes)")
+        # negative control: DELETE one reference in a copy; the
+        # comparison must flag the class
+        if not ref_diff:
+            import copy as _cp
+            mutmi = _cp.deepcopy(com)
+            tgt = None
+            for c, e in mutmi.items():
+                cvr = e.get("ctor_vftable_references") or {}
+                if len(cvr.get("references", [])) >= 2:
+                    tgt = c
+                    break
+            if tgt is None:
+                # R2: an undecidable control is NOT a pass -- the
+                # selftest exits non-zero so a vacuous run cannot go
+                # green
+                print("selftest T2: INCONCLUSIVE (no class with >=2 "
+                      "references to delete from) -- non-rc0")
+                ok = False
+            else:
+                mutmi[tgt]["ctor_vftable_references"]["references"].pop(0)
+                # compare again
+                diff2 = [c for c in sorted(set(mutmi) | set(re_der))
+                         if ((mutmi.get(c, {}).get("ctor_vftable_references")
+                              or {}).get("references")
+                             != (re_der.get(c, {})
+                                 .get("ctor_vftable_references")
+                                 or {}).get("references"))]
+                if diff2 == [tgt]:
+                    print(f"selftest T2: PASS pair 2 (deleted "
+                          f"reference caught: {tgt})")
+                else:
+                    print(f"selftest T2: FAIL pair 2 (deletion NOT "
+                          f"caught: diff={diff2[:4]})")
+                    ok = False
 
-    # ---- T3: no order verdict fields anywhere ----
-    # Scan the GATE portion of the source only (everything before the
-    # selftest function): the selftest's own guard strings would
-    # otherwise trip the scan.
-    artifact_txt = json.dumps(mi)
-    gate_src_full = (here / "uia_order_verify.py").read_text(
-        encoding="utf-8")
-    gate_src = gate_src_full[:gate_src_full.index("def _selftest(")]
-    marker = "CONSIST" + "ENT"
-    order_emit = '"order": ' + 'cvr'
-    if "ORDER-UNKNOWN" not in artifact_txt:
-        print("selftest T3: FAIL (ORDER-UNKNOWN semantics missing)")
-        ok = False
-    elif marker in gate_src:
-        print("selftest T3: FAIL (order-compare language remains)")
-        ok = False
-    elif order_emit.replace("cvr", "cvr.get") not in gate_src and \
-            '"order"' in gate_src.replace(
-                '"order": "ORDER-UNKNOWN"', ""):
-        print("selftest T3: FAIL (order verdict emission remains)")
+    # ---- T3: verdict-independence from cvr order fields ----
+    # REAL mutation control (source-grep is not evidence): mutate a
+    # copy of the pinned artifact so one class's
+    # ctor_vftable_references claims a fake order (order=RB-FIRST,
+    # semantics=declaration-order) and assert:
+    #   (a) the gate's VERDICT for that class is UNCHANGED (verdicts
+    #       are computed from probe/table evidence, never from cvr);
+    #   (b) the gate's own report rows contain NO order verdict field
+    #       (the context echo carries ORDER-UNKNOWN as given by the
+    #       extractor; a mutated order claim never becomes a verdict).
+    # pick a class that (a) has pdata-bounded cvr evidence and
+    # (b) the gate actually audits (header + >=2 tables): probe once
+    # on the pdata-bounded set and keep those with a report row
+    pb = [c for c, e_ in mi["derived"].items()
+          if (e_.get("ctor_vftable_references") or {})
+          .get("scan") == "pdata-bounded"]
+    probe = root / "t3-pick"
+    probe.mkdir(parents=True, exist_ok=True)
+    pr = subprocess.run(
+        [sys.executable, str(here / "uia_order_verify.py"),
+         "--pinned", str(pinned), "--include", str(inc),
+         "--workdir", str(probe), "--dll", str(dll),
+         "--classes", ",".join(pb), "--json-out", str(probe / "p.json")],
+        capture_output=True, text=True)
+    t3cands = []
+    if (probe / "p.json").is_file():
+        pdoc = json.loads((probe / "p.json").read_text(
+            encoding="utf-8"))
+        t3cands = [c for c in pdoc.get("audited", {})
+                   if pdoc["audited"][c].get("verdict")]
+    if not t3cands:
+        print("selftest T3: INCONCLUSIVE (no audited pdata-bounded "
+              "class) -- non-rc0")
         ok = False
     else:
-        print("selftest T3: PASS (reference-only + ORDER-UNKNOWN; no "
-              "order-compare verdicts)")
+        t3cls = t3cands[0]
+        t3root = root / "t3"
+        (t3root / "pinned").mkdir(parents=True, exist_ok=True)
+        import shutil as _sh
+        for f_ in pinned.iterdir():
+            if f_.is_file():
+                _sh.copy(f_, t3root / "pinned" / f_.name)
+        mutmi = json.loads((t3root / "pinned" / "mi-tables.json")
+                           .read_text(encoding="utf-8"))
+        cvr = mutmi["derived"][t3cls]["ctor_vftable_references"]
+        cvr["order"] = "RB-FIRST"
+        cvr["semantics"] = "declaration-order"
+        (t3root / "pinned" / "mi-tables.json").write_text(
+            json.dumps(mutmi), encoding="utf-8")
+
+        def _gate(pinned_dir, workname, outname):
+            art = t3root / outname
+            r_ = subprocess.run(
+                [sys.executable, str(here / "uia_order_verify.py"),
+                 "--pinned", str(pinned_dir), "--include", str(inc),
+                 "--workdir", str(t3root / workname),
+                 "--dll", str(dll), "--classes", t3cls,
+                 "--json-out", str(art)],
+                capture_output=True, text=True)
+            doc_ = (json.loads(art.read_text(encoding="utf-8"))
+                    if art.is_file() else None)
+            return r_.returncode, (doc_ or {}).get("audited", {}) \
+                .get(t3cls)
+
+        rc0, rep0 = _gate(pinned, "w-orig", "orig.json")
+        rc1, rep1 = _gate(t3root / "pinned", "w-mut", "mut.json")
+        if rep0 is None or rep1 is None:
+            print("selftest T3: FAIL (gate did not audit the class)")
+            ok = False
+        elif rep0.get("verdict") != rep1.get("verdict"):
+            print(f"selftest T3: FAIL (fake order claim changed the "
+                  f"verdict: {rep0.get('verdict')} -> "
+                  f"{rep1.get('verdict')})")
+            ok = False
+        else:
+            # verdict rows must carry no order field of their own
+            order_fields = []
+            for tbl, tr in (rep1.get("tables") or {}).items():
+                if "order" in tr:
+                    order_fields.append(tbl)
+            if order_fields:
+                print(f"selftest T3: FAIL (verdict rows carry order "
+                      f"fields: {order_fields})")
+                ok = False
+            else:
+                print(f"selftest T3: PASS (fake order claim in cvr "
+                      f"did not change {t3cls}'s verdict "
+                      f"[{rep0.get('verdict')}] and no order verdict "
+                      f"field exists in report rows)")
 
     # ---- T4/T5: run the gate on ONE class and inspect the artifact --
     cls = "InvokeProvider"
@@ -900,17 +1033,39 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     print(f"     * {t} slot {fs['slot']}: {fs['err']}")
     if args.json_out:
+        # R4 coverage disclosure: REAL counts of what the ctor
+        # reference evidence covers -- never a full-coverage claim.
+        scan_states: dict[str, int] = {}
+        n_ref = 0
+        for e in derived.values():
+            cvr = e.get("ctor_vftable_references") or {}
+            if cvr:
+                st_ = cvr.get("scan", "?")
+                scan_states[st_] = scan_states.get(st_, 0) + 1
+                n_ref += len(cvr.get("references", []))
+        cov_claim = ("ctor reference evidence is PARTIAL: scan "
+                     "states above; leaf classes without "
+                     "multi-table inheritance are outside this "
+                     "gate audit set; NOT a full-coverage claim")
+        cov = {
+            "classes_total": len(derived),
+            "classes_with_ctor_reference_evidence":
+                sum(scan_states.values()),
+            "scan_states": scan_states,
+            "references_total": n_ref,
+            "coverage_claim": cov_claim,
+        }
         pathlib.Path(args.json_out).write_text(
-            json.dumps({"gate": "R6 MI order + table truth",
+            json.dumps({"gate": "R6 multi-vtable shape/slot checker",
                         "mandatory": MANDATORY,
                         "mandatory_missing": mandatory_missing,
+                        "coverage": cov,
                         "audited": audited,
                         "counts": {"verified": n_ver,
                                    "verified_unknown": n_unk,
                                    "rejected": n_rej},
-                        "verdict": "FAIL" if (failed_classes or
-                                              mandatory_missing)
-                        else "PASS"},
+                        "verdict": ("FAIL" if (failed_classes or
+                                    mandatory_missing) else "PASS")},
                        indent=1, ensure_ascii=False),
             encoding="utf-8")
     if failed_classes or mandatory_missing:

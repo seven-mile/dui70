@@ -16,9 +16,14 @@
       G5  headers           random sample syntax-checked with cl /Zs
       J1  vtable slots      report-only: slot-order verdict recorded, exit 0
       R6  vtable shape/slot  report-only: multi-vtable shape/slot
-                            checker verdict recorded; fail-closed on
-                            missing schema-3 input, manual-conflict
-                            tables, or missing mandatory-17 coverage
+                            checker verdict recorded (enforced T1-T6
+                            selftest first); fail-closed on missing
+                            schema-3 input, manual-conflict tables, or
+                            missing mandatory-17 coverage
+      LIC manual-length ctl enforced negative controls: A loosen =
+                            ignored-redundant recorded, B deny =
+                            manual-conflict refused; rc2 NOT EXECUTED
+                            = tooling error
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
@@ -811,6 +816,37 @@ if ($SkipJ1) {
             $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
             Write-Info "verdict recorded: $verdict -- $summary"
             Add-Gate 'R6' 'vtable shape/slot' 'REPORT' $dta "$verdict -- $summary (report-only)"
+        }
+    }
+
+    # ------------------------------------------- LIC manual-length controls
+    # ENFORCED (N4): length_input_control negative controls prove the
+    # manual interface-length inputs are LIVE (loosen recorded as
+    # ignored-redundant, deny refused as manual-conflict). rc 0 PASS /
+    # rc 1 FAIL / rc 2 NOT EXECUTED (missing cached DLL) = tooling
+    # error -- never a silent pass.
+    Write-Head 'LIC  manual-length negative controls (enforced)'
+    $lic = Join-Path $script:Repo 'tools/dui-pipeline/length_input_control.py'
+    if (-not (Test-Path $lic)) {
+        Fail-Gate 'LIC' 'manual-length controls' `
+            'tool present' 'missing' @() 0
+    } else {
+        $t0l = Get-Date
+        $rl = Invoke-Tool $py @($lic) -Echo
+        $dtl = ((Get-Date) - $t0l).TotalSeconds
+        $taill = @($rl.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 12)
+        if ($rl.Rc -eq 0 -and ($rl.Out -match 'control A: PASS') -and
+            ($rl.Out -match 'control B: PASS')) {
+            Write-Ok 'controls A+B PASS (manual inputs live)'
+            Add-Gate 'LIC' 'manual-length controls' 'PASS' $dtl 'A+B PASS'
+        } elseif ($rl.Rc -eq 2) {
+            Fail-Gate 'LIC' 'manual-length controls' `
+                'executed (cached DLL present)' `
+                "NOT EXECUTED rc=2 -- missing pinned DLL" $taill $dtl
+        } else {
+            Fail-Gate 'LIC' 'manual-length controls' `
+                'A: loosen recorded, B: deny refused' `
+                "rc=$($rl.Rc)" $taill $dtl
         }
     }
 }

@@ -8,8 +8,9 @@ controls prove the input is LOAD-BEARING in BOTH directions:
   A (loosening): re-running extract-mi-tables with a loosened manual
      length must NOT fabricate slot content (the in-binary next-
      vftable bounds hold on their own) while the affected tables'
-     length_provenance must flip manual -> next-vftable (the input is
-     live in the record, not dead).
+     length_provenance must flip manual -> ignored-redundant (the
+     input is live in the record, not dead -- recorded, never
+     silently clamped).
 
   B (deny, 2 -> 1): a manual length SHORTER than an in-binary visible
      bound must be REFUSED, not silently truncate: the affected

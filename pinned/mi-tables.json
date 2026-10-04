@@ -8930,8 +8930,26 @@
   "AnimationStrip": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000D3BD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000D3BD0",
+     "0x000D3C00"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7AnimationStrip@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x00112470"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -9768,8 +9786,26 @@
   "BaseScrollBar": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000A7EA0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000A7EA0",
+     "0x000A7EC0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7BaseScrollBar@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010ED70"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -9800,8 +9836,37 @@
   "BaseScrollViewer": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0008AF50",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0008AF50",
+     "0x0008AF90"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7BaseScrollViewer@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x001057F0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7BaseScrollViewer@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 37,
+      "table_rva": "0x00105978"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "Element": {
@@ -10880,8 +10945,26 @@
   "BorderLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00071EA0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00071EA0",
+     "0x00071EC0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7BorderLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x001079B0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -11350,8 +11433,26 @@
   "BrowserSelectionProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EF850",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EF850",
+     "0x000EF870"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7BrowserSelectionProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001173F8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -11366,8 +11467,26 @@
   "Button": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000735E0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000735E0",
+     "0x00073620"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Button@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00107F18"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -12932,8 +13051,26 @@
   "CCBase": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007CAA0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007CAA0",
+     "0x0007CAF0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCBase@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 47,
+      "table_rva": "0x001091F8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -13969,6 +14106,17 @@
       "kind": "reference",
       "offset": 52,
       "table_rva": "0x00109628"
+     },
+     {
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7CCBaseScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 62,
+      "table_rva": "0x00109808"
      }
     ],
     "scan": "pdata-bounded",
@@ -15553,6 +15701,17 @@
       "kind": "reference",
       "offset": 14,
       "table_rva": "0x0010D5E0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7CCHScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 24,
+      "table_rva": "0x00109808"
      }
     ],
     "scan": "pdata-bounded",
@@ -23381,8 +23540,26 @@
   "CheckBoxGlyph": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B2300",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B2300",
+     "0x000B2340"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CheckBoxGlyph@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 33,
+      "table_rva": "0x0010F368"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -23792,8 +23969,26 @@
   "ClassInfoBase": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00075230",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00075230",
+     "0x00075250"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ClassInfoBase@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x001082C8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -24685,8 +24880,26 @@
   "Combobox": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B3750",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B3750",
+     "0x000B3790"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Combobox@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 34,
+      "table_rva": "0x00110E88"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -25142,8 +25355,26 @@
   "ConcreteElementProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0006F0EC",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0006F0EC",
+     "0x0006F110"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ConcreteElementProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00107910"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -25158,8 +25389,26 @@
   "ConcreteHWNDElementProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00073DBC",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00073DBC",
+     "0x00073DE0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ConcreteHWNDElementProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x001080A0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -29936,8 +30185,26 @@
   "DCSurface": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0006EDD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0006EDD0",
+     "0x0006EDF0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7DCSurface@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x001074D0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -29993,8 +30260,26 @@
   "DUIBehaviorFactory": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00097F00",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00097F00",
+     "0x00097F20"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7DUIBehaviorFactory@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010EE80"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -30073,6 +30358,17 @@
       "kind": "reference",
       "offset": 21,
       "table_rva": "0x00110C78"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7DialogElement@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 31,
+      "table_rva": "0x00110C48"
      },
      {
       "candidates": [
@@ -30796,8 +31092,70 @@
   "DuiAccessible": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00068CC0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00068CC0",
+     "0x00068D10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "IAccessible@",
+        "symbol": "??_7DuiAccessible@DirectUI@@6BIAccessible@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00107D78"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IEnumVARIANT@",
+        "symbol": "??_7DuiAccessible@DirectUI@@6BIEnumVARIANT@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 10,
+      "table_rva": "0x00107068"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IOleWindow@",
+        "symbol": "??_7DuiAccessible@DirectUI@@6BIOleWindow@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 21,
+      "table_rva": "0x00107040"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IAccIdentity@",
+        "symbol": "??_7DuiAccessible@DirectUI@@6BIAccIdentity@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 32,
+      "table_rva": "0x001070A0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IServiceProvider@",
+        "symbol": "??_7DuiAccessible@DirectUI@@6BIServiceProvider@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 43,
+      "table_rva": "0x001070C0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -31702,8 +32060,26 @@
   "Edit": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000913A0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000913A0",
+     "0x000913D8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Edit@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 34,
+      "table_rva": "0x0010DD88"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -32150,8 +32526,26 @@
   "Element": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00067CE0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00067CE0",
+     "0x00067D10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Element@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x001037C0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -32779,6 +33173,28 @@
       "kind": "reference",
       "offset": 41,
       "table_rva": "0x001050D0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IRawElementProviderFragment@",
+        "symbol": "??_7ElementProvider@DirectUI@@6BIRawElementProviderFragment@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 52,
+      "table_rva": "0x00105138"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IRawElementProviderAdviseEvents@",
+        "symbol": "??_7ElementProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 63,
+      "table_rva": "0x00105110"
      }
     ],
     "scan": "pdata-bounded",
@@ -34248,8 +34664,26 @@
   "ExpandCollapseProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB6B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB6B0",
+     "0x000EB6D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ExpandCollapseProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117180"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35157,8 +35591,26 @@
   "ExpandoButtonGlyph": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B23B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B23B0",
+     "0x000B23F0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ExpandoButtonGlyph@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 33,
+      "table_rva": "0x0010F078"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35570,8 +36022,26 @@
   "FillLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00076C80",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00076C80",
+     "0x00076CA0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7FillLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00106260"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35593,8 +36063,26 @@
   "FlowLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007A090",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007A090",
+     "0x0007A0B0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7FlowLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00106218"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35616,8 +36104,26 @@
   "FontCache": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0009B470",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0009B470",
+     "0x0009B490"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7FontCache@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010EF00"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35784,8 +36290,26 @@
   "GridItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000ECE90",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000ECE90",
+     "0x000ECEB0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GridItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001172A0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35800,8 +36324,26 @@
   "GridLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000D6CD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000D6CD0",
+     "0x000D6D00"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GridLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x0010E540"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35905,8 +36447,26 @@
   "GridProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000ED560",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000ED560",
+     "0x000ED580"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GridProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117318"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35921,8 +36481,26 @@
   "HWNDElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007D180",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007D180",
+     "0x0007D1C0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7HWNDElement@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00109418"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -36448,6 +37026,50 @@
       "kind": "reference",
       "offset": 14,
       "table_rva": "0x001070E0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IEnumVARIANT@",
+        "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIEnumVARIANT@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 24,
+      "table_rva": "0x00107068"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IOleWindow@",
+        "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIOleWindow@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 35,
+      "table_rva": "0x00107040"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IAccIdentity@",
+        "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIAccIdentity@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 46,
+      "table_rva": "0x001070A0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IServiceProvider@",
+        "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIServiceProvider@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 57,
+      "table_rva": "0x001070C0"
      }
     ],
     "scan": "pdata-bounded",
@@ -37383,6 +38005,39 @@
       "kind": "reference",
       "offset": 24,
       "table_rva": "0x00104E60"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IRawElementProviderFragment@",
+        "symbol": "??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderFragment@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 35,
+      "table_rva": "0x00104F20"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IRawElementProviderAdviseEvents@",
+        "symbol": "??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 46,
+      "table_rva": "0x00104EF8"
+     },
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7HWNDElementProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 57,
+      "table_rva": "0x00104ED0"
      }
     ],
     "scan": "pdata-bounded",
@@ -37462,8 +38117,26 @@
   "HWNDHost": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007B380",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007B380",
+     "0x0007B3B8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7HWNDHost@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00103278"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -37987,6 +38660,50 @@
       "kind": "reference",
       "offset": 14,
       "table_rva": "0x0010EC68"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IEnumVARIANT@",
+        "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIEnumVARIANT@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 24,
+      "table_rva": "0x00104460"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IOleWindow@",
+        "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIOleWindow@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 35,
+      "table_rva": "0x00104438"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IAccIdentity@",
+        "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIAccIdentity@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 46,
+      "table_rva": "0x00104498"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IServiceProvider@",
+        "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIServiceProvider@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 57,
+      "table_rva": "0x001044B8"
      }
     ],
     "scan": "pdata-bounded",
@@ -38709,8 +39426,26 @@
   "IDataEngine": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00092440",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00092440",
+     "0x00092460"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7IDataEngine@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010E630"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -38729,8 +39464,26 @@
   "IDataEntry": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00092440",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00092440",
+     "0x00092460"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7IDataEntry@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010E630"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -38798,8 +39551,26 @@
   "ISBLeak": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0009B630",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0009B630",
+     "0x0009B650"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ISBLeak@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010EF20"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -38880,8 +39651,26 @@
   "IXElementCP": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B6A60",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B6A60",
+     "0x000B6A80"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7IXElementCP@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x001118A0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -38896,8 +39685,26 @@
   "IXProviderCP": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0009B630",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0009B630",
+     "0x0009B650"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7IXProviderCP@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010EF20"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -39710,8 +40517,26 @@
   "InvokeProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB730",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB730",
+     "0x000EB750"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7InvokeProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001171D8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -39726,8 +40551,26 @@
   "ItemList": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00085D90",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00085D90",
+     "0x00085DC0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ItemList@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x0010B278"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -40201,8 +41044,26 @@
   "Layout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00070120",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00070120",
+     "0x00070140"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Layout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00107D00"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -42155,8 +43016,26 @@
   "ModernProgressBar": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00015750",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00015750",
+     "0x000157B0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ModernProgressBar@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 16,
+      "table_rva": "0x00100AB8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -42581,8 +43460,26 @@
   "ModernProgressBarRangeValueProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB770",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB770",
+     "0x000EB790"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ModernProgressBarRangeValueProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117010"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43041,8 +43938,26 @@
   "Movie": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000880A0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000880A0",
+     "0x000880D8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Movie@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x0010C6A8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43467,8 +44382,26 @@
   "NativeHWNDHost": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0008AF90",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0008AF90",
+     "0x0008AFC0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7NativeHWNDHost@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00103CE0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43902,8 +44835,26 @@
   "NavigatorSelectionItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB7B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB7B0",
+     "0x000EB7D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7NavigatorSelectionItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117138"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43918,8 +44869,26 @@
   "NineGridLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007C880",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007C880",
+     "0x0007C8A0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7NineGridLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x001061D0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43941,8 +44910,26 @@
   "PText": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B6CB0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B6CB0",
+     "0x000B6CE0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7PText@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x001118B0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -45408,8 +46395,26 @@
   "Progress": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B4220",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B4220",
+     "0x000B4250"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Progress@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x001110D8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -45837,8 +46842,26 @@
   "ProgressRangeValueProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB7F0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB7F0",
+     "0x000EB810"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ProgressRangeValueProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117030"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -46768,8 +47791,26 @@
   "RadioButtonGlyph": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B23F0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B23F0",
+     "0x000B2430"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RadioButtonGlyph@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 33,
+      "table_rva": "0x0010F1F0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -47262,8 +48303,26 @@
   "RangeValueProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB890",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB890",
+     "0x000EB8B0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RangeValueProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117040"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -47278,8 +48337,26 @@
   "RefPointElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B5BE0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B5BE0",
+     "0x000B5C10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RefPointElement@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x00111340"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -47737,8 +48814,26 @@
   "RepeatButton": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B61B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B61B0",
+     "0x000B61F0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RepeatButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 33,
+      "table_rva": "0x001114A8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49026,8 +50121,26 @@
   "RichTextCache": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B9C28",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B9C28",
+     "0x000B9C50"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RichTextCache@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 4,
+      "table_rva": "0x001125E0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49051,8 +50164,37 @@
   "RichTextExtraFormatting": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0001B838",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0001B838",
+     "0x0001B900"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "IDUIRichTextRenderOffset@",
+        "symbol": "??_7RichTextExtraFormatting@DirectUI@@6BIDUIRichTextRenderOffset@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00107EF8"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IDUIRichTextRenderColor@",
+        "symbol": "??_7RichTextExtraFormatting@DirectUI@@6BIDUIRichTextRenderColor@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 18,
+      "table_rva": "0x00107ED8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IDUIRichTextRenderColor@": {
@@ -49098,8 +50240,26 @@
   "RowLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00085A00",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00085A00",
+     "0x00085A20"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RowLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x001060F8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49121,8 +50281,37 @@
   "ScrollBar": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00097790",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00097790",
+     "0x000977D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7ScrollBar@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x00105A38"
+     },
+     {
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7ScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 37,
+      "table_rva": "0x00105BA8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -49534,8 +50723,26 @@
   "ScrollBarRangeValueProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB8B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB8B0",
+     "0x000EB8D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ScrollBarRangeValueProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117020"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49627,8 +50834,26 @@
   "ScrollItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EE480",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EE480",
+     "0x000EE4A0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ScrollItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117380"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49727,8 +50952,26 @@
   "ScrollProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB930",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB930",
+     "0x000EB950"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ScrollProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001170B0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49743,8 +50986,37 @@
   "ScrollViewer": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0008CA40",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0008CA40",
+     "0x0008CA90"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7ScrollViewer@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x0010DBD0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7ScrollViewer@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 12,
+      "table_rva": "0x0010DD58"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "Element": {
@@ -50436,8 +51708,26 @@
   "SelectionItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB890",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB890",
+     "0x000EB8B0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectionItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117040"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -50534,8 +51824,26 @@
   "SelectionProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB890",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB890",
+     "0x000EB8B0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectionProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117040"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -50550,8 +51858,26 @@
   "Selector": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00082AE0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00082AE0",
+     "0x00082B10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Selector@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x0010ADF0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -51431,8 +52757,26 @@
   "SelectorSelectionItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EB9B0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EB9B0",
+     "0x000EB9D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectorSelectionItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117128"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -51447,8 +52791,26 @@
   "SelectorSelectionProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EF8D0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EF8D0",
+     "0x000EF8F0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectorSelectionProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001173E8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -51846,8 +53208,26 @@
   "ShellBorderLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007CA60",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007CA60",
+     "0x0007CA80"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ShellBorderLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00106140"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -52749,8 +54129,26 @@
   "StyleSheet": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00097ED0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00097ED0",
+     "0x00097EE8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7StyleSheet@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010EE18"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -52776,8 +54174,37 @@
   "StyledScrollViewer": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000BB190",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000BB190",
+     "0x000BB1D0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7StyledScrollViewer@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x0010F510"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7StyledScrollViewer@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 37,
+      "table_rva": "0x0010F4E0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "Element": {
@@ -53388,8 +54815,26 @@
   "Surface": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000979F0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000979F0",
+     "0x00097A08"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Surface@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00108090"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54899,8 +56344,26 @@
   "TableItemProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EFFE0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EFFE0",
+     "0x000F0000"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TableItemProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117448"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54915,8 +56378,26 @@
   "TableLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B6FB0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B6FB0",
+     "0x000B6FD0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TableLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00112428"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -55023,8 +56504,26 @@
   "TableProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000F0710",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000F0710",
+     "0x000F0730"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TableProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001174C0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -55039,8 +56538,37 @@
   "TaskPage": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000DDC40",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000DDC40",
+     "0x000DDC90"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7TaskPage@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x0010E470"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IXProviderCP",
+        "symbol": "??_7TaskPage@DirectUI@@6BIXProviderCP@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 10,
+      "table_rva": "0x0010E458"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IElementListener": {
@@ -56304,8 +57832,26 @@
   "Thumb": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0007BAD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0007BAD0",
+     "0x0007BB10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Thumb@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00108FB0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -56775,8 +58321,26 @@
   "ToggleProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000EC570",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000EC570",
+     "0x000EC590"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ToggleProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x00117238"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -56791,8 +58355,37 @@
   "TooltipEventSink@TouchHWNDElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000D5740",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000D5740",
+     "0x000D5778"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "CSafeElementListenerCB@",
+        "symbol": "??_7TooltipEventSink@TouchHWNDElement@DirectUI@@6BCSafeElementListenerCB@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00115988"
+     },
+     {
+      "candidates": [
+       {
+        "base": "ITouchTooltipEventSink@",
+        "symbol": "??_7TooltipEventSink@TouchHWNDElement@DirectUI@@6BITouchTooltipEventSink@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 12,
+      "table_rva": "0x00115A50"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -57586,8 +59179,37 @@
   "TouchCarouselList": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000BCC3C",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000BCC3C",
+     "0x000BCD38"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7TouchCarouselList@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00113288"
+     },
+     {
+      "candidates": [
+       {
+        "base": "CSafeElementListenerCB@",
+        "symbol": "??_7TouchCarouselList@DirectUI@@6BCSafeElementListenerCB@@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 19,
+      "table_rva": "0x00113258"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -58194,8 +59816,48 @@
   "TouchCarouselScrollBar": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000BCD38",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000BCD38",
+     "0x000BCDFC"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00112E88"
+     },
+     {
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 19,
+      "table_rva": "0x00112DF8"
+     },
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 33,
+      "table_rva": "0x00112DC8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -59967,6 +61629,17 @@
       "kind": "reference",
       "offset": 31,
       "table_rva": "0x00116288"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7TouchDialogElement@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 48,
+      "table_rva": "0x0010E920"
      }
     ],
     "scan": "pdata-bounded",
@@ -60798,8 +62471,37 @@
   "TouchEdit2": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000C0670",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000C0670",
+     "0x000C06E0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "TouchEditBase",
+        "symbol": "??_7TouchEdit2@DirectUI@@6BTouchEditBase@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00113600"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7TouchEdit2@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 12,
+      "table_rva": "0x001135D0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IElementListener": {
@@ -64664,8 +66366,26 @@
   "TouchHWNDElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x0002C910",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x0002C910",
+     "0x0002CA10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchHWNDElement@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x00103FB8"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -66627,8 +68347,37 @@
   "TouchScrollViewer": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00091890",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00091890",
+     "0x00091A50"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7TouchScrollViewer@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 3,
+      "table_rva": "0x001053A0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7TouchScrollViewer@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 24,
+      "table_rva": "0x001057C0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "Element": {
@@ -72084,8 +73833,26 @@
   "UnknownElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B1B10",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B1B10",
+     "0x000B1B40"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7UnknownElement@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 27,
+      "table_rva": "0x00110A98"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -72589,8 +74356,26 @@
   "ValueProxy": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000F15E0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000F15E0",
+     "0x000F1600"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ValueProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 8,
+      "table_rva": "0x001174F0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -72605,8 +74390,26 @@
   "VerticalFlowLayout": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00081FD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00081FD0",
+     "0x00081FF0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7VerticalFlowLayout@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 5,
+      "table_rva": "0x00106188"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -72628,8 +74431,26 @@
   "Viewer": {
    "ctor_vftable_references": {
     "ctor_rva": "0x00081AD0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x00081AD0",
+     "0x00081B10"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Viewer@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x0010A240"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -74246,8 +76067,37 @@
   "XElement": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000D8740",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000D8740",
+     "0x000D8790"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "HWNDHost",
+        "symbol": "??_7XElement@DirectUI@@6BHWNDHost@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 2,
+      "table_rva": "0x001116E0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "IXElementCP",
+        "symbol": "??_7XElement@DirectUI@@6BIXElementCP@1@@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 12,
+      "table_rva": "0x001116D0"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "HWNDHost": {
@@ -74704,8 +76554,26 @@
   "XProvider": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000D8790",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000D8790",
+     "0x000D87C0"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7XProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00111638"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -74795,8 +76663,26 @@
   "XResourceProvider": {
    "ctor_vftable_references": {
     "ctor_rva": "0x000B71C0",
-    "reason": "ctor rva not covered by .pdata",
-    "scan": "unknown-scan-refused"
+    "function_extent": [
+     "0x000B71C0",
+     "0x000B7310"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7XResourceProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "offset": 0,
+      "table_rva": "0x00111620"
+     }
+    ],
+    "scan": "symbol-bounded-safe",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -74866,17 +76752,36 @@
    "",
    "STATUS: EXPLICIT ABI INPUTS with negative proof. A WRONG value must",
    "change the affected classes' emitted slot tables (tamper controls:",
-   "tools/dui-pipeline/length_input_control.py flips RefcountBase 2->3",
-   "and changes derived tables; the class-scoped entries flip the",
-   "EP/HWND/TouchSelect tables between visible/conflict states).",
+   "STATUS: EXPLICIT ABI INPUTS with negative proof. A WRONG value must",
+   "change the affected classes' emitted slot tables or their",
+   "provenance (tamper controls: tools/dui-pipeline/",
+   "length_input_control.py -- Control A loosens the",
+   "ElementProvider class-scoped RefcountBase length 5->6:",
+   "content stable, provenance manual -> ignored-redundant",
+   "(the input is recorded, never silently clamped); Control B",
+   "denies the family-wide RefcountBase 2->1: 26 class/table",
+   "entries refused as manual-conflict, visible slots kept,",
+   "never truncated).",
    "Values are never claimed as binary-derived evidence; emission",
    "REQUIRES them (fail-closed when absent).",
    "",
-   "EVIDENCE GRADES (schema 3): ctor_store_order and table slot",
-   "contents = Solid Evidence (object-layout observation of the pinned",
-   "binary). Any EMISSION ORDERING STRATEGY derived from them",
-   "(e.g. 'emit bases in ctor-store order') = Strong Inference",
-   "(store order is not necessarily source declaration order)."
+   "EVIDENCE GRADES (schema 3): table slot contents = Solid",
+   "Evidence (DLL bytes). ctor_vftable_references =",
+   "reference-only evidence (LEA references inside the ctor's",
+   ".pdata extent, ORDER-UNKNOWN): NOT stores, and NO base",
+   "order, emission order, or declaration order is derived",
+   "from it.",
+   "CONSISTENCY (R3''): repro.py asserts (a) the manual section is",
+   "byte-identical to the COMMITTED mi-interface-lengths.json input",
+   "(absent input or drifted copy = FAIL, fail-closed), (b) schema == 3,",
+   "(c) the derived section re-derives identically from DLL bytes +",
+   "symbols.json + this manual input (conditional re-derivability:",
+   "determinism + committed-match, NOT independent manual truth).",
+   "ctor_vftable_references scan modes: pdata-bounded (ctor covered by",
+   "a .pdata function extent) or symbol-bounded-safe (ctor bounded by",
+   "its own symbol extent from the pinned symbols; fallback when",
+   ".pdata does not cover it); otherwise unknown-scan-refused.",
+   "Fixed windows are never used."
   ]
  },
  "schema": 3

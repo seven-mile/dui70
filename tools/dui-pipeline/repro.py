@@ -737,6 +737,27 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
         fail("R3''", "schema versions agree",
              f"rebuilt {rb.get('schema')} vs committed {cb.get('schema')}")
         return 1
+    if cb.get("schema") != 3:
+        fail("R3''", "committed mi-tables.json schema == 3",
+             f"schema {cb.get('schema')}")
+        return 1
+    # manual section must equal the COMMITTED lengths input verbatim
+    # (R3 consistency: the extractor copies it, so any drift between
+    # the two pinned files -- or an extractor that silently rewrote
+    # the manual section -- fails here; a MISSING lengths input is
+    # fail-closed upstream and cannot reach this point as a pass)
+    try:
+        len_doc = json.loads(lengths.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        fail("R3''", "committed mi-interface-lengths.json parses",
+             f"{exc}")
+        return 1
+    if cb.get("manual") != len_doc:
+        fail("R3''",
+             "mi-tables.json manual section == committed "
+             "mi-interface-lengths.json",
+             "manual section drifted from the committed lengths input")
+        return 1
     if rb.get("derived") == cb.get("derived"):
         n = len(cb.get("derived") or {})
         n_cvr = sum(1 for e in (cb.get("derived") or {}).values()

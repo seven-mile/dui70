@@ -234,9 +234,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dll", required=True)
     ap.add_argument("--symbols", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--lengths", default=None,
+    ap.add_argument("--lengths", required=True,
                     help="manual interface-lengths JSON (human ABI input; "
-                         "copied verbatim into output.manual)")
+                         "copied verbatim into output.manual). REQUIRED "
+                         "and fail-closed: emission REQUIRES the manual "
+                         "input -- an absent input is an error, never a "
+                         "silent pass with unbounded tables.")
     args = ap.parse_args(argv)
 
     dll = pathlib.Path(args.dll)
@@ -247,14 +250,18 @@ def main(argv: list[str] | None = None) -> int:
                   file=sys.stderr)
             return 2
 
-    manual: dict = {}
-    if args.lengths:
-        lp = pathlib.Path(args.lengths)
-        if not lp.is_file():
-            print(f"extract-mi-tables: ERROR --lengths file missing: {lp}",
-                 file=sys.stderr)
+    lp = pathlib.Path(args.lengths)
+    if not lp.is_file():
+        print(f"extract-mi-tables: ERROR --lengths file missing: {lp}",
+             file=sys.stderr)
+        return 2
+    manual = json.loads(lp.read_text(encoding="utf-8"))
+    for req_key in ("interface_lengths", "class_interface_lengths"):
+        if not isinstance(manual.get(req_key), dict):
+            print(f"extract-mi-tables: ERROR --lengths input lacks "
+                  f"'{req_key}' dict -- fail-closed (N5)",
+                  file=sys.stderr)
             return 2
-        manual = json.loads(lp.read_text(encoding="utf-8"))
 
     try:
         blob = dll.read_bytes()
@@ -313,14 +320,19 @@ def main(argv: list[str] | None = None) -> int:
         vft.append((int(rv, 16), parsed[0], parsed[1]))
     vt_sorted = sorted({r for r, _, _ in vft})
 
-    # vftable rva -> mangled (for ctor-store-order resolution)
-    vt_by_rva: dict[int, str] = {}
+    # vftable rva -> ALL alias mangled names (dict[int, list[str]]).
+    # One RVA can carry SEVERAL vftable symbols (ICF-folded tables
+    # share an address); last-wins would silently drop aliases, so
+    # every consumer gets the full sorted list.
+    vt_by_rva: dict[int, list[str]] = collections.defaultdict(list)
     for s in sym:
         if s.get("kind") != "vftable":
             continue
         rv = s.get("rva")
         if isinstance(rv, str) and rv:
-            vt_by_rva[int(rv, 16)] = s.get("mangled") or ""
+            vt_by_rva[int(rv, 16)].append(s.get("mangled") or "")
+    for rva in vt_by_rva:
+        vt_by_rva[rva] = sorted(set(vt_by_rva[rva]))
 
     # constructors: class -> first non-copy ctor rva
     ctor_rva: dict[str, int] = {}
@@ -332,6 +344,25 @@ def main(argv: list[str] | None = None) -> int:
         if m.startswith("??0") and "@DirectUI@@QEAA" in m and "AEBV" not in m:
             cls = m[3:m.index("@DirectUI@@")]
             ctor_rva.setdefault(cls, int(rv, 16))
+
+    # ctor symbol extents from the pinned symbols table: the next
+    # symbol's RVA bounds the ctor symbol's own extent (symbols are
+    # RVA-sorted in practice; we compute per-class [rva, next_rva)
+    # conservatively from the sorted symbol list, same-kind only).
+    # Used ONLY as the safe-scan fallback when .pdata does not cover
+    # the ctor (R4: symbol-bounded safe scan; never a fixed window).
+    all_rvas = sorted({int(s["rva"], 16) for s in sym
+                       if isinstance(s.get("rva"), str) and s.get("rva")})
+    import bisect as _bi
+    ctor_symbol_extents: dict[str, tuple[int, int]] = {}
+    for cls, r in ctor_rva.items():
+        i = _bi.bisect_right(all_rvas, r)
+        if i < len(all_rvas):
+            nxt = all_rvas[i]
+            # conservative cap: the next symbol at most 0x200 away --
+            # beyond that the symbol table gives no trustworthy bound
+            if nxt - r <= 0x200:
+                ctor_symbol_extents[cls] = (r, nxt)
 
     stat: collections.Counter = collections.Counter()
 
@@ -478,38 +509,46 @@ def main(argv: list[str] | None = None) -> int:
             by_class[cls].setdefault("_secondaries", {})[base] = rva
 
     # ---- ctor vftable REFERENCES (schema 3): reference-only ----
-    # An RVA can carry several ALIAS vftable symbols (ICF); keep ALL
-    # of them per reference, none dropped (no last-wins).
-    vt_aliases_at: dict[int, list[str]] = collections.defaultdict(list)
-    for rva, m in vt_by_rva.items():
-        vt_aliases_at[rva].append(m)
-    for rva in vt_aliases_at:
-        vt_aliases_at[rva].sort()
+    # vt_by_rva itself now preserves ALL aliases per RVA
+    # (dict[int, list[str]]); the reference scan consumes it directly.
 
     def ctor_vftable_references(cls: str):
         """Rip-relative LEA references to the class's OWN vftables,
-        strictly within the ctor's .pdata function extent.
+        bounded by the ctor's function extent.
 
         REFERENCE-ONLY: a vptr store would additionally require a
         traced `this+offset` write (dataflow) -- out of scope, so
         order='ORDER-UNKNOWN' and NO base/emission order is derived.
-        When .pdata or a covering function entry is unavailable the
-        scan is REFUSED (fixed windows are not an acceptable
-        substitute)."""
+        Bounding, in order of preference:
+          1. .pdata function extent (scan=pdata-bounded);
+          2. symbol-bounded safe scan: the ctor symbol's own extent
+             as reported by the pinned symbols table
+             (scan=symbol-bounded-safe) -- the walk never leaves the
+             symbol's reported extent;
+          3. refused (scan=unknown-scan-refused) -- fixed windows are
+             never an acceptable substitute."""
         crva = ctor_rva.get(cls)
         if crva is None:
             return None
-        if not pdata_bounds:
-            return {"scan": "unknown-scan-refused",
-                    "reason": "no .pdata function extents in image"}
         extent = None
-        for b, en in pdata_bounds:
-            if b <= crva < en:
-                extent = (b, en)
-                break
+        scan_mode = None
+        if pdata_bounds:
+            for b, en in pdata_bounds:
+                if b <= crva < en:
+                    extent = (b, en)
+                    scan_mode = "pdata-bounded"
+                    break
         if extent is None:
-            return {"scan": "unknown-scan-refused",
-                    "reason": "ctor rva not covered by .pdata"}
+            sym_ext = ctor_symbol_extents.get(cls)
+            if sym_ext is not None:
+                extent = sym_ext
+                scan_mode = "symbol-bounded-safe"
+            else:
+                return {
+                    "scan": "unknown-scan-refused",
+                    "reason": "ctor rva not covered by .pdata and no "
+                              "symbol-bounded extent available",
+                }
         off = rva_to_off(crva)
         if off is None:
             return None
@@ -525,8 +564,8 @@ def main(argv: list[str] | None = None) -> int:
                     (code[i + 2] & 0xC7) == 0x05:
                 disp = struct.unpack_from("<i", code, i + 3)[0]
                 target = crva + i + 7 + disp
-                if target in vt_aliases_at:
-                    aliases = [m for m in vt_aliases_at[target]
+                if target in vt_by_rva:
+                    aliases = [m for m in vt_by_rva[target]
                                if m.startswith(f"??_7{cls}@DirectUI@@6B")]
                     if aliases:
                         cands = []
@@ -545,7 +584,7 @@ def main(argv: list[str] | None = None) -> int:
                 continue
             i += 1
         return {
-            "scan": "pdata-bounded",
+            "scan": scan_mode,
             "function_extent": ["0x%08X" % extent[0],
                                 "0x%08X" % extent[1]],
             "semantics": "reference-only",
@@ -614,11 +653,13 @@ def main(argv: list[str] | None = None) -> int:
 
     n_prim = sum(1 for e in derived.values() if "primary" in e)
     n_sec = sum(len(e.get("secondaries", {})) for e in derived.values())
-    n_cso = sum(1 for e in derived.values()
-                if "ctor_vftable_references" in e)
-    n_refused = sum(1 for e in derived.values()
-                    if (e.get("ctor_vftable_references") or {})
-                    .get("scan") == "unknown-scan-refused")
+    scan_states = collections.Counter()
+    for e in derived.values():
+        cvr = e.get("ctor_vftable_references") or {}
+        if cvr:
+            scan_states[cvr.get("scan", "?")] += 1
+    n_cso = sum(scan_states.values())
+    n_refused = scan_states.get("unknown-scan-refused", 0)
     provs = collections.Counter()
     for e in derived.values():
         if "primary" in e:
@@ -627,7 +668,8 @@ def main(argv: list[str] | None = None) -> int:
             provs[s["length_provenance"]] += 1
     print(f"extract-mi-tables: classes={len(derived)} "
           f"primary={n_prim} secondary={n_sec} total={n_tables} "
-          f"ctor_vftable_references={n_cso} (scan-refused={n_refused})")
+          f"ctor_vftable_references={n_cso} "
+          f"(scan states: {dict(scan_states)})")
     print(f"  slot stats: {dict(stat)}")
     print(f"  length provenance: {dict(provs)}")
     print(f"  manual interface_lengths: {len(iface_lengths)} entries")

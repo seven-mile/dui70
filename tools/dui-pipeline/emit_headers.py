@@ -815,12 +815,22 @@ MI_PROVIDER_MIN_SHAPE = ("QueryInterface", "AddRef", "Release")
 
 
 def load_mi_tables(pinned_dir: Path) -> dict | None:
-    """Load pinned/mi-tables.json (schema 2); None when absent."""
+    """Load pinned/mi-tables.json; None when absent.
+
+    Schema 2 and schema 3 are both accepted: schema 3 is a SUPERSET
+    (adds per-table identity, ctor_vftable_references reference-only
+    evidence, class-scoped manual lengths for the TouchSelect family,
+    and the honest ignored-redundant provenance). Every provenance
+    value the shape validators check (next-vftable / manual) exists
+    with the same meaning in both; the schema-3 additions are not
+    consumed by the MI emission walk. Dropping schema 3 here would
+    silently disable the MI emitter (the emitter must never vanish
+    on a schema bump)."""
     p = pinned_dir / "mi-tables.json"
     if not p.is_file():
         return None
     doc = json.loads(p.read_text(encoding="utf-8"))
-    if doc.get("schema") != 2:
+    if doc.get("schema") not in (2, 3):
         return None
     return doc
 

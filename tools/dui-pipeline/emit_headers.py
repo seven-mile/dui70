@@ -2366,26 +2366,36 @@ def render_interfaces_header(banner: str) -> str:
     # IClassInfo: real DLL has NO ??0/??1/??_7 IClassInfo symbols (only
     # derived ElementClassInfo etc.). novtable prevents a vftable for this
     # interface; the inline empty bodies are never emitted unless odr-used
-    # (the stub TUs never instantiate IClassInfo). The non-trivial-ish
-    # shape (user-declared ctor/dtor) is kept so consumers stay source-
-    # compatible with the DirectUI interface shape.
+    # (the stub TUs never instantiate IClassInfo).
+    #
+    # L2 R1 (pinned mi-tables.json ClassInfoBase primary, schema 2):
+    # the real interface table is 19 slots = business methods 0-17 +
+    # vector-deleting dtor at the TAIL (slot 18). Declaration order ==
+    # slot order, so the dtor is declared LAST and PROTECTED. slot2
+    # CreateInstance and slot7 GetBaseClass are _purecall in the real
+    # DLL -- annotated, still pure virtual (signatures from derived
+    # overrides; no invented signatures).
     lines.append("    struct __declspec(novtable) IClassInfo")
     lines.append("    {")
     lines.append("        IClassInfo() {}")
     lines.append("        IClassInfo(const IClassInfo&) = delete;")
     lines.append("        IClassInfo& operator=(const IClassInfo&) = delete;")
-    lines.append("        virtual ~IClassInfo() {}")
     lines.append("")
     lines.append("    public:")
-    lines.append("        // slots follow the DirectUI order (AddRef..AssertPIZeroRef,")
-    lines.append("        // then the deleting dtor)")
+    lines.append("        // slots 0-17: business methods in the pinned")
+    lines.append("        // ClassInfoBase primary order (declaration order")
+    lines.append("        // == vtable slot order; the deleting dtor is the")
+    lines.append("        // TAIL slot 18).")
     lines.append("        virtual long AddRef(void) = 0;                                   // 0")
     lines.append("        virtual long Release(void) = 0;                                 // 1")
+    lines.append("        // slot 2 -- _purecall in the real DLL (abstract here;")
+    lines.append("        // signature from derived overrides, e.g. ElementClassInfo)")
     lines.append("        virtual long CreateInstance(Element*, unsigned long*, Element**) = 0;  // 2")
     lines.append("        virtual PropertyInfo* EnumPropertyInfo(unsigned int) = 0;       // 3")
     lines.append("        virtual PropertyInfo* GetByClassIndex(unsigned int) = 0;        // 4")
     lines.append("        virtual unsigned int GetPICount(void) = 0;                     // 5")
     lines.append("        virtual unsigned int GetGlobalIndex(void) = 0;                 // 6")
+    lines.append("        // slot 7 -- _purecall in the real DLL (abstract here)")
     lines.append("        virtual IClassInfo* GetBaseClass(void) = 0;                    // 7")
     lines.append("        virtual UCString GetName(void) = 0;                            // 8")
     lines.append("        virtual bool IsValidProperty(PropertyInfo const*) = 0;        // 9")
@@ -2397,6 +2407,11 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("        virtual void RemoveChild(void) = 0;                           // 15")
     lines.append("        virtual unsigned int GetChildren(void) = 0;                   // 16")
     lines.append("        virtual void AssertPIZeroRef(void) = 0;                       // 17")
+    lines.append("")
+    lines.append("    protected:")
+    lines.append("        // slot 18 -- vector-deleting dtor, TAIL of the real")
+    lines.append("        // table; protected per the DirectUI interface shape.")
+    lines.append("        virtual ~IClassInfo() {}")
     lines.append("    };")
     lines.append("")
     lines.append("    // IXProviderCP / IXElementCP are REAL exported classes now --")

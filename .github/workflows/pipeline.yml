@@ -144,3 +144,20 @@ jobs:
       - name: Golden gates (G1+G2)
         shell: pwsh
         run: pwsh -File tools/dui-pipeline/ci.ps1 -GoldenOnly
+      # ChildrenView fixture, run against the PINNED dui70.dll that repro just
+      # downloaded and sha256-asserted -- no additional download happens here.
+      #
+      # This step belongs to `repro` and no other job: it is the only job whose
+      # disk actually holds the pinned DLL. The `abi`/`smoke` jobs have MSVC but
+      # no pinned DLL, so a fixture run there would necessarily exercise the OS
+      # System32 copy; a green light from that would be exactly the "PASS that
+      # proves nothing about pinned bytes" this fixture exists to prevent.
+      #
+      # Blocking on purpose. J1 is report-only because it carries known ordering
+      # debt; this is new evidence with no debt to carry, so it fails closed.
+      # -RunNegative also exercises NEGCTL and NOPIN: NOPIN hides the staged DLL
+      # and requires A1/A2/A3 to notice the System32 substitute, which is what
+      # makes A2 evidence rather than decoration.
+      - name: ChildrenView fixture vs pinned dui70.dll (A1/A2/A3, blocking)
+        shell: pwsh
+        run: pwsh -File tools/dui-pipeline/gen_childrenview_probe.ps1 -RunNegative

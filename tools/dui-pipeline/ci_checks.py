@@ -20,6 +20,8 @@ so `ci.ps1` can surface "which gate, what was expected, what was seen".
 """
 from __future__ import annotations
 
+from mi_schema import MI_EMIT_SCHEMA_OK
+
 import argparse
 import hashlib
 import json
@@ -257,7 +259,7 @@ def _mi_pattern_interfaces() -> set:
         doc = json.loads(doc_path.read_text(encoding="utf-8"))
     except Exception:
         return set()
-    if doc.get("schema") not in (2, 3):
+    if doc.get("schema") not in MI_EMIT_SCHEMA_OK:
         return set()
     out: set = set()
     for cls, entry in (doc.get("derived") or {}).items():

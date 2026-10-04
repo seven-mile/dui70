@@ -1773,9 +1773,19 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
     for s in members:
         by_name.setdefault(s["member"], s)
     slot_names = list(MI_PROVIDER_MIN_SHAPE) + list(mi_shape["pattern_methods"])
+    used: set[str] = set()
     for slot in slot_names:
         names = [slot] if isinstance(slot, str) else list(slot or [])
-        resolved = next((n for n in names if n in by_name), None)
+        # fold pair (e.g. two slots sharing one body, candidates
+        # [get_ColumnSpan, get_RowSpan] on BOTH): assign each name to
+        # exactly one slot in first-appearance order -- deterministic,
+        # and every fold candidate stays declared exactly once
+        resolved = next((n for n in names if n in by_name
+                         and n not in used), None)
+        if resolved is not None:
+            used.add(resolved)
+        if resolved is None:
+            resolved = next((n for n in names if n in by_name), None)
         if resolved is None:
             # fold entry with no recoverable signature: placeholder
             # (declared in order -- the slot stays ABI-true)
@@ -2226,16 +2236,16 @@ def render_class_header(cls: str, members: list, data_members: list,
             lines.append("        // IProvider secondary length 1, manual input).")
             lines.append("        // Return type: the fn-pointer shape comes from the")
             lines.append("        // concrete overrides' pinned signature")
-            lines.append("        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ).")
-            lines.append("        class ProviderProxy;")
-            lines.append("        class Element;")
-            lines.append("        typedef ProviderProxy* (__cdecl* ProxyCreatorFn)(Element*);")
-            lines.append("        virtual ProxyCreatorFn GetProxyCreator(void) = 0;")
+            lines.append("        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ);")
+            lines.append("        // ProviderProxy/Elaborate-type speccers keep the types at")
+            lines.append("        // DirectUI scope (nested decls would change the mangling).")
+            lines.append("        virtual class ProviderProxy* (__cdecl* GetProxyCreator(void))(class Element*) = 0;")
             lines.append("")
-            lines.append("    private:")
             lines.append("        // ICF-fold ctor/assign exports: compiler")
-            lines.append("        // artifacts, not interface methods;")
-            lines.append("        // defined out-of-line in the stub TU.")
+            lines.append("        // artifacts of the real binary's fold, not")
+            lines.append("        // interface methods; declared (public -- the")
+            lines.append("        // exported mangles are QEAA) and defined")
+            lines.append("        // out-of-line in the stub TU.")
             lines.append("        IProvider(void);")
             lines.append("        IProvider(IProvider const&);")
             lines.append("        IProvider(IProvider&&);")

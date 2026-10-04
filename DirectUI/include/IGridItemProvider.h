@@ -20,7 +20,7 @@ namespace DirectUI
         virtual long get_Row(int*) = 0;
         virtual long get_Column(int*) = 0;
         virtual long get_ColumnSpan(int*) = 0;
-        virtual long get_ColumnSpan(int*) = 0;
+        virtual long get_RowSpan(int*) = 0;
         virtual long get_ContainingGrid(IRawElementProviderSimple**) = 0;
     };
 

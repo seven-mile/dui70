@@ -18,16 +18,16 @@ namespace DirectUI
         // IProvider secondary length 1, manual input).
         // Return type: the fn-pointer shape comes from the
         // concrete overrides' pinned signature
-        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ).
-        class ProviderProxy;
-        class Element;
-        typedef ProviderProxy* (__cdecl* ProxyCreatorFn)(Element*);
-        virtual ProxyCreatorFn GetProxyCreator(void) = 0;
+        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ);
+        // ProviderProxy/Elaborate-type speccers keep the types at
+        // DirectUI scope (nested decls would change the mangling).
+        virtual class ProviderProxy* (__cdecl* GetProxyCreator(void))(class Element*) = 0;
 
-    private:
         // ICF-fold ctor/assign exports: compiler
-        // artifacts, not interface methods;
-        // defined out-of-line in the stub TU.
+        // artifacts of the real binary's fold, not
+        // interface methods; declared (public -- the
+        // exported mangles are QEAA) and defined
+        // out-of-line in the stub TU.
         IProvider(void);
         IProvider(IProvider const&);
         IProvider(IProvider&&);

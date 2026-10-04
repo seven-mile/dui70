@@ -9,7 +9,7 @@
 //   @0xDD390, Element::Add @0x73810 -- each ends in a Value::Release call).
 //
 //   Getting that wrong is easy and its symptom is a leak or a use-after-free, not
-//   a compile error. So this view makes the mistake UNEXPRESSIBLE:
+//   a compile error. So this view makes the BORROW mistake UNEXPRESSIBLE:
 //     * no public constructor -- a view can only come from GetChildrenView()
 //     * the borrowed Value* is private and has no getter
 //     * the DynamicArray pointer is private and has no getter
@@ -19,6 +19,10 @@
 //   The raw DynamicArray/Value pointers therefore never appear in the public
 //   surface, so "forgot to Release" and "the array owns the elements" are both
 //   unwritable rather than merely discouraged.
+//
+//   Scope of that guarantee: it covers the borrow, NOT the elements. A bare
+//   `Element*` from at() is still deletable by a caller. See "WHAT THIS CLASS DOES
+//   NOT PREVENT" below -- the limit is stated there rather than papered over.
 //
 // SCOPE / PROVENANCE  (read this before using it)
 //   This is deliberately narrow: it covers ONLY DynamicArray<Element*, 0>, the
@@ -52,6 +56,20 @@
 //       (The DLL owns that decision; we just call the function.)
 //     * children added/removed while a view is alive are not tracked.
 //
+// WHAT THIS CLASS DOES *NOT* PREVENT  (read before trusting "unexpressible" above)
+//   `private` protects the BORROW, not the ELEMENT. at(i) necessarily hands back a
+//   bare `Element*`, and a bare pointer is deletable by anyone: `delete
+//   view.at(i);` compiles, and the view cannot stop it. What the design does
+//   guarantee is narrower and worth stating precisely:
+//     * you cannot obtain, copy away, or store the borrowed Value* -- so you
+//       cannot double-Release it or leak it by losing track of it
+//     * you cannot hold the raw array pointer -- so you cannot walk past count()
+//     * you cannot copy a view -- so two views cannot Release one borrow
+//   Element lifetime remains the caller's contract, documented not enforced. That
+//   is a deliberate limit: enforcing it would require returning an owning wrapper
+//   or a reference type, which would misrepresent the DLL's actual ownership model
+//   (the tree owns its elements; the view owns nothing).
+//
 // Hand-written: registered in tools/dui-pipeline/ci_checks.py HANDWRITTEN, so G3
 // requires it to exist and G5 compiles it. It is NOT derived from pinned/ and must
 // never be regenerated over.
@@ -62,6 +80,26 @@
 #include "dui_abi_types.h"
 #include "Element.h"
 #include "Value.h"
+
+// x64-ONLY, enforced at compile time.
+//
+// The layout this header encodes was measured on the x64 pinned DLL, and the
+// numbers are sizeof(void*)-dependent: sizeof(T)=8 gives sizeof(DynamicArray)=24
+// and inline capacity 2. On a 32-bit target sizeof(T)=4, so the same template
+// would give a different size and a different inline capacity, and every offset
+// below (kDataOffset / kCapacityOffset / the pointer stride in ElementAt) would
+// silently read the wrong bytes.
+//
+// This is not a theoretical concern: the header would still COMPILE for x86,
+// because the offsets are plain integer constants and the accesses are memcpy on
+// an opaque blob -- there is no type error to catch. Refusing to build is
+// therefore the only honest option; a wrong-but-compiling layout reader is worse
+// than a missing feature.
+static_assert(sizeof(void *) == 8,
+              "ChildrenView encodes offsets measured on the x64 pinned dui70.dll "
+              "(sizeof(DynamicArray<Element*,0>) == 24, inline capacity 2). That "
+              "layout does not hold when sizeof(void*) != 8, so this header is "
+              "deliberately unusable on 32-bit targets.");
 
 namespace DirectUI {
 

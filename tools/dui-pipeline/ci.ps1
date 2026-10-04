@@ -630,6 +630,40 @@ if ($SkipJ1) {
     Add-Gate 'J1' 'vtable slot-order' 'REPORT' $dt "$verdict (report-only)"
 }
 
+# ----------------------------------------------------------- J1-IF interface gate
+# IClassInfo interface contract gate (single-point, ENFORCED). Ground truth is
+# pinned/vtable-slots.json classes.ClassInfoBase (R3-protected): 19 slots =
+# business 0-17 + tail vdtor 18; slots 2/7 _purecall; slot 17 fold-tolerant.
+# The gate checks the generated Interfaces.h IClassInfo against that table
+# (declaration order == slot order; dtor LAST + protected; purecall slots
+# stay pure). Negative controls exercised before shipping: dtor-first FAIL,
+# slot2 non-pure FAIL, slot order swap FAIL (see .local/audit).
+if ($SkipJ1) {
+    Write-Head 'J1-IF  IClassInfo contract (skipped: -SkipJ1)'
+    Add-Gate 'J1-IF' 'IClassInfo contract' 'SKIP' 0 'via -SkipJ1'
+} else {
+    Write-Head 'J1-IF  IClassInfo interface contract (enforced)'
+    $t0 = Get-Date
+    $slots = Join-Path $script:Repo 'pinned/vtable-slots.json'
+    $j1ifJson = Join-Path $WorkDir 'j1if-report.json'
+    if (-not (Test-Path $slots)) {
+        $dt = ((Get-Date) - $t0).TotalSeconds
+        Fail-Gate 'J1-IF' 'IClassInfo contract' `
+            'pinned/vtable-slots.json exists' 'missing' @() $dt
+    }
+    $r = Invoke-Tool $py @($script:Checks, 'j1-if',
+        '--slots', $slots, '--json-out', $j1ifJson) -Echo
+    $dt = ((Get-Date) - $t0).TotalSeconds
+    if ($r.Rc -ne 0) {
+        $tail = ($r.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+        Fail-Gate 'J1-IF' 'IClassInfo contract' `
+            'Interfaces.h IClassInfo == ClassInfoBase table contract' `
+            "gate rc=$($r.Rc)" $tail $dt
+    }
+    Write-Ok 'IClassInfo interface matches the pinned ClassInfoBase contract'
+    Add-Gate 'J1-IF' 'IClassInfo contract' 'PASS' $dt
+}
+
 # ------------------------------------------------------- A1 slot-ABI identity
 # Full-mangled vtable slot-identity audit (tracked tool
 # tools/dui-pipeline/slot_abi_audit.py). REPORT-ONLY for now: the real

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""extract-mi-tables.py -- schema-3 MI vftable tables + ctor-store order.
+"""extract-mi-tables.py -- schema-3 MI vftable tables + ctor vftable references.
 
 WHAT THIS PRODUCES
     `pinned/mi-tables.json`: for every DirectUI class with a primary
@@ -9,13 +9,12 @@ WHAT THIS PRODUCES
     schema-1 vtable-slots.json, which keeps covering primaries only.
 
 SCHEMA 3 ADDS (over schema 2)
-    * `ctor_store_order`: for every class whose constructor is in the
-      pinned symbols, the order in which the ctor's code references
-      the class's own vftables (rip-relative LEA targets), together
-      with the ctor RVA -- direct OBJECT-LAYOUT observation. It is
-      evidence about subobject INITIALISATION order in the compiled
-      binary; it is NOT the source-level base-declaration order
-      (declaration order is not recoverable from a binary).
+    * `ctor_vftable_references`: for every class whose constructor is
+      in the pinned symbols, the rip-relative LEA references to the
+      class's OWN vftables, together with the ctor RVA -- REFERENCE-
+      ONLY evidence (semantics: reference-only; order: ORDER-UNKNOWN).
+      No base order, emission order, or declaration order is derived
+      from it, and no `this+offset` store is traced or claimed.
     * `identity` per table: "primary" (unsuffixed `6B@`) or
       "secondary" with its base name from the mangled suffix.
     * fail-closed manual/derived conflict rule (see below).
@@ -174,8 +173,6 @@ def _pdata_functions(blob: bytes, secs) -> list[tuple[int, int]]:
     a fixed window is never an acceptable substitute)."""
     e = struct.unpack_from("<I", blob, 0x3C)[0]
     coff = e + 4
-    for va, vsize, raddr, rsize in secs:
-        pass
     # locate .pdata by section name
     opt = coff + 20
     nsec = struct.unpack_from("<H", blob, coff + 2)[0]
@@ -342,6 +339,16 @@ def main(argv: list[str] | None = None) -> int:
         if not isinstance(rv, str) or not rv:
             continue
         if m.startswith("??0") and "@DirectUI@@QEAA" in m and "AEBV" not in m:
+            cls = m[3:m.index("@DirectUI@@")]
+            ctor_rva.setdefault(cls, int(rv, 16))
+        # N-c: move constructors ($$QEAV by-value&& parameter) are
+        # constructors too -- record them alongside copy/default ctors
+        # so a class whose ONLY ctor is a move ctor still gets
+        # reference evidence. $$QEAV marks the rvalue-ref parameter;
+        # the check is on the mangled param encoding, not the symbol
+        # kind field.
+        elif m.startswith("??0") and "@DirectUI@@QEAA" in m and \
+                "$$QEAV" in m:
             cls = m[3:m.index("@DirectUI@@")]
             ctor_rva.setdefault(cls, int(rv, 16))
 

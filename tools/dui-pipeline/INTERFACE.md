@@ -322,18 +322,24 @@ Two sections:
 - `derived` -- a function of DLL bytes + symbols.json + the manual
   lengths input. repro.py gate R3'' proves CONDITIONAL
   re-derivability (same committed manual input -> byte-identical
-  derived section); it is NOT an independent proof of the manual
-  values themselves. Per class:
+  derived section) and asserts manual == committed lengths input
+  verbatim + schema == 3; it is NOT an independent proof of the
+  manual values themselves. Per class:
   `primary` / `secondaries` tables with `identity`, `rva`, `slots`,
   `length_provenance` (`next-vftable` | `manual` | `manual-conflict`
-  | `hard-stop` | `unknown`), plus `ctor_vftable_references`: the
-  rip-relative LEA references to the class's OWN vftables, strictly
-  within the ctor's .pdata function extent (scan refused when .pdata
-  is unavailable; ALL alias candidates at a target RVA kept, none
-  dropped). SEMANTICS: reference-only evidence, order=ORDER-UNKNOWN;
-  these are NOT stores (no this+offset write is traced) and NO base
-  order, emission order, or declaration order is derived from the
-  field.
+  | `ignored-redundant` | `hard-stop` | `unknown`), plus
+  `ctor_vftable_references`: the rip-relative LEA references to the
+  class's OWN vftables, bounded by the ctor's function extent --
+  `scan: pdata-bounded` when .pdata covers the ctor, else
+  `scan: symbol-bounded-safe` (the ctor symbol's own extent from the
+  pinned symbols table, conservative cap); on this binary: 84
+  pdata-bounded + 84 symbol-bounded-safe, 0 refused. ALL alias
+  candidates at a target RVA kept, none dropped. SEMANTICS:
+  reference-only evidence, order=ORDER-UNKNOWN; these are NOT stores
+  (no this+offset write is traced) and NO base order, emission order,
+  or declaration order is derived from the field. Move constructors
+  (`$$QEAV` by-value&& parameter) count as constructors when a class
+  has no other ctor.
 - `manual` -- verbatim copy of mi-interface-lengths.json: human ABI
   inputs (G1-locked). Family-wide `interface_lengths` apply only
   where no `class_interface_lengths` entry exists. A manual value

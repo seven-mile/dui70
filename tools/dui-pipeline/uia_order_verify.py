@@ -205,13 +205,17 @@ def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
     scan (the BLOCKed behavior) would produce references past the
     extent -- the shipped scan must not.
 
-    T2 (F1 alias lists): an RVA carrying TWO alias vftable symbols
-    (ICF) must record BOTH candidates -- drop-last-wins must not
-    occur. Verified structurally on the pinned artifact.
+    T2 (reference-set truth + deletion): pair 1 -- the committed
+    ctor_vftable_references must equal a fresh re-derivation on the
+    same inputs (full reference sets, 168 classes); pair 2 -- a
+    DELETED reference in a mutated copy must be CAUGHT by that
+    comparison. Aliases per RVA are preserved by construction
+    (dict[int, list[str]]); INCONCLUSIVE paths are non-rc0.
 
-    T3 (F3/F4 no order claims): the pinned artifact carries
-    ORDER-UNKNOWN semantics and no order-compare verdict field
-    exists in the gate.
+    T3 (verdict-independence from order claims): a fake order
+    (order=RB-FIRST, semantics=declaration-order) injected into a
+    copy's ctor_vftable_references must NOT change the class
+    verdict, and report rows carry no order field.
 
     T4 (offsets honesty): every table row this_offsets is either a
     non-empty list of decodings or the string unknown -- never an
@@ -1043,14 +1047,22 @@ def main(argv: list[str] | None = None) -> int:
                 st_ = cvr.get("scan", "?")
                 scan_states[st_] = scan_states.get(st_, 0) + 1
                 n_ref += len(cvr.get("references", []))
+        n_tpl = sum(1 for c in derived if "?" in c or "<" in c)
         cov_claim = ("ctor reference evidence is PARTIAL: scan "
-                     "states above; leaf classes without "
-                     "multi-table inheritance are outside this "
-                     "gate audit set; NOT a full-coverage claim")
+                     "states above; classes without evidence are "
+                     "templates (no in-symbols ctor of their own) or "
+                     "concrete classes whose ctor is not in the "
+                     "pinned symbols; leaf classes without "
+                     "multi-table inheritance are outside this gate "
+                     "audit set; NOT a full-coverage claim")
         cov = {
             "classes_total": len(derived),
             "classes_with_ctor_reference_evidence":
                 sum(scan_states.values()),
+            "classes_without_evidence": {
+                "templates": n_tpl,
+                "concrete_no_ctor": len(derived)
+                - sum(scan_states.values()) - n_tpl},
             "scan_states": scan_states,
             "references_total": n_ref,
             "coverage_claim": cov_claim,

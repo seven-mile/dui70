@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCPushButton::CCPushButton(CCPushButton&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCPushButton::CCPushButton(CCPushButton const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCPushButton::CCPushButton(unsigned long a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCPushButton::~CCPushButton(void)
 {}

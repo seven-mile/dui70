@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCRadioButton::CCRadioButton(CCRadioButton&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCRadioButton::CCRadioButton(CCRadioButton const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCRadioButton::CCRadioButton(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCRadioButton::~CCRadioButton(void)
 {}

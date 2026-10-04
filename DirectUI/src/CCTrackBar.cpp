@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCTrackBar::CCTrackBar(CCTrackBar&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTrackBar::CCTrackBar(CCTrackBar const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTrackBar::CCTrackBar(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTrackBar::~CCTrackBar(void)
 {}

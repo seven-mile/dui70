@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCProgressBar::CCProgressBar(CCProgressBar&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCProgressBar::CCProgressBar(CCProgressBar const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCProgressBar::CCProgressBar(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCProgressBar::~CCProgressBar(void)
 {}

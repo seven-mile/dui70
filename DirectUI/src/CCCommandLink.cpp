@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCCommandLink::CCCommandLink(CCCommandLink&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCCommandLink::CCCommandLink(CCCommandLink const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCCommandLink::CCCommandLink(unsigned long a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCCommandLink::~CCCommandLink(void)
 {}

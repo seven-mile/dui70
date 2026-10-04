@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCTreeView::CCTreeView(CCTreeView&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTreeView::CCTreeView(CCTreeView const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTreeView::CCTreeView(unsigned long a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCTreeView::~CCTreeView(void)
 {}

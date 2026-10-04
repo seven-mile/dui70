@@ -27,14 +27,59 @@ slot swap must FAIL, (b) a same-name overload declaration swap must
 FAIL, and the unmutated pair must PASS -- a control that cannot fail
 is vacuous and the selftest reports that as an error.
 """
-import argparse, json, os, pathlib, re, subprocess, sys, tempfile
+import argparse, json, os, pathlib, re, shutil, subprocess, sys, tempfile
 
-CL = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe"
-DLL = r"Z:\repos\DirectUI\.local\build\ci-probe\annot-trap\dll_alone\dui70.dll"  # pinned 2080E43F
-DUMPBIN = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe"
-MSVC_INC = r"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include"
-SDK = r"C:\Program Files (x86)\Windows Kits\10"
-INC = [f"{SDK}\\Include\\10.0.26100.0\\ucrt", f"{SDK}\\Include\\10.0.26100.0\\um", f"{SDK}\\Include\\10.0.26100.0\\shared"]
+
+def _find_tool(name: str, hardcoded: str) -> str:
+    """Prefer the hardcoded local toolchain path (pinned local runs);
+    fall back to PATH resolution (CI runners provision MSVC via
+    msvc-dev-cmd). Fail loudly when neither exists."""
+    if pathlib.Path(hardcoded).is_file():
+        return hardcoded
+    p = shutil.which(name)
+    if p:
+        return p
+    raise SystemExit(f"slot-abi-audit: {name} not found (neither "
+                     f"{hardcoded} nor PATH); run under msvc-dev-cmd "
+                     "or add MSVC to PATH")
+
+
+def _sdk_inc_dirs() -> list:
+    """MSVC + Windows SDK include dirs: the pinned local layout first
+    (MSVC 14.44 + SDK 10.0.26100.0), otherwise every installed Windows
+    Kits version newest-first plus cl.exe's sibling include dir (CI
+    runners provision different versions -- never assume one path)."""
+    incs = []
+    msvc_local = (r"C:\Program Files\Microsoft Visual Studio\2022"
+                  r"\Community\VC\Tools\MSVC\14.44.35207\include")
+    if pathlib.Path(msvc_local).is_dir():
+        incs.append(msvc_local)
+    else:
+        vc_inc = pathlib.Path(CL).parent.parent.parent / "include"
+        if vc_inc.is_dir():
+            incs.append(str(vc_inc))
+    roots = (r"C:\Program Files (x86)\Windows Kits\10\Include",
+             r"C:\Program Files\Windows Kits\10\Include")
+    for root_s in roots:
+        root = pathlib.Path(root_s)
+        if not root.is_dir():
+            continue
+        for ver in sorted((x.name for x in root.iterdir() if x.is_dir()),
+                          reverse=True):
+            for sub in ("ucrt", "um", "shared"):
+                d = root / ver / sub
+                if d.is_dir():
+                    incs.append(str(d))
+    return incs
+
+
+CL = _find_tool("cl.exe",
+                r"C:\Program Files\Microsoft Visual Studio\2022"
+                r"\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\cl.exe")
+DUMPBIN = _find_tool("dumpbin.exe",
+                     r"C:\Program Files\Microsoft Visual Studio\2022"
+                     r"\Community\VC\Tools\MSVC\14.44.35207\bin\Hostx64\x64\dumpbin.exe")
+INC = _sdk_inc_dirs()
 
 
 def build_probe(cls, table, tmp):
@@ -402,7 +447,7 @@ def main():
 
         def compile_obj() -> tuple[str, list]:
             r = subprocess.run([CL, "/nologo", "/std:c++20", "/EHsc", "/Od", "/c",
-                                *sum([["/I", p] for p in [MSVC_INC, *INC]], []),
+                                *sum([["/I", p] for p in INC], []),
                                 "/I", str(inc),
                                 f"/Fo{obj}", str(cpp)],
                                capture_output=True, text=True)

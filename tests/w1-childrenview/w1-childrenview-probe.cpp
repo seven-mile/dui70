@@ -70,6 +70,7 @@
 #include <cstdio>
 #include <cstring>
 #include <string>
+#include <utility>  // std::move, used by the move-semantics check
 
 #include <DirectUI.h>
 #include <ChildrenView.h>
@@ -515,6 +516,71 @@ static void RunCase(int n, bool negctl) {
     }
     if (leaked)
       leaked->Release();
+  }
+
+  // ---------------------------------------------------------------------------
+  // MOVE SEMANTICS: the class deletes copy and allows move, claiming "exactly one
+  // live view ever owns the borrow". That claim is only worth having if it is
+  // tested, because a move that failed to null the source would produce TWO views
+  // that each Release the same borrow -- a double release, i.e. exactly the bug the
+  // deleted copy constructor exists to prevent.
+  //
+  // Method (same instrument as the anti-leak check above):
+  //   before   = refcount with no view alive
+  //   during   = refcount with a view MOVED-into alive  (must be higher)
+  //   after    = refcount once that view is destroyed   (must return to before)
+  // If the move failed to null the moved-from view, the moved-from destructor
+  // would ALSO Release, and `after` would come out BELOW `before` -- one quantum
+  // released twice. So the same equality that proves "no leak" here also proves
+  // "no double release".
+  //
+  // Additionally assert the moved-from view is observably empty (count()==0 and
+  // at()==nullptr), which is the documented post-move state.
+  //
+  // Sentinel (n==0) is skipped for the refcount delta, since its Release is a
+  // measured no-op, but the "moved-from is empty" structural check still runs.
+  // ---------------------------------------------------------------------------
+  {
+    Value *b = nullptr;
+    root->GetChildren(&b);
+    if (b) {
+      bool sentinel = IsSentinelRef(b);
+      unsigned before = RefCountOf(b);
+      if (!sentinel) {
+        {
+          ChildrenView src = GetChildrenView(root);
+          ChildrenView dst = std::move(src);  // NOLINT: intentional move
+
+          // moved-from must be empty and must own nothing
+          Expect(src.count() == 0u, "MOVE: moved-from view reports count()==0");
+          Expect(src.at(0) == nullptr,
+                 "MOVE: moved-from view yields no element");
+
+          unsigned during = RefCountOf(b);
+          printf("  move: before=%u during-moved-into-view=%u\n", before, during);
+          if (!negctl)
+            Expect(during > before,
+                   "MOVE: the moved-into view holds the borrow");
+        }
+        unsigned after = RefCountOf(b);
+        printf("  move: after destroying moved-into view=%u (expect %u)\n", after,
+               before);
+        if (negctl)
+          Expect(after != before,
+                 "NEGCTL: move path must fail to restore refcount");
+        else
+          Expect(after == before,
+                 "MOVE: borrow released exactly ONCE across the move "
+                 "(no leak, no double release)");
+      } else {
+        printf("  move: sentinel header -> Release is a no-op by measurement; "
+               "checking structural state only\n");
+        ChildrenView src = GetChildrenView(root);
+        ChildrenView dst = std::move(src);
+        Expect(src.count() == 0u, "MOVE: moved-from view reports count()==0");
+      }
+      b->Release();
+    }
   }
 
   parser->Destroy();

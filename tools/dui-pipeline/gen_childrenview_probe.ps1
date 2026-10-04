@@ -154,6 +154,46 @@ if (-not $RunNegative) {
     return
 }
 
+# --- X86 NEGCTL: the header must REFUSE to build for 32-bit -------------------
+# ChildrenView encodes an x64-measured layout (sizeof(void*)==8 -> 24-byte array,
+# inline capacity 2). On x86 the header would still COMPILE -- the offsets are
+# plain integers and the accesses are memcpy on an opaque blob, so there is no
+# type error -- and every read would then be silently wrong. A static_assert is
+# the only thing standing between "wrong feature" and "wrong bytes", so this
+# control requires it to actually fire.
+#
+# It is a compile-only check (/Zs: syntax only, no object, no link), so it needs
+# no x86 libs and costs ~0.1s.
+$vcBinX86 = Join-Path $vsRoot 'bin\Hostx64\x86'
+$clX86 = Join-Path $vcBinX86 'cl.exe'
+if (Test-Path $clX86) {
+    Write-Host '==> X86 negative control (static_assert must REJECT 32-bit)' -ForegroundColor Cyan
+    $x86Tu = Join-Path $OutDir 'x86-layout-control.cpp'
+    Set-Content -Path $x86Tu -Encoding ascii -NoNewline -Value "#include <ChildrenView.h>`n"
+    # Preserve the x64 INCLUDE order (vc\include first: excpt.h lives there).
+    $x86Out = & $clX86 /nologo /Zs /std:c++17 /EHsc /I $includeDir $x86Tu 2>&1
+    $x86Rc = $LASTEXITCODE
+    Remove-Item $x86Tu -Force -ErrorAction SilentlyContinue
+    if ($x86Rc -eq 0) {
+        throw ("x86 negative control PASSED: ChildrenView.h compiled for a 32-bit " +
+               "target. The measured x64 offsets would be applied to a 4-byte " +
+               "pointer layout, silently reading the wrong bytes. The " +
+               "static_assert(sizeof(void*)==8) guard is missing or ineffective.")
+    }
+    # Accept both spellings: MSVC has emitted "static assertion failed" and, in
+    # newer toolsets, "static_assert failed". Pinning one exact string would make
+    # this control fail for the wrong reason on a different compiler.
+    if (-not (($x86Out | Out-String) -match 'static[_ ]assert(ion)? failed')) {
+        throw ("x86 build failed, but NOT on the layout static_assert -- so the " +
+               "guard is not what refused it. Output: " + (($x86Out | Select-Object -First 6) -join ' | '))
+    }
+    Write-Host '    X86 correctly refused by static_assert' -ForegroundColor Green
+} else {
+    throw ("x86 cl.exe not found at $clX86 -- cannot run the 32-bit negative " +
+           "control. Install the x86 toolset, or the x64-only guarantee is " +
+           "unverified. Refusing to report a PASS without it.")
+}
+
 # --- NEGCTL: wrong expectations must FAIL -----------------------------------
 Write-Host '==> NEGCTL (must exit non-zero)' -ForegroundColor Cyan
 & $exe NEGCTL | Out-Null

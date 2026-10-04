@@ -13,8 +13,16 @@
 #include <windows.h>
 #include <commctrl.h>       // _TREEITEM, tagNMCUSTOMDRAWINFO, _PSP
 #include <commdlg.h>        // _PROPSHEETPAGEW
-#include <UIAutomationCore.h>  // IRawElementProvider*, UiaRect, enums
-#include <UIAutomationCoreApi.h>  // AutomationIdentifierType enum (Uia* fn-ptr args)
+// Option D quarantine (measured, .local/audit/uia-exp): the
+// SDK UIA headers are NOT included here anymore. The only
+// references in this prelude are comment-level; the real
+// consumers include the SDK headers directly: the 13 pattern
+// interface headers (UIAutomationCore.h, before their yield
+// check), Schema.h (Core+Api for AutomationIdentifierType and
+// UiaRaiseAutomationEvent), ElementProxy.h (Core for UiaRect),
+// ElementProvider.h / HWNDElementProvider.h (quoted includes,
+// unchanged). This keeps SDK UIA types out of provider-only
+// TUs that do not use them and out of the CApi collision path.
 #include <directmanipulation.h> // IDirectManipulation* interfaces
 #include <dwrite.h>         // DWRITE_TEXT_RANGE, IDWriteFactory, ...
 #include <oleacc.h>         // IAccessible, IAccIdentity

@@ -15,6 +15,8 @@
 
 #include "UIAutomationCore.h"
 
+#include <UIAutomationCore.h>  // Option D quarantine: SDK UIA types
+
 #include "Schema.h"
 
 namespace DirectUI

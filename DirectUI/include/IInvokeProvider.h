@@ -9,8 +9,27 @@
 
 #include "dui_abi_types.h"
 
+// Option D: this interface's methods use SDK UIA types
+// (IRawElementProviderSimple*, ScrollAmount, ...). The SDK
+// header is therefore pulled HERE, before the yield check --
+// the SDK MIDL interface is the base in every TU.
+#include <UIAutomationCore.h>
+
+#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED
+#ifdef __uiautomationcore_h__
+#error "DUI_ABI_PROVIDER_ABI_REQUIRED: UIAutomationCore.h is in the TU; provider ABI TUs must not mix SDK UIA interfaces and generated ABI structs"
+#endif
+#endif
+
 struct IInvokeProvider;
 
+#ifndef __uiautomationcore_h__
+// auto-yield: the SDK UIA header already defined this
+// interface name; its MIDL interface owns the name here.
+// The generated struct below is the pinned-signature
+// documentation; it never defines while the SDK guard is
+// set. If an SDK update renames the guard, this struct
+// reactivates and C2011s loudly (fail-visible).
 struct IInvokeProvider
 {
 public:
@@ -19,3 +38,4 @@ public:
     virtual unsigned long Release(void) = 0;
     virtual long Invoke(void) = 0;
 };
+#endif // __uiautomationcore_h__

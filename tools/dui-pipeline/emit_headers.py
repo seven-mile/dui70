@@ -1722,6 +1722,57 @@ EXTERNAL_BASE_INCLUDES = {
     "IServiceProvider": "servprov.h",
 }
 
+# Option D quarantine: the SDK UIA headers are no longer included by
+# dui_abi_types.h, so every header whose own signatures reference SDK
+# UIA types must include them DIRECTLY (measured from the generated
+# tree + pinned signatures: .local/audit/uia-exp). UIAutomationCoreApi.h
+# requires UIAutomationCore.h first (PROPERTYID), so Core always
+# precedes Api. Detection is signature-driven (see
+# sdk_uia_includes_for) -- not a class-name list -- so new SDK-type
+# users cannot be missed.
+SDK_UIA_TYPE_TOKENS = (
+    "IRawElementProviderSimple",
+    "IRawElementProviderFragment",
+    "IRawElementProviderAdviseEvents",
+    "UiaRect",
+    "AutomationIdentifierType",
+    "UiaRaiseAutomationEvent",
+    "ScrollAmount",
+    "ExpandCollapseState",
+    "ToggleState",
+    "RowOrColumnMajor",
+)
+# Api-only types (need UIAutomationCoreApi.h in addition to Core)
+SDK_UIA_API_TYPE_TOKENS = ("AutomationIdentifierType", "UiaRaiseAutomationEvent")
+
+
+def sdk_uia_includes_for(members: list, data_members: list) -> list[str]:
+    """SDK UIA headers this class's own signatures require (Option D).
+
+    Scans the pinned param/return type text AND the mangled names (fn
+    POINTER data members carry their pointee signature only in the
+    mangled form, e.g. Schema's static UiaLookupId/UiaRaiseAutomation*)
+    for SDK UIA tokens. The result is ordered Core-first (Api depends
+    on Core's PROPERTYID). A duplicate #include is harmless (all
+    headers are #pragma once); missing one is a compile error.
+    """
+    texts: list[str] = []
+    for s in members + data_members:
+        texts.extend(s.get("params") or [])
+        if s.get("return_type"):
+            texts.append(s["return_type"])
+        if s.get("mangled"):
+            texts.append(s["mangled"])
+    blob = "\n".join(texts)
+    needs_core = any(tok in blob for tok in SDK_UIA_TYPE_TOKENS)
+    needs_api = any(tok in blob for tok in SDK_UIA_API_TYPE_TOKENS)
+    out: list[str] = []
+    if needs_core:
+        out.append("UIAutomationCore.h")
+    if needs_api:
+        out.append("UIAutomationCoreApi.h")
+    return out
+
 
 def nested_type_hosts_used(members: list, data_members: list, base) -> list:
     """Host classes whose nested types are referenced in these signatures
@@ -1800,6 +1851,24 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
     qualified (VInvokeProvider@DirectUI@@) -- the real pattern
     interfaces live outside namespace DirectUI (UIA header
     convention), unlike IProvider/RefcountBase (6BIProvider@1@@).
+
+    OPTION-D YIELD (measured, .local/audit/uia-exp/FINDINGS.md v2):
+    the generated struct's own signatures use SDK UIA types
+    (IRawElementProviderSimple**, ScrollAmount, ToggleState*, ...), so
+    this header includes the SDK UIAutomationCore.h DIRECTLY, before
+    the yield check. The SDK MIDL interface of the same name then owns
+    the name in every TU; the generated struct below is yield-guarded
+    (#ifndef __uiautomationcore_h__) and stays as compile-checked
+    pinned-signature documentation -- it never defines while the SDK
+    header defines its guard. If a future SDK renames the guard the
+    struct reactivates and collides (C2011): FAIL-VISIBLE by design,
+    never fail-silent. Under /Zc:wchar_t- (the official consumer
+    flag, pinned by G4) the SDK-derived overrides mangle exactly like
+    the pinned exports (measured 13/13, symbol-exact).
+
+    REQUIRED state: DUI_ABI_PROVIDER_ABI_REQUIRED hard-errors if the
+    SDK header is in the TU -- for ABI-critical TUs that must never
+    mix the SDK interfaces with anything else.
     """
     lines = [banner,
              f"// {iface} -- UIA pattern interface synthesized",
@@ -1811,8 +1880,27 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
              "",
              '#include "dui_abi_types.h"',
              "",
+             "// Option D: this interface's methods use SDK UIA types",
+             "// (IRawElementProviderSimple*, ScrollAmount, ...). The SDK",
+             "// header is therefore pulled HERE, before the yield check --",
+             "// the SDK MIDL interface is the base in every TU.",
+             "#include <UIAutomationCore.h>",
+             "",
+             "#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED",
+             "#ifdef __uiautomationcore_h__",
+             '#error "DUI_ABI_PROVIDER_ABI_REQUIRED: UIAutomationCore.h is in the TU; provider ABI TUs must not mix SDK UIA interfaces and generated ABI structs"',
+             "#endif",
+             "#endif",
+             "",
              f"struct {iface};",
              "",
+             "#ifndef __uiautomationcore_h__",
+             "// auto-yield: the SDK UIA header already defined this",
+             "// interface name; its MIDL interface owns the name here.",
+             "// The generated struct below is the pinned-signature",
+             "// documentation; it never defines while the SDK guard is",
+             "// set. If an SDK update renames the guard, this struct",
+             "// reactivates and C2011s loudly (fail-visible).",
              f"struct {iface}",
              "{",
              "public:"]
@@ -1845,6 +1933,7 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
         sig = md.signature(tr)
         lines.append(f"    virtual {sig} = 0;")
     lines.append("};")
+    lines.append("#endif // __uiautomationcore_h__")
     lines.append("")
     return "\n".join(lines)
 
@@ -2154,6 +2243,13 @@ def render_class_header(cls: str, members: list, data_members: list,
             else:
                 lines.append(f"#include <{provider}>")
             lines.append("")
+    # Option D quarantine: this class's own signatures use SDK UIA
+    # types -> include the SDK headers directly (dui_abi_types.h no
+    # longer provides them transitively). Signature-driven; Core
+    # always precedes Api (Api needs Core's PROPERTYID).
+    for sdk_hdr in sdk_uia_includes_for(members, data_members):
+        lines.append(f"#include <{sdk_hdr}>  // Option D quarantine: SDK UIA types")
+        lines.append("")
     # explicit specializations: the template ARGUMENT types must be
     # complete-enough to name (DirectUI provider classes get their header;
     # UIA interfaces come from UIAutomationCore.h via dui_abi_types.h)
@@ -2563,8 +2659,16 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("#include <windows.h>")
     lines.append("#include <commctrl.h>       // _TREEITEM, tagNMCUSTOMDRAWINFO, _PSP")
     lines.append("#include <commdlg.h>        // _PROPSHEETPAGEW")
-    lines.append("#include <UIAutomationCore.h>  // IRawElementProvider*, UiaRect, enums")
-    lines.append("#include <UIAutomationCoreApi.h>  // AutomationIdentifierType enum (Uia* fn-ptr args)")
+    lines.append("// Option D quarantine (measured, .local/audit/uia-exp): the")
+    lines.append("// SDK UIA headers are NOT included here anymore. The only")
+    lines.append("// references in this prelude are comment-level; the real")
+    lines.append("// consumers include the SDK headers directly: the 13 pattern")
+    lines.append("// interface headers (UIAutomationCore.h, before their yield")
+    lines.append("// check), Schema.h (Core+Api for AutomationIdentifierType and")
+    lines.append("// UiaRaiseAutomationEvent), ElementProxy.h (Core for UiaRect),")
+    lines.append("// ElementProvider.h / HWNDElementProvider.h (quoted includes,")
+    lines.append("// unchanged). This keeps SDK UIA types out of provider-only")
+    lines.append("// TUs that do not use them and out of the CApi collision path.")
     lines.append("#include <directmanipulation.h> // IDirectManipulation* interfaces")
     lines.append("#include <dwrite.h>         // DWRITE_TEXT_RANGE, IDWriteFactory, ...")
     lines.append("#include <oleacc.h>         // IAccessible, IAccIdentity")

@@ -470,8 +470,12 @@ def cmd_headers(args: argparse.Namespace) -> int:
     for name in sample:
         tu = tmp / f"hdrcheck_{name.replace('.', '_')}.cpp"
         tu.write_text(f"#include <{name}>\n", encoding="ascii", newline="\n")
+        # /Zc:wchar_t- matches the provider ABI compile mode (Option D:
+        # the SDK UIA interfaces' wchar_t params mangle PEBG == the
+        # pinned exports only in this mode; default wchar_t diverges
+        # and ValueProvider.h C3668s on SetValue/get_Value).
         rc, out = _run([str(cl), "/nologo", "/Zs", "/std:c++17", "/EHsc", "/W3",
-                        *inc_flags, str(tu)])
+                        "/Zc:wchar_t-", *inc_flags, str(tu)])
         warn_total += out.count("warning C")
         if rc != 0:
             first = "\n".join(out.strip().splitlines()[:12])

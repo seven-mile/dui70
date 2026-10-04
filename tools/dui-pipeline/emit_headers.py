@@ -1035,6 +1035,27 @@ def _bind_own_units(cls: str, unit_names: list,
                     break
     unknown_set = set(unknown_units)
 
+    # Slots EVIDENCED for an unknown unit are unprovable for this
+    # class when that unit cannot bind: an unknown unit's vote is real
+    # evidence that the virtual sits at that slot, so a THIRD unit
+    # claiming it by backtracking would fabricate an arrangement the
+    # evidence contradicts. Both contested slots (two units voting for
+    # the same slot) and exclusively-voted slots (only the unknown unit
+    # votes) stay placeholders; slots with no vote evidence remain
+    # backtrackable.
+    reserved_slots = set()
+    if override_votes is not None:
+        for u in unknown_units:
+            for b in appears.get(u, ()):
+                if (u, b) in override_votes:
+                    reserved_slots.add(b)
+    if reserved_slots:
+        appears = {u: {s for s in ss if s not in reserved_slots}
+                   for u, ss in appears.items()}
+        # (name_slots entries at reserved slots are impossible here:
+        # a singleton slot cannot be fold-ambiguous, and unknown units
+        # are never singleton-anchored)
+
     # 1) singleton-anchored units first (their slot is mandatory), then
     #    unanchored units by fewest candidates; ties by name. Anchoring
     #    first prevents a fold-only unit from stealing a run's tail slot

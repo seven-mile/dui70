@@ -48,20 +48,33 @@ def build_probe(cls, table, tmp):
     return ph_slots, body
 
 
-def _resolve_dll(pinned_dir) -> pathlib.Path:
-    """The pinned DLL: pinned/manifest.json names its sha256; the DLL
-    itself lives outside pinned/ (too large for the repo). Resolution:
-    <pinned>/../.local/build/ci-probe/annot-trap/dll_alone/dui70.dll,
-    and the manifest sha is VERIFIED so a different build can never
-    silently become the ground truth."""
-    import hashlib
+def _resolve_dll(pinned_dir, download: bool = True) -> pathlib.Path:
+    """The pinned DLL: pinned/manifest.json names its sha256 and the
+    msdl source_url; the DLL itself lives outside pinned/ (too large
+    for the repo). Resolution:
+    <pinned>/../.local/build/ci-probe/annot-trap/dll_alone/dui70.dll
+    (the canonical local copy); when absent and download=True (e.g. a
+    fresh CI runner), fetch manifest.dll.source_url into that cache
+    path first. The manifest sha is VERIFIED either way, so a
+    different build can never silently become the ground truth."""
+    import hashlib, urllib.request
     p = pathlib.Path(pinned_dir)
     man = json.loads((p / "manifest.json").read_text(encoding="utf-8"))
-    want = man["dll"]["sha256"]
+    want = man["dll"]["sha256"].lower()
     c = (p / ".." / ".local" / "build" / "ci-probe" / "annot-trap" / "dll_alone" / "dui70.dll").resolve()
+    if not c.is_file() and download:
+        url = man["dll"].get("source_url")
+        if not (url and url.startswith("https://")):
+            raise SystemExit("slot-abi-audit: pinned DLL missing and no https source_url to fetch it")
+        c.parent.mkdir(parents=True, exist_ok=True)
+        tmp = c.with_suffix(".part")
+        req = urllib.request.Request(url, headers={"User-Agent": "dui70-repro"})
+        with urllib.request.urlopen(req, timeout=600) as resp, tmp.open("wb") as out:
+            out.write(resp.read())
+        tmp.replace(c)
     if c.is_file():
         got = hashlib.sha256(c.read_bytes()).hexdigest()
-        if got.lower() != want.lower():
+        if got.lower() != want:
             raise SystemExit(f"slot-abi-audit: DLL sha mismatch for {c}: {got} != manifest {want} -- refusing")
         return c
     raise SystemExit("slot-abi-audit: pinned dui70.dll not found (expected <repo>/.local/build/ci-probe/annot-trap/dll_alone/dui70.dll); pass --dll explicitly")
@@ -79,6 +92,13 @@ def selftest(args) -> int:
     overload declarations in a scratch copy of the include dir --
     mutated run must FAIL (const vs non-const is visible in the
     mangled name), clean run PASSes.
+    Control C (split-vote guard): mutate a scratch copy of the
+    contract so CCBase's OnNotify@46 singleton becomes OnMessage@46
+    (a 1-vs-14 split vote across tables), regenerate into the scratch
+    dir, and assert the SOLVER failed closed: HWNDHost's header must
+    carry placeholder slots in the fold-pair region (both bindings
+    refused) rather than a guessed order. The scratch copy is the
+    audit INPUT only -- the pinned source tree is never touched.
     """
     import shutil
     here = pathlib.Path(__file__).resolve().parent
@@ -163,6 +183,50 @@ def selftest(args) -> int:
         else:
             print("selftest B: PASS (overload swap FAILs as required, "
                   "clean pair PASSes)")
+
+    # ---- Control C: split-vote guard (solver fail-closed) --------------
+    # A 1-vs-14 split vote (CCBase's OnNotify@46 singleton mutated to
+    # OnMessage@46) must make the solver REFUSE both bindings for
+    # HWNDHost's fold pair: placeholders in the pair region, real
+    # declarations appended unbound. The mutated contract lives only
+    # in the scratch dir; the pair is judged structurally (placeholder
+    # presence) because a guessed order here would be exactly the
+    # defect this control guards against.
+    mutc = root / "split-vote"
+    mutc.mkdir()
+    for f in pinned.iterdir():
+        shutil.copy(f, mutc / f.name)
+    doc = json.loads((mutc / "vtable-slots.json").read_text(encoding="utf-8"))
+    t = doc["classes"]["CCBase"]["slots"]
+    if t[46] != "OnNotify":
+        print("selftest C: CCBase[46] is not the OnNotify singleton "
+              f"(got {t[46]!r}) -- control invalid (contract changed?)")
+        ok = False
+    else:
+        t[46] = "OnMessage"
+        (mutc / "vtable-slots.json").write_text(json.dumps(doc), encoding="utf-8")
+        r = subprocess.run(
+            [sys.executable, str(here / "emit_headers.py"),
+             "--pinned", str(mutc), "--out", str(mutc / "hdrs")],
+            capture_output=True, text=True)
+        if r.returncode != 0:
+            print("selftest C: emit_headers refused the mutated "
+                  f"contract (rc={r.returncode}) -- control invalid: "
+                  + (r.stderr or r.stdout).strip()[:160])
+            ok = False
+        else:
+            ht = (mutc / "hdrs" / "HWNDHost.h").read_text(encoding="utf-8")
+            ph46 = "__DuiAbiSlot_HWNDHost_46" in ht
+            ph47 = "__DuiAbiSlot_HWNDHost_47" in ht
+            both_decl = ("OnMessage" in ht and "OnNotify" in ht)
+            if ph46 and ph47 and both_decl:
+                print("selftest C: PASS (split vote -> both pair slots "
+                      "UNKNOWN placeholders, declarations kept unbound)")
+            else:
+                print(f"selftest C: FAIL -- solver did not fail closed "
+                      f"(ph46={ph46} ph47={ph47} decls={both_decl}); "
+                      "a guessed order would be a defect")
+                ok = False
 
     print(f"slot-abi-audit selftest: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1

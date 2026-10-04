@@ -744,6 +744,159 @@ def _j1_write_json(args, verdict: str, *, judged: int, total: int, same: int,
         encoding="utf-8", newline="\n")
 
 
+# J1-IF: IClassInfo interface contract gate (single-point, ENFORCED).
+#
+# Ground truth: pinned/vtable-slots.json classes.ClassInfoBase -- the
+# real dui70.dll ClassInfoBase primary vftable IS the IClassInfo
+# interface contract (R3-protected data; no hand table here).
+#
+# The gate checks the GENERATED Interfaces.h IClassInfo struct against
+# that table:
+#   * 19 slots total: business methods 0-17 + vector-deleting dtor at
+#     the TAIL (slot 18)
+#   * slot order of the business pure-virtual declarations == table
+#     slot order (declaration order == slot order)
+#   * slots 2 and 7 (CreateInstance / GetBaseClass) are _purecall in
+#     the real DLL -> the interface must keep them pure virtual (no
+#     invented signatures); the gate checks the declaration IS pure
+#   * slot 17 (AssertPIZeroRef) lives inside an ICF fold in the table
+#     -> fold-membership tolerance: the declared name must be A member
+#     of the fold at its slot, not necessarily the fold's first entry
+#   * the dtor is declared LAST and protected
+#
+# Negative controls (documented; exercised before this gate shipped):
+# the pre-R1 header (dtor first) fails the slot-order check; a header
+# with slot2/7 implemented (non-pure) fails the purecall check; moving
+# the dtor out of the protected tail breaks the dtor check.
+def _j1if_die(msg: str) -> int:
+    print(f"J1-IF: ERROR  {msg}", file=sys.stderr)
+    return 2
+
+
+# pure-virtual declarations carrying a trailing // N slot annotation
+_IF_DECL_RE = re.compile(
+    r"^\s*virtual\s+([^;={]*?)\)\s*(const)?\s*(=\s*0)?\s*;\s*"
+    r"//\s*(\d+)\s*$", re.M)
+
+
+def _if_decl_name(sig: str) -> str:
+    """Function name from the captured declaration head: the last
+    identifier BEFORE the parameter list. The head is everything the
+    regex captured up to the closing ')' of the LAST parameter list,
+    so identifiers inside '(params' must not win -- cut at the FIRST
+    '(' of the head."""
+    head = sig.split("(", 1)[0]
+    ids = re.findall(r"\w+", head)
+    return ids[-1] if ids else "?"
+
+
+def cmd_j1if(args: argparse.Namespace) -> int:
+    slots_path: Path = args.slots
+    if not slots_path.is_file():
+        return _j1if_die(f"slots table missing: {slots_path}")
+    hdr_path: Path = args.include / "Interfaces.h"
+    if not hdr_path.is_file():
+        return _j1if_die(f"Interfaces.h missing: {hdr_path}")
+
+    try:
+        doc = json.loads(slots_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return _j1if_die(f"slots table is not valid JSON: {exc}")
+    entry = (doc.get("classes") or {}).get("ClassInfoBase")
+    if not isinstance(entry, dict) or not isinstance(entry.get("slots"), list):
+        return _j1if_die("slots table has no ClassInfoBase entry")
+
+    text = hdr_path.read_text(encoding="utf-8")
+    m = re.search(
+        r"struct\s+__declspec\(novtable\)\s+IClassInfo\s*\{(.*?)\n\s*\};",
+        text, re.S)
+    if not m:
+        return _j1if_die("Interfaces.h has no IClassInfo struct")
+    body = m.group(1)
+
+    problems: list[str] = []
+
+    # --- dtor: LAST virtual, protected, inline-empty -----------------
+    dtor_m = re.search(r"virtual\s+~IClassInfo\s*\(\s*\)\s*\{\s*\}", body)
+    if not dtor_m:
+        problems.append("IClassInfo dtor missing or not inline-empty")
+    else:
+        tail = body[dtor_m.end():]
+        if re.search(r"virtual\s+\w", tail):
+            problems.append("IClassInfo dtor is not the LAST virtual "
+                            "(a virtual follows it)")
+        pre = body[:dtor_m.start()]
+        # the protected: label may be separated from the dtor by
+        # comment lines -- strip them before matching
+        pre_nc = re.sub(r"//[^\n]*", "", pre)
+        if not re.search(r"protected\s*:\s*$", pre_nc):
+            problems.append("IClassInfo dtor is not in a protected section")
+
+    # --- business pure virtuals in slot order ------------------------
+    decls = []
+    for g in _IF_DECL_RE.finditer(body):
+        sig = g.group(1).strip()
+        fname = _if_decl_name(sig)
+        decls.append((fname, sig, g.group(2), g.group(3), int(g.group(4))))
+
+    if not decls:
+        return _j1if_die("no slot-annotated pure virtuals found in IClassInfo")
+
+    table = entry["slots"]
+
+    # 1) slot annotations are exactly 0..17 in order
+    ann = [d[4] for d in decls]
+    if ann != list(range(18)):
+        problems.append(f"slot annotations not 0..17 in order: {ann[:20]}")
+
+    # 2) each declared name matches its table slot (fold-tolerant);
+    #    purecall slots must stay pure
+    for fname, sig, is_const, pure, slot in decls:
+        if slot >= len(table):
+            problems.append(f"slot {slot} beyond table length {len(table)}")
+            continue
+        entry_slot = table[slot]
+        if entry_slot == "_purecall":
+            if pure is None:
+                problems.append(
+                    f"slot {slot} is _purecall in the DLL but the header "
+                    f"declares a non-pure virtual ({fname})")
+        elif isinstance(entry_slot, list):
+            if fname not in entry_slot:
+                problems.append(
+                    f"slot {slot}: declared {fname} is not a member of the "
+                    f"ICF fold at that slot")
+        else:
+            if fname != entry_slot:
+                problems.append(
+                    f"slot {slot}: declared {fname} != table entry "
+                    f"{entry_slot}")
+
+    # 3) table shape: 19 slots, _E marker at 18 (the data itself)
+    if len(table) != 19:
+        problems.append(f"table length {len(table)} != 19 (contract changed?)")
+    else:
+        if table[18] != "_EClassInfoBase":
+            problems.append(f"slot 18 is not the _EClassInfoBase vdtor "
+                            f"marker: {table[18]!r}")
+
+    verdict = "PASS" if not problems else "FAIL"
+    print("J1-IF   IClassInfo interface contract "
+          f"(ClassInfoBase table, {len(table)} slots)")
+    print(f"        business pure-virtuals annotated: {len(decls)}")
+    for p in problems:
+        print(f"        PROBLEM: {p}")
+    if args.json_out:
+        Path(args.json_out).write_text(
+            json.dumps({"gate": "J1-IF", "verdict": verdict,
+                        "problems": problems, "slots": len(table),
+                        "business_decls": len(decls)},
+                       ensure_ascii=False, indent=1) + "\n",
+            encoding="utf-8", newline="\n")
+    print(f"GATE J1-IF: {verdict}")
+    return 0 if verdict == "PASS" else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -795,6 +948,15 @@ def main(argv: list[str] | None = None) -> int:
     j1.add_argument("--json-out", default=None,
                     help="write the full report (funnel, ICF, divergences) as JSON")
     j1.set_defaults(func=cmd_j1)
+
+    j1if = sub.add_parser(
+        "j1-if", help="IClassInfo interface contract gate (single-point, enforced)")
+    j1if.add_argument("--slots", type=Path,
+                      default=DEFAULT_PINNED / "vtable-slots.json",
+                      help="ground-truth table (pinned/vtable-slots.json)")
+    j1if.add_argument("--include", type=Path, default=DEFAULT_OUT / "include")
+    j1if.add_argument("--json-out", default=None)
+    j1if.set_defaults(func=cmd_j1if)
 
     args = ap.parse_args(argv)
     return args.func(args)

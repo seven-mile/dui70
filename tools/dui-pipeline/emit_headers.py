@@ -1382,11 +1382,13 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     IClassInfo/ClassInfoBase is deliberately excluded from vdtor placement
     rejection: it is the L2 problem (tracked separately, not masked here).
     """
-    if cls == "ClassInfoBase":
-        # L2 (IClassInfo slot0 +1 layout) is tracked as a SEPARATE
-        # subproblem: not placeholder-masked, not vdtor-rejected. It keeps
-        # canonical order with an explicit L2 banner.
-        return {"mode": "l2"}
+    # L2 R2: ClassInfoBase now uses the GENERIC contract path. Its
+    # pinned table (vtable-slots.json) is the 19-slot IClassInfo
+    # contract: business methods 0-17 (slots 2/7 _purecall ->
+    # placeholders; slots 11/17 are ICF folds -> placeholders where no
+    # own unit binds) + `_EClassInfoBase` vdtor at the TAIL (slot 18).
+    # The old L2 short-circuit (canonical order + banner) was the R2
+    # bug: dtor-first declaration shifted every business slot.
 
     tabnames: set = set()
     for s in slot_lists:

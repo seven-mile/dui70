@@ -18,22 +18,28 @@ namespace DirectUI
     class ShellBorderLayout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        // ABI placeholder: real slot 0 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ShellBorderLayout_0(void) = 0;
+        // ABI placeholder: real slot 1 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ShellBorderLayout_1(void) = 0;
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ShellBorderLayout_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_ShellBorderLayout_6(void) = 0;
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         ShellBorderLayout(ShellBorderLayout const&);
         ShellBorderLayout(void);
         virtual ~ShellBorderLayout(void);
         ShellBorderLayout& operator=(ShellBorderLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
 
         private:
         long _CalcTabOrder(Element*);

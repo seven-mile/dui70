@@ -18,25 +18,25 @@ namespace DirectUI
     class BorderLayout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_BorderLayout_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_BorderLayout_6(void) = 0;
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         BorderLayout(BorderLayout const&);
         BorderLayout(void);
         virtual ~BorderLayout(void);
         BorderLayout& operator=(BorderLayout const&);
         static long Create(int, int*, Value**);
         static long Create(Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         void Initialize(void);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         private:
         void SetClient(Element*);

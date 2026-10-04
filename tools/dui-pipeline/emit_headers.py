@@ -1101,34 +1101,52 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     def _ph(slot: int) -> None:
         out.append(f"__PH__{slot}")
 
-    # slot 0: the destructor set (ctors + dtor) leads the class when the
-    # class has a destructor declaration and the table's slot 0 is the
-    # vdtor marker; if slot 0 is a real method no dtor set exists here.
-    dtor_emitted = False
+    # --- vdtor unit binding (GENERIC slot rule) ------------------------
+    # The destructor set (ctors + dtor + operator=) is a vtable unit like
+    # any other: its slot is wherever the contract table carries the
+    # vector-deleting-dtor marker `_E<Class>` (MSVC assigns the vdtor the
+    # slot of its declaration: first-declared => slot 0, last-declared =>
+    # the final slot; both shapes exist in the real binary). The unit is
+    # emitted AT that slot during the walk -- the dtor is never assumed
+    # to occupy slot 0.
+    # Classes with a modeled base: the base clause supplies the inherited
+    # region [0, base_prefix); an overriding vdtor marker inside that
+    # region is still fine (the declaration overrides the base slot).
+    # No marker anywhere + a declared virtual dtor = inexpressible
+    # (rejected upstream in contract_classify; fail-closed here too).
+    dtor_name: str | None = None
+    dtor_slot: int | None = None
     for s in members:
         if classify_dtor(s):
-            out.extend(unit_order[s["member"]])
-            emitted.add(s["member"])
-            dtor_emitted = True
+            dtor_name = s["member"]
             break
+    if dtor_name is not None:
+        for idx, entry in enumerate(slot_lists):
+            hit = (entry == f"_E{cls}") or (
+                isinstance(entry, list) and f"_E{cls}" in entry)
+            if hit:
+                dtor_slot = idx
+                break
+        if dtor_slot is None:
+            raise SystemExit(
+                f"contract_reorder: {cls}: virtual dtor declared but the "
+                f"table has no `_E{cls}` marker -- cannot place the dtor "
+                "set; refusing to guess (classify should have rejected)")
 
     # walk the table slot by slot; at each covered base slot emit the
     # unit (its full run), at each uncovered slot emit a placeholder.
-    # Units with a virtual-dtor set: slot 0 is the vdtor (the dtor set
-    # was emitted above); other units start at their base slot.
+    # Units with a virtual-dtor set occupy the marker slot; other units
+    # start at their base slot.
     base_to_units: dict[int, list] = {}
     for n in set_slots:
         b = min(set_slots[n])
         base_to_units.setdefault(b, []).append(n)
-    if dtor_emitted:
-        # the emitted dtor set owns slot 0 when the table's slot 0 is the
-        # vdtor marker (_E<Class>); no placeholder for it
-        s0e = slot_lists[0]
-        s0_is_vdtor = (isinstance(s0e, str) and s0e.startswith("_E")) or (
-            isinstance(s0e, list) and any(
-                isinstance(x, str) and x.startswith("_E") for x in s0e))
-        if s0_is_vdtor:
-            covered.add(0)
+    if dtor_slot is not None:
+        assert dtor_name is not None
+        set_slots[dtor_name] = [dtor_slot]
+        base_to_units.setdefault(dtor_slot, []).insert(0, dtor_name)
+        # the marker slot is covered by the dtor unit (never a placeholder)
+        covered.add(dtor_slot)
 
     for slot in range(len(slot_lists)):
         if slot in covered:
@@ -1188,10 +1206,10 @@ def contract_classify(cls: str, members: list, slot_lists: list,
       external_virtuals   the class exports virtuals that are not in its
                           primary table (they live in secondary/MI
                           subobject tables this pipeline does not model)
-      vdtor_conflict      the table's slot 0 holds a real method but the
-                          class declares a virtual destructor (the dtor
-                          would take slot 0 and shift the whole table)
-    IClassInfo/ClassInfoBase is deliberately excluded from vdtor-conflict
+      vdtor_unplaced      the class declares a virtual destructor but the
+                          table carries no `_E<Class>` marker anywhere:
+                          no slot can express the dtor
+    IClassInfo/ClassInfoBase is deliberately excluded from vdtor placement
     rejection: it is the L2 problem (tracked separately, not masked here).
     """
     if cls == "ClassInfoBase":
@@ -1209,15 +1227,23 @@ def contract_classify(cls: str, members: list, slot_lists: list,
         return {"mode": "rejected", "reason": "external_virtuals",
                 "external": ext}
 
-    # vdtor conflict: slot 0 is a real method, not an _E marker
-    s0 = slot_lists[0]
-    is_vdtor_entry = (isinstance(s0, str) and s0.startswith("_E")) or (
-        isinstance(s0, list) and any(
-            isinstance(x, str) and x.startswith("_E") for x in s0))
+    # vdtor placement (GENERIC rule): the destructor set binds to the
+    # slot carrying the `_E<Class>` marker WHEREVER it sits (slot 0 when
+    # the dtor was declared first, the last slot when declared last --
+    # both shapes exist in the real binary). A virtual dtor is only
+    # inexpressible when the table carries NO marker at all.
     has_vdtor_decl = any(classify_dtor(s) for s in members)
-    if not is_vdtor_entry and has_vdtor_decl:
-        return {"mode": "rejected", "reason": "vdtor_conflict",
-                "slot0": s0 if isinstance(s0, str) else sorted(s0)[:3]}
+    if has_vdtor_decl:
+        marker = next((
+            i for i, entry in enumerate(slot_lists)
+            if entry == f"_E{cls}" or (
+                isinstance(entry, list) and f"_E{cls}" in entry)), None)
+        if marker is None:
+            return {"mode": "rejected", "reason": "vdtor_unplaced",
+                    "slots": len(slot_lists)}
+        covered_dtor = {marker}
+    else:
+        covered_dtor = set()
 
     # bound: compute which slots the own units cover
     by_name: dict[str, list] = {}
@@ -1233,6 +1259,7 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     for n, s0v in name_slot.items():
         k = n_virtuals.get(n, 1)
         covered.update(range(s0v, s0v + k))
+    covered |= covered_dtor
     # slots provided by a modeled base (its own table is the prefix of
     # this class's table) are INHERITED -- never placeholders
     if base_prefix > 0:
@@ -1688,8 +1715,9 @@ def render_class_header(cls: str, members: list, data_members: list,
             lines.append(f"        // reason: exported virtual(s) not in the primary")
             lines.append(f"        // vtable (secondary/MI subobject table): {ext}")
         else:
-            lines.append("        // reason: virtual destructor would take slot 0,")
-            lines.append("        // but the real table's slot 0 is a method")
+            lines.append("        // reason: virtual destructor declared but the real")
+            lines.append("        // table carries no destructor marker (no slot")
+            lines.append("        // can express it)")
         lines.append("")
     if items is not None and slot_lists is not None:
         # v2: item stream in contract slot order; placeholders render as
@@ -2537,8 +2565,8 @@ def main(argv=None) -> int:
             print(f"    REJECTED {r['cls']:<26} external virtuals: "
                   f"{', '.join(r['external'][:6])}")
         else:
-            print(f"    REJECTED {r['cls']:<26} vdtor-conflict "
-                  f"(slot0={r.get('slot0')})")
+            print(f"    REJECTED {r['cls']:<26} vdtor-unplaced "
+                  f"(no _E marker in {r.get('slots')} slots)")
     # W5 contract binding report (known-signature vs unbindable virtuals)
     n_cls = len(contract_rows)
     n_bound = sum(r["bound"] for r in contract_rows)

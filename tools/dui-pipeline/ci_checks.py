@@ -231,7 +231,13 @@ def cmd_totals(args: argparse.Namespace) -> int:
 #
 # Kept at module scope so G3 (existence) and G5 (compile) read one registry.
 GENERATED_EXTRA = {"DirectUI", "Interfaces", "dui_abi_types"}
-HANDWRITTEN = {"DuiEnums"}
+# ChildrenView is hand-written for the same reason DuiEnums is: it cannot be
+# derived from pinned/. It encodes the measured DynamicArray<Element*,0> borrow
+# contract (GetChildren returns a Value* the caller must Release) as a type, so
+# the raw Value*/DynamicArray* never reach a caller. Adding it here is a
+# deliberate widening of "the generated tree" and G3/G5 both read this one
+# registry (G5 force-compiles it so it cannot silently rot).
+HANDWRITTEN = {"DuiEnums", "ChildrenView"}
 
 
 def cmd_struct(args: argparse.Namespace) -> int:

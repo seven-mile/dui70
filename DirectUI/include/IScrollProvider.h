@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class IScrollProvider;
+    struct IScrollProvider;
 
-    class IScrollProvider
+    struct IScrollProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

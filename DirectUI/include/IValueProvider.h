@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class IValueProvider;
+    struct IValueProvider;
 
-    class IValueProvider
+    struct IValueProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

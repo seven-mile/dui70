@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class IToggleProvider;
+    struct IToggleProvider;
 
-    class IToggleProvider
+    struct IToggleProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

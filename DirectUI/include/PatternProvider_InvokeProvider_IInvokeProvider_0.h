@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class InvokeProvider;
-    class IInvokeProvider;
+    struct IInvokeProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

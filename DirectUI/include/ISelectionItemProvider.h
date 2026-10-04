@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class ISelectionItemProvider;
+    struct ISelectionItemProvider;
 
-    class ISelectionItemProvider
+    struct ISelectionItemProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

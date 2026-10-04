@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class SelectionItemProvider;
-    class ISelectionItemProvider;
+    struct ISelectionItemProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

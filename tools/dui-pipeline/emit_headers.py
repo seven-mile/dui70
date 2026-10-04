@@ -1622,6 +1622,46 @@ STRUCT_TAG_CLASSES = {
 }
 
 
+def _mi_struct_tag_interfaces() -> set:
+    """The pattern interfaces synthesized by the schema-2 provider-MI
+    path are STRUCTs in the real DLL (mangled template args carry U,
+    e.g. UIInvokeProvider in ?...@?$PatternProvider@VInvokeProvider@
+    DirectUI@@UIInvokeProvider@@$0A@). Derived from pinned
+    mi-tables.json with the same membership rule the emitter uses."""
+    p = Path(__file__).resolve().parent.parent.parent / "pinned" / "mi-tables.json"
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    if doc.get("schema") != 2:
+        return set()
+    out: set = set()
+    for cls, entry in (doc.get("derived") or {}).items():
+        if cls.startswith("?$") or not isinstance(entry, dict):
+            continue
+        pri = entry.get("primary")
+        secs = entry.get("secondaries") or {}
+        ip = secs.get("IProvider")
+        rb = secs.get("RefcountBase")
+        slots = pri.get("slots") if isinstance(pri, dict) else None
+        if (isinstance(pri, dict) and isinstance(ip, dict)
+                and isinstance(rb, dict)
+                and pri.get("length_provenance") == "next-vftable"
+                and isinstance(slots, list) and len(slots) >= 3
+                and slots[0] == "QueryInterface" and slots[1] == "AddRef"
+                and slots[2] == "Release"
+                and ip.get("length_provenance") == "manual"
+                and ip.get("slots") == ["GetProxyCreator"]
+                and rb.get("length_provenance") == "manual"
+                and isinstance(rb.get("slots"), list)
+                and len(rb["slots"]) == 2):
+            out.add("I" + cls)
+    return out
+
+
+STRUCT_TAG_CLASSES |= _mi_struct_tag_interfaces()
+
+
 def is_duixml_nested(cls: str) -> bool:
     """FunctionDefinition<T> specializations are NESTED inside
     DUIXmlParser (mangled ?$FunctionDefinition@...@DUIXmlParser@DirectUI@@).
@@ -1764,9 +1804,9 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
              "",
              "namespace DirectUI",
              "{",
-             f"    class {iface};",
+             f"    struct {iface};",
              "",
-             f"    class {iface}",
+             f"    struct {iface}",
              "    {",
              "    public:"]
     by_name: dict[str, dict] = {}
@@ -2004,9 +2044,11 @@ def render_mi_template_header(tpl_id: str, members: list,
     # the specialization arguments reference the concrete provider
     # class and the pattern interface; this header is INCLUDED BY the
     # concrete class's header, so they can only be forward-declared
-    # here (complete types come from their own headers).
+    # here (complete types come from their own headers). The interface
+    # forward uses STRUCT (the real DLL declares the pattern
+    # interfaces as struct; the class-key is part of the mangling).
     lines.append(f"    class {mi_shape.get('_concrete', '_Unknown')};")
-    lines.append(f"    class {iface};")
+    lines.append(f"    struct {iface};")
     lines.append("")
     lines.append("    template <typename PROVIDER, typename INTERFACE, int ID>")
     lines.append("    class PatternProvider;")

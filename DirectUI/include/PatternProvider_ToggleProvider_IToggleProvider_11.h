@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class ToggleProvider;
-    class IToggleProvider;
+    struct IToggleProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

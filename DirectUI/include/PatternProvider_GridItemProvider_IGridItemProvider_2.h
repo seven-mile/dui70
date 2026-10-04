@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class GridItemProvider;
-    class IGridItemProvider;
+    struct IGridItemProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

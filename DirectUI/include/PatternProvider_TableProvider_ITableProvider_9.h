@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class TableProvider;
-    class ITableProvider;
+    struct ITableProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

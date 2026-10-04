@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class ScrollItemProvider;
-    class IScrollItemProvider;
+    struct IScrollItemProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

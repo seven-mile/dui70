@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class IExpandCollapseProvider;
+    struct IExpandCollapseProvider;
 
-    class IExpandCollapseProvider
+    struct IExpandCollapseProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

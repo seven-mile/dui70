@@ -23,7 +23,7 @@ namespace DirectUI
 namespace DirectUI
 {
     class ExpandCollapseProvider;
-    class IExpandCollapseProvider;
+    struct IExpandCollapseProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;

@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class ITableItemProvider;
+    struct ITableItemProvider;
 
-    class ITableItemProvider
+    struct ITableItemProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

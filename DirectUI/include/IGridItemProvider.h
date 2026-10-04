@@ -9,9 +9,9 @@
 
 namespace DirectUI
 {
-    class IGridItemProvider;
+    struct IGridItemProvider;
 
-    class IGridItemProvider
+    struct IGridItemProvider
     {
     public:
         virtual long QueryInterface(_GUID const&, void**) = 0;

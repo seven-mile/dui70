@@ -58,6 +58,8 @@ USAGE
 """
 from __future__ import annotations
 
+from mi_schema import MI_TABLES_SCHEMA_OK
+
 import argparse
 import json
 import pathlib
@@ -648,9 +650,10 @@ def main(argv: list[str] | None = None) -> int:
               "(run extract-mi-tables.py first)", file=sys.stderr)
         return 2
     mi_doc = json.loads(mi_path.read_text(encoding="utf-8"))
-    if mi_doc.get("schema") != 3:
+    if mi_doc.get("schema") not in MI_TABLES_SCHEMA_OK:
         print(f"uia_order_verify: ERROR mi-tables schema "
-              f"{mi_doc.get('schema')} != 3 (the shape/slot checker "
+              f"{mi_doc.get('schema')} not in {MI_TABLES_SCHEMA_OK} "
+              f"(the shape/slot checker "
               "consumes schema 3: ctor_vftable_references + identity "
               "fields + fail-closed manual conflicts)", file=sys.stderr)
         return 2
@@ -1010,9 +1013,20 @@ def main(argv: list[str] | None = None) -> int:
     n_unk = sum(1 for r in audited.values()
                 if r["verdict"] == "VERIFIED-UNKNOWN-SLOTS")
     n_rej = sum(1 for r in audited.values() if r["verdict"] == "REJECTED")
+    # slot-level + table-level totals (artifact-derived, one source)
+    tot_tables = sum(len(r["tables"]) for r in audited.values())
+    tot_v = sum(t_["verified"] for r in audited.values()
+                for t_ in r["tables"].values())
+    tot_u = sum(t_["fold_unknown"] + t_["thunk_unknown"]
+                + t_["unresolved"] for r in audited.values()
+                for t_ in r["tables"].values())
+    tot_f = sum(len(t_["fail_slots"]) for r in audited.values()
+                for t_ in r["tables"].values())
     print(f"R6 uia-order-verify: audited {len(audited)} classes -- "
           f"{n_ver} VERIFIED, {n_unk} VERIFIED-UNKNOWN-SLOTS, "
           f"{n_rej} REJECTED")
+    print(f"  slot totals: {tot_tables} tables -- verified={tot_v}, "
+          f"unknown={tot_u}, fail_slots={tot_f}")
     if mandatory_missing:
         print(f"  MANDATORY MISSING (fail-closed): {mandatory_missing}")
     for cls, r in sorted(audited.items()):
@@ -1055,14 +1069,23 @@ def main(argv: list[str] | None = None) -> int:
                      "pinned symbols; leaf classes without "
                      "multi-table inheritance are outside this gate "
                      "audit set; NOT a full-coverage claim")
+        n_evid = sum(scan_states.values())
+        n_no_ctor = len(derived) - n_evid - n_tpl
+        # arithmetic guard: the decomposition must be exact and
+        # non-negative -- a wrong count is a tooling bug, never a
+        # silently-drifted disclosure
+        if n_evid + n_tpl + n_no_ctor != len(derived) or \
+                n_no_ctor < 0:
+            print(f"uia_order_verify: ERROR coverage decomposition "
+                  f"broken: {n_evid}+{n_tpl}+{n_no_ctor} != "
+                  f"{len(derived)}", file=sys.stderr)
+            return 2
         cov = {
             "classes_total": len(derived),
-            "classes_with_ctor_reference_evidence":
-                sum(scan_states.values()),
+            "classes_with_ctor_reference_evidence": n_evid,
             "classes_without_evidence": {
                 "templates": n_tpl,
-                "concrete_no_ctor": len(derived)
-                - sum(scan_states.values()) - n_tpl},
+                "concrete_no_ctor": n_no_ctor},
             "scan_states": scan_states,
             "references_total": n_ref,
             "coverage_claim": cov_claim,

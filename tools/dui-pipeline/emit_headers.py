@@ -15,6 +15,8 @@ Usage:
 
 from __future__ import annotations
 
+from mi_schema import MI_TABLES_SCHEMA_OK
+
 import argparse
 import json
 import re
@@ -830,7 +832,7 @@ def load_mi_tables(pinned_dir: Path) -> dict | None:
     if not p.is_file():
         return None
     doc = json.loads(p.read_text(encoding="utf-8"))
-    if doc.get("schema") not in (2, 3):
+    if doc.get("schema") not in MI_TABLES_SCHEMA_OK:
         return None
     return doc
 

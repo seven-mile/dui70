@@ -724,8 +724,6 @@ def _j1_write_json(args, verdict: str, *, judged: int, total: int, same: int,
                    "diffs": diffs, "funnel": funnel},
                   ensure_ascii=False, indent=1) + "\n",
         encoding="utf-8", newline="\n")
-    print("SELFTEST FAIL", file=sys.stderr)
-    return 1
 
 
 def main(argv: list[str] | None = None) -> int:

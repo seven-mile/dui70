@@ -305,6 +305,24 @@ def main(argv: list[str] | None = None) -> int:
         return slots, provenance
 
     iface_lengths: dict[str, int] = manual.get("interface_lengths", {})
+    # class-scoped overrides: the manual input may pin the length of a
+    # SPECIFIC class's subobject table (keyed "class::base"). The
+    # ElementProvider family's RefcountBase@1@ subobject is a different
+    # shape from the pattern family's (its table carries the class's
+    # introduced virtuals: [dtor, GetProxyCreator, GetElement,
+    # TossElement, Init]); the family-wide default (2) would truncate
+    # it. Class-scoped entries take precedence; both remain explicit
+    # human ABI inputs recorded under manual.
+    class_lengths: dict[str, dict[str, int]] = manual.get(
+        "class_interface_lengths", {})
+
+    def table_len(cls: str, base: str | None) -> int | None:
+        ov = class_lengths.get(cls)
+        if isinstance(ov, dict) and base is not None and base in ov:
+            return ov[base]
+        if base is None:
+            return None
+        return iface_lengths.get(base)
 
     # group tables by class
     by_class: dict[str, dict] = collections.defaultdict(dict)
@@ -321,7 +339,7 @@ def main(argv: list[str] | None = None) -> int:
         entry: dict = {}
         prva = info.get("_primary_rva")
         if prva is not None:
-            slots, prov = read_table(prva, iface_lengths.get(cls))
+            slots, prov = read_table(prva, table_len(cls, None))
             if slots is not None:
                 entry["primary"] = {
                     "rva": "0x%08X" % prva,
@@ -334,7 +352,7 @@ def main(argv: list[str] | None = None) -> int:
             sec_out = {}
             for base in sorted(secs_):
                 rva = secs_[base]
-                slots, prov = read_table(rva, iface_lengths.get(base))
+                slots, prov = read_table(rva, table_len(cls, base))
                 if slots is None:
                     continue
                 sec_out[base] = {

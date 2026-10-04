@@ -6,18 +6,39 @@
  "notes": [
   "Human ABI inputs, NOT re-derived facts. G1 locks this file via",
   "pinned.sha256; R3'' re-derives only mi-tables.json derived section.",
-  "IProvider=1: GetProxyCreator only (observed 13/13 concrete providers,",
-  "all next-vftable-bounded). RefcountBase=2: vector dtor + Init",
-  "(observed 13/13 concrete providers). Interface method COUNT is an",
-  "ABI contract fact, not derivable from a single binary when the tail",
-  "is unobservable.",
   "",
-  "STATUS: EXPLICIT ABI INPUT with negative proof. A WRONG value here",
-  "must change the affected classes' emitted slot tables (tamper",
-  "control: flipping RefcountBase to 3 makes mi_provider_shape reject",
-  "the family -- every provider falls back to schema-1 REJECTED",
-  "headers, G4/G4-Y fail loudly). The value is never claimed as",
-  "binary-derived evidence; emission REQUIRES it (fail-closed when",
-  "absent)."
- ]
+  "interface_lengths (family-wide defaults):",
+  "IProvider=1: GetProxyCreator only (observed 13/13 concrete pattern",
+  "providers, all next-vftable-bounded). RefcountBase=2: [vector dtor,",
+  "Init] (observed 13/13 pattern providers). Interface method COUNT is",
+  "an ABI contract fact, not derivable from a single binary when the",
+  "tail is unobservable.",
+  "",
+  "class_interface_lengths (class-scoped subobject-table lengths):",
+  "The ElementProvider family's RefcountBase@1@ subobject is a",
+  "DIFFERENT shape from the pattern family's: its table carries the",
+  "introduced virtuals [dtor, GetProxyCreator, GetElement, TossElement,",
+  "Init] (ElementProvider, 5 slots -- next-vftable-bounded by the",
+  "Simple2 table at +0x28) and HWNDElementProvider appends a 6th slot",
+  "(its Init(HWNDElement*) HIDES ElementProvider::Init(Element*) -- a",
+  "new virtual -- bound by the primary FragmentRoot table at +0x30).",
+  "The family-wide RefcountBase=2 default would truncate these; the",
+  "class-scoped entries record the in-binary-observed bounds.",
+  "",
+  "STATUS: EXPLICIT ABI INPUTS with negative proof. A WRONG value must",
+  "change the affected classes' emitted slot tables (tamper control",
+  "tools/dui-pipeline/length_input_control.py: flipping RefcountBase to",
+  "3 changes 6 classes' derived tables; the class-scoped EP-family",
+  "entries flip the EP/HWND RefcountBase tables between 2/5/6 slots).",
+  "Values are never claimed as binary-derived evidence; emission",
+  "REQUIRES them (fail-closed when absent)."
+ ],
+ "class_interface_lengths": {
+  "ElementProvider": {
+   "RefcountBase": 5
+  },
+  "HWNDElementProvider": {
+   "RefcountBase": 6
+  }
+ }
 }

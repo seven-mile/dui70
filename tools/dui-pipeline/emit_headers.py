@@ -949,7 +949,10 @@ def hwnd_provider_shape(mi_entry: dict) -> dict | None:
     if rb.get("length_provenance") != "manual":
         return None
     rbs = rb.get("slots")
-    if not isinstance(rbs, list) or len(rbs) != 2:
+    # 5 slots [??_E, GetProxyCreator, GetElement, TossElement, Init] or
+    # 6 (the class's own Init(HWNDElement*) HIDES the base Init -- a new
+    # virtual appended to the first-base subobject table)
+    if not isinstance(rbs, list) or len(rbs) not in (5, 6):
         return None
     s0 = rbs[0]
     s0names = [s0] if isinstance(s0, str) else list(s0 or [])
@@ -959,6 +962,58 @@ def hwnd_provider_shape(mi_entry: dict) -> dict | None:
         return None
     return {"primary_iface": "IRawElementProviderFragmentRoot",
             "primary_tail": list(slots[3:])}
+
+
+# ElementProvider family: abstract intermediate (no own ??_7 primary).
+# Its FIRST base is the RefcountBase@1@ subobject (evidence: the
+# subobject's 5-slot table [??_E, GetProxyCreator, GetElement,
+# TossElement, Init] carries the class's introduced virtuals -- MSVC
+# appends a class's new virtuals to its FIRST base's subobject table,
+# so RefcountBase is first; the extractor's classes.json order is
+# canonical, not layout). The 3 SDK secondaries are next-vftable
+# bounded. This models the real DLL's (unnamed) intermediate
+# 'RefcountBase-derived first base' as [RefcountBase + introduced
+# virtuals] directly -- consumer-ABI equivalent, verified by the A1
+# secondary-table audit.
+EP_PROVIDER_RB_SLOTS = ["GetProxyCreator", "GetElement", "TossElement",
+                        "Init"]
+
+
+def ep_provider_shape(mi_entry: dict) -> dict | None:
+    """Validate the ElementProvider-family MI shape.
+
+    Returns {"rb_introduced": [...]} when the entry matches, else None.
+    """
+    if not isinstance(mi_entry, dict):
+        return None
+    if "primary" in mi_entry:
+        return None  # abstract intermediate: no own primary table
+    secs = mi_entry.get("secondaries") or {}
+    rb = secs.get("RefcountBase")
+    if not isinstance(rb, dict):
+        return None
+    if rb.get("length_provenance") != "manual":
+        return None
+    rbs = rb.get("slots")
+    if not isinstance(rbs, list) or len(rbs) < 2:
+        return None
+    s0 = rbs[0]
+    s0names = [s0] if isinstance(s0, str) else list(s0 or [])
+    if not any(n.startswith(("_E", "_G")) for n in s0names):
+        return None
+    for name in rbs[1:]:
+        if name not in EP_PROVIDER_RB_SLOTS:
+            return None
+    # the 3 SDK secondaries, in-binary bounded (next-vftable or
+    # hard-stop -- both are observed bounds, not manual inputs)
+    n_sdk = 0
+    for k, v in secs.items():
+        if k.rstrip("@") in HWND_PROVIDER_SECONDARIES and \
+                v.get("length_provenance") in ("next-vftable", "hard-stop"):
+            n_sdk += 1
+    if n_sdk != 3:
+        return None
+    return {"rb_introduced": list(rbs[1:])}
 
 
 def mi_pattern_iface_name(cls: str) -> str:
@@ -2153,6 +2208,11 @@ def render_mi_provider_header(cls: str, members: list, data_members: list,
         # exported overrides bind to the primary iface's slots.
         return render_hwnd_provider_header(
             cls, members, data_members, tr, classes, banner, mi_shape)
+    if "rb_introduced" in mi_shape:
+        # ElementProvider family: abstract intermediate, RefcountBase
+        # first (the subobject table carries its introduced virtuals)
+        return render_ep_provider_header(
+            cls, members, data_members, tr, classes, banner, mi_shape)
     tpl_id = mi_template_class_id(cls, classes)
     assert tpl_id is not None, (
         f"MI provider {cls}: no PatternProvider<cls, ...> specialization "
@@ -2207,6 +2267,132 @@ def render_mi_provider_header(cls: str, members: list, data_members: list,
         md = MemberDecl(s, cls)
         sig = md.signature(tr)
         lines.append(f"        virtual {sig} override;")
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_ep_provider_header(cls: str, members: list, data_members: list,
+                              tr: TypeTranslator, classes: list,
+                              banner: str, mi_shape: dict) -> str:
+    """Render the ElementProvider-family MI class header.
+
+    DLL truth (pinned vftable symbols + mi-tables.json schema 2): the
+    class has NO primary table of its own (abstract intermediate), and
+    its RefcountBase@1@ subobject table carries the class's introduced
+    virtuals:
+        [??_E<cls>, GetProxyCreator, GetElement, TossElement, Init]
+    (HWNDElementProvider appends a 6th slot: its Init(HWNDElement*)
+    hides ElementProvider::Init(Element*) -- a NEW virtual, and the
+    RefcountBase subobject is the FIRST base, so new virtuals land
+    there.)
+
+    Modeling: the real DLL has an unnamed RefcountBase-derived FIRST
+    base introducing those virtuals (the '@1@' collision suffix in the
+    vftable name marks the indirect base). Declaring the class itself
+        class <cls> : public RefcountBase,
+                      public IRawElementProviderAdviseEvents,
+                      public IRawElementProviderFragment,
+                      public IRawElementProviderSimple2
+    with the introduced virtuals declared in the DLL's subobject-slot
+    order reproduces the SAME five subobject tables (verified by the
+    A1 secondary-table audit); the header documents the modeling.
+    """
+    rb_introduced = list(mi_shape["rb_introduced"])
+    lines = [banner,
+             f"// DirectUI::{cls} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             "// W5 stage-2 MI emission (ElementProvider family): the",
+             "// RefcountBase@1@ subobject is the FIRST base; its table",
+             "// carries this class's introduced virtuals in DLL slot",
+             "// order (pinned mi-tables.json, schema 2). The DLL's real",
+             "// first base is an unnamed RefcountBase-derived",
+             "// intermediate; declaring the introduced virtuals here",
+             "// reproduces the same subobject tables.",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             '#include "RefcountBase.h"',
+             ""]
+    for b in HWND_PROVIDER_SECONDARIES:
+        lines.append(f"#include <{EXTERNAL_BASE_INCLUDES[b]}>")
+        lines.append("")
+    # headers of classes whose NESTED types this signature set uses by
+    # value (enum by value needs the complete host class), e.g.
+    # TossPatternProvider(Schema::Pattern)
+    for host in sorted(nested_type_hosts_used(members, data_members, None)):
+        if host != cls and host in classes:
+            lines.append(f'#include "{safe_name(host)}.h"')
+            lines.append("")
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    # forward declarations referenced by signatures (incl. nested-type
+    # hosts like Schema for Schema::Pattern)
+    fwd2 = set(fwd)
+    for s in members:
+        src = " ".join(str(s.get(k) or "") for k in
+                       ("signature", "undecorated", "member"))
+        for m in re.finditer(r"(\w+)::(\w+)", src):
+            fwd2.add(m.group(1))
+    for name in sorted(fwd2):
+        if name in NESTED_TYPE_HOSTS or name == cls:
+            continue
+        kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+        lines.append(f"    {kw} {name};")
+    if fwd2:
+        lines.append("")
+    lines.append("}")
+    lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {cls}")
+    lines.append("        : public RefcountBase,")
+    for b in HWND_PROVIDER_SECONDARIES:
+        lines.append(f"          public {b},")
+    # strip trailing comma of last base line
+    lines[-1] = lines[-1].rstrip(",")
+    lines.append("    {")
+    lines.append("    public:")
+    lines.append(f"        virtual ~{cls}(void);")
+    # introduced virtuals FIRST, in the DLL's RefcountBase-subobject
+    # slot order (slot0 = the vdtor above); they are NEW virtuals (no
+    # base declares them) -> no override specifier
+    by_name: dict[str, dict] = {}
+    for s in members:
+        by_name.setdefault(s["member"], s)
+    emitted = set()
+    for name in rb_introduced:
+        s = by_name.get(name)
+        if s is None:
+            continue
+        md = MemberDecl(s, cls)
+        lines.append(f"        virtual {md.signature(tr)};")
+        emitted.add(name)
+    # then the SDK overrides (their slots live in the SDK subobjects)
+    for s in members:
+        name = s["member"]
+        if name in emitted or classify_dtor(s):
+            continue
+        if not s.get("is_virtual"):
+            md = MemberDecl(s, cls)
+            lines.append(f"        {md.full_decl(tr)}")
+            continue
+        md = MemberDecl(s, cls)
+        lines.append(f"        virtual {md.signature(tr)} override;")
     lines.append("    };")
     lines.append("")
     lines.append("} // namespace DirectUI")
@@ -2277,15 +2463,17 @@ def render_hwnd_provider_header(cls: str, members: list, data_members: list,
     lines.append("namespace DirectUI")
     lines.append("{")
     lines.append(f"    class {cls}")
-    lines.append(f"        : public {primary_iface}, public ElementProvider")
+    lines.append(f"        : public ElementProvider, public {primary_iface}")
     lines.append("    {")
     lines.append("    public:")
     # the class's own exported overrides (QI/AddRef/Release pair the
     # FragmentRoot slots; ElementProviderFromPoint/GetFocus land at
-    # FragmentRoot slots 3/4). Init is inherited from the RefcountBase
-    # secondary's owner chain -- NOT re-declared (same rule as the
-    # pattern-provider family).
-    skip = {"Init"}
+    # FragmentRoot slots 3/4). Init(HWNDElement*, InvokeHelper*) HIDES
+    # ElementProvider::Init(Element*, InvokeHelper*) (C++ has no
+    # parameter-covariance: a different first param = a NEW virtual) --
+    # the DLL's RefcountBase subobject table carries it as slot 5, so
+    # it IS declared here (a plain virtual, no override specifier).
+    skip: set[str] = set()
     dtor = next((s for s in members if classify_dtor(s)), None)
     if dtor is not None:
         lines.append(f"        virtual ~{cls}(void);")
@@ -2299,7 +2487,12 @@ def render_hwnd_provider_header(cls: str, members: list, data_members: list,
             continue
         md = MemberDecl(s, cls)
         sig = md.signature(tr)
-        lines.append(f"        virtual {sig} override;")
+        # Init HIDES the base's Init (different first param): a new
+        # virtual, not an override
+        if name == "Init":
+            lines.append(f"        virtual {sig};")
+        else:
+            lines.append(f"        virtual {sig} override;")
     lines.append("    };")
     lines.append("")
     lines.append("} // namespace DirectUI")
@@ -3559,6 +3752,12 @@ def main(argv=None) -> int:
                 shape = hwnd_provider_shape(entry)
                 if shape is not None:
                     mi_shapes[cls] = shape
+                    continue
+                # the ElementProvider family (abstract intermediate,
+                # RefcountBase-first): no primary, 4 secondaries
+                shape = ep_provider_shape(entry)
+                if shape is not None:
+                    mi_shapes[cls] = shape
         n_mi = len(mi_shapes) + len(mi_template_shapes)
         print(f"emit_headers: schema-2 MI tables loaded "
               f"({len(mi_doc.get('derived') or {})} classes; "
@@ -3630,11 +3829,13 @@ def main(argv=None) -> int:
                 override_votes=override_votes, mi_shape=mi_shape)
             (out_dir / f"{safe_name(cls)}.h").write_text(
                 content, encoding="utf-8", newline="\n")
-            if "primary_iface" in mi_shape:
+            if "primary_iface" in mi_shape or "rb_introduced" in mi_shape:
                 # HWNDElementProvider family: the primary interface is a
                 # REAL SDK interface (UIAutomationCore.h owns it under
                 # Option D) and there is no PatternProvider intermediate
-                # -- no generated interface/template headers
+                # -- no generated interface/template headers.
+                # ElementProvider family: abstract intermediate, no
+                # primary table and no pattern interface at all.
                 stats[cls] = {"methods": len(members),
                               "data": len(data_members), "mi": True}
                 continue
@@ -3731,7 +3932,8 @@ def main(argv=None) -> int:
     iface_ph: dict[str, int] = {}
     if mi_doc is not None:
         for cls, shape in mi_shapes.items():
-            if "primary_iface" in shape or "pattern_methods" not in shape:
+            if "primary_iface" in shape or "rb_introduced" in shape \
+                    or "pattern_methods" not in shape:
                 continue
             n = sum(1 for s in shape["pattern_methods"]
                     if isinstance(s, list))

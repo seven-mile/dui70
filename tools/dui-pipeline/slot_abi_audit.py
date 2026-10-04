@@ -496,12 +496,20 @@ def main():
                 return ("compile", [err[0][:120] if err else "?"])
             r2 = subprocess.run([DUMPBIN, "/nologo", "/relocations", str(obj)],
                                 capture_output=True, text=True)
-            entries = []  # (section, offset, symbol)
-            sec = None
+            entries = []  # (block, offset, symbol)
+            # dumpbin prints one RELOCATIONS #<n> block per COFF section,
+            # and comdat sections can REPEAT the same printed number
+            # (each comdat gets its own block). Two different vftables
+            # may therefore both appear under "#1" with offsets that
+            # restart at 0x0 -- grouping by the printed number would
+            # interleave them after sorting. Key each BLOCK by its
+            # ordinal position in the output instead; within a block the
+            # rows are ascending and contiguous.
+            block = -1
             for L in r2.stdout.splitlines():
                 m_sec = re.match(r"RELOCATIONS #(\d+)", L)
                 if m_sec:
-                    sec = int(m_sec.group(1))
+                    block += 1
                     continue
                 if "ADDR64" not in L:
                     continue
@@ -516,7 +524,7 @@ def main():
                 if cut > 0:
                     sym = sym[:cut].strip()
                 if sym.startswith("?") or "_purecall" in sym:
-                    entries.append((sec, off, sym))
+                    entries.append((block, off, sym))
             return ("ok", entries)
 
         def split_vftables(payload: list, cls: str) -> dict:
@@ -545,8 +553,9 @@ def main():
             tables: dict[str, list] = {}
             if not payload:
                 return tables
-            # group by SECTION first (offsets restart per section), then
-            # into contiguous 8-byte runs within each section
+            # group by dumpbin RELOCATIONS BLOCK (each vftable comdat is
+            # its own block; offsets restart per block), then into
+            # contiguous 8-byte runs within each block
             by_sec: dict[int, list] = {}
             for s, off, sym in payload:
                 by_sec.setdefault(s, []).append((off, sym))
@@ -688,10 +697,78 @@ def main():
         # DLL's symbol set at that position (fold sets accepted,
         # membership recorded as fold-UNKNOWN, exactly like primary).
         # Fold slots in the SECONDARY truth are lists (fold pairs).
+
+        def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
+            """Pinned-name truncation / thunk-adjustor tolerance.
+
+            The pinned PDB publics sometimes store a THUNK name
+            truncated right after the adjustor component
+            ('?QI@C@DirectUI@@WB' vs the probe's full
+            '?QI@C@DirectUI@@WBI@EAAJ...'), and MSVC encodes the
+            this-adjustor differently (M-thunk 'MEAA' vs direct
+            'UEAA') when the subobject offset differs between the
+            two layouts. Both sides must name the SAME class and
+            member; the member component must fully agree up to
+            the shorter name's end.
+            """
+            m_obj = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_obj)
+            m_dll = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_dll)
+            if not (m_obj and m_dll):
+                return False
+            if m_obj.group(1) != m_dll.group(1) or \
+                    m_obj.group(2) != m_dll.group(2):
+                return False
+            # same member, both this-adjustor THUNK forms
+            # ('@W<adjustor>@...' encodings): the subobject OFFSET
+            # differs between the DLL's real layout and the modeled
+            # one; which member the slot carries is still provable
+            m2t = re.match(r"\?\w+@\w+@DirectUI@@W", s_obj)
+            m3t = re.match(r"\?\w+@\w+@DirectUI@@W", s_dll)
+            if m2t and m3t:
+                return True
+            # one side a strict prefix of the other (truncation)
+            shorter = s_obj if len(s_obj) <= len(s_dll) else s_dll
+            longer = s_dll if shorter is s_obj else s_obj
+            if longer.startswith(shorter):
+                # the prefix boundary must sit at the access/
+                # adjustor zone ('@...E'/'@...M'/'@W'), not
+                # mid-signature
+                return bool(re.match(r"^(\?(\w+)@(\w+)@DirectUI@@)?"
+                                     r"[A-Z]*@?[A-Z]*$", shorter))
+            # access-letter skin: this-adjustor thunk ('MEAA') vs
+            # direct ('UEAA') when the subobject offset differs
+            # between layouts -- the access markers differ only in
+            # the leading letter (M = thunk form) and everything
+            # after must be equal
+            m2 = re.match(r"\?(\w+)@(\w+)@DirectUI@@([A-Z])(.*)$", s_obj)
+            m3 = re.match(r"\?(\w+)@(\w+)@DirectUI@@([A-Z])(.*)$", s_dll)
+            if m2 and m3 and m2.group(4) == m3.group(4) and \
+                    len(m2.group(3)) == len(m3.group(3)) == 1:
+                if {m2.group(3), m3.group(3)} <= {"E", "M", "U", "V",
+                                                   "W", "A", "B", "C",
+                                                   "D", "F", "G"}:
+                    # single-letter access zone: only the U<->M thunk
+                    # distinction may differ
+                    if (m2.group(3) == "U" and m3.group(3) == "M") or \
+                            (m2.group(3) == "M" and m3.group(3) == "U"):
+                        return True
+            # multi-letter access markers: equal after the first letter
+            m2b = re.match(r"\?\w+@\w+@DirectUI@@([A-Z]+)(.*)$", s_obj)
+            m3b = re.match(r"\?\w+@\w+@DirectUI@@([A-Z]+)(.*)$", s_dll)
+            if m2b and m3b and m2b.group(2) == m3b.group(2) and \
+                    len(m2b.group(1)) == len(m3b.group(1)) and \
+                    m2b.group(1)[1:] == m3b.group(1)[1:] and \
+                    {m2b.group(1)[0], m3b.group(1)[0]} == {"U", "M"}:
+                return True
+            return False
+
         if cls in mi_sec and primary_slots is not None:
             for base_name, sec in sorted(mi_sec[cls].items()):
                 sec_slots = sec["slots"]
-                got = tables.get(base_name, [])
+                # mi-tables keys may carry the trailing '@' collision
+                # suffix ('IFoo@'); the split keys are rstripped
+                got = tables.get(base_name) or tables.get(
+                    base_name.rstrip("@"), [])
                 if len(got) != len(sec_slots):
                     errs.append(
                         f"secondary {base_name}: slot count {len(got)} "
@@ -714,6 +791,12 @@ def main():
                     if sym in exp_set:
                         if len(exp_set) > 1:
                             unknowns.setdefault(cls, []).append(i)
+                        continue
+                    # thunk/truncation skin of the same member (see
+                    # _thunk_equiv in the primary loop): UNKNOWN, not
+                    # FAIL
+                    if any(_thunk_equiv(sym, x) for x in exp_set):
+                        unknowns.setdefault(cls, []).append(i)
                         continue
                     # fold pair in the secondary truth: any member
                     # accepted (member identity not provable)
@@ -776,9 +859,12 @@ def main():
                 if len(exp_set) > 1:
                     unknowns.setdefault(cls, []).append(i)
                 continue
-            # miss: maybe the probe subclass overrode a placeholder-ish
-            # slot that the DLL resolves to real code (ph slot set
-            # mismatch), or the identity truly diverges
+            # thunk/truncation skin of the same member (see
+            # _thunk_equiv above): UNKNOWN, not FAIL
+            if any(_thunk_equiv(sym, x) for x in exp_set):
+                unknowns.setdefault(cls, []).append(i)
+                continue
+
             def _cands():
                 # report ALL symbols at the slot's RVA (an ICF fold can
                 # carry dozens); never an arbitrary representative

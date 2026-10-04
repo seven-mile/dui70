@@ -341,6 +341,18 @@ def ctor_base_init(cls: str, symbols: list, classes: list,
 def render_tu(cls: str, members: list, data_members: list,
               tr: TypeTranslator, banner: str,
               base_init: str = "") -> str:
+    # MI classes whose headers deliberately skip re-declaring inherited
+    # members (e.g. the pattern-provider family's Init -- the template's
+    # Init owns the RefcountBase-secondary slot): the DLL still EXPORTS
+    # the member from the concrete class, so the stub TU must define it;
+    # a member-only declaration is injected first (a virtual declared
+    # only here keeps the vftable layout -- the slot is the same one the
+    # header chain already reserved).
+    mi_skip_members: dict[str, tuple[str, ...]] = {
+        "HWNDElementProvider": (
+            "long Init(HWNDElement* a0, InvokeHelper* a1)",
+        ),
+    }
     lines = [banner]
     tid = template_id(cls) if is_template_class(cls) else cls
     from emit_headers import GLOBAL_SCOPE_CLASSES
@@ -360,6 +372,11 @@ def render_tu(cls: str, members: list, data_members: list,
     if not global_cls:
         lines.append("namespace DirectUI")
         lines.append("{")
+        lines.append("")
+    # members the MI header chain inherits but the DLL exports from the
+    # concrete class: declare then define (see mi_skip_members above)
+    for decl in mi_skip_members.get(cls, ()):
+        lines.append(f"    {decl};")
         lines.append("")
     for sym in members:
         lines.append(render_definition(cls, sym, tr, base_init))

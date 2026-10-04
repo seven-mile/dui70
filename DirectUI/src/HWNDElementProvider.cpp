@@ -9,8 +9,6 @@
 namespace DirectUI
 {
 
-    long Init(HWNDElement* a0, InvokeHelper* a1);
-
 HWNDElementProvider::HWNDElementProvider(void)
 { }
 

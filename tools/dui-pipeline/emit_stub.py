@@ -373,11 +373,6 @@ def render_tu(cls: str, members: list, data_members: list,
         lines.append("namespace DirectUI")
         lines.append("{")
         lines.append("")
-    # members the MI header chain inherits but the DLL exports from the
-    # concrete class: declare then define (see mi_skip_members above)
-    for decl in mi_skip_members.get(cls, ()):
-        lines.append(f"    {decl};")
-        lines.append("")
     for sym in members:
         lines.append(render_definition(cls, sym, tr, base_init))
         lines.append("")

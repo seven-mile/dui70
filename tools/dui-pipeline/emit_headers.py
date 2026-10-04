@@ -2375,24 +2375,35 @@ def render_ep_provider_header(cls: str, members: list, data_members: list,
     for s in members:
         by_name.setdefault(s["member"], s)
     emitted = set()
+    # access-aware sections: the DLL's access bytes are part of the
+    # decorated export names (e.g. Init MEAA = protected, DoInvoke
+    # IEAA = private) -- public/protected/private blocks keep them
+    sections: dict[str, list[str]] = {"public": [], "protected": [],
+                                      "private": []}
     for name in rb_introduced:
         s = by_name.get(name)
         if s is None:
             continue
         md = MemberDecl(s, cls)
-        lines.append(f"        virtual {md.signature(tr)};")
+        sections[access_of(s)].append(
+            f"        virtual {md.signature(tr)};")
         emitted.add(name)
     # then the SDK overrides (their slots live in the SDK subobjects)
     for s in members:
         name = s["member"]
         if name in emitted or classify_dtor(s):
             continue
-        if not s.get("is_virtual"):
-            md = MemberDecl(s, cls)
-            lines.append(f"        {md.full_decl(tr)}")
-            continue
         md = MemberDecl(s, cls)
-        lines.append(f"        virtual {md.signature(tr)} override;")
+        if not s.get("is_virtual"):
+            sections[access_of(s)].append(f"        {md.full_decl(tr)}")
+            continue
+        sections[access_of(s)].append(
+            f"        virtual {md.signature(tr)} override;")
+    for sec in ("public", "protected", "private"):
+        if sections[sec]:
+            if sec != "public":
+                lines.append(f"    {sec}:")
+            lines.extend(sections[sec])
     lines.append("    };")
     lines.append("")
     lines.append("} // namespace DirectUI")
@@ -2473,26 +2484,34 @@ def render_hwnd_provider_header(cls: str, members: list, data_members: list,
     # parameter-covariance: a different first param = a NEW virtual) --
     # the DLL's RefcountBase subobject table carries it as slot 5, so
     # it IS declared here (a plain virtual, no override specifier).
+    # Access sections honor the DLL's access bytes (Init is MEAA =
+    # protected in the pinned exports).
     skip: set[str] = set()
     dtor = next((s for s in members if classify_dtor(s)), None)
     if dtor is not None:
         lines.append(f"        virtual ~{cls}(void);")
+    sections: dict[str, list[str]] = {"public": [], "protected": [],
+                                      "private": []}
     for s in members:
         name = s["member"]
         if name in skip or classify_dtor(s):
             continue
-        if not s.get("is_virtual"):
-            md = MemberDecl(s, cls)
-            lines.append(f"        {md.full_decl(tr)}")
-            continue
         md = MemberDecl(s, cls)
+        if not s.get("is_virtual"):
+            sections[access_of(s)].append(f"        {md.full_decl(tr)}")
+            continue
         sig = md.signature(tr)
         # Init HIDES the base's Init (different first param): a new
         # virtual, not an override
         if name == "Init":
-            lines.append(f"        virtual {sig};")
+            sections[access_of(s)].append(f"        virtual {sig};")
         else:
-            lines.append(f"        virtual {sig} override;")
+            sections[access_of(s)].append(f"        virtual {sig} override;")
+    for sec in ("public", "protected", "private"):
+        if sections[sec]:
+            if sec != "public":
+                lines.append(f"    {sec}:")
+            lines.extend(sections[sec])
     lines.append("    };")
     lines.append("")
     lines.append("} // namespace DirectUI")

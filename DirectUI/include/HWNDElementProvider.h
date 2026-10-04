@@ -38,9 +38,10 @@ namespace DirectUI
         virtual long ElementProviderFromPoint(double, double, IRawElementProviderFragment**) override;
         virtual long GetFocus(IRawElementProviderFragment**) override;
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
-        virtual long Init(HWNDElement*, InvokeHelper*);
         virtual long QueryInterface(_GUID const&, void**) override;
         virtual unsigned long Release(void) override;
+    protected:
+        virtual long Init(HWNDElement*, InvokeHelper*);
     };
 
 } // namespace DirectUI

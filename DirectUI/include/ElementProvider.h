@@ -51,13 +51,11 @@ namespace DirectUI
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual Element const volatile* GetElement(void);
         virtual void TossElement(void);
-        virtual long Init(Element*, InvokeHelper*);
         ElementProvider(void);
         virtual unsigned long AddRef(void) override;
         virtual long AdviseEventAdded(int, tagSAFEARRAY*) override;
         virtual long AdviseEventRemoved(int, tagSAFEARRAY*) override;
         static long Create(Element*, InvokeHelper*, ElementProvider**);
-        long DoInvoke(int, ...);
         long DoInvokeArgs(int, ProviderProxy* (__cdecl *)(Element*), char*);
         Element const* GetElementKey(void);
         virtual long GetEmbeddedFragmentRoots(tagSAFEARRAY**) override;
@@ -74,6 +72,9 @@ namespace DirectUI
         virtual long get_FragmentRoot(IRawElementProviderFragmentRoot**) override;
         virtual long get_HostRawElementProvider(IRawElementProviderSimple**) override;
         virtual long get_ProviderOptions(ProviderOptions*) override;
+    protected:
+        virtual long Init(Element*, InvokeHelper*);
+        long DoInvoke(int, ...);
     };
 
 } // namespace DirectUI

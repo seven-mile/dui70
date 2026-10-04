@@ -7,6 +7,8 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "Element.h"
+
 namespace DirectUI
 {
     class Element;
@@ -14,94 +16,25 @@ namespace DirectUI
     class Value;
 
     class HWNDHost
+        : public Element
     {
     public:
         HWNDHost(HWNDHost const&);
         HWNDHost(void);
         virtual ~HWNDHost(void);
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_1(void) = 0;
-        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
-        // ABI placeholder: real slot 3 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_3(void) = 0;
-        // ABI placeholder: real slot 4 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_4(void) = 0;
-        // ABI placeholder: real slot 5 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_5(void) = 0;
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        // ABI placeholder: real slot 7 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_7(void) = 0;
-        // ABI placeholder: real slot 8 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_8(void) = 0;
         virtual void OnInput(InputEvent*);
-        // ABI placeholder: real slot 10 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_10(void) = 0;
-        // ABI placeholder: real slot 11 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_11(void) = 0;
         virtual void OnDestroy(void);
         virtual void OnEvent(Event*);
         virtual void Paint(HDC__*, tagRECT const*, tagRECT const*, tagRECT*, tagRECT*);
-        // ABI placeholder: real slot 15 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_15(void) = 0;
-        // ABI placeholder: real slot 16 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_16(void) = 0;
-        // ABI placeholder: real slot 17 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_17(void) = 0;
-        // ABI placeholder: real slot 18 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_18(void) = 0;
-        // ABI placeholder: real slot 19 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_19(void) = 0;
-        // ABI placeholder: real slot 20 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_20(void) = 0;
         virtual void SetKeyFocus(void);
-        // ABI placeholder: real slot 22 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_22(void) = 0;
-        // ABI placeholder: real slot 23 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_23(void) = 0;
         virtual unsigned int MessageCallback(tagGMSG*);
-        // ABI placeholder: real slot 25 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_25(void) = 0;
-        // ABI placeholder: real slot 26 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_26(void) = 0;
-        // ABI placeholder: real slot 27 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_27(void) = 0;
-        // ABI placeholder: real slot 28 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_28(void) = 0;
 
         protected:
         virtual void OnHosted(Element*);
         virtual void OnUnHosted(Element*);
 
         public:
-        // ABI placeholder: real slot 31 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_31(void) = 0;
-        // ABI placeholder: real slot 32 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_32(void) = 0;
-        // ABI placeholder: real slot 33 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_33(void) = 0;
         virtual bool GetKeyFocused(void);
         virtual IClassInfo* GetClassInfoW(void);
 
@@ -112,48 +45,18 @@ namespace DirectUI
 
         public:
         virtual long GetAccessibleImpl(IAccessible**);
-
-        protected:
-        virtual HWND__* CreateHWND(HWND__*);
-
-        public:
-        // ABI placeholder: real slot 38 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_38(void) = 0;
-        // ABI placeholder: real slot 39 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_39(void) = 0;
-        // ABI placeholder: real slot 40 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_40(void) = 0;
-        // ABI placeholder: real slot 41 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_41(void) = 0;
-        // ABI placeholder: real slot 42 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_42(void) = 0;
-        // ABI placeholder: real slot 43 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_43(void) = 0;
-        // ABI placeholder: real slot 44 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_44(void) = 0;
         virtual HWND__* GetHWND(void);
+        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnSysChar(unsigned short);
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_48(void) = 0;
         virtual bool OnSinkThemeChanged(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnCtrlThemeChanged(unsigned int, unsigned __int64, __int64, __int64*);
         virtual void OnWindowStyleChanged(unsigned __int64, tagSTYLESTRUCT const*);
         virtual int OnAdjustWindowSize(int, int, unsigned int);
         virtual void SetWindowDirection(HWND__*);
-        // ABI placeholder: real slot 54 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_54(void) = 0;
 
         protected:
+        virtual HWND__* CreateHWND(HWND__*);
         virtual bool EraseBkgnd(HDC__*, __int64*);
 
         public:

@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCListView::CCListView(CCListView&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListView::CCListView(CCListView const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListView::CCListView(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListView::~CCListView(void)
 {}

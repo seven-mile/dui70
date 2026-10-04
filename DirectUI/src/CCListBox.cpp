@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCListBox::CCListBox(CCListBox&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListBox::CCListBox(CCListBox const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListBox::CCListBox(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCListBox::~CCListBox(void)
 {}

@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "Element.h"
+#include "HWNDHost.h"
 
 namespace DirectUI
 {
@@ -16,7 +16,7 @@ namespace DirectUI
     class Value;
 
     class Edit
-        : public Element
+        : public HWNDHost
     {
     public:
         Edit(Edit const&);
@@ -29,41 +29,10 @@ namespace DirectUI
         virtual tagSIZE GetContentSize(int, int, Surface*);
         virtual unsigned int MessageCallback(tagGMSG*);
         virtual IClassInfo* GetClassInfoW(void);
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_45(void) = 0;
         virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_49(void) = 0;
-        // ABI placeholder: real slot 50 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_50(void) = 0;
-        // ABI placeholder: real slot 51 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_51(void) = 0;
-        // ABI placeholder: real slot 52 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_52(void) = 0;
-        // ABI placeholder: real slot 53 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_53(void) = 0;
 
         protected:
         virtual HWND__* CreateHWND(HWND__*);
-
-        public:
-        // ABI placeholder: real slot 55 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_55(void) = 0;
-
-        protected:
         virtual HWND__* CreateHWND(HWND__*, bool);
 
         public:

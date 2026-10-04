@@ -204,17 +204,59 @@
   "Button": [
    "Element"
   ],
+  "CCAVI": [
+   "CCBase"
+  ],
+  "CCBase": [
+   "HWNDHost"
+  ],
+  "CCBaseCheckRadioButton": [
+   "CCBase"
+  ],
   "CCBaseScrollBar": [
    "BaseScrollBar",
+   "CCBase"
+  ],
+  "CCCheckBox": [
+   "CCBase"
+  ],
+  "CCCommandLink": [
    "CCBase"
   ],
   "CCHScrollBar": [
    "BaseScrollBar",
    "CCBase"
   ],
+  "CCListBox": [
+   "CCBase"
+  ],
+  "CCListView": [
+   "CCBase"
+  ],
+  "CCProgressBar": [
+   "CCBase"
+  ],
+  "CCPushButton": [
+   "CCBase"
+  ],
+  "CCRadioButton": [
+   "CCBase"
+  ],
+  "CCSysLink": [
+   "CCBase"
+  ],
+  "CCTrackBar": [
+   "CCBase"
+  ],
+  "CCTreeView": [
+   "CCBase"
+  ],
   "CCVScrollBar": [
    "BaseScrollBar",
    "CCBase"
+  ],
+  "Combobox": [
+   "HWNDHost"
   ],
   "DialogElement": [
    "HWNDElement",
@@ -229,7 +271,7 @@
    "IServiceProvider"
   ],
   "Edit": [
-   "Element"
+   "HWNDHost"
   ],
   "ElementProvider": [
    "IRawElementProviderAdviseEvents",
@@ -278,6 +320,9 @@
    "IEnumVARIANT",
    "IOleWindow",
    "IServiceProvider"
+  ],
+  "HWNDHost": [
+   "Element"
   ],
   "InvokeProvider": [
    "IProvider",

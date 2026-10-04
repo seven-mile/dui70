@@ -7,182 +7,26 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "CCBase.h"
+
 namespace DirectUI
 {
     class CCBaseCheckRadioButton;
     class Value;
 
     class CCBaseCheckRadioButton
+        : public CCBase
     {
     public:
         CCBaseCheckRadioButton(CCBaseCheckRadioButton&&);
         CCBaseCheckRadioButton(CCBaseCheckRadioButton const&);
         CCBaseCheckRadioButton(unsigned long);
         virtual ~CCBaseCheckRadioButton(void);
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_1(void) = 0;
         virtual bool OnLostDialogFocus(IDialogElement*);
-        // ABI placeholder: real slot 3 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_3(void) = 0;
-        // ABI placeholder: real slot 4 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_4(void) = 0;
         virtual bool OnReceivedDialogFocus(IDialogElement*);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        // ABI placeholder: real slot 7 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_7(void) = 0;
-        // ABI placeholder: real slot 8 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_8(void) = 0;
-        // ABI placeholder: real slot 9 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_9(void) = 0;
-        // ABI placeholder: real slot 10 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_10(void) = 0;
-        // ABI placeholder: real slot 11 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_11(void) = 0;
-        // ABI placeholder: real slot 12 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_12(void) = 0;
-        // ABI placeholder: real slot 13 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_13(void) = 0;
-        // ABI placeholder: real slot 14 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_14(void) = 0;
         virtual tagSIZE GetContentSize(int, int, Surface*);
-        // ABI placeholder: real slot 16 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_16(void) = 0;
-        // ABI placeholder: real slot 17 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_17(void) = 0;
-        // ABI placeholder: real slot 18 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_18(void) = 0;
-        // ABI placeholder: real slot 19 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_19(void) = 0;
-        // ABI placeholder: real slot 20 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_20(void) = 0;
-        // ABI placeholder: real slot 21 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_21(void) = 0;
-        // ABI placeholder: real slot 22 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_22(void) = 0;
-        // ABI placeholder: real slot 23 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_23(void) = 0;
-        // ABI placeholder: real slot 24 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_24(void) = 0;
-        // ABI placeholder: real slot 25 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_25(void) = 0;
-        // ABI placeholder: real slot 26 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_26(void) = 0;
-        // ABI placeholder: real slot 27 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_27(void) = 0;
-        // ABI placeholder: real slot 28 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_28(void) = 0;
-        // ABI placeholder: real slot 29 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_29(void) = 0;
-        // ABI placeholder: real slot 30 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_30(void) = 0;
-        // ABI placeholder: real slot 31 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_31(void) = 0;
-        // ABI placeholder: real slot 32 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_32(void) = 0;
-        // ABI placeholder: real slot 33 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_33(void) = 0;
-        // ABI placeholder: real slot 34 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
-        // ABI placeholder: real slot 36 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_36(void) = 0;
-        // ABI placeholder: real slot 37 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_37(void) = 0;
-        // ABI placeholder: real slot 38 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_38(void) = 0;
-        // ABI placeholder: real slot 39 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_39(void) = 0;
-        // ABI placeholder: real slot 40 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_40(void) = 0;
-        // ABI placeholder: real slot 41 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_41(void) = 0;
-        // ABI placeholder: real slot 42 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_42(void) = 0;
-        // ABI placeholder: real slot 43 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_43(void) = 0;
-        // ABI placeholder: real slot 44 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_44(void) = 0;
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_49(void) = 0;
-        // ABI placeholder: real slot 50 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_50(void) = 0;
-        // ABI placeholder: real slot 51 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_51(void) = 0;
-        // ABI placeholder: real slot 52 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_52(void) = 0;
-        // ABI placeholder: real slot 53 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_53(void) = 0;
-        // ABI placeholder: real slot 54 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_54(void) = 0;
-        // ABI placeholder: real slot 55 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_55(void) = 0;
-        // ABI placeholder: real slot 56 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_56(void) = 0;
-        // ABI placeholder: real slot 57 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_57(void) = 0;
-        // ABI placeholder: real slot 58 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBaseCheckRadioButton_58(void) = 0;
 
         protected:
         virtual void PostCreate(HWND__*);

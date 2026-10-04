@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCSysLink::CCSysLink(CCSysLink&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCSysLink::CCSysLink(CCSysLink const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCSysLink::CCSysLink(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCSysLink::~CCSysLink(void)
 {}

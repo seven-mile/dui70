@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCAVI::CCAVI(CCAVI&&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCAVI::CCAVI(CCAVI const&a0)
-{ }
+: CCBase(0, nullptr) { }
 
 CCAVI::CCAVI(void)
-{ }
+: CCBase(0, nullptr) { }
 
 CCAVI::~CCAVI(void)
 {}

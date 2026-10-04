@@ -7,185 +7,26 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "CCBase.h"
+
 namespace DirectUI
 {
     class CCSysLink;
     class Element;
 
     class CCSysLink
+        : public CCBase
     {
     public:
         CCSysLink(CCSysLink&&);
         CCSysLink(CCSysLink const&);
         CCSysLink(void);
         virtual ~CCSysLink(void);
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_1(void) = 0;
-        // ABI placeholder: real slot 2 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_2(void) = 0;
-        // ABI placeholder: real slot 3 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_3(void) = 0;
-        // ABI placeholder: real slot 4 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_4(void) = 0;
-        // ABI placeholder: real slot 5 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_5(void) = 0;
-        // ABI placeholder: real slot 6 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_6(void) = 0;
-        // ABI placeholder: real slot 7 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_7(void) = 0;
-        // ABI placeholder: real slot 8 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_8(void) = 0;
         virtual void OnInput(InputEvent*);
-        // ABI placeholder: real slot 10 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_10(void) = 0;
-        // ABI placeholder: real slot 11 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_11(void) = 0;
-        // ABI placeholder: real slot 12 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_12(void) = 0;
-        // ABI placeholder: real slot 13 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_13(void) = 0;
-        // ABI placeholder: real slot 14 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_14(void) = 0;
         virtual tagSIZE GetContentSize(int, int, Surface*);
-        // ABI placeholder: real slot 16 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_16(void) = 0;
-        // ABI placeholder: real slot 17 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_17(void) = 0;
-        // ABI placeholder: real slot 18 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_18(void) = 0;
-        // ABI placeholder: real slot 19 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_19(void) = 0;
-        // ABI placeholder: real slot 20 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_20(void) = 0;
-        // ABI placeholder: real slot 21 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_21(void) = 0;
-        // ABI placeholder: real slot 22 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_22(void) = 0;
-        // ABI placeholder: real slot 23 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_23(void) = 0;
-        // ABI placeholder: real slot 24 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_24(void) = 0;
-        // ABI placeholder: real slot 25 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_25(void) = 0;
-        // ABI placeholder: real slot 26 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_26(void) = 0;
-        // ABI placeholder: real slot 27 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_27(void) = 0;
-        // ABI placeholder: real slot 28 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_28(void) = 0;
-        // ABI placeholder: real slot 29 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_29(void) = 0;
-        // ABI placeholder: real slot 30 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_30(void) = 0;
-        // ABI placeholder: real slot 31 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_31(void) = 0;
-        // ABI placeholder: real slot 32 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_32(void) = 0;
-        // ABI placeholder: real slot 33 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_33(void) = 0;
-        // ABI placeholder: real slot 34 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_34(void) = 0;
         virtual IClassInfo* GetClassInfoW(void);
-        // ABI placeholder: real slot 36 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_36(void) = 0;
-        // ABI placeholder: real slot 37 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_37(void) = 0;
-        // ABI placeholder: real slot 38 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_38(void) = 0;
-        // ABI placeholder: real slot 39 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_39(void) = 0;
-        // ABI placeholder: real slot 40 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_40(void) = 0;
-        // ABI placeholder: real slot 41 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_41(void) = 0;
-        // ABI placeholder: real slot 42 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_42(void) = 0;
-        // ABI placeholder: real slot 43 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_43(void) = 0;
-        // ABI placeholder: real slot 44 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_44(void) = 0;
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_49(void) = 0;
-        // ABI placeholder: real slot 50 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_50(void) = 0;
-        // ABI placeholder: real slot 51 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_51(void) = 0;
-        // ABI placeholder: real slot 52 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_52(void) = 0;
-        // ABI placeholder: real slot 53 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_53(void) = 0;
-        // ABI placeholder: real slot 54 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_54(void) = 0;
-        // ABI placeholder: real slot 55 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_55(void) = 0;
-        // ABI placeholder: real slot 56 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_56(void) = 0;
         virtual bool OnLostDialogFocus(IDialogElement*);
         virtual bool OnReceivedDialogFocus(IDialogElement*);
-        // ABI placeholder: real slot 59 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCSysLink_59(void) = 0;
         CCSysLink& operator=(CCSysLink&&);
         CCSysLink& operator=(CCSysLink const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

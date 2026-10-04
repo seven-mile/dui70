@@ -1012,10 +1012,12 @@ def _bind_own_units(cls: str, unit_names: list,
             "-- refusing to guess an order")
 
     name_slot: dict[str, int] = {}
-    for s, u in claimed.items():
-        if u not in name_slot or s < name_slot[u]:
-            name_slot[u] = s
-    return name_slot, unbindable, name_slots
+    slots_of: dict[str, list[int]] = {}
+    for u in set(claimed.values()):
+        ss = sorted(s for s, uu in claimed.items() if uu == u)
+        slots_of[u] = ss
+        name_slot[u] = ss[0]
+    return name_slot, unbindable, name_slots, slots_of
 
 
 def contract_reorder(cls: str, members: list, slot_lists: list,
@@ -1037,7 +1039,7 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     for name, group in by_name.items():
         n_virtuals[name] = sum(1 for s in group if _is_vtable_virtual(s))
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, binder_unbound, name_slots_actual = _bind_own_units(
+    name_slot, binder_unbound, name_slots_actual, binder_slots = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
         base_prefix=base_prefix, base_names=base_names)
 
@@ -1059,15 +1061,20 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
             unit_order[name] = nonvirt + virt
             continue
         if len(virt) > 1:
-            # overload run occupies CONSECUTIVE slots starting at the
+            # Overloads normally occupy CONSECUTIVE slots starting at the
             # unit's base (MSVC assigns same-name overloads to adjacent
-            # slots in first-declaration order). Extra singleton
-            # occurrences of the name beyond base+k-1 belong to OTHER
-            # classes' same-named bodies (ICF) and are ignored here.
-            # Measured MSVC rule for adjacent pairs: the CONST
-            # first-param overload takes the LOWER slot, so emit
-            # non-const FIRST.
-            ss = list(range(s0, s0 + len(virt)))
+            # slots in first-declaration order). BUT the binder may have
+            # chosen a SPLIT assignment instead -- k singleton slots of
+            # this name separated by other members' slots (the real class
+            # interleaves the overloads, e.g. Edit::CreateHWND at 54/56
+            # with the base-inherited EraseBkgnd at 55). The emitted
+            # declaration order must follow the CHOSEN slots, one overload
+            # per slot in ascending order; a run is the special case
+            # slots = [s0, s0+1, ...]. Measured MSVC rule for adjacent
+            # pairs: the CONST first-param overload takes the LOWER slot.
+            ss = (list(binder_slots[name])
+                  if binder_slots.get(name) and len(binder_slots[name]) == len(virt)
+                  else list(range(s0, s0 + len(virt))))
             virt_sorted = sorted(virt, key=lambda s: (
                 1 if _first_param_const(s) else 0))
             set_slots[name] = ss
@@ -1148,14 +1155,49 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
         # the marker slot is covered by the dtor unit (never a placeholder)
         covered.add(dtor_slot)
 
+    def _is_split(n: str) -> bool:
+        ss = set_slots.get(n)
+        return bool(ss and len(ss) > 1
+                    and ss != list(range(ss[0], ss[0] + len(ss))))
+
+    # split units: slot -> the ONE virtual declared at that slot; the
+    # unit's non-virtual members (e.g. a static factory of the same
+    # name) lead at the unit's base slot
+    split_at: dict[int, list] = {}
+    split_lead: dict[str, list] = {}
+    for n in set_slots:
+        if _is_split(n):
+            virt = [s for s in unit_order[n] if _is_vtable_virtual(s)]
+            nonvirt = [s for s in unit_order[n] if not _is_vtable_virtual(s)]
+            ss = sorted(set_slots[n])
+            # virt was sorted const-first; a split's slots are ASCENDING,
+            # so pair them in ascending overload order
+            for s, sl in zip(virt, ss):
+                split_at.setdefault(sl, []).append(s)
+            split_lead[n] = nonvirt
+
     for slot in range(len(slot_lists)):
         if slot in covered:
             for n in sorted(base_to_units.get(slot, []),
                             key=lambda x: x):
                 if n in emitted:
                     continue
-                out.extend(unit_order[n])
-                emitted.add(n)
+                if _is_split(n):
+                    # non-virtual same-name members lead, then the
+                    # virtual for THIS slot; remaining overloads follow
+                    # at their own slots below
+                    for extra in split_lead.get(n, []):
+                        out.append(extra)
+                    for s in split_at.get(slot, []):
+                        out.append(s)
+                    emitted.add(n)
+                else:
+                    out.extend(unit_order[n])
+                    emitted.add(n)
+            # split-unit overloads whose own slot carries no base unit
+            for s in split_at.get(slot, []):
+                if s not in out:
+                    out.append(s)
         else:
             _ph(slot)
 
@@ -1252,13 +1294,18 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     n_virtuals = {n: sum(1 for s in g if _is_vtable_virtual(s))
                   for n, g in by_name.items()}
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, unbindable, name_slots_actual = _bind_own_units(
+    name_slot, unbindable, name_slots_actual, binder_slots = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
         base_prefix=base_prefix, base_names=base_names)
     covered = set()
     for n, s0v in name_slot.items():
+        # use the CHOSEN slot set (a split unit covers exactly its k
+        # singleton slots, not the run s0..s0+k-1)
         k = n_virtuals.get(n, 1)
-        covered.update(range(s0v, s0v + k))
+        ss = (list(binder_slots[n])
+              if binder_slots.get(n) and len(binder_slots[n]) == k
+              else list(range(s0v, s0v + k)))
+        covered.update(ss)
     covered |= covered_dtor
     # slots provided by a modeled base (its own table is the prefix of
     # this class's table) are INHERITED -- never placeholders
@@ -1425,13 +1472,46 @@ def base_list(inheritance: dict, cls: str) -> list:
     return [b for b in v if b]
 
 
+def base_chain_virtual_names(cls: str, inheritance: dict,
+                             exported_virtuals_by_class: dict | None) -> set:
+    """Names that the WHOLE base chain of `cls` declares as exported
+    virtuals (the override targets). A name qualifies when it BOTH
+    appears in some ancestor's contract table entries AND is exported by
+    that ancestor as a virtual (fold aliases from unrelated classes fail
+    the second test; ICF-folded true declarations pass both). An override
+    may target any ancestor's virtual, so the entire chain is walked.
+
+    Single source of truth: main() uses this for classification AND the
+    renderer uses the same set, so reported stats and emitted headers can
+    never diverge on which slots the base clause supplies.
+    """
+    names: set = set()
+    chain = list(base_list(inheritance, cls))
+    seen_b: set = set()
+    while chain:
+        b = chain.pop(0)
+        if b in seen_b:
+            continue
+        seen_b.add(b)
+        be = slot_tables_global.get(b)
+        if isinstance(be, dict) and isinstance(be.get("slots"), list):
+            tab_names = set()
+            for s in be["slots"]:
+                tab_names |= ({s} if isinstance(s, str) else set(s))
+            bv = (exported_virtuals_by_class or {}).get(b, set())
+            names |= (tab_names & bv)
+        chain.extend(base_list(inheritance, b))
+    return names
+
+
 def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
                         inheritance: dict, banner: str,
                         has_own_vftable: bool = False,
                         slot_lists: list | None = None,
                         base_prefix: int = 0,
-                        exported_virtuals_by_class: dict | None = None) -> str:
+                        exported_virtuals_by_class: dict | None = None,
+                        base_names: set | None = None) -> str:
     """Render one class header file content."""
     tpl = is_template_class(cls)
     tid = template_id(cls) if tpl else cls
@@ -1527,30 +1607,10 @@ def render_class_header(cls: str, members: list, data_members: list,
             if s.get("is_virtual") and s.get("is_exported"):
                 cls_exp_virt.add(s["member"])
         cls_exp_virt.discard(cls)  # dtor name is not a separate member
-        base_names = None
-        if base_prefix:
-            # a base-declared virtual = a name that BOTH appears in some
-            # ancestor's table entries AND is exported by that ancestor
-            # as a virtual (fold aliases from unrelated classes fail the
-            # second test; ICF-folded true declarations pass both).
-            # Walk the WHOLE base chain: an override may target any
-            # ancestor's virtual.
-            base_names = set()
-            chain = list(base_list(inheritance, cls))
-            seen_b = set()
-            while chain:
-                b = chain.pop(0)
-                if b in seen_b:
-                    continue
-                seen_b.add(b)
-                be = slot_tables_global.get(b)
-                if isinstance(be, dict) and isinstance(be.get("slots"), list):
-                    tab_names = set()
-                    for s in be["slots"]:
-                        tab_names |= ({s} if isinstance(s, str) else set(s))
-                    bv = (exported_virtuals_by_class or {}).get(b, set())
-                    base_names |= (tab_names & bv)
-                chain.extend(base_list(inheritance, b))
+        base_names = base_names if base_names is not None else (
+            base_chain_virtual_names(
+                cls, inheritance, exported_virtuals_by_class)
+            if base_prefix else None)
         classification = contract_classify(
             cls, members, slot_lists, cls_exp_virt,
             base_prefix=base_prefix or 0, base_names=base_names)
@@ -2517,20 +2577,28 @@ def main(argv=None) -> int:
         cls_exp_virt.discard(cls)
         classification = None
         base_prefix = 0
+        base_names = None
         if slot_lists is not None:
             for b in base_list(inheritance, cls):
                 be = slot_tables.get(b)
                 if isinstance(be, dict) and isinstance(be.get("slots"), list):
                     base_prefix = max(base_prefix, len(be["slots"]))
+            # SAME base-name set the renderer uses (single source:
+            # base_chain_virtual_names) -- classification stats and the
+            # emitted header must agree by construction, not by accident.
+            if base_prefix:
+                base_names = base_chain_virtual_names(
+                    cls, inheritance, exp_virt_by_class)
             classification = contract_classify(
                 cls, members, slot_lists, cls_exp_virt,
-                base_prefix=base_prefix)
+                base_prefix=base_prefix or 0, base_names=base_names)
         content = render_class_header(cls, members, data_members, tr,
                                       classes, inheritance, banner,
                                       has_own_vftable=has_own_vftable,
                                       slot_lists=slot_lists,
                                       base_prefix=base_prefix,
-                                      exported_virtuals_by_class=exp_virt_by_class)
+                                      exported_virtuals_by_class=exp_virt_by_class,
+                                      base_names=base_names)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
         if slot_lists is not None:
@@ -2545,6 +2613,37 @@ def main(argv=None) -> int:
     (out_dir / "dui_abi_types.h").write_text(render_abi_types_header(banner), encoding="utf-8", newline="\n")
     (out_dir / "Interfaces.h").write_text(render_interfaces_header(banner), encoding="utf-8", newline="\n")
     (out_dir / "DirectUI.h").write_text(render_aggregate_header(classes, banner), encoding="utf-8", newline="\n")
+
+    # ---- artifact consistency (fail-closed) ---------------------------
+    # The classification report and the emitted headers are two views of
+    # ONE classification; a placeholder must exist in the rendered file
+    # if and only if the classification counted it. Counting from the
+    # artifacts themselves (not the in-memory classification) catches any
+    # drift between the walk emission and the stats.
+    hdr_ph_by_class: dict[str, int] = {}
+    phre = re.compile(r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;")
+    for hf in sorted(out_dir.glob("*.h")):
+        phc = len(phre.findall(hf.read_text(encoding="utf-8")))
+        if phc:
+            hdr_ph_by_class[hf.stem] = phc
+    cls_ph_by_class = {r["cls"]: len(r["placeholders"])
+                       for r in v2_rows if r["mode"] == "bound"
+                       and r.get("placeholders")}
+    if hdr_ph_by_class != cls_ph_by_class:
+        only_hdr = {k: v for k, v in hdr_ph_by_class.items()
+                    if cls_ph_by_class.get(k) != v}
+        only_cls = {k: v for k, v in cls_ph_by_class.items()
+                    if hdr_ph_by_class.get(k) != v}
+        print("emit_headers: ERROR  placeholder accounting mismatch "
+              "between classification and emitted headers "
+              "(fail-closed)", file=sys.stderr)
+        for k, v in sorted(only_hdr.items()):
+            print(f"    header-only {k}: {v} vs classification "
+                  f"{cls_ph_by_class.get(k, 0)}", file=sys.stderr)
+        for k, v in sorted(only_cls.items()):
+            print(f"    classification-only {k}: {v} vs header "
+                  f"{hdr_ph_by_class.get(k, 0)}", file=sys.stderr)
+        return 2
 
     print(f"emit_headers: wrote {len(stats) + 3} files to {out_dir}")
     # v2 classification report: full-bound / placeholder-bound / rejected

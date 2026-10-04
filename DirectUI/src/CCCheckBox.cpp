@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCCheckBox::CCCheckBox(CCCheckBox&&a0)
-: CCBase(0, nullptr) { }
+: CCBaseCheckRadioButton(0) { }
 
 CCCheckBox::CCCheckBox(CCCheckBox const&a0)
-: CCBase(0, nullptr) { }
+: CCBaseCheckRadioButton(0) { }
 
 CCCheckBox::CCCheckBox(unsigned long a0)
-: CCBase(0, nullptr) { }
+: CCBaseCheckRadioButton(0) { }
 
 CCCheckBox::~CCCheckBox(void)
 {}

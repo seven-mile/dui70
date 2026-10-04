@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "CCBase.h"
+#include "CCBaseCheckRadioButton.h"
 
 namespace DirectUI
 {
@@ -15,7 +15,7 @@ namespace DirectUI
     class Element;
 
     class CCCheckBox
-        : public CCBase
+        : public CCBaseCheckRadioButton
     {
     public:
         CCCheckBox(CCCheckBox&&);
@@ -25,15 +25,6 @@ namespace DirectUI
         virtual void OnInput(InputEvent*);
         virtual IClassInfo* GetClassInfoW(void);
         virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
-        // ABI placeholder: real slot 60 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCCheckBox_60(void) = 0;
-        // ABI placeholder: real slot 61 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCCheckBox_61(void) = 0;
-        // ABI placeholder: real slot 62 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCCheckBox_62(void) = 0;
         CCCheckBox& operator=(CCCheckBox&&);
         CCCheckBox& operator=(CCCheckBox const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "CCBase.h"
+#include "CCPushButton.h"
 
 namespace DirectUI
 {
@@ -16,7 +16,7 @@ namespace DirectUI
     class Value;
 
     class CCCommandLink
-        : public CCBase
+        : public CCPushButton
     {
     public:
         CCCommandLink(CCCommandLink&&);
@@ -31,13 +31,7 @@ namespace DirectUI
         virtual void PostCreate(HWND__*);
 
         public:
-        // ABI placeholder: real slot 60 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCCommandLink_60(void) = 0;
         virtual void OnSelectedPropertyChanged(void);
-        // ABI placeholder: real slot 62 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCCommandLink_62(void) = 0;
         CCCommandLink& operator=(CCCommandLink&&);
         CCCommandLink& operator=(CCCommandLink const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

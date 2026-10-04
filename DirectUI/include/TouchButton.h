@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "Element.h"
+#include "RichText.h"
 
 namespace DirectUI
 {
@@ -15,7 +15,7 @@ namespace DirectUI
     class Value;
 
     class TouchButton
-        : public Element
+        : public RichText
     {
     public:
         enum ClickDevice { ClickDevice_None = 0 };

@@ -2,39 +2,43 @@
 
 // DirectUI::PatternProvider<ScrollItemProvider, IScrollItemProvider, 6> -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
-
 #include "RefcountBase.h"
 
-#include "ScrollItemProvider.h"
+#include "IProvider.h"
 
 namespace DirectUI
 {
     class Element;
     class ElementProvider;
     class ProviderProxy;
+}
+
+namespace DirectUI
+{
+    class ScrollItemProvider;
+    class IScrollItemProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
     template <>
     class PatternProvider<ScrollItemProvider, IScrollItemProvider, 6>
-        : public IProvider, public RefcountBase
+        : public RefcountBase, public IProvider
     {
     public:
-        PatternProvider<ScrollItemProvider, IScrollItemProvider, 6>(void);
         virtual ~PatternProvider<ScrollItemProvider, IScrollItemProvider, 6>(void);
+        PatternProvider<ScrollItemProvider, IScrollItemProvider, 6>(void);
         static long Create(ElementProvider*, IUnknown**);
+        long DoInvoke(int, ...);
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
-
-        protected:
-        long DoInvoke(int, ...);
     };
 
 } // namespace DirectUI

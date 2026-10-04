@@ -2,39 +2,43 @@
 
 // DirectUI::PatternProvider<GridItemProvider, IGridItemProvider, 2> -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
-
 #include "RefcountBase.h"
 
-#include "GridItemProvider.h"
+#include "IProvider.h"
 
 namespace DirectUI
 {
     class Element;
     class ElementProvider;
     class ProviderProxy;
+}
+
+namespace DirectUI
+{
+    class GridItemProvider;
+    class IGridItemProvider;
 
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
     template <>
     class PatternProvider<GridItemProvider, IGridItemProvider, 2>
-        : public IProvider, public RefcountBase
+        : public RefcountBase, public IProvider
     {
     public:
-        PatternProvider<GridItemProvider, IGridItemProvider, 2>(void);
         virtual ~PatternProvider<GridItemProvider, IGridItemProvider, 2>(void);
+        PatternProvider<GridItemProvider, IGridItemProvider, 2>(void);
         static long Create(ElementProvider*, IUnknown**);
+        long DoInvoke(int, ...);
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
-
-        protected:
-        long DoInvoke(int, ...);
     };
 
 } // namespace DirectUI

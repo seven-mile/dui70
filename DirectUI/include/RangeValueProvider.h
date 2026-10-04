@@ -2,43 +2,42 @@
 
 // DirectUI::RangeValueProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "IRangeValueProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_RangeValueProvider_IRangeValueProvider_4.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class RangeValueProvider
-        : public IProvider, public RefcountBase
+        : public IRangeValueProvider, public PatternProvider<RangeValueProvider, IRangeValueProvider, 4>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        RangeValueProvider(void);
         virtual ~RangeValueProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long SetValue(double);
-        virtual long get_IsReadOnly(int*);
-        virtual long get_LargeChange(double*);
-        virtual long get_Maximum(double*);
-        virtual long get_Minimum(double*);
-        virtual long get_SmallChange(double*);
-        virtual long get_Value(double*);
+        RangeValueProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long SetValue(double) override;
+        virtual long get_IsReadOnly(int*) override;
+        virtual long get_LargeChange(double*) override;
+        virtual long get_Maximum(double*) override;
+        virtual long get_Minimum(double*) override;
+        virtual long get_SmallChange(double*) override;
+        virtual long get_Value(double*) override;
     };
 
 } // namespace DirectUI

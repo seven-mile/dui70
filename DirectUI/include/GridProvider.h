@@ -2,39 +2,38 @@
 
 // DirectUI::GridProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "IGridProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_GridProvider_IGridProvider_3.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class GridProvider
-        : public IProvider, public RefcountBase
+        : public IGridProvider, public PatternProvider<GridProvider, IGridProvider, 3>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        GridProvider(void);
         virtual ~GridProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long GetItem(int, int, IRawElementProviderSimple**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long get_ColumnCount(int*);
-        virtual long get_RowCount(int*);
+        GridProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual long GetItem(int, int, IRawElementProviderSimple**) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long get_ColumnCount(int*) override;
+        virtual long get_RowCount(int*) override;
     };
 
 } // namespace DirectUI

@@ -9,19 +9,31 @@
 
 namespace DirectUI
 {
-    class IProvider;
-
     class IProvider
     {
     public:
     public:
-        virtual unsigned long AddRef(void) = 0;
+        // W5 stage-2 schema-2: the real single
+        // interface method (pinned mi-tables.json:
+        // IProvider secondary length 1, manual input).
+        // Return type: the fn-pointer shape comes from the
+        // concrete overrides' pinned signature
+        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ).
+        class ProviderProxy;
+        class Element;
+        typedef ProviderProxy* (__cdecl* ProxyCreatorFn)(Element*);
+        virtual ProxyCreatorFn GetProxyCreator(void) = 0;
 
-        IProvider(IProvider&&);
-        IProvider(IProvider const&);
+    private:
+        // ICF-fold ctor/assign exports: compiler
+        // artifacts, not interface methods;
+        // defined out-of-line in the stub TU.
         IProvider(void);
-        IProvider& operator=(IProvider&&);
+        IProvider(IProvider const&);
+        IProvider(IProvider&&);
         IProvider& operator=(IProvider const&);
+        IProvider& operator=(IProvider&&);
+
     };
 
 } // namespace DirectUI

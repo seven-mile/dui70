@@ -2,20 +2,20 @@
 
 // DirectUI::HWNDElementProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission (HWNDElementProvider family): base-subobject
+// vftables verified against pinned mi-tables.json (schema 2).
+// Primary table (unsuffixed ??_7): 5 slots whose tail is
+// IRawElementProviderFragmentRoot's method pair --
+// content-derived ownership (the table symbol carries no
+// base name). The 4 secondary tables name their bases.
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "RefcountBase.h"
+#include <UIAutomationCore.h>
 
-#include "UIAutomationCore.h"
-
-#include "UIAutomationCore.h"
-
-#include "UIAutomationCore.h"
-
-#include <UIAutomationCore.h>  // Option D quarantine: SDK UIA types
+#include "ElementProvider.h"
 
 namespace DirectUI
 {
@@ -23,29 +23,23 @@ namespace DirectUI
     class HWNDElement;
     class HWNDElementProvider;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class HWNDElementProvider
-        : public IRawElementProviderAdviseEvents, public IRawElementProviderFragment, public IRawElementProviderSimple2, public RefcountBase
+        : public IRawElementProviderFragmentRoot, public ElementProvider
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator, Init
-
-        HWNDElementProvider(void);
         virtual ~HWNDElementProvider(void);
-        virtual unsigned long AddRef(void);
+        HWNDElementProvider(void);
+        virtual unsigned long AddRef(void) override;
         static long Create(HWNDElement*, InvokeHelper*, HWNDElementProvider**);
-        virtual long ElementProviderFromPoint(double, double, IRawElementProviderFragment**);
-        virtual long GetFocus(IRawElementProviderFragment**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-
-        protected:
-        virtual long Init(HWNDElement*, InvokeHelper*);
+        virtual long ElementProviderFromPoint(double, double, IRawElementProviderFragment**) override;
+        virtual long GetFocus(IRawElementProviderFragment**) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
     };
 
 } // namespace DirectUI

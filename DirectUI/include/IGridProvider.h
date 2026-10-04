@@ -9,17 +9,30 @@
 
 #include "dui_abi_types.h"
 
+// Mode semantics (Option D):
+//   default (provider-only / SDK-first alike): this header
+//     includes the SDK UIAutomationCore.h and the SDK MIDL
+//     interface of this name is THE base in the TU; the
+//     generated struct below stays yield-guarded out
+//     (pinned-signature documentation).
+//   DUI_ABI_PROVIDER_ABI_REQUIRED: HARD ERROR. This header is
+//     INHERENTLY SDK-coupled -- its method signatures use SDK
+//     UIA types (IRawElementProviderSimple*, ScrollAmount,
+//     ToggleState*, ...), so no SDK-free form of it can
+//     compile. An ABI-critical TU that must not mix SDK UIA
+//     interfaces and generated ABI structs must not include
+//     this header at all. The check runs BEFORE the SDK
+//     include so the error reports the mode violation, not
+//     the include's side effect.
+#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED
+#error "DUI_ABI_PROVIDER_ABI_REQUIRED: pattern interface headers are SDK-coupled by signature; a provider-ABI-required TU must not include this header (the SDK UIAutomationCore.h interfaces are mandatory here)"
+#endif
+
 // Option D: this interface's methods use SDK UIA types
 // (IRawElementProviderSimple*, ScrollAmount, ...). The SDK
 // header is therefore pulled HERE, before the yield check --
 // the SDK MIDL interface is the base in every TU.
 #include <UIAutomationCore.h>
-
-#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED
-#ifdef __uiautomationcore_h__
-#error "DUI_ABI_PROVIDER_ABI_REQUIRED: UIAutomationCore.h is in the TU; provider ABI TUs must not mix SDK UIA interfaces and generated ABI structs"
-#endif
-#endif
 
 struct IGridProvider;
 

@@ -834,9 +834,22 @@ def mi_provider_shape(mi_entry: dict) -> dict | None:
       * primary table with length provenance next-vftable (in-binary
         bound) whose first three slots are exactly the IUnknown trio
       * IProvider secondary: exactly 1 slot resolving GetProxyCreator,
-        length provenance manual (the manual interface-length input)
+        length provenance manual
       * RefcountBase secondary: exactly 2 slots, slot0 a dtor marker
         (_E.../_G.../fold containing one), length provenance manual
+
+    MANUAL LENGTH PROVENANCE IS AN EXPLICIT ABI INPUT, NOT A DERIVED
+    FACT: interface method COUNTS are not derivable from a single
+    binary when a table's tail is unobservable (the next vftable
+    follows contiguously; nothing in the bytes says where one
+    interface's method list ends). The input lives in
+    pinned/mi-interface-lengths.json (G1-locked via pinned.sha256),
+    carries its own notes, and is cross-checked by R3'' (re-derivation
+    of the mi-tables derived section) plus a negative control: feeding
+    a WRONG length for one interface must flip the affected class's
+    slot table (the audit's paired tamper test). It is consumed here as
+    a declared human ABI contract input -- never presented as binary-
+    derived evidence.
     """
     if not isinstance(mi_entry, dict):
         return None
@@ -868,6 +881,84 @@ def mi_provider_shape(mi_entry: dict) -> dict | None:
     # pattern method names after the IUnknown trio (skip folds with
     # unknown identity: they become placeholders in the interface)
     return {"pattern_methods": slots[3:]}
+
+
+# HWNDElementProvider family (the 14th native UIA provider): the DLL's
+# bare ??_7 primary table is 5 slots whose tail (slots 3-4) is exactly
+# IRawElementProviderFragmentRoot's own method pair
+# (ElementProviderFromPoint, GetFocus). The 4 secondary tables name their
+# bases directly: 3 SDK interfaces (AdviseEvents/Fragment/Simple2, all
+# next-vftable bounded) + RefcountBase (manual, [_E marker, GetProxyCreator]).
+# Evidence: pinned vftable symbols
+#   ??_7HWNDElementProvider@DirectUI@@6B@                       (5 slots)
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderFragment@@
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderSimple2@@
+#   ??_7HWNDElementProvider@DirectUI@@6BRefcountBase@1@@
+# The FragmentRoot ownership of the primary is content-derived (slot
+# names), not name-derived -- the strongest evidence available for an
+# unsuffixed table.
+HWND_PROVIDER_SECONDARIES = (
+    "IRawElementProviderAdviseEvents",
+    "IRawElementProviderFragment",
+    "IRawElementProviderSimple2",
+)
+HWND_PROVIDER_PRIMARY_TAIL = ("ElementProviderFromPoint", "GetFocus")
+
+
+def hwnd_provider_shape(mi_entry: dict) -> dict | None:
+    """Validate the HWNDElementProvider family MI shape.
+
+    Returns {"primary_iface": "IRawElementProviderFragmentRoot",
+    "primary_tail": [...]} when the entry matches, else None.
+    """
+    if not isinstance(mi_entry, dict):
+        return None
+    pri = mi_entry.get("primary")
+    secs = mi_entry.get("secondaries") or {}
+    if not isinstance(pri, dict):
+        return None
+    if pri.get("length_provenance") != "next-vftable":
+        return None
+    slots = pri.get("slots")
+    if not isinstance(slots, list) or len(slots) != 5:
+        return None
+    for i, want in enumerate(MI_PROVIDER_MIN_SHAPE):
+        if slots[i] != want:
+            return None
+    if tuple(slots[3:5]) != HWND_PROVIDER_PRIMARY_TAIL:
+        return None
+    for b in HWND_PROVIDER_SECONDARIES:
+        # mi-tables keys carry a trailing '@' collision suffix for the
+        # SDK secondaries ('IRawElementProviderAdviseEvents@'); match by
+        # prefix
+        sb = next((v for k, v in secs.items()
+                   if k.rstrip("@") == b), None)
+        if not isinstance(sb, dict):
+            return None
+        if sb.get("length_provenance") != "next-vftable":
+            return None
+        bs = sb.get("slots")
+        if not isinstance(bs, list) or len(bs) < 4:
+            return None
+        if bs[:3] != list(MI_PROVIDER_MIN_SHAPE):
+            return None
+    rb = secs.get("RefcountBase")
+    if not isinstance(rb, dict):
+        return None
+    if rb.get("length_provenance") != "manual":
+        return None
+    rbs = rb.get("slots")
+    if not isinstance(rbs, list) or len(rbs) != 2:
+        return None
+    s0 = rbs[0]
+    s0names = [s0] if isinstance(s0, str) else list(s0 or [])
+    if not any(n.startswith(("_E", "_G")) for n in s0names):
+        return None
+    if rbs[1] != "GetProxyCreator":
+        return None
+    return {"primary_iface": "IRawElementProviderFragmentRoot",
+            "primary_tail": list(slots[3:])}
 
 
 def mi_pattern_iface_name(cls: str) -> str:
@@ -1866,9 +1957,12 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
     flag, pinned by G4) the SDK-derived overrides mangle exactly like
     the pinned exports (measured 13/13, symbol-exact).
 
-    REQUIRED state: DUI_ABI_PROVIDER_ABI_REQUIRED hard-errors if the
-    SDK header is in the TU -- for ABI-critical TUs that must never
-    mix the SDK interfaces with anything else.
+    REQUIRED state: DUI_ABI_PROVIDER_ABI_REQUIRED hard-errors BEFORE the
+    SDK include. This header is INHERENTLY SDK-coupled (its method
+    signatures use SDK UIA types -- a SDK-free form cannot compile), so
+    the coherent REQUIRED semantics are "this header must not be included
+    in an ABI-critical TU at all", stated explicitly rather than the
+    tautological post-include guard check.
     """
     lines = [banner,
              f"// {iface} -- UIA pattern interface synthesized",
@@ -1880,17 +1974,30 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
              "",
              '#include "dui_abi_types.h"',
              "",
+             "// Mode semantics (Option D):",
+             "//   default (provider-only / SDK-first alike): this header",
+             "//     includes the SDK UIAutomationCore.h and the SDK MIDL",
+             "//     interface of this name is THE base in the TU; the",
+             "//     generated struct below stays yield-guarded out",
+             "//     (pinned-signature documentation).",
+             "//   DUI_ABI_PROVIDER_ABI_REQUIRED: HARD ERROR. This header is",
+             "//     INHERENTLY SDK-coupled -- its method signatures use SDK",
+             "//     UIA types (IRawElementProviderSimple*, ScrollAmount,",
+             "//     ToggleState*, ...), so no SDK-free form of it can",
+             "//     compile. An ABI-critical TU that must not mix SDK UIA",
+             "//     interfaces and generated ABI structs must not include",
+             "//     this header at all. The check runs BEFORE the SDK",
+             "//     include so the error reports the mode violation, not",
+             "//     the include's side effect.",
+             "#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED",
+             '#error "DUI_ABI_PROVIDER_ABI_REQUIRED: pattern interface headers are SDK-coupled by signature; a provider-ABI-required TU must not include this header (the SDK UIAutomationCore.h interfaces are mandatory here)"',
+             "#endif",
+             "",
              "// Option D: this interface's methods use SDK UIA types",
              "// (IRawElementProviderSimple*, ScrollAmount, ...). The SDK",
              "// header is therefore pulled HERE, before the yield check --",
              "// the SDK MIDL interface is the base in every TU.",
              "#include <UIAutomationCore.h>",
-             "",
-             "#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED",
-             "#ifdef __uiautomationcore_h__",
-             '#error "DUI_ABI_PROVIDER_ABI_REQUIRED: UIAutomationCore.h is in the TU; provider ABI TUs must not mix SDK UIA interfaces and generated ABI structs"',
-             "#endif",
-             "#endif",
              "",
              f"struct {iface};",
              "",
@@ -1908,21 +2015,29 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
     for s in members:
         by_name.setdefault(s["member"], s)
     slot_names = list(MI_PROVIDER_MIN_SHAPE) + list(mi_shape["pattern_methods"])
-    used: set[str] = set()
     for slot in slot_names:
         names = [slot] if isinstance(slot, str) else list(slot or [])
-        # fold pair (e.g. two slots sharing one body, candidates
-        # [get_ColumnSpan, get_RowSpan] on BOTH): assign each name to
-        # exactly one slot in first-appearance order -- deterministic,
-        # and every fold candidate stays declared exactly once
-        resolved = next((n for n in names if n in by_name
-                         and n not in used), None)
-        if resolved is not None:
-            used.add(resolved)
+        if isinstance(slot, list):
+            # ICF fold pair (e.g. two slots sharing one body, candidates
+            # [get_ColumnSpan, get_RowSpan] on BOTH slots): the pinned
+            # data cannot prove WHICH member sits in WHICH slot --
+            # member-level identity is fold-UNKNOWN. Emitting a guessed
+            # first-appearance pick would assert an ordering the DLL
+            # bytes do not determine; instead BOTH fold slots carry
+            # ABI placeholders (slot COUNT and vftable layout stay
+            # exact; the two candidate declarations are documented in
+            # the comment). The G4-Y R2 check verifies the layout
+            # fold-tolerantly and records these slots as fold-UNKNOWN.
+            cand = ", ".join(n for n in names if n in by_name)
+            lines.append("    // ABI placeholder: ICF fold slot -- the")
+            lines.append("    // pinned DLL data cannot determine which")
+            lines.append(f"    // member ({{ {cand} }}) occupies this slot;")
+            lines.append("    // member-level identity stays fold-UNKNOWN.")
+            lines.append(f"    virtual void __DuiAbiSlot_{iface}_{len(lines)}(void) = 0;")
+            continue
+        resolved = slot if slot in by_name else None
         if resolved is None:
-            resolved = next((n for n in names if n in by_name), None)
-        if resolved is None:
-            # fold entry with no recoverable signature: placeholder
+            # singleton entry with no recoverable signature: placeholder
             # (declared in order -- the slot stays ABI-true)
             lines.append("    // ABI placeholder: fold slot, member-level")
             lines.append("    // identity not provable from the pinned data.")
@@ -2031,6 +2146,13 @@ def render_mi_provider_header(cls: str, members: list, data_members: list,
     specialization id both come from pinned data; nothing is guessed.
     """
     iface = mi_pattern_iface_name(cls)
+    if "primary_iface" in mi_shape:
+        # HWNDElementProvider family: no PatternProvider intermediate;
+        # bases = the primary SDK interface + ElementProvider (which
+        # carries the 3 SDK secondaries + RefcountBase). The class's own
+        # exported overrides bind to the primary iface's slots.
+        return render_hwnd_provider_header(
+            cls, members, data_members, tr, classes, banner, mi_shape)
     tpl_id = mi_template_class_id(cls, classes)
     assert tpl_id is not None, (
         f"MI provider {cls}: no PatternProvider<cls, ...> specialization "
@@ -2079,6 +2201,99 @@ def render_mi_provider_header(cls: str, members: list, data_members: list,
             continue
         if not s.get("is_virtual"):
             # non-virtual exported members keep their declarations
+            md = MemberDecl(s, cls)
+            lines.append(f"        {md.full_decl(tr)}")
+            continue
+        md = MemberDecl(s, cls)
+        sig = md.signature(tr)
+        lines.append(f"        virtual {sig} override;")
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_hwnd_provider_header(cls: str, members: list, data_members: list,
+                                tr: TypeTranslator, classes: list,
+                                banner: str, mi_shape: dict) -> str:
+    """Render the HWNDElementProvider-family MI class header.
+
+    DLL truth (pinned vftable symbols + mi-tables.json schema 2):
+        ??_7<cls>@DirectUI@@6B@                       -- primary, 5 slots
+            [QueryInterface, AddRef, Release,
+             ElementProviderFromPoint, GetFocus]
+            == IRawElementProviderFragmentRoot's table (content-derived:
+            the unsuffixed table's tail is exactly FragmentRoot's method
+            pair; the suffixed tables name the other 4 bases directly)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderAdviseEvents@@  (secondary)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderFragment@@       (secondary)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderSimple2@@        (secondary)
+        ??_7<cls>@DirectUI@@6BRefcountBase@1@@        (secondary, manual)
+
+    Layout:
+        class <cls> : public IRawElementProviderFragmentRoot,
+                      public ElementProvider
+        ElementProvider.h already declares its 4 bases (the 3 SDK
+        secondaries + RefcountBase) -- deriving it reproduces those
+        subobject tables exactly.
+
+    The 13 SDK pure virtuals ElementProvider does not override stay
+    unimplemented: the class is abstract, exactly like the DLL's own
+    (their bodies are non-exported). Consumers hold pointers; the
+    ABI-relevant facts are the vftable layouts, all pinned above.
+    """
+    primary_iface = mi_shape["primary_iface"]
+    lines = [banner,
+             f"// DirectUI::{cls} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             "// W5 stage-2 MI emission (HWNDElementProvider family): "
+             "base-subobject",
+             "// vftables verified against pinned mi-tables.json "
+             "(schema 2).",
+             "// Primary table (unsuffixed ??_7): 5 slots whose tail is",
+             "// IRawElementProviderFragmentRoot's method pair --",
+             "// content-derived ownership (the table symbol carries no",
+             "// base name). The 4 secondary tables name their bases.",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             f"#include <{EXTERNAL_BASE_INCLUDES[primary_iface]}>",
+             "",
+             '#include "ElementProvider.h"',
+             ""]
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {cls}")
+    lines.append(f"        : public {primary_iface}, public ElementProvider")
+    lines.append("    {")
+    lines.append("    public:")
+    # the class's own exported overrides (QI/AddRef/Release pair the
+    # FragmentRoot slots; ElementProviderFromPoint/GetFocus land at
+    # FragmentRoot slots 3/4). Init is inherited from the RefcountBase
+    # secondary's owner chain -- NOT re-declared (same rule as the
+    # pattern-provider family).
+    skip = {"Init"}
+    dtor = next((s for s in members if classify_dtor(s)), None)
+    if dtor is not None:
+        lines.append(f"        virtual ~{cls}(void);")
+    for s in members:
+        name = s["member"]
+        if name in skip or classify_dtor(s):
+            continue
+        if not s.get("is_virtual"):
             md = MemberDecl(s, cls)
             lines.append(f"        {md.full_decl(tr)}")
             continue
@@ -3337,6 +3552,13 @@ def main(argv=None) -> int:
                 shape = mi_provider_shape(entry)
                 if shape is not None:
                     mi_shapes[cls] = shape
+                    continue
+                # the 14th native UIA provider family
+                # (HWNDElementProvider): primary =
+                # IRawElementProviderFragmentRoot + 4 secondaries
+                shape = hwnd_provider_shape(entry)
+                if shape is not None:
+                    mi_shapes[cls] = shape
         n_mi = len(mi_shapes) + len(mi_template_shapes)
         print(f"emit_headers: schema-2 MI tables loaded "
               f"({len(mi_doc.get('derived') or {})} classes; "
@@ -3408,6 +3630,14 @@ def main(argv=None) -> int:
                 override_votes=override_votes, mi_shape=mi_shape)
             (out_dir / f"{safe_name(cls)}.h").write_text(
                 content, encoding="utf-8", newline="\n")
+            if "primary_iface" in mi_shape:
+                # HWNDElementProvider family: the primary interface is a
+                # REAL SDK interface (UIAutomationCore.h owns it under
+                # Option D) and there is no PatternProvider intermediate
+                # -- no generated interface/template headers
+                stats[cls] = {"methods": len(members),
+                              "data": len(data_members), "mi": True}
+                continue
             # the pattern interface header (primary-table slot order)
             iface = mi_pattern_iface_name(cls)
             iface_content = render_mi_pattern_iface_header(
@@ -3493,6 +3723,28 @@ def main(argv=None) -> int:
     cls_ph_by_class = {r["cls"]: len(r["placeholders"])
                        for r in v2_rows if r["mode"] == "bound"
                        and r.get("placeholders")}
+    # MI pattern-interface headers carry fold placeholders by design
+    # (fold entries emit ABI placeholders -- no first-appearance pick).
+    # The expected count per iface = its mi_shape fold entries (the same
+    # data the renderer used), so the accounting stays artifact-derived
+    # and fail-closed on any drift.
+    iface_ph: dict[str, int] = {}
+    if mi_doc is not None:
+        for cls, shape in mi_shapes.items():
+            if "primary_iface" in shape or "pattern_methods" not in shape:
+                continue
+            n = sum(1 for s in shape["pattern_methods"]
+                    if isinstance(s, list))
+            if n:
+                iface_ph[mi_pattern_iface_name(cls)] = n
+    for k, v in iface_ph.items():
+        if hdr_ph_by_class.get(k) != v:
+            print(f"emit_headers: ERROR  MI iface {k}: header has "
+                  f"{hdr_ph_by_class.get(k, 0)} placeholders, mi-shape "
+                  f"expects {v} (fail-closed)", file=sys.stderr)
+            return 2
+        # account for: remove from the strict cross-check below
+        hdr_ph_by_class.pop(k, None)
     if hdr_ph_by_class != cls_ph_by_class:
         only_hdr = {k: v for k, v in hdr_ph_by_class.items()
                     if cls_ph_by_class.get(k) != v}

@@ -10,6 +10,14 @@
   "all next-vftable-bounded). RefcountBase=2: vector dtor + Init",
   "(observed 13/13 concrete providers). Interface method COUNT is an",
   "ABI contract fact, not derivable from a single binary when the tail",
-  "is unobservable."
+  "is unobservable.",
+  "",
+  "STATUS: EXPLICIT ABI INPUT with negative proof. A WRONG value here",
+  "must change the affected classes' emitted slot tables (tamper",
+  "control: flipping RefcountBase to 3 makes mi_provider_shape reject",
+  "the family -- every provider falls back to schema-1 REJECTED",
+  "headers, G4/G4-Y fail loudly). The value is never claimed as",
+  "binary-derived evidence; emission REQUIRES it (fail-closed when",
+  "absent)."
  ]
 }

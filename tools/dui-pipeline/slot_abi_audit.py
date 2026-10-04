@@ -571,8 +571,9 @@ def main():
                         continue
                     key = m.group(1)
                     # the COL path may carry the collision-number suffix
-                    # ('RefcountBase@1@'): keep the bare base name so it
-                    # matches mi-tables.json's secondary keys
+                    # ('RefcountBase@1@') or a trailing '@' for external
+                    # interface secondaries ('IFoo@'): keep the bare base
+                    # name so it matches mi-tables.json's secondary keys
                     key = re.sub(r"@\d+@$", "@", key).rstrip("@")
                     tables[key] = [sym for _, sym in r[1:]]
             return tables

@@ -245,3 +245,16 @@ ModelManifest.xml
 .fake/
 # Python bytecode
 __pycache__/
+
+# Local scratch area: audit notes, derived build outputs, downloaded artefacts.
+#
+# Root-anchored on purpose. An unanchored `.local/` also matches at any depth,
+# so a future `packages/.local/` would be silently swallowed; `.local/` nested
+# elsewhere in this repo is always inside this tree anyway, but the narrower
+# rule keeps the intent exact.
+#
+# This was previously ignored only by .git/info/exclude, which is per-clone and
+# NOT committed -- so on a fresh clone and on CI the whole tree was visible.
+# Note gitignore cannot re-include a file inside an ignored directory: to track
+# something here, use its own path or `git add -f`, not a `!` rule.
+/.local/

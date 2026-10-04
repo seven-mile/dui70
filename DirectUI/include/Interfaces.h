@@ -120,18 +120,22 @@ namespace DirectUI
         IClassInfo() {}
         IClassInfo(const IClassInfo&) = delete;
         IClassInfo& operator=(const IClassInfo&) = delete;
-        virtual ~IClassInfo() {}
 
     public:
-        // slots follow the DirectUI order (AddRef..AssertPIZeroRef,
-        // then the deleting dtor)
+        // slots 0-17: business methods in the pinned
+        // ClassInfoBase primary order (declaration order
+        // == vtable slot order; the deleting dtor is the
+        // TAIL slot 18).
         virtual long AddRef(void) = 0;                                   // 0
         virtual long Release(void) = 0;                                 // 1
+        // slot 2 -- _purecall in the real DLL (abstract here;
+        // signature from derived overrides, e.g. ElementClassInfo)
         virtual long CreateInstance(Element*, unsigned long*, Element**) = 0;  // 2
         virtual PropertyInfo* EnumPropertyInfo(unsigned int) = 0;       // 3
         virtual PropertyInfo* GetByClassIndex(unsigned int) = 0;        // 4
         virtual unsigned int GetPICount(void) = 0;                     // 5
         virtual unsigned int GetGlobalIndex(void) = 0;                 // 6
+        // slot 7 -- _purecall in the real DLL (abstract here)
         virtual IClassInfo* GetBaseClass(void) = 0;                    // 7
         virtual UCString GetName(void) = 0;                            // 8
         virtual bool IsValidProperty(PropertyInfo const*) = 0;        // 9
@@ -143,6 +147,11 @@ namespace DirectUI
         virtual void RemoveChild(void) = 0;                           // 15
         virtual unsigned int GetChildren(void) = 0;                   // 16
         virtual void AssertPIZeroRef(void) = 0;                       // 17
+
+    protected:
+        // slot 18 -- vector-deleting dtor, TAIL of the real
+        // table; protected per the DirectUI interface shape.
+        virtual ~IClassInfo() {}
     };
 
     // IXProviderCP / IXElementCP are REAL exported classes now --

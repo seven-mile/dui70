@@ -239,9 +239,15 @@ def cmd_totals(args: argparse.Namespace) -> int:
 # per class: a provider family that stops qualifying stops emitting
 # its interface header and this registry follows.
 def _mi_pattern_interfaces() -> set:
-    """The pattern interface names the schema-2 provider-MI path will
-    emit, derived from pinned/mi-tables.json + classes.json the same
-    way emit_headers.py derives them (same validators, same inputs)."""
+    """The pattern interface names the provider-MI path will emit,
+    derived from pinned/mi-tables.json + classes.json the same way
+    emit_headers.py derives them (same validators, same inputs).
+
+    Schema 2 and schema 3 are both accepted: schema 3 is a strict
+    superset of schema 2 for everything this validator reads (same
+    derived structure, same provenance values). Rejecting schema 3
+    here would desynchronize this registry from the emitter (which
+    accepts both) and redden G3 while the emitter is healthy."""
     import json
     pinned = Path(__file__).resolve().parent.parent.parent / "pinned"
     doc_path = pinned / "mi-tables.json"
@@ -251,7 +257,7 @@ def _mi_pattern_interfaces() -> set:
         doc = json.loads(doc_path.read_text(encoding="utf-8"))
     except Exception:
         return set()
-    if doc.get("schema") != 2:
+    if doc.get("schema") not in (2, 3):
         return set()
     out: set = set()
     for cls, entry in (doc.get("derived") or {}).items():

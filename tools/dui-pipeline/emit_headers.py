@@ -1261,35 +1261,8 @@ def _bind_own_units(cls: str, unit_names: list,
             continue
         name_slots.setdefault(entry, []).append(idx)
 
-    # Fix-2 (7-FAIL research): INHERITED-OVERRIDE units. A unit
-    # whose name appears in the base chain's own table region (the
-    # base region of THIS table) but is NOT export-verified (its
-    # ancestor exporter was ICF-folded away) was previously filtered
-    # to >= base_prefix by the new-virtual rule and dropped from
-    # `appears` -- landing in `unbindable` and refusing to emit. But
-    # such a name CANNOT be a new virtual: the base table already
-    # carries that slot content. The unit is an OVERRIDE whose
-    # vtable entry lives in the inherited region; the C++ base
-    # clause supplies the slot, so the header needs only the
-    # declaration (no own-slot claim).
-    inherited_override: list[str] = []
-    if base_prefix > 0 and base_names is not None:
-        base_region_names: set = set()
-        for idx, entry in enumerate(slot_lists):
-            if idx >= base_prefix:
-                break
-            cands = ([entry] if isinstance(entry, str)
-                     else list(entry or []))
-            base_region_names |= set(cands)
-        for u in unit_names:
-            if u in base_region_names and u not in base_names \
-                    and not any(s >= base_prefix
-                                for s in appears.get(u, ())):
-                inherited_override.append(u)
+    unbindable = [u for u in unit_names if not appears.get(u)]
 
-    unbindable = [u for u in unit_names
-                  if not appears.get(u)
-                  and u not in inherited_override]
 
     claimed: dict[int, str] = {}
 
@@ -1430,8 +1403,7 @@ def _bind_own_units(cls: str, unit_names: list,
         ss = sorted(s for s, uu in claimed.items() if uu == u)
         slots_of[u] = ss
         name_slot[u] = ss[0]
-    return name_slot, unbindable, name_slots, slots_of, \
-        unknown_units, inherited_override
+    return name_slot, unbindable, name_slots, slots_of, unknown_units
 
 
 def contract_reorder(cls: str, members: list, slot_lists: list,
@@ -1454,7 +1426,7 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     for name, group in by_name.items():
         n_virtuals[name] = sum(1 for s in group if _is_vtable_virtual(s))
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, binder_unbound, name_slots_actual, binder_slots, binder_unknown, binder_inherited = _bind_own_units(
+    name_slot, binder_unbound, name_slots_actual, binder_slots, binder_unknown = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
         base_prefix=base_prefix, base_names=base_names,
         override_votes=override_votes)
@@ -1471,14 +1443,6 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
             continue
         s0 = name_slot.get(name)
         if s0 is None:
-            if name in binder_inherited:
-                # Fix-2: inherited override -- the base clause
-                # supplies the slot; emit the declaration only (no
-                # own-slot claim, no placeholder; the base region is
-                # already covered by inheritance)
-                unbound.append(name)
-                unit_order[name] = nonvirt + virt
-                continue
             # generator synthetic, structurally unbindable (no candidate
             # slot), or fold-UNKNOWN (contradictory/absent override
             # evidence): keep order, report (do NOT guess a slot)
@@ -1642,9 +1606,7 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     #     declaration does not enter the vtable walk). This is the
     #     fail-closed UNKNOWN path: never a guessed slot.
     if unbound:
-        synth = [n for n in unbound
-                 if n not in binder_unknown
-                 and n not in binder_inherited]
+        synth = [n for n in unbound if n not in binder_unknown]
         if synth:
             raise SystemExit(
                 f"contract_reorder: {cls}: v2 classified bound but "
@@ -1731,7 +1693,7 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     n_virtuals = {n: sum(1 for s in g if _is_vtable_virtual(s))
                   for n, g in by_name.items()}
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, unbindable, name_slots_actual, binder_slots, _unknown, _inherited = _bind_own_units(
+    name_slot, unbindable, name_slots_actual, binder_slots, _unknown = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
         base_prefix=base_prefix, base_names=base_names,
         override_votes=override_votes)

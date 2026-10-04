@@ -211,17 +211,17 @@
    "HWNDHost"
   ],
   "CCBaseCheckRadioButton": [
-   "CCBase"
+   "CCPushButton"
   ],
   "CCBaseScrollBar": [
    "BaseScrollBar",
    "CCBase"
   ],
   "CCCheckBox": [
-   "CCBase"
+   "CCBaseCheckRadioButton"
   ],
   "CCCommandLink": [
-   "CCBase"
+   "CCPushButton"
   ],
   "CCHScrollBar": [
    "BaseScrollBar",
@@ -240,7 +240,7 @@
    "CCBase"
   ],
   "CCRadioButton": [
-   "CCBase"
+   "CCBaseCheckRadioButton"
   ],
   "CCSysLink": [
    "CCBase"
@@ -332,7 +332,7 @@
    "Element"
   ],
   "PushButton": [
-   "Button"
+   "AutoButton"
   ],
   "RangeValueProvider": [
    "IProvider",
@@ -383,7 +383,7 @@
    "RefcountBase"
   ],
   "TouchButton": [
-   "Element"
+   "RichText"
   ],
   "TouchCheckBox": [
    "TouchButton"
@@ -455,6 +455,15 @@
   "PatternProvider<class DirectUI::ValueProvider, struct IValueProvider, 12>": [
    "IProvider",
    "RefcountBase"
+  ],
+  "AutoButton": [
+   "AccessibleButton"
+  ],
+  "RichText": [
+   "Element"
+  ],
+  "AccessibleButton": [
+   "Button"
   ]
  }
 }

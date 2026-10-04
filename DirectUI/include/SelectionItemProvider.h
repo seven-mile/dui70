@@ -2,41 +2,40 @@
 
 // DirectUI::SelectionItemProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "ISelectionItemProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_SelectionItemProvider_ISelectionItemProvider_7.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class SelectionItemProvider
-        : public IProvider, public RefcountBase
+        : public ISelectionItemProvider, public PatternProvider<SelectionItemProvider, ISelectionItemProvider, 7>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        SelectionItemProvider(void);
         virtual ~SelectionItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long AddToSelection(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long RemoveFromSelection(void);
-        virtual long Select(void);
-        virtual long get_IsSelected(int*);
-        virtual long get_SelectionContainer(IRawElementProviderSimple**);
+        SelectionItemProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual long AddToSelection(void) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long RemoveFromSelection(void) override;
+        virtual long Select(void) override;
+        virtual long get_IsSelected(int*) override;
+        virtual long get_SelectionContainer(IRawElementProviderSimple**) override;
     };
 
 } // namespace DirectUI

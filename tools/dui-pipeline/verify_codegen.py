@@ -161,11 +161,22 @@ def run(cmd: list, **kw) -> subprocess.CompletedProcess:
                           text=True, **kw)
 
 
+# Provider ABI compile flags. /Zc:wchar_t- is LOAD-BEARING: the SDK UIA
+# interfaces' wchar_t params (IValueProvider::SetValue/get_Value) mangle
+# PEBG/PEAPEAG -- identical to the pinned dui70.dll exports -- ONLY in
+# this mode (default wchar_t diverges: PEB_W). compile_tu asserts the
+# flag's presence so a refactor cannot silently drop it (fail-closed,
+# per Option D PR requirements).
+PROVIDER_ABI_FLAGS = ("/std:c++20", "/Zc:wchar_t-", "/EHsc", "/W0")
+
+
 def compile_tu(tc: Toolchain, src: Path, obj_dir: Path, inc: Path) -> tuple[int, str]:
     obj_dir.mkdir(parents=True, exist_ok=True)
     obj = obj_dir / (src.stem + ".obj")
+    assert "/Zc:wchar_t-" in PROVIDER_ABI_FLAGS, \
+        "provider ABI compile flags lost /Zc:wchar_t- (Option D invariant)"
     cmd = [
-        tc.cl, "/nologo", "/c", "/std:c++20", "/Zc:wchar_t-", "/EHsc", "/W0",
+        tc.cl, "/nologo", "/c", *PROVIDER_ABI_FLAGS,
         f"/I{tc.vcinc}", f"/I{tc.sdkinc / 'ucrt'}", f"/I{tc.sdkinc / 'shared'}",
         f"/I{tc.sdkinc / 'um'}", f"/I{tc.sdkinc / 'winrt'}", f"/I{inc}",
         f"/Fo{obj}", str(src),

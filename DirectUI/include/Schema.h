@@ -7,6 +7,10 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include <UIAutomationCore.h>  // Option D quarantine: SDK UIA types
+
+#include <UIAutomationCoreApi.h>  // Option D quarantine: SDK UIA types
+
 namespace DirectUI
 {
     class Element;

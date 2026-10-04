@@ -2,6 +2,13 @@
 
 // DirectUI::ElementProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission (ElementProvider family): the
+// RefcountBase@1@ subobject is the FIRST base; its table
+// carries this class's introduced virtuals in DLL slot
+// order (pinned mi-tables.json, schema 2). The DLL's real
+// first base is an unnamed RefcountBase-derived
+// intermediate; declaring the introduced virtuals here
+// reproduces the same subobject tables.
 #pragma once
 
 #include <windows.h>
@@ -9,11 +16,11 @@
 
 #include "RefcountBase.h"
 
-#include "UIAutomationCore.h"
+#include <UIAutomationCore.h>
 
-#include "UIAutomationCore.h"
+#include <UIAutomationCore.h>
 
-#include "UIAutomationCore.h"
+#include <UIAutomationCore.h>
 
 #include "Schema.h"
 
@@ -22,40 +29,52 @@ namespace DirectUI
     class Element;
     class ElementProvider;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
+    class Element;
+    class ProviderProxy;
+
+}
+
+namespace DirectUI
+{
     class ElementProvider
-        : public IRawElementProviderAdviseEvents, public IRawElementProviderFragment, public IRawElementProviderSimple2, public RefcountBase
+        : public RefcountBase,
+          public IRawElementProviderAdviseEvents,
+          public IRawElementProviderFragment,
+          public IRawElementProviderSimple2
     {
     public:
-        ElementProvider(void);
         virtual ~ElementProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long AdviseEventAdded(int, tagSAFEARRAY*);
-        virtual long AdviseEventRemoved(int, tagSAFEARRAY*);
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
+        virtual Element const volatile* GetElement(void);
+        virtual void TossElement(void);
+        ElementProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual long AdviseEventAdded(int, tagSAFEARRAY*) override;
+        virtual long AdviseEventRemoved(int, tagSAFEARRAY*) override;
         static long Create(Element*, InvokeHelper*, ElementProvider**);
         long DoInvokeArgs(int, ProviderProxy* (__cdecl *)(Element*), char*);
-        virtual Element const volatile* GetElement(void);
         Element const* GetElementKey(void);
-        virtual long GetEmbeddedFragmentRoots(tagSAFEARRAY**);
-        virtual long GetPatternProvider(int, IUnknown**);
-        virtual long GetPropertyValue(int, tagVARIANT*);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long GetRuntimeId(tagSAFEARRAY**);
-        virtual long Navigate(NavigateDirection, IRawElementProviderFragment**);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long SetFocus(void);
-        virtual long ShowContextMenu(void);
-        virtual void TossElement(void);
+        virtual long GetEmbeddedFragmentRoots(tagSAFEARRAY**) override;
+        virtual long GetPatternProvider(int, IUnknown**) override;
+        virtual long GetPropertyValue(int, tagVARIANT*) override;
+        virtual long GetRuntimeId(tagSAFEARRAY**) override;
+        virtual long Navigate(NavigateDirection, IRawElementProviderFragment**) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long SetFocus(void) override;
+        virtual long ShowContextMenu(void) override;
         void TossPatternProvider(Schema::Pattern);
-        virtual long get_BoundingRectangle(UiaRect*);
-        virtual long get_FragmentRoot(IRawElementProviderFragmentRoot**);
-        virtual long get_HostRawElementProvider(IRawElementProviderSimple**);
-        virtual long get_ProviderOptions(ProviderOptions*);
-
-        protected:
-        long DoInvoke(int, ...);
+        virtual long get_BoundingRectangle(UiaRect*) override;
+        virtual long get_FragmentRoot(IRawElementProviderFragmentRoot**) override;
+        virtual long get_HostRawElementProvider(IRawElementProviderSimple**) override;
+        virtual long get_ProviderOptions(ProviderOptions*) override;
+    protected:
         virtual long Init(Element*, InvokeHelper*);
+        long DoInvoke(int, ...);
     };
 
 } // namespace DirectUI

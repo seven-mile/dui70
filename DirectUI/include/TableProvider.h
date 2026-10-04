@@ -2,39 +2,38 @@
 
 // DirectUI::TableProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "ITableProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_TableProvider_ITableProvider_9.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class TableProvider
-        : public IProvider, public RefcountBase
+        : public ITableProvider, public PatternProvider<TableProvider, ITableProvider, 9>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        TableProvider(void);
         virtual ~TableProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual long GetColumnHeaders(tagSAFEARRAY**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long GetRowHeaders(tagSAFEARRAY**);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long get_RowOrColumnMajor(RowOrColumnMajor*);
+        TableProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual long GetColumnHeaders(tagSAFEARRAY**) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long GetRowHeaders(tagSAFEARRAY**) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long get_RowOrColumnMajor(RowOrColumnMajor*) override;
     };
 
 } // namespace DirectUI

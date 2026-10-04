@@ -674,6 +674,105 @@ def compare_vtable_slots(args, dll: pathlib.Path) -> int:
 
 
 # ------------------------------------------------------------------------ main
+def compare_mi_tables(args, dll: pathlib.Path) -> int:
+    """R3'': re-derive pinned/mi-tables.json DERIVED section and compare.
+
+    mi-tables.json is a TWO-section document (schema 2):
+      derived -- a pure function of DLL bytes + symbols.json + the
+                 manual interface-lengths file (the lengths enter the
+                 derivation as INPUTS; the derived section never
+                 contains a length that lacks either in-binary evidence
+                 or a manual input)
+      manual  -- the human ABI inputs themselves
+
+    R3'' re-derives `derived` under the COMMITTED manual inputs and
+    compares (LF-canonical JSON semantics). The `manual` section is NOT
+    compared against any re-derivation -- by construction it cannot be
+    re-derived; its integrity is locked by G1 (pinned.sha256). This is
+    exactly the split the schema exists to make: no "pure function"
+    claim is ever made about the manual part.
+
+    When pinned/mi-tables.json is ABSENT the gate is a no-op PASS
+    (schema-2 adoption is incremental; schema 1 remains authoritative
+    for primaries everywhere else).
+    """
+    committed = args.pinned / "mi-tables.json"
+    if not committed.is_file():
+        ok("R3''", "mi-tables.json absent -- schema-2 not adopted yet "
+                   "(no-op pass)")
+        return 0
+    lengths = args.pinned / "mi-interface-lengths.json"
+    if not lengths.is_file():
+        fail("R3''", "pinned/mi-interface-lengths.json exists "
+                     "(manual inputs for the derived section)", "missing")
+        return 1
+
+    work = args.work / "r3dblprime"
+    if work.exists():
+        shutil.rmtree(work)
+    work.mkdir(parents=True)
+    rebuilt = work / "mi-tables.json"
+    cmd = [sys.executable, str(HERE / "extract-mi-tables.py"),
+           "--dll", str(dll), "--symbols", str(args.pinned / "symbols.json"),
+           "--out", str(rebuilt), "--lengths", str(lengths)]
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=600,
+                           cwd=str(REPO))
+    except (OSError, subprocess.SubprocessError) as exc:
+        fail("R3''", "extract-mi-tables.py re-derives the derived section",
+             f"{type(exc).__name__}: {exc}")
+        return 1
+    if p.returncode != 0:
+        fail("R3''", "extract-mi-tables.py re-derives the derived section",
+             f"rc={p.returncode}", (p.stdout or "")[-800:] + (p.stderr or "")[-800:])
+        return 1
+
+    def canon(path: pathlib.Path) -> dict:
+        return json.loads(
+            path.read_bytes().replace(b"\r\n", b"\n").decode("utf-8"))
+
+    try:
+        rb = canon(rebuilt)
+        cb = canon(committed)
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        fail("R3''", "mi-tables.json parses", f"{type(exc).__name__}: {exc}")
+        return 1
+    if rb.get("schema") != 2 or cb.get("schema") != 2:
+        fail("R3''", "both sides are schema 2", "schema mismatch")
+        return 1
+    if rb.get("manual") != cb.get("manual"):
+        fail("R3''", "manual section identical (inputs copied verbatim)",
+             "manual sections differ")
+        return 1
+    if rb.get("derived") == cb.get("derived"):
+        n = len(cb.get("derived", {}))
+        ok("R3''", f"mi-tables.json derived section re-derived identically "
+                   f"({n} classes; manual section is a G1-locked input, "
+                   f"deliberately outside the re-derivation claim)")
+        return 0
+
+    a, b = rb.get("derived", {}), cb.get("derived", {})
+    only_r = sorted(set(a) - set(b))
+    only_c = sorted(set(b) - set(a))
+    detail = []
+    if only_r:
+        detail.append(f"only in rebuilt: {only_r[:8]}")
+    if only_c:
+        detail.append(f"only in committed: {only_c[:8]}")
+    both = sorted(set(a) & set(b))
+    shown = 0
+    for cls in both:
+        if a[cls] != b[cls]:
+            detail.append(f"{cls}: differs")
+            shown += 1
+            if shown >= 8:
+                detail.append("... (+more)")
+                break
+    fail("R3''", "mi-tables.json derived section re-derives identically",
+         "differs", "\n".join(detail))
+    return 1
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
         description="CI stage 2: re-derive pinned/ from msdl (dll + pdb) and assert "
@@ -708,6 +807,12 @@ def main(argv=None) -> int:
     print("=" * 74)
     inputs = json.loads((args.work / "inputs.json").read_text(encoding="utf-8"))
     if compare_vtable_slots(args, pathlib.Path(inputs["dll"])) != 0:
+        return 1
+    print()
+    print("=" * 74)
+    print("R3'' re-derive pinned/mi-tables.json DERIVED section (schema 2)")
+    print("=" * 74)
+    if compare_mi_tables(args, pathlib.Path(inputs["dll"])) != 0:
         return 1
     print()
     print("ALL REPRO ASSERTIONS PASS")

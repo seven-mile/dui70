@@ -13,6 +13,8 @@
       G2  golden regen      regen.py is byte-stable: git diff --exit-code
       G3  structure         classes.json class count == generated tree
       G4  ABI fidelity      modname N/N + extern-C N/N (compile-derived)
+      G4-Y Option D yield   R1 symbol-exactness + R2 slot order + R5
+                            compile matrix + N1-N4 tamper controls
       G5  headers           random sample syntax-checked with cl /Zs
       J1  vtable slots      report-only: slot-order verdict recorded, exit 0
 
@@ -549,6 +551,26 @@ if ($SkipAbiCheck) {
     Write-Ok "extern-C fidelity $gotCapi/$gotCapi (plain-name exports, undecorated)"
     Add-Gate 'G4' 'ABI fidelity' 'PASS' $dt `
         "modname $gotMatch/$gotTotal, extern-C $gotCapi/$gotCapi"
+
+    # ---- G4-Y: Option D yield verification (R1/R2/R5 + N1-N4) ----
+    # uia_yield_verify.py compiles the CApi shape + 13 provider stubs +
+    # ElementProvider/Schema/ElementProxy under /Zc:wchar_t-, proves
+    # every stub symbol exact-matches pinned exports (R1), checks all
+    # 13 primary vftable slot orders vs mi-tables.json fold-tolerantly
+    # (R2), and exercises the four tamper negative controls
+    # (N1 guard-removed C2011, N2 default-wchar C3668, N3 REQUIRED
+    # C1189, N4 wrong-guard C2011). Enforced: any red kills the run.
+    $t0y = Get-Date
+    $rY = Invoke-Tool $py @((Join-Path $PSScriptRoot 'uia_yield_verify.py'))
+    $dty = ((Get-Date) - $t0y).TotalSeconds
+    if ($rY.Rc -ne 0) {
+        $tailY = @($rY.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 24)
+        Fail-Gate 'G4-Y' 'Option D yield verification' `
+            'R1 symbol-exactness + R2 slot order + R5 compile matrix + N1-N4 tamper controls all green' `
+            "uia_yield_verify rc=$($rY.Rc)" $tailY $dty
+    }
+    Write-Ok 'Option D yield: R1 13/13 symbol-exact, R2 13/13 fold-tolerant, R5 full matrix, N1-N4 fail as designed'
+    Add-Gate 'G4-Y' 'Option D yield verification' 'PASS' $dty
 }
 
 # ------------------------------------------------------------------- G5 headers

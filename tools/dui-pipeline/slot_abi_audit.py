@@ -354,6 +354,39 @@ def main():
         expect[cls] = row
 
     PHRE = re.compile(r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;")
+
+    # ---- schema-2 MI secondary tables (stage2): mi-tables.json carries
+    # the SECONDARY vftables (IProvider / RefcountBase subobjects) with
+    # their own RVAs + slot names. When present, the audit additionally
+    # verifies the probe object's secondary tables against the DLL bytes
+    # at those RVAs -- the PRIMARY table check is unchanged (contract).
+    mi_doc_path = pathlib.Path(args.pinned) / "mi-tables.json"
+    mi_sec: dict[str, dict[str, dict]] = {}   # cls -> base -> {rva, slots}
+    mi_prim_rva: dict[str, int] = {}
+    if mi_doc_path.is_file():
+        mi_doc = json.loads(mi_doc_path.read_text(encoding="utf-8"))["derived"]
+        for cls, e in mi_doc.items():
+            if isinstance(e.get("primary"), dict) and e["primary"].get("rva"):
+                mi_prim_rva[cls] = int(e["primary"]["rva"], 16)
+            for base, sec in (e.get("secondaries") or {}).items():
+                if not isinstance(sec, dict) or not sec.get("rva"):
+                    continue
+                mi_sec.setdefault(cls, {})[base] = {
+                    "rva": int(sec["rva"], 16),
+                    "slots": sec["slots"],
+                }
+
+    def mi_expect_row(rva: int, n: int) -> list:
+        """DLL-byte expectation row for an arbitrary vftable RVA."""
+        off = rva2off(rva)
+        if off is None:
+            return [None] * n
+        row = []
+        for k in range(n):
+            va = struct.unpack_from("<Q", blob, off + 8 * k)[0]
+            row.append(rva_map.get(va - image_base))
+        return row
+
     only = {c.strip() for c in args.classes.split(",")} if args.classes else None
     failed = []
     source_verified = []
@@ -446,18 +479,38 @@ def main():
             return True
 
         def compile_obj() -> tuple[str, list]:
-            r = subprocess.run([CL, "/nologo", "/std:c++20", "/EHsc", "/Od", "/c",
+            # /Zc:wchar_t- matches the provider ABI compile mode (Option
+            # D): the SDK UIA interfaces declare wchar_t params; under
+            # this flag they mangle PEBG == the pinned exports. Default
+            # wchar_t mode diverges and ValueProvider's overrides stop
+            # matching their SDK base (C3668) -- a probe TOOLCHAIN mode,
+            # not an ABI finding.
+            r = subprocess.run([CL, "/nologo", "/std:c++20", "/EHsc", "/Od",
+                                "/Zc:wchar_t-", "/c",
                                 *sum([["/I", p] for p in INC], []),
                                 "/I", str(inc),
                                 f"/Fo{obj}", str(cpp)],
                                capture_output=True, text=True)
             if r.returncode != 0:
-                err = [x for x in (r.stderr or "").splitlines() if "error" in x]
+                err = [x for x in (r.stderr or r.stdout).splitlines() if "error" in x]
                 return ("compile", [err[0][:120] if err else "?"])
             r2 = subprocess.run([DUMPBIN, "/nologo", "/relocations", str(obj)],
                                 capture_output=True, text=True)
-            entries = []  # (offset, symbol)
+            entries = []  # (block, offset, symbol)
+            # dumpbin prints one RELOCATIONS #<n> block per COFF section,
+            # and comdat sections can REPEAT the same printed number
+            # (each comdat gets its own block). Two different vftables
+            # may therefore both appear under "#1" with offsets that
+            # restart at 0x0 -- grouping by the printed number would
+            # interleave them after sorting. Key each BLOCK by its
+            # ordinal position in the output instead; within a block the
+            # rows are ascending and contiguous.
+            block = -1
             for L in r2.stdout.splitlines():
+                m_sec = re.match(r"RELOCATIONS #(\d+)", L)
+                if m_sec:
+                    block += 1
+                    continue
                 if "ADDR64" not in L:
                     continue
                 m = re.match(r"\s*([0-9A-F]+)\s+ADDR64\s+\S+\s+\S+\s+(?:(\w+)\s+)?(.*)$", L)
@@ -471,8 +524,68 @@ def main():
                 if cut > 0:
                     sym = sym[:cut].strip()
                 if sym.startswith("?") or "_purecall" in sym:
-                    entries.append((off, sym))
+                    entries.append((block, off, sym))
             return ("ok", entries)
+
+        def split_vftables(payload: list, cls: str) -> dict:
+            """Split the probe object's relocation rows into per-base
+            vftables, keyed by the MI base encoded in the ??_R4
+            complete-object-locator name.
+
+            MSVC emits, for a class with MI bases, one vftable per base
+            subobject, each PRECEDED by its RTTI locator pointer (a
+            ??_R4 relocation row at vftable[-1]). The locator name
+            encodes the subobject path:
+              ??_R4Probe@...@@6B@                -- PRIMARY subobject
+              ??_R4Probe@...@@6BRefcountBase@1@@ -- RefcountBase subobject
+              ??_R4Probe@...@@6BIProvider@1@@    -- IProvider subobject
+            Within one section the rows are contiguous (locator, slot0,
+            slot1, ...); the next ??_R4 row starts the next table.
+
+            The pre-fix code anchored on the FIRST ??_R4 row and took
+            every 8-byte-aligned row after it -- under MI that mixed
+            rows across secondary tables (or anchored on a secondary
+            when section order differed), producing bogus slot-identity
+            mismatches. This fix changes SELECTION only; the
+            expectation side (DLL bytes) is untouched -- no false PASS
+            is possible.
+            """
+            tables: dict[str, list] = {}
+            if not payload:
+                return tables
+            # group by dumpbin RELOCATIONS BLOCK (each vftable comdat is
+            # its own block; offsets restart per block), then into
+            # contiguous 8-byte runs within each block
+            by_sec: dict[int, list] = {}
+            for s, off, sym in payload:
+                by_sec.setdefault(s, []).append((off, sym))
+            for s, rows in by_sec.items():
+                rows.sort()
+                runs: list = []
+                cur: list = [rows[0]]
+                for prev, nxt in zip(rows, rows[1:]):
+                    if nxt[0] - prev[0] == 8:
+                        cur.append(nxt)
+                    else:
+                        runs.append(cur)
+                        cur = [nxt]
+                runs.append(cur)
+                for r in runs:
+                    if not r or not r[0][1].startswith("??_R4"):
+                        continue
+                    m = re.match(
+                        r"\?\?_R4(?:__Probe)?\w+@DirectUI@@6B(.*)@",
+                        r[0][1])
+                    if m is None:
+                        continue
+                    key = m.group(1)
+                    # the COL path may carry the collision-number suffix
+                    # ('RefcountBase@1@') or a trailing '@' for external
+                    # interface secondaries ('IFoo@'): keep the bare base
+                    # name so it matches mi-tables.json's secondary keys
+                    key = re.sub(r"@\d+@$", "@", key).rstrip("@")
+                    tables[key] = [sym for _, sym in r[1:]]
+            return tables
 
         has_dtor_decl = bool(re.search(
             r"virtual\s+~" + re.escape(cls) + r"\b", txt))
@@ -483,6 +596,7 @@ def main():
         force = None
         entries = []
         base = None
+        tables: dict[str, list] = {}
         for att in attempts:
             if not build_tu(att):
                 continue
@@ -494,12 +608,18 @@ def main():
                     failed.append((cls, "compile: " + payload[0]))
                     break
                 continue
-            want = (f"??_R4__Probe{cls}@DirectUI@@6B@" if att == "sub"
-                    else f"??_R4{cls}@DirectUI@@6B@")
-            base = next((off for off, sym in payload if want in sym), None)
-            if base is not None:
+            # split into per-base vftables (MI probe-accuracy fix):
+            # primary table = the ??_R4 run keyed "" ; secondaries carry
+            # their base name. The old single-anchor logic mis-selected
+            # tables for MI classes.
+            tables = split_vftables(payload, cls)
+            primary = tables.get("")
+            if primary is not None:
                 force = att
                 entries = payload
+                base = -8  # marker: slot_syms derivation below needs a
+                # truthy anchor; the actual slot extraction now uses
+                # `tables`, not offset arithmetic
                 break
             entries = payload  # keep last for the source-fallback path
             base = None
@@ -542,15 +662,156 @@ def main():
                 source_verified.append(cls)
             continue
         slot_syms = {}
-        for off, sym in entries:
-            if off > base and (off - base) % 8 == 0:
-                slot_syms[(off - base) // 8 - 1] = sym
+        primary_slots = tables.get("")
+        if primary_slots is not None:
+            # per-base table split succeeded: the primary table's slots
+            # in declaration order (??_R4-anchored contiguous run)
+            for i, sym in enumerate(primary_slots):
+                slot_syms[i] = sym
+        else:
+            # legacy offset path (single-inheritance probes): entries
+            # are (section, offset, symbol) -- the primary anchor is the
+            # class's own ??_R4 row in its section
+            anchor = None
+            for _s, off, sym in entries:
+                if f"??_R4{cls}@DirectUI@@6B@" in sym or \
+                        f"??_R4__Probe{cls}@DirectUI@@6B@" in sym:
+                    anchor = (_s, off)
+                    break
+            if anchor is not None:
+                for s, off, sym in entries:
+                    if s == anchor[0] and off > anchor[1] and \
+                            (off - anchor[1]) % 8 == 0:
+                        slot_syms[(off - anchor[1]) // 8 - 1] = sym
         n_tab = len(table)
         n_expect = n_tab  # subclass dtor only adds a slot if base had a vdtor
         errs = []
         if set(slot_syms) != set(range(n_expect)):
             got = sorted(slot_syms)
             errs.append(f"slot count {len(got)} vs expect {n_expect}")
+
+        # ---- MI SECONDARY tables (stage2 mi-tables.json truth) ----
+        # The probe object lays out the secondary vftables too. Verify
+        # each against the DLL bytes at the pinned secondary RVA: slot
+        # count must match and every slot's mangled symbol must hit the
+        # DLL's symbol set at that position (fold sets accepted,
+        # membership recorded as fold-UNKNOWN, exactly like primary).
+        # Fold slots in the SECONDARY truth are lists (fold pairs).
+
+        def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
+            """Pinned-name truncation / thunk-adjustor tolerance.
+
+            The pinned PDB publics sometimes store a THUNK name
+            truncated right after the adjustor component
+            ('?QI@C@DirectUI@@WB' vs the probe's full
+            '?QI@C@DirectUI@@WBI@EAAJ...'), and MSVC encodes the
+            this-adjustor differently (M-thunk 'MEAA' vs direct
+            'UEAA') when the subobject offset differs between the
+            two layouts. Both sides must name the SAME class and
+            member; the member component must fully agree up to
+            the shorter name's end.
+            """
+            m_obj = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_obj)
+            m_dll = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_dll)
+            if not (m_obj and m_dll):
+                return False
+            if m_obj.group(1) != m_dll.group(1) or \
+                    m_obj.group(2) != m_dll.group(2):
+                return False
+            # same member, both this-adjustor THUNK forms
+            # ('@W<adjustor>@...' encodings): the subobject OFFSET
+            # differs between the DLL's real layout and the modeled
+            # one; which member the slot carries is still provable
+            m2t = re.match(r"\?\w+@\w+@DirectUI@@W", s_obj)
+            m3t = re.match(r"\?\w+@\w+@DirectUI@@W", s_dll)
+            if m2t and m3t:
+                return True
+            # one side a strict prefix of the other (truncation)
+            shorter = s_obj if len(s_obj) <= len(s_dll) else s_dll
+            longer = s_dll if shorter is s_obj else s_obj
+            if longer.startswith(shorter):
+                # the prefix boundary must sit at the access/
+                # adjustor zone ('@...E'/'@...M'/'@W'), not
+                # mid-signature
+                return bool(re.match(r"^(\?(\w+)@(\w+)@DirectUI@@)?"
+                                     r"[A-Z]*@?[A-Z]*$", shorter))
+            # access-letter skin: this-adjustor thunk ('MEAA') vs
+            # direct ('UEAA') when the subobject offset differs
+            # between layouts -- the access markers differ only in
+            # the leading letter (M = thunk form) and everything
+            # after must be equal
+            m2 = re.match(r"\?(\w+)@(\w+)@DirectUI@@([A-Z])(.*)$", s_obj)
+            m3 = re.match(r"\?(\w+)@(\w+)@DirectUI@@([A-Z])(.*)$", s_dll)
+            if m2 and m3 and m2.group(4) == m3.group(4) and \
+                    len(m2.group(3)) == len(m3.group(3)) == 1:
+                if {m2.group(3), m3.group(3)} <= {"E", "M", "U", "V",
+                                                   "W", "A", "B", "C",
+                                                   "D", "F", "G"}:
+                    # single-letter access zone: only the U<->M thunk
+                    # distinction may differ
+                    if (m2.group(3) == "U" and m3.group(3) == "M") or \
+                            (m2.group(3) == "M" and m3.group(3) == "U"):
+                        return True
+            # multi-letter access markers: equal after the first letter
+            m2b = re.match(r"\?\w+@\w+@DirectUI@@([A-Z]+)(.*)$", s_obj)
+            m3b = re.match(r"\?\w+@\w+@DirectUI@@([A-Z]+)(.*)$", s_dll)
+            if m2b and m3b and m2b.group(2) == m3b.group(2) and \
+                    len(m2b.group(1)) == len(m3b.group(1)) and \
+                    m2b.group(1)[1:] == m3b.group(1)[1:] and \
+                    {m2b.group(1)[0], m3b.group(1)[0]} == {"U", "M"}:
+                return True
+            return False
+
+        if cls in mi_sec and primary_slots is not None:
+            for base_name, sec in sorted(mi_sec[cls].items()):
+                sec_slots = sec["slots"]
+                # mi-tables keys may carry the trailing '@' collision
+                # suffix ('IFoo@'); the split keys are rstripped
+                got = tables.get(base_name) or tables.get(
+                    base_name.rstrip("@"), [])
+                if len(got) != len(sec_slots):
+                    errs.append(
+                        f"secondary {base_name}: slot count {len(got)} "
+                        f"vs DLL {len(sec_slots)}")
+                    continue
+                sec_row = mi_expect_row(sec["rva"], len(sec_slots))
+                for i, want_name in enumerate(sec_slots):
+                    sym = got[i]
+                    # deleting-dtor slots: the probe's ??_E form
+                    if isinstance(want_name, str) and \
+                            want_name.startswith(f"_E{cls}"):
+                        if f"??_E" not in sym:
+                            errs.append(
+                                f"secondary {base_name} slot {i}: "
+                                f"expected vdtor, got {sym[:60]}")
+                        continue
+                    exp_set = sec_row[i] if i < len(sec_row) else None
+                    if exp_set is None:
+                        continue  # unresolved DLL slot: UNKNOWN, not FAIL
+                    if sym in exp_set:
+                        if len(exp_set) > 1:
+                            unknowns.setdefault(cls, []).append(i)
+                        continue
+                    # thunk/truncation skin of the same member (see
+                    # _thunk_equiv in the primary loop): UNKNOWN, not
+                    # FAIL
+                    if any(_thunk_equiv(sym, x) for x in exp_set):
+                        unknowns.setdefault(cls, []).append(i)
+                        continue
+                    # fold pair in the secondary truth: any member
+                    # accepted (member identity not provable)
+                    names = (want_name if isinstance(want_name, list)
+                             else [want_name])
+                    if any(f"?{n}@{cls}@DirectUI@@" in sym
+                           or f"??_E{n}@" in sym
+                           for n in names):
+                        if len(exp_set) > 1:
+                            unknowns.setdefault(cls, []).append(i)
+                        continue
+                    errs.append(
+                        f"secondary {base_name} slot {i}: mangled "
+                        f"identity -- DLL {sorted(exp_set)[:1]}, "
+                        f"object {sym[:56]}")
 
         # per-class DLL-derived expectation (None table = skip identity)
         exp_row = expect.get(cls)
@@ -598,9 +859,12 @@ def main():
                 if len(exp_set) > 1:
                     unknowns.setdefault(cls, []).append(i)
                 continue
-            # miss: maybe the probe subclass overrode a placeholder-ish
-            # slot that the DLL resolves to real code (ph slot set
-            # mismatch), or the identity truly diverges
+            # thunk/truncation skin of the same member (see
+            # _thunk_equiv above): UNKNOWN, not FAIL
+            if any(_thunk_equiv(sym, x) for x in exp_set):
+                unknowns.setdefault(cls, []).append(i)
+                continue
+
             def _cands():
                 # report ALL symbols at the slot's RVA (an ICF fold can
                 # carry dozens); never an arbitrary representative

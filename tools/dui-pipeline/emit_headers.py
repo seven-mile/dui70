@@ -762,9 +762,265 @@ GLOBAL_SCOPE_CLASSES = {
 # itself exports no vftable or virtuals). Their generated headers need at
 # least one pure virtual to make the base polymorphic, else the derived
 # classes emit no base-subobject vftable at all.
+# Base classes that are ABSTRACT in the real DLL (their derived classes
+# export ??_7Derived@...@6B<Base>@@ base-subobject vftables, but the base
+# itself exports no vftable or virtuals). Their generated headers need at
+# least one pure virtual to make the base polymorphic, else the derived
+# classes emit no base-subobject vftable at all.
+# W5 stage-2: whether pinned/mi-tables.json (schema 2) is present in
+# the pinned directory -- gates the IProvider interface revision (the
+# real single-method interface) on the schema-2 contract being loaded.
 POLYMORPHIC_BASE_CLASSES = {
     "IProvider",
 }
+
+_MI_DOC_LOADED = False
+
+
+def mi_doc_loaded() -> bool:
+    return _MI_DOC_LOADED
+
+
+# ---------------------------------------------------------------------------
+# W5 stage-2: schema-2 MI emission (Provider family)
+#
+# pinned/mi-tables.json (schema 2) carries, for every class with secondary
+# subobject tables, the primary AND secondary tables with slot RVAs, full
+# candidate mangled names, and length provenance. The IProvider-family
+# MI shape is uniform (verified per-class against the pinned DLL):
+#
+#   class <P>Provider
+#       : public I<P>Provider,   // primary table: QI/AddRef/Release + pattern methods
+#         public RefcountBase,   // secondary [vector dtor, Init]
+#         public IProvider       // secondary [GetProxyCreator]
+#
+# The base ORDER (primary, RefcountBase, IProvider) reproduces the DLL's
+# .rdata table emission order (verified: probe compile reloc order
+# primary -> RefcountBase -> IProvider matches 0x1171A0 -> 0x1171C0 ->
+# 0x1171D0). Each table's slot identity is carried by the corresponding
+# INTERFACE DECLARATION ORDER (the pattern interface is synthesized from
+# the primary table's slot names; IProvider/RefcountBase are the shared
+# interface headers), so no contract_reorder walk is needed or used for
+# these classes: every slot is declared, in order, by construction.
+#
+# Membership is decided GENERICALLY from the pinned data (no hardcoded
+# class list): a class qualifies when its mi-tables entry has BOTH a
+# RefcountBase secondary of exactly [dtor-marker, Init-like slot] and an
+# IProvider secondary of exactly one GetProxyCreator slot, plus a primary
+# starting QueryInterface/AddRef/Release. Any class failing the shape is
+# left on the previous path (rejected canonical) -- never force-fit.
+# ---------------------------------------------------------------------------
+
+MI_PROVIDER_MIN_SHAPE = ("QueryInterface", "AddRef", "Release")
+
+
+def load_mi_tables(pinned_dir: Path) -> dict | None:
+    """Load pinned/mi-tables.json (schema 2); None when absent."""
+    p = pinned_dir / "mi-tables.json"
+    if not p.is_file():
+        return None
+    doc = json.loads(p.read_text(encoding="utf-8"))
+    if doc.get("schema") != 2:
+        return None
+    return doc
+
+
+def mi_provider_shape(mi_entry: dict) -> dict | None:
+    """Validate the uniform IProvider-family MI shape from pinned data.
+
+    Returns {"pattern_iface": "I<P>Provider", "pattern_methods": [...]}
+    when the entry matches, else None. Evidence required (per Lead: no
+    guessing when evidence is missing):
+      * primary table with length provenance next-vftable (in-binary
+        bound) whose first three slots are exactly the IUnknown trio
+      * IProvider secondary: exactly 1 slot resolving GetProxyCreator,
+        length provenance manual
+      * RefcountBase secondary: exactly 2 slots, slot0 a dtor marker
+        (_E.../_G.../fold containing one), length provenance manual
+
+    MANUAL LENGTH PROVENANCE IS AN EXPLICIT ABI INPUT, NOT A DERIVED
+    FACT: interface method COUNTS are not derivable from a single
+    binary when a table's tail is unobservable (the next vftable
+    follows contiguously; nothing in the bytes says where one
+    interface's method list ends). The input lives in
+    pinned/mi-interface-lengths.json (G1-locked via pinned.sha256),
+    carries its own notes, and is cross-checked by R3'' (re-derivation
+    of the mi-tables derived section) plus a negative control: feeding
+    a WRONG length for one interface must flip the affected class's
+    slot table (the audit's paired tamper test). It is consumed here as
+    a declared human ABI contract input -- never presented as binary-
+    derived evidence.
+    """
+    if not isinstance(mi_entry, dict):
+        return None
+    pri = mi_entry.get("primary")
+    secs = mi_entry.get("secondaries") or {}
+    if not isinstance(pri, dict):
+        return None
+    if pri.get("length_provenance") != "next-vftable":
+        return None
+    slots = pri.get("slots")
+    if not isinstance(slots, list) or len(slots) < 3:
+        return None
+    for i, want in enumerate(MI_PROVIDER_MIN_SHAPE):
+        if slots[i] != want:
+            return None
+    ip = secs.get("IProvider")
+    rb = secs.get("RefcountBase")
+    if not isinstance(ip, dict) or not isinstance(rb, dict):
+        return None
+    if ip.get("length_provenance") != "manual" or ip.get("slots") != ["GetProxyCreator"]:
+        return None
+    rb_slots = rb.get("slots")
+    if rb.get("length_provenance") != "manual" or not isinstance(rb_slots, list) or len(rb_slots) != 2:
+        return None
+    slot0 = rb_slots[0]
+    s0names = [slot0] if isinstance(slot0, str) else list(slot0 or [])
+    if not any(n.startswith(("_E", "_G")) for n in s0names):
+        return None
+    # pattern method names after the IUnknown trio (skip folds with
+    # unknown identity: they become placeholders in the interface)
+    return {"pattern_methods": slots[3:]}
+
+
+# HWNDElementProvider family (the 14th native UIA provider): the DLL's
+# bare ??_7 primary table is 5 slots whose tail (slots 3-4) is exactly
+# IRawElementProviderFragmentRoot's own method pair
+# (ElementProviderFromPoint, GetFocus). The 4 secondary tables name their
+# bases directly: 3 SDK interfaces (AdviseEvents/Fragment/Simple2, all
+# next-vftable bounded) + RefcountBase (manual, [_E marker, GetProxyCreator]).
+# Evidence: pinned vftable symbols
+#   ??_7HWNDElementProvider@DirectUI@@6B@                       (5 slots)
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderFragment@@
+#   ??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderSimple2@@
+#   ??_7HWNDElementProvider@DirectUI@@6BRefcountBase@1@@
+# The FragmentRoot ownership of the primary is content-derived (slot
+# names), not name-derived -- the strongest evidence available for an
+# unsuffixed table.
+HWND_PROVIDER_SECONDARIES = (
+    "IRawElementProviderAdviseEvents",
+    "IRawElementProviderFragment",
+    "IRawElementProviderSimple2",
+)
+HWND_PROVIDER_PRIMARY_TAIL = ("ElementProviderFromPoint", "GetFocus")
+
+
+def hwnd_provider_shape(mi_entry: dict) -> dict | None:
+    """Validate the HWNDElementProvider family MI shape.
+
+    Returns {"primary_iface": "IRawElementProviderFragmentRoot",
+    "primary_tail": [...]} when the entry matches, else None.
+    """
+    if not isinstance(mi_entry, dict):
+        return None
+    pri = mi_entry.get("primary")
+    secs = mi_entry.get("secondaries") or {}
+    if not isinstance(pri, dict):
+        return None
+    if pri.get("length_provenance") != "next-vftable":
+        return None
+    slots = pri.get("slots")
+    if not isinstance(slots, list) or len(slots) != 5:
+        return None
+    for i, want in enumerate(MI_PROVIDER_MIN_SHAPE):
+        if slots[i] != want:
+            return None
+    if tuple(slots[3:5]) != HWND_PROVIDER_PRIMARY_TAIL:
+        return None
+    for b in HWND_PROVIDER_SECONDARIES:
+        # mi-tables keys carry a trailing '@' collision suffix for the
+        # SDK secondaries ('IRawElementProviderAdviseEvents@'); match by
+        # prefix
+        sb = next((v for k, v in secs.items()
+                   if k.rstrip("@") == b), None)
+        if not isinstance(sb, dict):
+            return None
+        if sb.get("length_provenance") != "next-vftable":
+            return None
+        bs = sb.get("slots")
+        if not isinstance(bs, list) or len(bs) < 4:
+            return None
+        if bs[:3] != list(MI_PROVIDER_MIN_SHAPE):
+            return None
+    rb = secs.get("RefcountBase")
+    if not isinstance(rb, dict):
+        return None
+    if rb.get("length_provenance") != "manual":
+        return None
+    rbs = rb.get("slots")
+    # 5 slots [??_E, GetProxyCreator, GetElement, TossElement, Init] or
+    # 6 (the class's own Init(HWNDElement*) HIDES the base Init -- a new
+    # virtual appended to the first-base subobject table)
+    if not isinstance(rbs, list) or len(rbs) not in (5, 6):
+        return None
+    s0 = rbs[0]
+    s0names = [s0] if isinstance(s0, str) else list(s0 or [])
+    if not any(n.startswith(("_E", "_G")) for n in s0names):
+        return None
+    if rbs[1] != "GetProxyCreator":
+        return None
+    return {"primary_iface": "IRawElementProviderFragmentRoot",
+            "primary_tail": list(slots[3:])}
+
+
+# ElementProvider family: abstract intermediate (no own ??_7 primary).
+# Its FIRST base is the RefcountBase@1@ subobject (evidence: the
+# subobject's 5-slot table [??_E, GetProxyCreator, GetElement,
+# TossElement, Init] carries the class's introduced virtuals -- MSVC
+# appends a class's new virtuals to its FIRST base's subobject table,
+# so RefcountBase is first; the extractor's classes.json order is
+# canonical, not layout). The 3 SDK secondaries are next-vftable
+# bounded. This models the real DLL's (unnamed) intermediate
+# 'RefcountBase-derived first base' as [RefcountBase + introduced
+# virtuals] directly -- consumer-ABI equivalent, verified by the A1
+# secondary-table audit.
+EP_PROVIDER_RB_SLOTS = ["GetProxyCreator", "GetElement", "TossElement",
+                        "Init"]
+
+
+def ep_provider_shape(mi_entry: dict) -> dict | None:
+    """Validate the ElementProvider-family MI shape.
+
+    Returns {"rb_introduced": [...]} when the entry matches, else None.
+    """
+    if not isinstance(mi_entry, dict):
+        return None
+    if "primary" in mi_entry:
+        return None  # abstract intermediate: no own primary table
+    secs = mi_entry.get("secondaries") or {}
+    rb = secs.get("RefcountBase")
+    if not isinstance(rb, dict):
+        return None
+    if rb.get("length_provenance") != "manual":
+        return None
+    rbs = rb.get("slots")
+    if not isinstance(rbs, list) or len(rbs) < 2:
+        return None
+    s0 = rbs[0]
+    s0names = [s0] if isinstance(s0, str) else list(s0 or [])
+    if not any(n.startswith(("_E", "_G")) for n in s0names):
+        return None
+    for name in rbs[1:]:
+        if name not in EP_PROVIDER_RB_SLOTS:
+            return None
+    # the 3 SDK secondaries, in-binary bounded (next-vftable or
+    # hard-stop -- both are observed bounds, not manual inputs)
+    n_sdk = 0
+    for k, v in secs.items():
+        if k.rstrip("@") in HWND_PROVIDER_SECONDARIES and \
+                v.get("length_provenance") in ("next-vftable", "hard-stop"):
+            n_sdk += 1
+    if n_sdk != 3:
+        return None
+    return {"rb_introduced": list(rbs[1:])}
+
+
+def mi_pattern_iface_name(cls: str) -> str:
+    """InvokeProvider -> IInvokeProvider (verified against the
+    PatternProvider<T, INTERFACE, n> template args in symbols.json:
+    the interface name is I + class name for this family)."""
+    return "I" + cls
 
 # ---------------------------------------------------------------------------
 # W5 P2 pilot: Element vtable slot order
@@ -1514,6 +1770,46 @@ STRUCT_TAG_CLASSES = {
 }
 
 
+def _mi_struct_tag_interfaces() -> set:
+    """The pattern interfaces synthesized by the schema-2 provider-MI
+    path are STRUCTs in the real DLL (mangled template args carry U,
+    e.g. UIInvokeProvider in ?...@?$PatternProvider@VInvokeProvider@
+    DirectUI@@UIInvokeProvider@@$0A@). Derived from pinned
+    mi-tables.json with the same membership rule the emitter uses."""
+    p = Path(__file__).resolve().parent.parent.parent / "pinned" / "mi-tables.json"
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    if doc.get("schema") != 2:
+        return set()
+    out: set = set()
+    for cls, entry in (doc.get("derived") or {}).items():
+        if cls.startswith("?$") or not isinstance(entry, dict):
+            continue
+        pri = entry.get("primary")
+        secs = entry.get("secondaries") or {}
+        ip = secs.get("IProvider")
+        rb = secs.get("RefcountBase")
+        slots = pri.get("slots") if isinstance(pri, dict) else None
+        if (isinstance(pri, dict) and isinstance(ip, dict)
+                and isinstance(rb, dict)
+                and pri.get("length_provenance") == "next-vftable"
+                and isinstance(slots, list) and len(slots) >= 3
+                and slots[0] == "QueryInterface" and slots[1] == "AddRef"
+                and slots[2] == "Release"
+                and ip.get("length_provenance") == "manual"
+                and ip.get("slots") == ["GetProxyCreator"]
+                and rb.get("length_provenance") == "manual"
+                and isinstance(rb.get("slots"), list)
+                and len(rb["slots"]) == 2):
+            out.add("I" + cls)
+    return out
+
+
+STRUCT_TAG_CLASSES |= _mi_struct_tag_interfaces()
+
+
 def is_duixml_nested(cls: str) -> bool:
     """FunctionDefinition<T> specializations are NESTED inside
     DUIXmlParser (mangled ?$FunctionDefinition@...@DUIXmlParser@DirectUI@@).
@@ -1573,6 +1869,57 @@ EXTERNAL_BASE_INCLUDES = {
     "IOleWindow": "oleidl.h",
     "IServiceProvider": "servprov.h",
 }
+
+# Option D quarantine: the SDK UIA headers are no longer included by
+# dui_abi_types.h, so every header whose own signatures reference SDK
+# UIA types must include them DIRECTLY (measured from the generated
+# tree + pinned signatures: .local/audit/uia-exp). UIAutomationCoreApi.h
+# requires UIAutomationCore.h first (PROPERTYID), so Core always
+# precedes Api. Detection is signature-driven (see
+# sdk_uia_includes_for) -- not a class-name list -- so new SDK-type
+# users cannot be missed.
+SDK_UIA_TYPE_TOKENS = (
+    "IRawElementProviderSimple",
+    "IRawElementProviderFragment",
+    "IRawElementProviderAdviseEvents",
+    "UiaRect",
+    "AutomationIdentifierType",
+    "UiaRaiseAutomationEvent",
+    "ScrollAmount",
+    "ExpandCollapseState",
+    "ToggleState",
+    "RowOrColumnMajor",
+)
+# Api-only types (need UIAutomationCoreApi.h in addition to Core)
+SDK_UIA_API_TYPE_TOKENS = ("AutomationIdentifierType", "UiaRaiseAutomationEvent")
+
+
+def sdk_uia_includes_for(members: list, data_members: list) -> list[str]:
+    """SDK UIA headers this class's own signatures require (Option D).
+
+    Scans the pinned param/return type text AND the mangled names (fn
+    POINTER data members carry their pointee signature only in the
+    mangled form, e.g. Schema's static UiaLookupId/UiaRaiseAutomation*)
+    for SDK UIA tokens. The result is ordered Core-first (Api depends
+    on Core's PROPERTYID). A duplicate #include is harmless (all
+    headers are #pragma once); missing one is a compile error.
+    """
+    texts: list[str] = []
+    for s in members + data_members:
+        texts.extend(s.get("params") or [])
+        if s.get("return_type"):
+            texts.append(s["return_type"])
+        if s.get("mangled"):
+            texts.append(s["mangled"])
+    blob = "\n".join(texts)
+    needs_core = any(tok in blob for tok in SDK_UIA_TYPE_TOKENS)
+    needs_api = any(tok in blob for tok in SDK_UIA_API_TYPE_TOKENS)
+    out: list[str] = []
+    if needs_core:
+        out.append("UIAutomationCore.h")
+    if needs_api:
+        out.append("UIAutomationCoreApi.h")
+    return out
 
 
 def nested_type_hosts_used(members: list, data_members: list, base) -> list:
@@ -1635,6 +1982,641 @@ def base_chain_virtual_names(cls: str, inheritance: dict,
     return names
 
 
+def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
+                                   tr: TypeTranslator, banner: str,
+                                   mi_shape: dict) -> str:
+    """Synthesize the pattern interface header (e.g. IInvokeProvider).
+
+    The interface's pure-virtual declaration order IS the primary
+    table's slot order (DLL truth): IUnknown trio first, then the
+    pattern methods. Signatures are lifted from the concrete class's
+    own override members (same mangling shape; the override and the
+    interface method have identical signatures by C++ rules).
+
+    SCOPE: the interface is declared at GLOBAL scope. Evidence: the
+    pinned template mangles the arg UNQUALIFIED (UIInvokeProvider@@,
+    no @DirectUI@@ component) while the concrete class arg IS
+    qualified (VInvokeProvider@DirectUI@@) -- the real pattern
+    interfaces live outside namespace DirectUI (UIA header
+    convention), unlike IProvider/RefcountBase (6BIProvider@1@@).
+
+    OPTION-D YIELD (measured, .local/audit/uia-exp/FINDINGS.md v2):
+    the generated struct's own signatures use SDK UIA types
+    (IRawElementProviderSimple**, ScrollAmount, ToggleState*, ...), so
+    this header includes the SDK UIAutomationCore.h DIRECTLY, before
+    the yield check. The SDK MIDL interface of the same name then owns
+    the name in every TU; the generated struct below is yield-guarded
+    (#ifndef __uiautomationcore_h__) and stays as compile-checked
+    pinned-signature documentation -- it never defines while the SDK
+    header defines its guard. If a future SDK renames the guard the
+    struct reactivates and collides (C2011): FAIL-VISIBLE by design,
+    never fail-silent. Under /Zc:wchar_t- (the official consumer
+    flag, pinned by G4) the SDK-derived overrides mangle exactly like
+    the pinned exports (measured 13/13, symbol-exact).
+
+    REQUIRED state: DUI_ABI_PROVIDER_ABI_REQUIRED hard-errors BEFORE the
+    SDK include. This header is INHERENTLY SDK-coupled (its method
+    signatures use SDK UIA types -- a SDK-free form cannot compile), so
+    the coherent REQUIRED semantics are "this header must not be included
+    in an ABI-critical TU at all", stated explicitly rather than the
+    tautological post-include guard check.
+    """
+    lines = [banner,
+             f"// {iface} -- UIA pattern interface synthesized",
+             f"// from the pinned mi-tables.json primary vftable of",
+             f"// DirectUI::{cls} (slot order == declaration order).",
+             "// NOTE: global scope (the pinned mangled template args carry",
+             "//       no @DirectUI@@ qualifier for the interface parameter).",
+             "#pragma once",
+             "",
+             '#include "dui_abi_types.h"',
+             "",
+             "// Mode semantics (Option D):",
+             "//   default (provider-only / SDK-first alike): this header",
+             "//     includes the SDK UIAutomationCore.h and the SDK MIDL",
+             "//     interface of this name is THE base in the TU; the",
+             "//     generated struct below stays yield-guarded out",
+             "//     (pinned-signature documentation).",
+             "//   DUI_ABI_PROVIDER_ABI_REQUIRED: HARD ERROR. This header is",
+             "//     INHERENTLY SDK-coupled -- its method signatures use SDK",
+             "//     UIA types (IRawElementProviderSimple*, ScrollAmount,",
+             "//     ToggleState*, ...), so no SDK-free form of it can",
+             "//     compile. An ABI-critical TU that must not mix SDK UIA",
+             "//     interfaces and generated ABI structs must not include",
+             "//     this header at all. The check runs BEFORE the SDK",
+             "//     include so the error reports the mode violation, not",
+             "//     the include's side effect.",
+             "#ifdef DUI_ABI_PROVIDER_ABI_REQUIRED",
+             '#error "DUI_ABI_PROVIDER_ABI_REQUIRED: pattern interface headers are SDK-coupled by signature; a provider-ABI-required TU must not include this header (the SDK UIAutomationCore.h interfaces are mandatory here)"',
+             "#endif",
+             "",
+             "// Option D: this interface's methods use SDK UIA types",
+             "// (IRawElementProviderSimple*, ScrollAmount, ...). The SDK",
+             "// header is therefore pulled HERE, before the yield check --",
+             "// the SDK MIDL interface is the base in every TU.",
+             "#include <UIAutomationCore.h>",
+             "",
+             f"struct {iface};",
+             "",
+             "#ifndef __uiautomationcore_h__",
+             "// auto-yield: the SDK UIA header already defined this",
+             "// interface name; its MIDL interface owns the name here.",
+             "// The generated struct below is the pinned-signature",
+             "// documentation; it never defines while the SDK guard is",
+             "// set. If an SDK update renames the guard, this struct",
+             "// reactivates and C2011s loudly (fail-visible).",
+             f"struct {iface}",
+             "{",
+             "public:"]
+    by_name: dict[str, dict] = {}
+    for s in members:
+        by_name.setdefault(s["member"], s)
+    slot_names = list(MI_PROVIDER_MIN_SHAPE) + list(mi_shape["pattern_methods"])
+    for slot in slot_names:
+        names = [slot] if isinstance(slot, str) else list(slot or [])
+        if isinstance(slot, list):
+            # ICF fold pair (e.g. two slots sharing one body, candidates
+            # [get_ColumnSpan, get_RowSpan] on BOTH slots): the pinned
+            # data cannot prove WHICH member sits in WHICH slot --
+            # member-level identity is fold-UNKNOWN. Emitting a guessed
+            # first-appearance pick would assert an ordering the DLL
+            # bytes do not determine; instead BOTH fold slots carry
+            # ABI placeholders (slot COUNT and vftable layout stay
+            # exact; the two candidate declarations are documented in
+            # the comment). The G4-Y R2 check verifies the layout
+            # fold-tolerantly and records these slots as fold-UNKNOWN.
+            cand = ", ".join(n for n in names if n in by_name)
+            lines.append("    // ABI placeholder: ICF fold slot -- the")
+            lines.append("    // pinned DLL data cannot determine which")
+            lines.append(f"    // member ({{ {cand} }}) occupies this slot;")
+            lines.append("    // member-level identity stays fold-UNKNOWN.")
+            lines.append(f"    virtual void __DuiAbiSlot_{iface}_{len(lines)}(void) = 0;")
+            continue
+        resolved = slot if slot in by_name else None
+        if resolved is None:
+            # singleton entry with no recoverable signature: placeholder
+            # (declared in order -- the slot stays ABI-true)
+            lines.append("    // ABI placeholder: fold slot, member-level")
+            lines.append("    // identity not provable from the pinned data.")
+            lines.append(f"    virtual void __DuiAbiSlot_{iface}_{len(lines)}(void) = 0;")
+            continue
+        s = by_name[resolved]
+        md = MemberDecl(s, cls)
+        sig = md.signature(tr)
+        lines.append(f"    virtual {sig} = 0;")
+    lines.append("};")
+    lines.append("#endif // __uiautomationcore_h__")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def mi_template_class_id(cls: str, classes: list) -> str | None:
+    """The PatternProvider specialization that is the REAL primary
+    intermediate base of provider class `cls`, e.g.
+    'PatternProvider<class DirectUI::InvokeProvider, struct
+    IInvokeProvider, 0>' -- found by matching the concrete class as the
+    first template argument (from pinned classes.json)."""
+    for c in classes:
+        if not c.startswith("PatternProvider<"):
+            continue
+        m = re.match(r"PatternProvider<class DirectUI::(\w+),", c)
+        if m and m.group(1) == cls:
+            return c
+    return None
+
+
+# MSVC mangles a non-negative template numeric argument N as '$0' +
+# one hex-mapped char + '@' (the documented scheme: N is encoded as
+# hex(N) with each nibble offset -- empirically, from the pinned
+# symbols themselves: 0->'A', 1..9->'0'..'8'?? No: the pinned mapping
+# is 0->A, 1->0, 2->1, ..., 10->9, 11->L, 12->M, i.e. the encoded
+# digit represents N-1 for 1<=N<=10 (hex digits, A-P for >=10) and 0
+# is special-cased to 'A'. We take this bijection FROM THE PINNED
+# DATA (symbols.json pairs the mangled suffix with the display-name
+# ID), not from a guessed closed form: build it once at load.
+MI_TPL_ID_ENCODING: dict[str, int] = {}
+MI_TPL_ID_DECODING: dict[int, str] = {}
+
+
+def mi_build_template_id_maps(symbols: list) -> None:
+    """Populate the $0X@ <-> numeric-ID bijection from pinned
+    symbols.json (each PatternProvider symbol carries both its mangled
+    name and its display-name template ID)."""
+    for s in symbols:
+        c = s.get("class") or ""
+        m = s.get("mangled") or ""
+        if not c.startswith("PatternProvider<"):
+            continue
+        mm = re.search(r"\$0([0-9A-Z]+)@", m)
+        idm = re.search(r", (\d+)>$", c)
+        if mm and idm:
+            enc, num = mm.group(1), int(idm.group(1))
+            MI_TPL_ID_ENCODING.setdefault(enc, num)
+            MI_TPL_ID_DECODING.setdefault(num, enc)
+
+
+def mi_template_display_name(mi_key: str) -> str | None:
+    """Translate a schema-2 mi-tables mangled template key
+    ('?$PatternProvider@VInvokeProvider@DirectUI@@UIInvokeProvider@@$0A@')
+    to the classes.json display name
+    ('PatternProvider<class DirectUI::InvokeProvider, struct
+    IInvokeProvider, 0>'). The numeric ID encoding uses the bijection
+    derived from pinned symbols.json (see mi_build_template_id_maps)."""
+    m = re.match(
+        r"^\?\$PatternProvider@V(\w+)@DirectUI@@U(\w+)@@\$0([0-9A-Z]+)@?$",
+        mi_key)
+    if not m:
+        return None
+    concrete, iface, enc = m.group(1), m.group(2), m.group(3)
+    tid = MI_TPL_ID_ENCODING.get(enc)
+    if tid is None:
+        return None
+    return (f"PatternProvider<class DirectUI::{concrete}, "
+            f"struct {iface}, {tid}>")
+
+
+def render_mi_provider_header(cls: str, members: list, data_members: list,
+                               tr: TypeTranslator, classes: list,
+                               banner: str, mi_shape: dict) -> str:
+    """Render a schema-2 MI provider class header.
+
+    Layout (every slot identity verified against the pinned DLL):
+        template <typename P, typename I, int ID> class PatternProvider;
+        template <> class PatternProvider<P, I, ID>
+            : public I, public RefcountBase, public IProvider
+            { ctor; virtual dtor; static Create; GetProxyCreator; Init; }
+        class <P>Provider : public PatternProvider<P, I, ID>
+            { virtual dtor; QI/AddRef/Release/pattern-method overrides;
+              GetProxyCreator override; }
+
+    Slot provenance (per pinned mi-tables.json, schema 2):
+      * primary table [QI, AddRef, Release, <pattern methods>]:
+        carried by the interface I's declaration order (I is the FIRST
+        direct base); the concrete class overrides every slot with its
+        own exported body
+      * RefcountBase secondary [vector dtor, Init]: dtor = the class's
+        own ??_E<P>Provider; Init = the TEMPLATE's Init (a new virtual
+        introduced by PatternProvider -- the class inherits it and
+        does NOT re-declare it)
+      * IProvider secondary [GetProxyCreator]: the class's own override
+    The pattern interface name (I<P>Provider) and the template
+    specialization id both come from pinned data; nothing is guessed.
+    """
+    iface = mi_pattern_iface_name(cls)
+    if "primary_iface" in mi_shape:
+        # HWNDElementProvider family: no PatternProvider intermediate;
+        # bases = the primary SDK interface + ElementProvider (which
+        # carries the 3 SDK secondaries + RefcountBase). The class's own
+        # exported overrides bind to the primary iface's slots.
+        return render_hwnd_provider_header(
+            cls, members, data_members, tr, classes, banner, mi_shape)
+    if "rb_introduced" in mi_shape:
+        # ElementProvider family: abstract intermediate, RefcountBase
+        # first (the subobject table carries its introduced virtuals)
+        return render_ep_provider_header(
+            cls, members, data_members, tr, classes, banner, mi_shape)
+    tpl_id = mi_template_class_id(cls, classes)
+    assert tpl_id is not None, (
+        f"MI provider {cls}: no PatternProvider<cls, ...> specialization "
+        "in classes.json -- refusing to guess the intermediate base")
+    lines = [banner,
+             f"// DirectUI::{cls} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             f"// W5 stage-2 MI emission: base-subobject vftables verified",
+             f"// against pinned mi-tables.json (schema 2).",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             f'#include "{iface}.h"',
+             "",
+             f'#include "{safe_name(tpl_id)}.h"',
+             ""]
+    # forward declarations referenced by signatures
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {cls}")
+    lines.append(f"        : public {iface}, public {template_id(tpl_id)}")
+    lines.append("    {")
+    lines.append("    public:")
+    # overrides only. Init is deliberately NOT declared here: the DLL's
+    # RefcountBase-secondary slot1 carries the TEMPLATE's Init
+    # (?Init@?$PatternProvider@...), which the class inherits.
+    skip = {"Init"}
+    dtor = next((s for s in members if classify_dtor(s)), None)
+    if dtor is not None:
+        lines.append(f"        virtual ~{cls}(void);")
+    for s in members:
+        name = s["member"]
+        if name in skip or classify_dtor(s):
+            continue
+        if not s.get("is_virtual"):
+            # non-virtual exported members keep their declarations
+            md = MemberDecl(s, cls)
+            lines.append(f"        {md.full_decl(tr)}")
+            continue
+        md = MemberDecl(s, cls)
+        sig = md.signature(tr)
+        lines.append(f"        virtual {sig} override;")
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_ep_provider_header(cls: str, members: list, data_members: list,
+                              tr: TypeTranslator, classes: list,
+                              banner: str, mi_shape: dict) -> str:
+    """Render the ElementProvider-family MI class header.
+
+    DLL truth (pinned vftable symbols + mi-tables.json schema 2): the
+    class has NO primary table of its own (abstract intermediate), and
+    its RefcountBase@1@ subobject table carries the class's introduced
+    virtuals:
+        [??_E<cls>, GetProxyCreator, GetElement, TossElement, Init]
+    (HWNDElementProvider appends a 6th slot: its Init(HWNDElement*)
+    hides ElementProvider::Init(Element*) -- a NEW virtual, and the
+    RefcountBase subobject is the FIRST base, so new virtuals land
+    there.)
+
+    Modeling: the real DLL has an unnamed RefcountBase-derived FIRST
+    base introducing those virtuals (the '@1@' collision suffix in the
+    vftable name marks the indirect base). Declaring the class itself
+        class <cls> : public RefcountBase,
+                      public IRawElementProviderAdviseEvents,
+                      public IRawElementProviderFragment,
+                      public IRawElementProviderSimple2
+    with the introduced virtuals declared in the DLL's subobject-slot
+    order reproduces the SAME five subobject tables (verified by the
+    A1 secondary-table audit); the header documents the modeling.
+    """
+    rb_introduced = list(mi_shape["rb_introduced"])
+    lines = [banner,
+             f"// DirectUI::{cls} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             "// W5 stage-2 MI emission (ElementProvider family): the",
+             "// RefcountBase@1@ subobject is the FIRST base; its table",
+             "// carries this class's introduced virtuals in DLL slot",
+             "// order (pinned mi-tables.json, schema 2). The DLL's real",
+             "// first base is an unnamed RefcountBase-derived",
+             "// intermediate; declaring the introduced virtuals here",
+             "// reproduces the same subobject tables.",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             '#include "RefcountBase.h"',
+             ""]
+    for b in HWND_PROVIDER_SECONDARIES:
+        lines.append(f"#include <{EXTERNAL_BASE_INCLUDES[b]}>")
+        lines.append("")
+    # headers of classes whose NESTED types this signature set uses by
+    # value (enum by value needs the complete host class), e.g.
+    # TossPatternProvider(Schema::Pattern)
+    for host in sorted(nested_type_hosts_used(members, data_members, None)):
+        if host != cls and host in classes:
+            lines.append(f'#include "{safe_name(host)}.h"')
+            lines.append("")
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    # forward declarations referenced by signatures (incl. nested-type
+    # hosts like Schema for Schema::Pattern)
+    fwd2 = set(fwd)
+    for s in members:
+        src = " ".join(str(s.get(k) or "") for k in
+                       ("signature", "undecorated", "member"))
+        for m in re.finditer(r"(\w+)::(\w+)", src):
+            fwd2.add(m.group(1))
+    for name in sorted(fwd2):
+        if name in NESTED_TYPE_HOSTS or name == cls:
+            continue
+        kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+        lines.append(f"    {kw} {name};")
+    if fwd2:
+        lines.append("")
+    lines.append("}")
+    lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {cls}")
+    lines.append("        : public RefcountBase,")
+    for b in HWND_PROVIDER_SECONDARIES:
+        lines.append(f"          public {b},")
+    # strip trailing comma of last base line
+    lines[-1] = lines[-1].rstrip(",")
+    lines.append("    {")
+    lines.append("    public:")
+    lines.append(f"        virtual ~{cls}(void);")
+    # introduced virtuals FIRST, in the DLL's RefcountBase-subobject
+    # slot order (slot0 = the vdtor above); they are NEW virtuals (no
+    # base declares them) -> no override specifier
+    by_name: dict[str, dict] = {}
+    for s in members:
+        by_name.setdefault(s["member"], s)
+    emitted = set()
+    # access-aware sections: the DLL's access bytes are part of the
+    # decorated export names (e.g. Init MEAA = protected, DoInvoke
+    # IEAA = private) -- public/protected/private blocks keep them
+    sections: dict[str, list[str]] = {"public": [], "protected": [],
+                                      "private": []}
+    for name in rb_introduced:
+        s = by_name.get(name)
+        if s is None:
+            continue
+        md = MemberDecl(s, cls)
+        sections[access_of(s)].append(
+            f"        virtual {md.signature(tr)};")
+        emitted.add(name)
+    # then the SDK overrides (their slots live in the SDK subobjects)
+    for s in members:
+        name = s["member"]
+        if name in emitted or classify_dtor(s):
+            continue
+        md = MemberDecl(s, cls)
+        if not s.get("is_virtual"):
+            sections[access_of(s)].append(f"        {md.full_decl(tr)}")
+            continue
+        sections[access_of(s)].append(
+            f"        virtual {md.signature(tr)} override;")
+    for sec in ("public", "protected", "private"):
+        if sections[sec]:
+            if sec != "public":
+                lines.append(f"    {sec}:")
+            lines.extend(sections[sec])
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_hwnd_provider_header(cls: str, members: list, data_members: list,
+                                tr: TypeTranslator, classes: list,
+                                banner: str, mi_shape: dict) -> str:
+    """Render the HWNDElementProvider-family MI class header.
+
+    DLL truth (pinned vftable symbols + mi-tables.json schema 2):
+        ??_7<cls>@DirectUI@@6B@                       -- primary, 5 slots
+            [QueryInterface, AddRef, Release,
+             ElementProviderFromPoint, GetFocus]
+            == IRawElementProviderFragmentRoot's table (content-derived:
+            the unsuffixed table's tail is exactly FragmentRoot's method
+            pair; the suffixed tables name the other 4 bases directly)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderAdviseEvents@@  (secondary)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderFragment@@       (secondary)
+        ??_7<cls>@DirectUI@@6BIRawElementProviderSimple2@@        (secondary)
+        ??_7<cls>@DirectUI@@6BRefcountBase@1@@        (secondary, manual)
+
+    Layout:
+        class <cls> : public IRawElementProviderFragmentRoot,
+                      public ElementProvider
+        ElementProvider.h already declares its 4 bases (the 3 SDK
+        secondaries + RefcountBase) -- deriving it reproduces those
+        subobject tables exactly.
+
+    The 13 SDK pure virtuals ElementProvider does not override stay
+    unimplemented: the class is abstract, exactly like the DLL's own
+    (their bodies are non-exported). Consumers hold pointers; the
+    ABI-relevant facts are the vftable layouts, all pinned above.
+    """
+    primary_iface = mi_shape["primary_iface"]
+    lines = [banner,
+             f"// DirectUI::{cls} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             "// W5 stage-2 MI emission (HWNDElementProvider family): "
+             "base-subobject",
+             "// vftables verified against pinned mi-tables.json "
+             "(schema 2).",
+             "// Primary table (unsuffixed ??_7): 5 slots whose tail is",
+             "// IRawElementProviderFragmentRoot's method pair --",
+             "// content-derived ownership (the table symbol carries no",
+             "// base name). The 4 secondary tables name their bases.",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             f"#include <{EXTERNAL_BASE_INCLUDES[primary_iface]}>",
+             "",
+             '#include "ElementProvider.h"',
+             ""]
+    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {cls}")
+    lines.append(f"        : public ElementProvider, public {primary_iface}")
+    lines.append("    {")
+    lines.append("    public:")
+    # the class's own exported overrides (QI/AddRef/Release pair the
+    # FragmentRoot slots; ElementProviderFromPoint/GetFocus land at
+    # FragmentRoot slots 3/4). Init(HWNDElement*, InvokeHelper*) HIDES
+    # ElementProvider::Init(Element*, InvokeHelper*) (C++ has no
+    # parameter-covariance: a different first param = a NEW virtual) --
+    # the DLL's RefcountBase subobject table carries it as slot 5, so
+    # it IS declared here (a plain virtual, no override specifier).
+    # Access sections honor the DLL's access bytes (Init is MEAA =
+    # protected in the pinned exports).
+    skip: set[str] = set()
+    dtor = next((s for s in members if classify_dtor(s)), None)
+    if dtor is not None:
+        lines.append(f"        virtual ~{cls}(void);")
+    sections: dict[str, list[str]] = {"public": [], "protected": [],
+                                      "private": []}
+    for s in members:
+        name = s["member"]
+        if name in skip or classify_dtor(s):
+            continue
+        md = MemberDecl(s, cls)
+        if not s.get("is_virtual"):
+            sections[access_of(s)].append(f"        {md.full_decl(tr)}")
+            continue
+        sig = md.signature(tr)
+        # Init HIDES the base's Init (different first param): a new
+        # virtual, not an override
+        if name == "Init":
+            sections[access_of(s)].append(f"        virtual {sig};")
+        else:
+            sections[access_of(s)].append(f"        virtual {sig} override;")
+    for sec in ("public", "protected", "private"):
+        if sections[sec]:
+            if sec != "public":
+                lines.append(f"    {sec}:")
+            lines.extend(sections[sec])
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def render_mi_template_header(tpl_id: str, members: list,
+                              data_members: list, tr: TypeTranslator,
+                              classes: list, banner: str,
+                              mi_shape: dict, iface: str) -> str:
+    """Render the PatternProvider specialization header for the MI
+    family. REAL hierarchy (compiler-verified against the pinned DLL
+    via reloc probes):
+        template <> class PatternProvider<P, I, ID>
+            : public RefcountBase, public IProvider
+            { ctor; virtual dtor; static Create; Init (NEW virtual ->
+              lands in the RefcountBase primary table slot1);
+              GetProxyCreator (override); DoInvoke }
+    The template does NOT inherit the pattern interface I -- the
+    concrete class lists I directly as ITS first base, which is why
+    the concrete primary table is the I-subobject table and Init sits
+    in the RefcountBase secondary (see render_mi_provider_header)."""
+    tid = template_id(tpl_id)
+    lines = [banner,
+             f"// DirectUI::{tid} -- declarations derived from the real",
+             "// dui70.dll export table + PDB publics.",
+             "// W5 stage-2 MI emission: base-subobject vftables verified",
+             "// against pinned mi-tables.json (schema 2).",
+             "#pragma once",
+             "",
+             "#include <windows.h>",
+             '#include "dui_abi_types.h"',
+             "",
+             '#include "RefcountBase.h"',
+             "",
+             '#include "IProvider.h"',
+             ""]
+    fwd = referenced_class_types(tpl_id, members, data_members, classes, None)
+    fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
+    if fwd:
+        lines.append("namespace DirectUI")
+        lines.append("{")
+        for name in fwd:
+            kw = "struct" if name in STRUCT_TAG_CLASSES else "class"
+            lines.append(f"    {kw} {name};")
+        lines.append("}")
+        lines.append("")
+    # the specialization arguments reference the concrete provider
+    # class (DirectUI scope) and the pattern interface (GLOBAL scope:
+    # its mangled arg carries no DirectUI qualifier). This header is
+    # INCLUDED BY the concrete class's header, so they can only be
+    # forward-declared here (complete types come from their own
+    # headers).
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append(f"    class {mi_shape.get('_concrete', '_Unknown')};")
+    lines.append("}")
+    lines.append("")
+    lines.append(f"struct {iface};")
+    lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
+    lines.append("    template <typename PROVIDER, typename INTERFACE, int ID>")
+    lines.append("    class PatternProvider;")
+    lines.append("")
+    lines.append("    template <>")
+    lines.append(f"    class {tid}")
+    lines.append("        : public RefcountBase, public IProvider")
+    lines.append("    {")
+    lines.append("    public:")
+    # the virtual dtor: its ??_E@$PatternProvider... deleting-dtor is
+    # the RefcountBase-primary slot0 of the TEMPLATE's own table
+    # (pinned 0x116F68); declared first like any dtor-bearing class.
+    dtor = next((s for s in members if classify_dtor(s)), None)
+    if dtor is not None:
+        lines.append(f"        virtual ~{tid}(void);")
+    # access sections in walk order (mangled names encode access:
+    # ?DoInvoke@...IEAA... is PRIVATE -- rendering it public would
+    # mangle QEAA and miss the real export).
+    cur_acc = "public"
+    for s in members:
+        name = s["member"]
+        if classify_dtor(s) or classify_scalar_dtor(s) or is_synth_member(s):
+            continue
+        acc = access_of(s)
+        if acc != cur_acc:
+            lines.append("")
+            lines.append(f"        {acc}:")
+            cur_acc = acc
+        md = MemberDecl(s, tpl_id)
+        if s.get("kind") == "ctor":
+            lines.append(f"        {md.signature(tr)};")
+        else:
+            decl = md.full_decl(tr).rstrip(";")
+            lines.append(f"        {decl};")
+    lines.append("    };")
+    lines.append("")
+    lines.append("} // namespace DirectUI")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
                         inheritance: dict, banner: str,
@@ -1643,8 +2625,16 @@ def render_class_header(cls: str, members: list, data_members: list,
                         base_prefix: int = 0,
                         exported_virtuals_by_class: dict | None = None,
                         base_names: set | None = None,
-                        override_votes: dict | None = None) -> str:
-    """Render one class header file content."""
+                        override_votes: dict | None = None,
+                        mi_shape: dict | None = None) -> str:
+    """Render one class header file content.
+
+    mi_shape: when the class qualifies for schema-2 MI emission (see
+    mi_provider_shape), the provider-MI rendering path is used: bases
+    [I<P>Provider, RefcountBase, IProvider] with every slot's identity
+    carried by interface declaration order; the class body declares
+    only overrides. No contract_reorder walk runs for these classes.
+    """
     tpl = is_template_class(cls)
     tid = template_id(cls) if tpl else cls
     bases = base_list(inheritance, cls)
@@ -1652,8 +2642,11 @@ def render_class_header(cls: str, members: list, data_members: list,
     items = None  # v2: contract item stream (members + __PH__ markers)
     if global_cls:
         # members reference DirectUI types fully qualified; the class itself
-        # lives at global scope (no @DirectUI@@ in its mangled members)
+        # lives at global scope (no @DirectUI@@ component in its mangled members)
         tr = TypeTranslator(classes, keep_scope=True)
+    if mi_shape is not None:
+        return render_mi_provider_header(
+            cls, members, data_members, tr, classes, banner, mi_shape)
     lines = []
     lines.append(banner)
     lines.append(f"// DirectUI::{tid} -- declarations derived from the real")
@@ -1679,6 +2672,13 @@ def render_class_header(cls: str, members: list, data_members: list,
             else:
                 lines.append(f"#include <{provider}>")
             lines.append("")
+    # Option D quarantine: this class's own signatures use SDK UIA
+    # types -> include the SDK headers directly (dui_abi_types.h no
+    # longer provides them transitively). Signature-driven; Core
+    # always precedes Api (Api needs Core's PROPERTYID).
+    for sdk_hdr in sdk_uia_includes_for(members, data_members):
+        lines.append(f"#include <{sdk_hdr}>  // Option D quarantine: SDK UIA types")
+        lines.append("")
     # explicit specializations: the template ARGUMENT types must be
     # complete-enough to name (DirectUI provider classes get their header;
     # UIA interfaces come from UIAutomationCore.h via dui_abi_types.h)
@@ -1807,9 +2807,37 @@ def render_class_header(cls: str, members: list, data_members: list,
     if cls in POLYMORPHIC_BASE_CLASSES:
         # abstract in the real DLL (derived classes export base-subobject
         # vftables): one pure virtual makes this base polymorphic without
-        # adding any export of its own
+        # adding any export of its own. W5 stage-2: for IProvider the
+        # pure virtual is the REAL interface method (GetProxyCreator,
+        # one slot, pinned manual interface-length input); its PDB
+        # "members" (ctor/assign folds) are compiler artifacts of the
+        # ICF fold, not real interface methods -- declared private and
+        # defined out-of-line in the stub TU so the exported mangled
+        # names still exist.
         lines.append("    public:")
-        lines.append("        virtual unsigned long AddRef(void) = 0;")
+        if cls == "IProvider" and mi_doc_loaded():
+            lines.append("        // W5 stage-2 schema-2: the real single")
+            lines.append("        // interface method (pinned mi-tables.json:")
+            lines.append("        // IProvider secondary length 1, manual input).")
+            lines.append("        // Return type: the fn-pointer shape comes from the")
+            lines.append("        // concrete overrides' pinned signature")
+            lines.append("        // (?GetProxyCreator@...P6APEAVProviderProxy@2@PEAVElement@2@@ZXZ);")
+            lines.append("        // ProviderProxy/Elaborate-type speccers keep the types at")
+            lines.append("        // DirectUI scope (nested decls would change the mangling).")
+            lines.append("        virtual class ProviderProxy* (__cdecl* GetProxyCreator(void))(class Element*) = 0;")
+            lines.append("")
+            lines.append("        // ICF-fold ctor/assign exports: compiler")
+            lines.append("        // artifacts of the real binary's fold, not")
+            lines.append("        // interface methods; declared (public -- the")
+            lines.append("        // exported mangles are QEAA) and defined")
+            lines.append("        // out-of-line in the stub TU.")
+            lines.append("        IProvider(void);")
+            lines.append("        IProvider(IProvider const&);")
+            lines.append("        IProvider(IProvider&&);")
+            lines.append("        IProvider& operator=(IProvider const&);")
+            lines.append("        IProvider& operator=(IProvider&&);")
+        else:
+            lines.append("        virtual unsigned long AddRef(void) = 0;")
         lines.append("")
 
     table_driven = bool(slot_lists)
@@ -2060,8 +3088,16 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("#include <windows.h>")
     lines.append("#include <commctrl.h>       // _TREEITEM, tagNMCUSTOMDRAWINFO, _PSP")
     lines.append("#include <commdlg.h>        // _PROPSHEETPAGEW")
-    lines.append("#include <UIAutomationCore.h>  // IRawElementProvider*, UiaRect, enums")
-    lines.append("#include <UIAutomationCoreApi.h>  // AutomationIdentifierType enum (Uia* fn-ptr args)")
+    lines.append("// Option D quarantine (measured, .local/audit/uia-exp): the")
+    lines.append("// SDK UIA headers are NOT included here anymore. The only")
+    lines.append("// references in this prelude are comment-level; the real")
+    lines.append("// consumers include the SDK headers directly: the 13 pattern")
+    lines.append("// interface headers (UIAutomationCore.h, before their yield")
+    lines.append("// check), Schema.h (Core+Api for AutomationIdentifierType and")
+    lines.append("// UiaRaiseAutomationEvent), ElementProxy.h (Core for UiaRect),")
+    lines.append("// ElementProvider.h / HWNDElementProvider.h (quoted includes,")
+    lines.append("// unchanged). This keeps SDK UIA types out of provider-only")
+    lines.append("// TUs that do not use them and out of the CApi collision path.")
     lines.append("#include <directmanipulation.h> // IDirectManipulation* interfaces")
     lines.append("#include <dwrite.h>         // DWRITE_TEXT_RANGE, IDWriteFactory, ...")
     lines.append("#include <oleacc.h>         // IAccessible, IAccIdentity")
@@ -2689,6 +3725,82 @@ def main(argv=None) -> int:
     override_votes = build_override_votes(inheritance, slot_tables)
     n_votes = sum(len(v) for v in override_votes.values())
 
+    # W5 stage-2 schema-2 MI tables (optional): provider-family classes
+    # with verified three-table MI layout leave the rejected path and
+    # are emitted with interface-order slot identity. Membership is
+    # decided from the pinned data alone (mi_provider_shape); the
+    # interface-length manual inputs are part of pinned (G1-locked).
+    mi_doc = load_mi_tables(args.pinned)
+    global _MI_DOC_LOADED
+    _MI_DOC_LOADED = mi_doc is not None
+    mi_build_template_id_maps(symbols)
+    mi_shapes: dict[str, dict] = {}
+    mi_template_shapes: dict[str, dict] = {}
+    if mi_doc is not None:
+        for mi_key, entry in (mi_doc.get("derived") or {}).items():
+            if mi_key.startswith("?$PatternProvider@"):
+                # template instantiation: keyed by its mangled name in
+                # schema 2; translate to the classes.json display name
+                cls = mi_template_display_name(mi_key)
+                if cls is None or cls not in classes:
+                    continue
+                # the template has no primary table of its own (the
+                # interface's pure methods keep it abstract; the
+                # concrete class owns the primary). Its SECONDARIES
+                # must match the family shape: RefcountBase secondary
+                # exactly [dtor-marker, Init] with manual provenance
+                # (the manual interface-length input), IProvider
+                # secondary length manual with a fold entry that
+                # CONTAINS GetProxyCreator (the template's generic body
+                # is ICF-folded across many classes).
+                secs = entry.get("secondaries") or {}
+                ip = secs.get("IProvider")
+                rb = secs.get("RefcountBase")
+                if not (isinstance(ip, dict) and isinstance(rb, dict)):
+                    continue
+                ip_slots = ip.get("slots")
+                ip_fold = (ip_slots[0] if isinstance(ip_slots, list)
+                           and ip_slots and isinstance(ip_slots[0], list)
+                           else None)
+                rb_slots = rb.get("slots")
+                if (ip.get("length_provenance") == "manual"
+                        and rb.get("length_provenance") == "manual"
+                        and ip_fold and "GetProxyCreator" in ip_fold
+                        and isinstance(rb_slots, list) and len(rb_slots) == 2
+                        and rb_slots[1] == "Init"):
+                    m = re.match(
+                        r"PatternProvider<class DirectUI::(\w+),", cls)
+                    mi_template_shapes[cls] = {
+                        "pattern_methods": [],
+                        "_concrete": m.group(1) if m else "_Unknown",
+                    }
+            else:
+                cls = mi_key
+                if cls not in classes:
+                    continue
+                shape = mi_provider_shape(entry)
+                if shape is not None:
+                    mi_shapes[cls] = shape
+                    continue
+                # the 14th native UIA provider family
+                # (HWNDElementProvider): primary =
+                # IRawElementProviderFragmentRoot + 4 secondaries
+                shape = hwnd_provider_shape(entry)
+                if shape is not None:
+                    mi_shapes[cls] = shape
+                    continue
+                # the ElementProvider family (abstract intermediate,
+                # RefcountBase-first): no primary, 4 secondaries
+                shape = ep_provider_shape(entry)
+                if shape is not None:
+                    mi_shapes[cls] = shape
+        n_mi = len(mi_shapes) + len(mi_template_shapes)
+        print(f"emit_headers: schema-2 MI tables loaded "
+              f"({len(mi_doc.get('derived') or {})} classes; "
+              f"{n_mi} qualify for provider-MI emission "
+              f"({len(mi_shapes)} concrete + {len(mi_template_shapes)} "
+              f"templates)")
+
     stats = {}
     contract_rows = []
     v2_rows = []
@@ -2705,11 +3817,23 @@ def main(argv=None) -> int:
             # nested in a host class (e.g. AccessibleButton::ACCESSIBLEROLE):
             # declared inside the host's header, no standalone file
             continue
+        if cls in mi_template_shapes:
+            # schema-2 MI: the PatternProvider specialization is emitted
+            # by its concrete provider's MI path (with the interface
+            # header); the legacy template-specialization path is
+            # bypassed so the two never collide.
+            continue
         members = [s for s in symbols
                    if s.get("class") == cls
                    and s.get("is_exported")
                    and in_directui_scope(s)
                    and is_callable(s)]
+        if (cls == "IProvider" and mi_doc_loaded()
+                and cls in POLYMORPHIC_BASE_CLASSES):
+            # W5 stage-2: IProvider's PDB members (ctor/assign folds)
+            # are ICF artifacts; the schema-2 interface block declares
+            # them (private, stub-TU defined) instead of the walk.
+            members = []
         data_members = [s for s in symbols
                         if s.get("class") == cls
                         and s.get("is_exported")
@@ -2726,6 +3850,54 @@ def main(argv=None) -> int:
             print(f"emit_headers: ERROR  contract entry for {cls} is not a "
                   "slot list", file=sys.stderr)
             return 2
+        mi_shape = mi_shapes.get(cls)
+        if mi_shape is not None:
+            # schema-2 MI emission: slot identity is carried by interface
+            # declaration order; the contract walk is bypassed entirely
+            # (classification would reject these classes -- their exported
+            # virtuals live across three tables, which is exactly what the
+            # MI path expresses).
+            content = render_class_header(
+                cls, members, data_members, tr, classes, inheritance,
+                banner, has_own_vftable=has_own_vftable,
+                slot_lists=None, base_prefix=0,
+                exported_virtuals_by_class=exp_virt_by_class,
+                override_votes=override_votes, mi_shape=mi_shape)
+            (out_dir / f"{safe_name(cls)}.h").write_text(
+                content, encoding="utf-8", newline="\n")
+            if "primary_iface" in mi_shape or "rb_introduced" in mi_shape:
+                # HWNDElementProvider family: the primary interface is a
+                # REAL SDK interface (UIAutomationCore.h owns it under
+                # Option D) and there is no PatternProvider intermediate
+                # -- no generated interface/template headers.
+                # ElementProvider family: abstract intermediate, no
+                # primary table and no pattern interface at all.
+                stats[cls] = {"methods": len(members),
+                              "data": len(data_members), "mi": True}
+                continue
+            # the pattern interface header (primary-table slot order)
+            iface = mi_pattern_iface_name(cls)
+            iface_content = render_mi_pattern_iface_header(
+                iface, cls, members, tr, banner, mi_shape)
+            (out_dir / f"{iface}.h").write_text(
+                iface_content, encoding="utf-8", newline="\n")
+            # the PatternProvider specialization (the real intermediate
+            # base: carries Init + the generic GetProxyCreator slots)
+            tpl_id = mi_template_class_id(cls, classes)
+            if tpl_id is not None and tpl_id in mi_template_shapes:
+                tpl_members = [s for s in symbols
+                               if s.get("class") == tpl_id
+                               and s.get("is_exported")
+                               and in_directui_scope(s)
+                               and is_callable(s)]
+                tpl_content = render_mi_template_header(
+                    tpl_id, tpl_members, [], tr, classes, banner,
+                    mi_template_shapes[tpl_id], iface)
+                (out_dir / f"{safe_name(tpl_id)}.h").write_text(
+                    tpl_content, encoding="utf-8", newline="\n")
+            stats[cls] = {"methods": len(members),
+                          "data": len(data_members), "mi": True}
+            continue
         # v2 exported-virtual set for classification (from symbols.json,
         # the canonical source -- not a hand table)
         cls_exp_virt = {s["member"] for s in symbols
@@ -2788,6 +3960,29 @@ def main(argv=None) -> int:
     cls_ph_by_class = {r["cls"]: len(r["placeholders"])
                        for r in v2_rows if r["mode"] == "bound"
                        and r.get("placeholders")}
+    # MI pattern-interface headers carry fold placeholders by design
+    # (fold entries emit ABI placeholders -- no first-appearance pick).
+    # The expected count per iface = its mi_shape fold entries (the same
+    # data the renderer used), so the accounting stays artifact-derived
+    # and fail-closed on any drift.
+    iface_ph: dict[str, int] = {}
+    if mi_doc is not None:
+        for cls, shape in mi_shapes.items():
+            if "primary_iface" in shape or "rb_introduced" in shape \
+                    or "pattern_methods" not in shape:
+                continue
+            n = sum(1 for s in shape["pattern_methods"]
+                    if isinstance(s, list))
+            if n:
+                iface_ph[mi_pattern_iface_name(cls)] = n
+    for k, v in iface_ph.items():
+        if hdr_ph_by_class.get(k) != v:
+            print(f"emit_headers: ERROR  MI iface {k}: header has "
+                  f"{hdr_ph_by_class.get(k, 0)} placeholders, mi-shape "
+                  f"expects {v} (fail-closed)", file=sys.stderr)
+            return 2
+        # account for: remove from the strict cross-check below
+        hdr_ph_by_class.pop(k, None)
     if hdr_ph_by_class != cls_ph_by_class:
         only_hdr = {k: v for k, v in hdr_ph_by_class.items()
                     if cls_ph_by_class.get(k) != v}

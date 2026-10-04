@@ -123,8 +123,13 @@ $env:LIB = "$(Join-Path $vsRoot 'lib\x64');$(Join-Path $sdkLib 'ucrt\x64');$(Joi
 
 Write-Host "==> build fixture against $Lib" -ForegroundColor Cyan
 $exe = Join-Path $OutDir 'w1-childrenview.exe'
+# /Zc:wchar_t- is the DirectUI consumer ABI mode (Option D): the SDK UIA
+# interfaces pulled in via the generated headers declare wchar_t params;
+# under this flag they mangle PEBG/PEAPEAG == the pinned dui70.dll
+# exports. The default wchar_t mode diverges (PEB_W) and the
+# ValueProvider overrides stop matching their SDK base (C3668).
 $clArgs = @(
-    '/nologo', '/W3', '/O2', '/EHsc', '/std:c++17',
+    '/nologo', '/W3', '/O2', '/EHsc', '/std:c++17', '/Zc:wchar_t-',
     "/I$includeDir", "/I$WorkDir",
     "/Fo$OutDir\\", "/Fe:$exe", "/Fd$OutDir\w1-childrenview.pdb",
     (Join-Path $testDir 'w1-childrenview-probe.cpp'),

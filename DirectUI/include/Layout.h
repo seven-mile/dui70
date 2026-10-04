@@ -16,30 +16,24 @@ namespace DirectUI
     class Layout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        virtual void OnAdd(Element*, Element**, unsigned int);
+        virtual void OnRemove(Element*, Element**, unsigned int);
+        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
+        virtual void Attach(Element*);
+        virtual void Detach(Element*);
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         Layout(Layout const&);
         Layout(void);
         virtual ~Layout(void);
         Layout& operator=(Layout const&);
-        virtual void Attach(Element*);
         static long Create(Layout**);
         void Destroy(void);
-        virtual void Detach(Element*);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         Element* GetChildFromLayoutIndex(Element*, int, DynamicArray<class Element*, 0>*);
         unsigned int GetLayoutChildCount(Element*);
         int GetLayoutIndexFromChild(Element*, Element*);
         void Initialize(void);
-        virtual void OnAdd(Element*, Element**, unsigned int);
-        virtual void OnLayoutPosChanged(Element*, Element*, int, int);
-        virtual void OnRemove(Element*, Element**, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
         static void UpdateLayoutRect(Element*, int, int, Element*, int, int, int, int);
 
         protected:

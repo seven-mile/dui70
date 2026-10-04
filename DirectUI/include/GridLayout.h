@@ -18,22 +18,31 @@ namespace DirectUI
     class GridLayout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_GridLayout_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_GridLayout_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_GridLayout_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_GridLayout_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_GridLayout_6(void) = 0;
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         GridLayout(GridLayout const&);
         GridLayout(void);
         virtual ~GridLayout(void);
         GridLayout& operator=(GridLayout const&);
         static long Create(int, int, Layout**);
         static long Create(int, int*, Value**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         void Initialize(int, int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         protected:
         unsigned int GetCurrentCols(int);

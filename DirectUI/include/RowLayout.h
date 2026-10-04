@@ -18,12 +18,24 @@ namespace DirectUI
     class RowLayout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RowLayout_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RowLayout_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RowLayout_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RowLayout_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_RowLayout_6(void) = 0;
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         RowLayout(RowLayout const&);
         RowLayout(void);
         virtual ~RowLayout(void);
@@ -31,10 +43,7 @@ namespace DirectUI
         static long Create(int, unsigned int, unsigned int, Layout**);
         static long Create(int, int*, Value**);
         static long Create(unsigned int, unsigned int, Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         long Initialize(int, unsigned int, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
     };
 
 } // namespace DirectUI

@@ -168,15 +168,6 @@ namespace DirectUI
         // ABI placeholder: real slot 55 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_Combobox_55(void) = 0;
-        // ABI placeholder: real slot 56 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Combobox_56(void) = 0;
-        // ABI placeholder: real slot 57 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Combobox_57(void) = 0;
-        // ABI placeholder: real slot 58 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Combobox_58(void) = 0;
         Combobox& operator=(Combobox const&);
         int AddString(unsigned short const*);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

@@ -105,6 +105,34 @@ def parse_pe(blob: bytes):
     return image_base, secs
 
 
+def exec_ranges(blob: bytes) -> list[tuple[int, int]]:
+    """Virtual-address ranges of every executable section (ENTRY targets).
+
+    A vftable entry is a code pointer: it must land inside a section
+    marked IMAGE_SCN_MEM_EXECUTE. On dui70.dll that is .text + fothk
+    (the import forwarder thunks). Anything else -- .rdata string
+    literals, .data pointers, misaligned garbage -- marks the END of
+    the table: the extractor was reading PAST the table into adjacent
+    .rdata (string tables, other constants) whenever the next vftable
+    symbol happened to sit far away. 42 classes had such phantom tails
+    (DUIXmlParser: 36 phantom slots read out of a layout-factory string
+    table; Layout: 3 phantom slots past ??_ELayout).
+    """
+    e = struct.unpack_from("<I", blob, 0x3C)[0]
+    coff = e + 4
+    nsec = struct.unpack_from("<H", blob, coff + 2)[0]
+    optsz = struct.unpack_from("<H", blob, coff + 16)[0]
+    opt = coff + 20
+    ranges = []
+    for i in range(nsec):
+        o = opt + optsz + i * 40
+        vsize, vaddr, rsize, raddr = struct.unpack_from("<IIII", blob, o + 8)
+        ch = struct.unpack_from("<I", blob, o + 36)[0]
+        if ch & 0x20000000:  # IMAGE_SCN_MEM_EXECUTE
+            ranges.append((vaddr, vaddr + vsize))
+    return ranges
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--dll", required=True, help="path to the pinned dui70.dll")
@@ -125,9 +153,17 @@ def main(argv: list[str] | None = None) -> int:
     try:
         blob = dll.read_bytes()
         image_base, secs = parse_pe(blob)
+        exec_rng = exec_ranges(blob)
+        if not exec_rng:
+            print("extract-vtable-slots: ERROR  no executable sections -- "
+                  "not a sane image", file=sys.stderr)
+            return 2
     except (OSError, struct.error, SystemExit) as exc:
         print(f"extract-vtable-slots: ERROR  cannot parse PE: {exc}", file=sys.stderr)
         return 2
+
+    def is_code_target(rva: int) -> bool:
+        return any(lo <= rva < hi for lo, hi in exec_rng)
 
     def rva_to_off(rva: int):
         for va, vsize, raddr, rsize in secs:
@@ -182,7 +218,10 @@ def main(argv: list[str] | None = None) -> int:
             stat["unmapped"] += 1
             continue
         # Table runs until the NEXT vftable symbol RVA (vftables are packed
-        # back-to-back in .rdata) or a zero pointer.
+        # back-to-back in .rdata), a zero pointer, or an entry that does
+        # NOT point into an executable section (the hard end-of-table
+        # signal: vftable entries are code pointers; anything else means
+        # the read has left the table and entered adjacent .rdata).
         i = bisect.bisect_right(vt_sorted, rva)
         end = vt_sorted[i] if i < len(vt_sorted) else None
         n = (end - rva) // 8 if end else 64
@@ -194,6 +233,17 @@ def main(argv: list[str] | None = None) -> int:
             p = struct.unpack_from("<Q", blob, off + 8 * k)[0]
             if p == 0:
                 break
+            if not is_code_target(p - image_base):
+                if k > 0:
+                    # entry outside every executable section: the table
+                    # ended before this slot (never counted as a slot)
+                    stat["stopped_non_code"] += 1
+                    break
+                # slot 0 itself is not a code pointer: keep it as an
+                # empty slot (fail-open toward [], the audit will flag)
+                stat["bad_slot0"] += 1
+                slots.append([])
+                continue
             cands = names_at.get(p - image_base)
             if not cands:
                 stat["unresolved"] += 1

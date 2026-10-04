@@ -153,15 +153,6 @@ namespace DirectUI
         virtual long BuildElement(void);
 
         public:
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Macro_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Macro_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Macro_48(void) = 0;
         Macro& operator=(Macro&&);
         Macro& operator=(Macro const&);
         static long Create(Element*, unsigned long*, Element**);

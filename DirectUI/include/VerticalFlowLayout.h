@@ -18,23 +18,32 @@ namespace DirectUI
     class VerticalFlowLayout
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual void DoLayout(Element*, int, int);
+        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_VerticalFlowLayout_2(void) = 0;
+        // ABI placeholder: real slot 3 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_VerticalFlowLayout_3(void) = 0;
+        // ABI placeholder: real slot 4 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_VerticalFlowLayout_4(void) = 0;
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_VerticalFlowLayout_5(void) = 0;
+        // ABI placeholder: real slot 6 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_VerticalFlowLayout_6(void) = 0;
+        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         VerticalFlowLayout(VerticalFlowLayout const&);
         VerticalFlowLayout(void);
         virtual ~VerticalFlowLayout(void);
         VerticalFlowLayout& operator=(VerticalFlowLayout const&);
         static long Create(int, int*, Value**);
         static long Create(bool, unsigned int, unsigned int, unsigned int, Layout**);
-        virtual void DoLayout(Element*, int, int);
-        virtual Element* GetAdjacent(Element*, Element*, int, NavReference const*, unsigned long);
         int GetLine(Element*, Element*);
         void Initialize(bool, unsigned int, unsigned int, unsigned int);
-        virtual tagSIZE UpdateDesiredSize(Element*, int, int, Surface*);
 
         protected:
         tagSIZE BuildCacheInfo(Element*, int, int, Surface*, bool);

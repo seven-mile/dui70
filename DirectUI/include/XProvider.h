@@ -23,37 +23,31 @@ namespace DirectUI
         : public IXProvider
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
-
+        virtual long QueryInterface(_GUID const&, void**);
+        virtual unsigned long AddRef(void);
+        virtual unsigned long Release(void);
+        virtual long CreateDUI(IXElementCP*, HWND__**);
+        virtual long SetParameter(_GUID const&, void*);
+        virtual long GetDesiredSize(int, int, tagSIZE*);
+        virtual long IsDescendent(Element*, bool*);
+        virtual long SetFocus(Element*);
+        virtual long Navigate(int, bool*);
+        virtual long CanSetFocus(bool*);
+        virtual int FindElementWithShortcutAndDoDefaultAction(unsigned short, int);
+        virtual long GetHostedElementID(unsigned short*);
+        virtual long ForceThemeChange(unsigned __int64, __int64);
+        virtual long SetDefaultButtonTracking(bool);
+        virtual int ClickDefaultButton(void);
+        virtual long SetRegisteredDefaultButton(Element*);
+        virtual long SetButtonClassAcceptsEnterKey(bool);
+        virtual long CreateXBaby(IXElementCP*, HWND__*, Element*, unsigned long*, IXBaby**);
         XProvider(XProvider const&);
         XProvider(void);
         virtual ~XProvider(void);
         XProvider& operator=(XProvider const&);
-        virtual unsigned long AddRef(void);
-        virtual long CanSetFocus(bool*);
-        virtual int ClickDefaultButton(void);
         static long Create(Element*, IXProviderCP*, XProvider**);
-        virtual long CreateDUI(IXElementCP*, HWND__**);
         long CreateParser(DUIXmlParser**);
-        virtual long CreateXBaby(IXElementCP*, HWND__*, Element*, unsigned long*, IXBaby**);
-        virtual int FindElementWithShortcutAndDoDefaultAction(unsigned short, int);
-        virtual long ForceThemeChange(unsigned __int64, __int64);
-        virtual long GetDesiredSize(int, int, tagSIZE*);
-        virtual long GetHostedElementID(unsigned short*);
         long Initialize(Element*, IXProviderCP*);
-        virtual long IsDescendent(Element*, bool*);
-        virtual long Navigate(int, bool*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long SetButtonClassAcceptsEnterKey(bool);
-        virtual long SetDefaultButtonTracking(bool);
-        virtual long SetFocus(Element*);
-        virtual long SetParameter(_GUID const&, void*);
-        virtual long SetRegisteredDefaultButton(Element*);
 
         protected:
         Element* GetRoot(void);

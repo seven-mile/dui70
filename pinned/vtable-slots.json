@@ -382,10 +382,7 @@
      "render"
     ],
     "OnLostDialogFocus",
-    "OnReceivedDialogFocus",
-    "_C",
-    [],
-    []
+    "OnReceivedDialogFocus"
    ]
   },
   "AdaptorElement": {
@@ -1631,8 +1628,7 @@
     "PageUp",
     "PageDown",
     "Home",
-    "End",
-    "_R4Maskable"
+    "End"
    ]
   },
   "BehaviorEngine": {
@@ -1647,10 +1643,7 @@
     [
      "_EBehaviorEngine",
      "_GBehaviorEngine"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "Bind": {
@@ -3923,15 +3916,7 @@
      "_guard_check_icall_nop",
      "destroy",
      "wil_StagingConfig_LogFeatureProcessUsage"
-    ],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
+    ]
    ]
   },
   "CCBaseCheckRadioButton": {
@@ -6861,12 +6846,7 @@
      "_guard_check_icall_nop",
      "destroy",
      "wil_StagingConfig_LogFeatureProcessUsage"
-    ],
-    [],
-    "_C",
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "CCPushButton": {
@@ -11158,26 +11138,14 @@
     "OnAdjustWindowSize",
     "SetWindowDirection",
     "CreateHWND",
-    "EraseBkgnd",
-    "_C",
-    [],
-    []
+    "EraseBkgnd"
    ]
   },
   "ConcreteElementProxy": {
    "rva": "0x00107910",
    "slots": [
     "DoMethod",
-    "Init",
-    "_C",
-    [],
-    [],
-    [],
-    "GetIntZero",
-    [],
-    "_C",
-    [],
-    []
+    "Init"
    ]
   },
   "ConcreteHWNDElementProxy": {
@@ -11185,10 +11153,7 @@
    "slots": [
     "DoMethod",
     "Init",
-    "Init",
-    "_C",
-    [],
-    []
+    "Init"
    ]
   },
   "ContentLayoutInvalidateBehavior": {
@@ -12491,10 +12456,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "DUIBehaviorFactory": {
@@ -12503,52 +12465,13 @@
     "_purecall",
     "_purecall",
     "_purecall",
-    "CreateBehavior",
-    "_C",
-    [],
-    []
+    "CreateBehavior"
    ]
   },
   "DUIXmlParser": {
    "rva": "0x00103698",
    "slots": [
-    "_EDUIXmlParser",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create",
-    "_C",
-    "Create"
+    "_EDUIXmlParser"
    ]
   },
   "DeferCycle": {
@@ -12557,10 +12480,7 @@
     [
      "_EDeferCycle",
      "_GDeferCycle"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "Edit": {
@@ -12999,12 +12919,7 @@
     "SetWindowDirection",
     "CreateHWND",
     "EraseBkgnd",
-    "CreateHWND",
-    [],
-    "_C",
-    "_C",
-    [],
-    []
+    "CreateHWND"
    ]
   },
   "Element": {
@@ -13593,10 +13508,7 @@
     [
      "_EElementClassInfo",
      "_GElementClassInfo"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "ElementWithHWND": {
@@ -15124,14 +15036,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
+    ]
    ]
   },
   "Expando": {
@@ -15548,8 +15453,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    []
+    ]
    ]
   },
   "ExpandoButtonGlyph": {
@@ -17092,14 +16996,7 @@
      "readNewStyle",
      "render"
     ],
-    "EraseBkgnd",
-    "_7CElementListenerNop",
-    "_C",
-    "ParseGradientFill",
-    "_C",
-    "ParseDFCFill",
-    "_C",
-    "ParseDTBFill"
+    "EraseBkgnd"
    ]
   },
   "IDataEngine": {
@@ -17133,13 +17030,7 @@
     "_purecall",
     "_purecall",
     "_purecall",
-    "_purecall",
-    "_C",
-    [],
-    [],
-    [],
-    "GetIntZero",
-    []
+    "_purecall"
    ]
   },
   "IDuiParserCache": {
@@ -18100,10 +17991,7 @@
      "GetAdjacent",
      "GetModule"
     ],
-    "_ELayout",
-    "_C",
-    [],
-    []
+    "_ELayout"
    ]
   },
   "LayoutInvalidateBehavior": {
@@ -19231,10 +19119,7 @@
      "readNewStyle",
      "render"
     ],
-    "BuildElement",
-    "_C",
-    [],
-    []
+    "BuildElement"
    ]
   },
   "ManipulationHelper": {
@@ -20327,10 +20212,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "ModernProgressBarRangeValueProxy": {
@@ -22056,10 +21938,7 @@
     [
      "_EPVLAnimationTriggers",
      "_GPVLAnimationTriggers"
-    ],
-    [],
-    [],
-    []
+    ]
    ]
   },
   "PVLLauncherAnimationTriggers": {
@@ -22559,10 +22438,7 @@
      "readNewStyle",
      "render"
     ],
-    "BuildElement",
-    "_C",
-    [],
-    []
+    "BuildElement"
    ]
   },
   "Pages": {
@@ -23409,10 +23285,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "ProgressRangeValueProxy": {
@@ -23845,10 +23718,7 @@
      "readNewStyle",
      "render"
     ],
-    "GetForegroundColorRef",
-    "_C",
-    [],
-    []
+    "GetForegroundColorRef"
    ]
   },
   "Proxy": {
@@ -25126,10 +24996,7 @@
   "RefcountBase": {
    "rva": "0x00103928",
    "slots": [
-    "_ERefcountBase",
-    "_C",
-    [],
-    []
+    "_ERefcountBase"
    ]
   },
   "RepeatButton": {
@@ -26367,16 +26234,7 @@
     [
      "_ERichTextCache",
      "_GRichTextCache"
-    ],
-    "_C",
-    [],
-    [],
-    [],
-    [],
-    [],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "RichTextShared": {
@@ -26912,10 +26770,7 @@
      "readNewStyle",
      "render"
     ],
-    "SetSelection",
-    "_C",
-    [],
-    []
+    "SetSelection"
    ]
   },
   "SelectorNoDefault": {
@@ -27730,10 +27585,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "ShellBorderLayout": {
@@ -28173,10 +28025,7 @@
      "readNewStyle",
      "render"
     ],
-    "GetForegroundColorRef",
-    "_C",
-    [],
-    []
+    "GetForegroundColorRef"
    ]
   },
   "SnapshotElement": {
@@ -30841,10 +30690,7 @@
      "render"
     ],
     "OnLostDialogFocus",
-    "OnReceivedDialogFocus",
-    "_C",
-    [],
-    []
+    "OnReceivedDialogFocus"
    ]
   },
   "ToggleProvider": {
@@ -32115,10 +31961,7 @@
     ],
     "GetForegroundColorRef",
     "FireClickEvent",
-    "FireRightClickEvent",
-    "_C",
-    [],
-    []
+    "FireRightClickEvent"
    ]
   },
   "TouchCommandButton": {
@@ -32500,10 +32343,7 @@
     ],
     "GetForegroundColorRef",
     "FireClickEvent",
-    "FireRightClickEvent",
-    "_C",
-    [],
-    []
+    "FireRightClickEvent"
    ]
   },
   "TouchEditBase": {
@@ -33674,58 +33514,7 @@
     ],
     "WndProc",
     "GetWindowClassNameAndStyle",
-    "_OnUIStateChanged",
-    "InvokePattern",
-    "Create",
-    "IsPatternSupported",
-    "ExpandCollapsePattern",
-    "Create",
-    "IsPatternSupported",
-    "GridItemPattern",
-    "Create",
-    "IsPatternSupported",
-    "GridPattern",
-    "Create",
-    "IsPatternSupported",
-    "RangeValuePattern",
-    "Create",
-    "IsPatternSupported",
-    "ScrollPattern",
-    "Create",
-    "IsPatternSupported",
-    "ScrollItemPattern",
-    "Create",
-    "IsPatternSupported",
-    "SelectionItemPattern",
-    "Create",
-    "IsPatternSupported",
-    "SelectionPattern",
-    "Create",
-    "IsPatternSupported",
-    "TablePattern",
-    "Create",
-    "IsPatternSupported",
-    "TableItemPattern",
-    "Create",
-    "IsPatternSupported",
-    "TogglePattern",
-    "Create",
-    "IsPatternSupported",
-    "ValuePattern",
-    "Create",
-    [
-     "AcceptAll",
-     "CanSetFocus",
-     "GetProportional",
-     "IsGlobal",
-     "IsMSAAEnabled",
-     "IsPatternSupported",
-     "OnListenedPropertyChanging",
-     "OnLostDialogFocus",
-     "OnPropertyChanging",
-     "OnReceivedDialogFocus"
-    ],
-    "DockPattern"
+    "_OnUIStateChanged"
    ]
   },
   "TouchHyperLink": {
@@ -34109,10 +33898,7 @@
     ],
     "GetForegroundColorRef",
     "FireClickEvent",
-    "FireRightClickEvent",
-    "_C",
-    [],
-    []
+    "FireRightClickEvent"
    ]
   },
   "TouchRepeatButton": {
@@ -34572,10 +34358,7 @@
      "_guard_check_icall_nop",
      "destroy",
      "wil_StagingConfig_LogFeatureProcessUsage"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "TouchSelect": {
@@ -34854,10 +34637,7 @@
     ],
     "GetForegroundColorRef",
     "FireClickEvent",
-    "FireRightClickEvent",
-    "_C",
-    [],
-    []
+    "FireRightClickEvent"
    ]
   },
   "TouchSelectHost": {
@@ -35247,10 +35027,7 @@
     ],
     "GetForegroundColorRef",
     "FireClickEvent",
-    "FireRightClickEvent",
-    "_C",
-    [],
-    []
+    "FireRightClickEvent"
    ]
   },
   "TouchSelectPopup": {
@@ -36215,10 +35992,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "TouchSliderRangeValueProxy": {
@@ -36645,10 +36419,7 @@
      "read",
      "readNewStyle",
      "render"
-    ],
-    "_C",
-    [],
-    []
+    ]
    ]
   },
   "TouchSwitchToggleProxy": {
@@ -38212,8 +37983,7 @@
    "rva": "0x001174F0",
    "slots": [
     "DoMethod",
-    "Init",
-    "_R4SolidBrush"
+    "Init"
    ]
   },
   "VerticalFlowLayout": {
@@ -38978,10 +38748,7 @@
      "readNewStyle",
      "render"
     ],
-    "SetSelection",
-    "_C",
-    [],
-    []
+    "SetSelection"
    ]
   },
   "XBaby": {

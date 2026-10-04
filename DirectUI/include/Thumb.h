@@ -152,15 +152,6 @@ namespace DirectUI
         // ABI placeholder: real slot 46 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_Thumb_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Thumb_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Thumb_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Thumb_49(void) = 0;
         Thumb& operator=(Thumb const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

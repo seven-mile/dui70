@@ -18,8 +18,9 @@ namespace DirectUI
         // problem -- tracked as a separate
         // subproblem (not placeholder-masked).
 
-        // reason: virtual destructor would take slot 0,
-        // but the real table's slot 0 is a method
+        // reason: virtual destructor declared but the real
+        // table carries no destructor marker (no slot
+        // can express it)
 
         ClassInfoBase(ClassInfoBase const&);
         ClassInfoBase(void);

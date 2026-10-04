@@ -18,7 +18,7 @@
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
-    (J1 is transitional: it records its verdict -- currently 82/103 classes
+    (J1 is transitional: it records its verdict -- currently 36/103 classes
     have header virtual order different from the real vtable slot order --
     into the log and a JSON artifact without failing the run. The printed
     verdict is "REPORT-ONLY: FAIL", never a masked PASS.)
@@ -576,7 +576,7 @@ if ($SkipHeaderCheck) {
 
 # --------------------------------------------------------------------- J1 vtable
 # Report-only transitional mode: the vtable slot-order gate records its verdict
-# (currently 82/103 different-order) into the CI log and a JSON artifact, but
+# (currently 36/103 different-order) into the CI log and a JSON artifact, but
 # exit 0 -- the known ordering debt must not redden this PR. The verdict is
 # printed as "REPORT-ONLY: FAIL" and never masked as PASS. Switching to
 # enforced mode is a separate, deliberate decision after the ordering fix.

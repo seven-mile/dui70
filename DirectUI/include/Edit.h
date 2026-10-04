@@ -57,12 +57,16 @@ namespace DirectUI
 
         protected:
         virtual HWND__* CreateHWND(HWND__*);
+
+        public:
+        // ABI placeholder: real slot 55 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_Edit_55(void) = 0;
+
+        protected:
         virtual HWND__* CreateHWND(HWND__*, bool);
 
         public:
-        // ABI placeholder: real slot 56 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Edit_56(void) = 0;
         Edit& operator=(Edit const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

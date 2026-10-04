@@ -312,3 +312,31 @@ verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝
 
 **另见**：`manifest.dll.file_version` 的口径（FixedFileInfo vs System32 路径的
 WRP 服务元数据）、repro 门禁的断言层次与负向测试，见 `CI.md` §7。
+
+## pinned/mi-tables.json (schema 3) -- order-contract track
+
+Produced by `extract-mi-tables.py --dll <dui70.dll> --symbols
+pinned/symbols.json --lengths pinned/mi-interface-lengths.json`.
+Two sections:
+
+- `derived` -- pure function of DLL bytes + symbols.json + the manual
+  lengths (re-derived and compared by repro.py gate R3''). Per class:
+  `primary` / `secondaries` tables with `identity`, `rva`, `slots`,
+  `length_provenance` (`next-vftable` | `manual` | `manual-conflict`
+  | `hard-stop` | `unknown`), plus `ctor_store_order`: the sequence of
+  the class's OWN vftable references in its constructor's code
+  (rip-relative LEA targets), with the ctor RVA. SEMANTICS: an
+  OBJECT-LAYOUT OBSERVATION (Solid Evidence) -- NOT the source-level
+  base-declaration order; any emission ordering strategy built on it
+  is Strong Inference.
+- `manual` -- verbatim copy of mi-interface-lengths.json: human ABI
+  inputs (G1-locked). Family-wide `interface_lengths` apply only
+  where no `class_interface_lengths` entry exists. A manual value
+  SHORTER than an in-binary visible bound is a CONFLICT: the table is
+  emitted with its visible slots and `length_provenance:
+  manual-conflict`, and consumers (R6, emitter) must refuse the class
+  -- a human input may tighten an unobservable tail, never deny
+  visible slots.
+
+Consumers: `uia_order_verify.py` (R6 gate), the stage-2 MI emission
+track (PR #15 branch), length_input_control.py (negative controls).

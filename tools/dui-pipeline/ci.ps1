@@ -15,6 +15,10 @@
       G4  ABI fidelity      modname N/N + extern-C N/N (compile-derived)
       G5  headers           random sample syntax-checked with cl /Zs
       J1  vtable slots      report-only: slot-order verdict recorded, exit 0
+      R6  MI order+tables   report-only: schema-3 mi-tables order/table
+                            verdict recorded; fail-closed on missing
+                            schema-3 input, manual-conflict tables, or
+                            missing mandatory-17 coverage
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
@@ -723,6 +727,73 @@ if ($SkipJ1) {
             $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
             Write-Info "verdict recorded: $verdict -- $summary"
             Add-Gate 'A1' 'slot-ABI identity' 'REPORT' $dta "$verdict -- $summary (report-only)"
+        }
+    }
+}
+
+# ------------------------------------------------------- R6 MI order + tables
+# MI inheritance-order + table-truth gate (tracked tool
+# tools/dui-pipeline/uia_order_verify.py; pinned input
+# pinned/mi-tables.json schema 3, produced by extract-mi-tables.py).
+# REPORT-ONLY on the current integration shape: the a208b14 headers
+# carry the ordinal-sorted classes.json base order, which the ctor
+# -store evidence contradicts for 17 classes (13 pattern providers +
+# ElementProvider/HWNDElementProvider + ScrollBar/CCVScrollBar), and
+# the table probes surface those divergences as REJECTED verdicts.
+# The verdict is recorded into the log and a JSON artifact (exit 0 in
+# report-only mode), NEVER masked as PASS. The fail-closed STRUCTURE
+# rules are enforced even in report-only mode:
+#   * pinned/mi-tables.json must exist at schema 3 (missing/older
+#     schema = tooling error, fails the run);
+#   * manual-conflict tables (manual length denying in-binary visible
+#     slots) are reported as REJECTED, never truncated;
+#   * the mandatory 17-class coverage is asserted (a mandatory class
+#     silently absent = tooling error).
+# Enforced mode (table truth for every audited class) is a separate
+# deliberate decision after the emission-order fix lands.
+if ($SkipJ1) {
+    Write-Head 'R6  MI order + table truth (skipped: -SkipJ1)'
+    Add-Gate 'R6' 'MI order + tables' 'SKIP' 0 'via -SkipJ1'
+} else {
+    Write-Head 'R6  MI order + table truth (report-only, fail-closed structure)'
+    $t0 = Get-Date
+    $r6 = Join-Path $PSScriptRoot 'uia_order_verify.py'
+    $miTables = Join-Path $script:Repo 'pinned/mi-tables.json'
+    $r6Json = Join-Path $WorkDir 'r6-report.json'
+    if (-not (Test-Path $r6)) {
+        $dt = ((Get-Date) - $t0).TotalSeconds
+        Fail-Gate 'R6' 'MI order + tables' `
+            'tools/dui-pipeline/uia_order_verify.py exists' 'missing' @() $dt
+    }
+    if (-not (Test-Path $miTables)) {
+        $dt = ((Get-Date) - $t0).TotalSeconds
+        Fail-Gate 'R6' 'MI order + tables' `
+            'pinned/mi-tables.json exists (derive: extract-mi-tables.py)' 'missing' @(
+                'regenerate: python tools/dui-pipeline/extract-mi-tables.py',
+                "  --dll <pinned dui70.dll> --symbols pinned/symbols.json",
+                "  --lengths pinned/mi-interface-lengths.json --out $miTables") $dt
+    } else {
+        $t1 = Get-Date
+        $ra = Invoke-Tool $py @($r6, '--pinned',
+            (Join-Path $script:Repo 'pinned'), '--include',
+            (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
+            (Join-Path $WorkDir 'r6-audit'), '--json-out', $r6Json) -Echo
+        $dta = ((Get-Date) - $t1).TotalSeconds
+        # rc 0 = all classes verified/UNKNOWN-reported; rc 1 = real
+        # divergences (recorded, not fatal in report-only mode);
+        # rc 2 = tooling/schema error (fatal)
+        if ($ra.Rc -ge 2) {
+            $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'R6' 'MI order + tables' `
+                'gate runs (rc 0/1 = verdicts; rc>=2 = tooling error)' `
+                "tooling error (rc=$($ra.Rc))" $tail $dta
+        } else {
+            $summary = @($ra.Out -split "`r?`n" |
+                Where-Object { $_ -match 'audited \d+ classes' } |
+                Select-Object -First 1)
+            $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
+            Write-Info "verdict recorded: $verdict -- $summary"
+            Add-Gate 'R6' 'MI order + tables' 'REPORT' $dta "$verdict -- $summary (report-only)"
         }
     }
 }

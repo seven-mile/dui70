@@ -62,7 +62,7 @@ namespace DirectUI
         virtual long AddBehavior(IDuiBehavior*);
         virtual long RemoveBehavior(IDuiBehavior*);
         virtual unsigned int MessageCallback(tagGMSG*);
-        virtual long GetElementProviderImpl(InvokeHelper*, ElementProvider**);
+        virtual long GetUIAElementProvider(_GUID const&, void**);
         virtual void GetImmersiveFocusRectOffsets(tagRECT*);
 
         protected:
@@ -79,8 +79,8 @@ namespace DirectUI
         virtual IClassInfo* GetClassInfoW(void);
         virtual long GetAccessibleImpl(IAccessible**);
         virtual long DefaultAction(void);
-        virtual long GetUIAElementProvider(_GUID const&, void**);
         virtual long QueryInterface(_GUID const&, void**);
+        virtual long GetElementProviderImpl(InvokeHelper*, ElementProvider**);
         virtual void HandleUiaDestroyListener(void);
         virtual void HandleUiaPropertyListener(PropertyInfo const*, int, Value*, Value*);
         virtual void HandleUiaPropertyChangingListener(PropertyInfo const*);

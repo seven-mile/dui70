@@ -18,8 +18,10 @@
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
-    (J1 is transitional: it records its verdict -- currently 36/103 classes
-    have header virtual order different from the real vtable slot order --
+    (J1 is transitional: it records its verdict -- currently 40/103 classes
+    have header virtual order different from J1's first-occurrence heuristic
+    (the fold-pair constraint solver fixed the OnNotify/OnMessage family to
+    the DLL-proven order, which the heuristic cannot see) --
     into the log and a JSON artifact without failing the run. The printed
     verdict is "REPORT-ONLY: FAIL", never a masked PASS.)
 
@@ -576,10 +578,17 @@ if ($SkipHeaderCheck) {
 
 # --------------------------------------------------------------------- J1 vtable
 # Report-only transitional mode: the vtable slot-order gate records its verdict
-# (currently 36/103 different-order) into the CI log and a JSON artifact, but
-# exit 0 -- the known ordering debt must not redden this PR. The verdict is
-# printed as "REPORT-ONLY: FAIL" and never masked as PASS. Switching to
-# enforced mode is a separate, deliberate decision after the ordering fix.
+# (currently 40/103 different-order after the fold-pair constraint solver) into
+# the CI log and a JSON artifact, but exit 0 -- the known ordering debt must
+# not redden this PR. The verdict is printed as "REPORT-ONLY: FAIL" and never
+# masked as PASS. Note: J1's "real" order uses FIRST OCCURRENCE of a name in
+# the contract table, which is a heuristic -- when a name appears both in an
+# early inherited fold and as a later own singleton (e.g. PostCreate in
+# fold@7/27 + singleton@59; OnMessage/OnNotify in fold@2 + slots 46/47), the
+# first-occurrence order can disagree with the DLL-proven header order. The
+# full-mangled identity gate (object probe vs pinned DLL deref) is the
+# authority for those cases; J1 remains report-only. Switching to enforced
+# mode is a separate, deliberate decision after the ordering fix.
 if ($SkipJ1) {
     Write-Head 'J1  vtable slot-order (skipped: -SkipJ1)'
     Add-Gate 'J1' 'vtable slot-order' 'SKIP' 0 'via -SkipJ1'
@@ -619,6 +628,69 @@ if ($SkipJ1) {
     }
     Write-Info "verdict recorded: $verdict (artifact: $j1Json)"
     Add-Gate 'J1' 'vtable slot-order' 'REPORT' $dt "$verdict (report-only)"
+}
+
+# ------------------------------------------------------- A1 slot-ABI identity
+# Full-mangled vtable slot-identity audit (tracked tool
+# tools/dui-pipeline/slot_abi_audit.py). REPORT-ONLY for now: the real
+# verdict (N failed / N fold-UNKNOWN) is recorded into the log and a
+# JSON artifact, exit 0 -- the known residual failures (check-family
+# intermediate-class debt, foreign-class bodies) must not redden PRs
+# until adjudicated, but they are NEVER masked as PASS. Enforced mode
+# is a separate deliberate decision. The selftest (paired negative
+# controls: own-virtual swap + overload swap, each FAIL on the mutated
+# side and PASS on the clean side -- never vacuous) IS enforced: a
+# vacuous or failing control reddens the run.
+if ($SkipJ1) {
+    Write-Head 'A1  slot-ABI identity (skipped: -SkipJ1)'
+    Add-Gate 'A1' 'slot-ABI identity' 'SKIP' 0 'via -SkipJ1'
+} else {
+    Write-Head 'A1  slot-ABI identity (report + enforced selftest)'
+    $t0 = Get-Date
+    $audit = Join-Path $PSScriptRoot 'slot_abi_audit.py'
+    $a1Json = Join-Path $WorkDir 'a1-report.json'
+    if (-not (Test-Path $audit)) {
+        $dt = ((Get-Date) - $t0).TotalSeconds
+        Fail-Gate 'A1' 'slot-ABI identity' `
+            'tools/dui-pipeline/slot_abi_audit.py exists' 'missing' @() $dt
+    } else {
+        # 1) selftest: PAIRED negative controls (ENFORCED)
+        $rs = Invoke-Tool $py @($audit, '--pinned',
+            (Join-Path $script:Repo 'pinned'), '--include',
+            (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
+            (Join-Path $WorkDir 'a1-selftest'), '--selftest') -Echo
+        $dts = ((Get-Date) - $t0).TotalSeconds
+        if ($rs.Rc -ne 0) {
+            $tail = ($rs.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'A1' 'slot-ABI selftest' `
+                'paired negative controls: swap FAILs, clean PASSes (non-vacuous)' `
+                "selftest rc=$($rs.Rc)" $tail $dts
+        } else {
+            Write-Ok 'selftest: paired negative controls non-vacuous (swap FAILs, clean PASSes)'
+        }
+        # 2) full audit: REPORT-ONLY verdict, true FAILs printed, never masked
+        $t1 = Get-Date
+        $ra = Invoke-Tool $py @($audit, '--pinned',
+            (Join-Path $script:Repo 'pinned'), '--include',
+            (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
+            (Join-Path $WorkDir 'a1-audit'), '--json-out', $a1Json) -Echo
+        $dta = ((Get-Date) - $t1).TotalSeconds
+        # rc 0 = all pass; rc 1 = real divergences (recorded, not fatal
+        # in report-only mode); rc >= 2 = tooling error (fatal)
+        if ($ra.Rc -ge 2) {
+            $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'A1' 'slot-ABI identity' `
+                'audit runs (rc 0/1 = verdicts; rc>=2 = tooling error)' `
+                "tooling error (rc=$($ra.Rc))" $tail $dta
+        } else {
+            $summary = @($ra.Out -split "`r?`n" |
+                Where-Object { $_ -match 'checked \d+ classes' } |
+                Select-Object -First 1)
+            $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
+            Write-Info "verdict recorded: $verdict -- $summary"
+            Add-Gate 'A1' 'slot-ABI identity' 'REPORT' $dta "$verdict -- $summary (report-only)"
+        }
+    }
 }
 
 # ------------------------------------------------------------------- budget

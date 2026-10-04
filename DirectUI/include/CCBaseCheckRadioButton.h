@@ -22,11 +22,11 @@ namespace DirectUI
         CCBaseCheckRadioButton(CCBaseCheckRadioButton const&);
         CCBaseCheckRadioButton(unsigned long);
         virtual ~CCBaseCheckRadioButton(void);
-        virtual bool OnLostDialogFocus(IDialogElement*);
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
         virtual tagSIZE GetContentSize(int, int, Surface*);
         virtual IClassInfo* GetClassInfoW(void);
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
 
         protected:
         virtual void PostCreate(HWND__*);

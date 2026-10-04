@@ -36,7 +36,9 @@ namespace DirectUI
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_5(void) = 0;
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void FireClickEvent(unsigned int, unsigned int, TouchButton::ClickDevice, tagPOINT*);
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchRepeatButton_7(void) = 0;
         // ABI placeholder: real slot 8 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_8(void) = 0;
@@ -94,7 +96,9 @@ namespace DirectUI
         // ABI placeholder: real slot 26 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_26(void) = 0;
-        virtual void FireRightClickEvent(unsigned int, tagPOINT*);
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchRepeatButton_27(void) = 0;
         // ABI placeholder: real slot 28 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_28(void) = 0;
@@ -145,12 +149,8 @@ namespace DirectUI
         // ABI placeholder: real slot 45 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchRepeatButton_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchRepeatButton_47(void) = 0;
+        virtual void FireClickEvent(unsigned int, unsigned int, TouchButton::ClickDevice, tagPOINT*);
+        virtual void FireRightClickEvent(unsigned int, tagPOINT*);
         TouchRepeatButton(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

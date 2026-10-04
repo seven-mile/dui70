@@ -31,7 +31,9 @@ namespace DirectUI
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_5(void) = 0;
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual void ActivateTooltip(Element*, unsigned long);
+        // ABI placeholder: real slot 7 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_7(void) = 0;
         // ABI placeholder: real slot 8 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_8(void) = 0;
@@ -79,7 +81,9 @@ namespace DirectUI
         // ABI placeholder: real slot 26 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_26(void) = 0;
-        virtual void RemoveTooltip(Element*);
+        // ABI placeholder: real slot 27 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_TouchHWNDElement_27(void) = 0;
         // ABI placeholder: real slot 28 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_28(void) = 0;
@@ -90,12 +94,8 @@ namespace DirectUI
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_30(void) = 0;
         virtual void UpdateTooltip(Element*);
-        // ABI placeholder: real slot 32 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchHWNDElement_32(void) = 0;
-        // ABI placeholder: real slot 33 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchHWNDElement_33(void) = 0;
+        virtual void ActivateTooltip(Element*, unsigned long);
+        virtual void RemoveTooltip(Element*);
         // ABI placeholder: real slot 34 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchHWNDElement_34(void) = 0;

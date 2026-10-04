@@ -21,14 +21,18 @@ namespace DirectUI
         // ABI placeholder: real slot 1 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CheckBoxGlyph_1(void) = 0;
-        virtual bool OnLostDialogFocus(IDialogElement*);
+        // ABI placeholder: real slot 2 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_2(void) = 0;
         // ABI placeholder: real slot 3 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CheckBoxGlyph_3(void) = 0;
         // ABI placeholder: real slot 4 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CheckBoxGlyph_4(void) = 0;
-        virtual bool OnReceivedDialogFocus(IDialogElement*);
+        // ABI placeholder: real slot 5 has no recoverable signature.
+        // ABI placeholder: never call.
+        virtual void __DuiAbiSlot_CheckBoxGlyph_5(void) = 0;
         // ABI placeholder: real slot 6 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CheckBoxGlyph_6(void) = 0;
@@ -144,12 +148,8 @@ namespace DirectUI
         // ABI placeholder: real slot 44 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CheckBoxGlyph_44(void) = 0;
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CheckBoxGlyph_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CheckBoxGlyph_46(void) = 0;
+        virtual bool OnLostDialogFocus(IDialogElement*);
+        virtual bool OnReceivedDialogFocus(IDialogElement*);
         CheckBoxGlyph& operator=(CheckBoxGlyph const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

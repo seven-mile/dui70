@@ -888,17 +888,73 @@ def _first_param_const(s: dict) -> bool:
     return bool(params) and "const" in (params[0] or "")
 
 
+def build_override_votes(inheritance: dict, slot_tables: dict) -> dict:
+    """Cross-table override evidence for fold-ambiguous slot binding.
+
+    Returns votes[(name, slot)] = set of classes D such that:
+      * D's contract table has a SINGLETON entry `name` at `slot`
+        (D's own override — an own-body member at its own slot), and
+      * `name` also appears in some OTHER class's fold entry at the
+        SAME slot index (i.e. the singleton disambiguates a fold), and
+      * D carries the singleton inside a fold-shaped region: the vote
+        only applies where the target class's entry at that slot is a
+        fold CONTAINING `name`.
+
+    Why this is sound (not a popularity vote): a C++ override may only
+    occupy a base slot for the SAME virtual it overrides. A descendant
+    D (any class whose table carries the singleton at the same index)
+    therefore PINS the identity of that slot's virtual for every class
+    whose table shares that slot as a fold containing the name. The
+    caller applies a vote only when the target slot's fold contains
+    the name, and requires zero contradictions before binding;
+    contradictions or absence demote the unit to UNKNOWN (placeholder)
+    -- never an alphabetical tie-break.
+
+    Inputs: pinned contracts only (classes.json inheritance +
+    vtable-slots.json tables). No generated headers are read.
+    """
+    votes: dict[tuple[str, int], set] = {}
+    # fold membership: name -> slots where SOME class folds it
+    fold_slots: dict[str, set[int]] = {}
+    for cls, entry in slot_tables.items():
+        t = entry.get("slots") if isinstance(entry, dict) else None
+        if not isinstance(t, list):
+            continue
+        for idx, e in enumerate(t):
+            if isinstance(e, list) and e:
+                for nm in e:
+                    fold_slots.setdefault(nm, set()).add(idx)
+    for cls, entry in slot_tables.items():
+        t = entry.get("slots") if isinstance(entry, dict) else None
+        if not isinstance(t, list):
+            continue
+        for idx, e in enumerate(t):
+            if not (isinstance(e, str) and e in fold_slots
+                    and idx in fold_slots[e]):
+                continue  # singleton that disambiguates nothing
+            votes.setdefault((e, idx), set()).add(cls)
+    return votes
+
+
 def _bind_own_units(cls: str, unit_names: list,
                     n_virtuals: dict, slot_lists: list,
                     base_prefix: int = 0,
-                    base_names: set | None = None):
+                    base_names: set | None = None,
+                    override_votes: dict | None = None):
     """Bind the class's own virtual-bearing units to vtable slots.
 
-    Returns (name_slot, unbindable, name_slots_actual):
+    Returns (name_slot, unbindable, name_slots_actual, slots_of,
+             unknown_units):
       name_slot         unit name -> base slot of its virtual run
       unbindable        unit names with no candidate slot (reported, kept
                         in original order; never guessed)
       name_slots_actual unit name -> ALL singleton slots the name occupies
+      slots_of          unit name -> chosen slot list (run or split)
+      unknown_units     fold-ambiguous units whose binding could NOT be
+                        proven by constraints (contradictory or absent
+                        override evidence); they are left UNCLAIMED and
+                        the walk emits placeholders for their slots
+                        (fail-closed UNKNOWN, never a guessed order)
 
     A unit with k virtuals occupies k CONSECUTIVE slots (an overload run)
     unless it has k distinct singleton slots (a SPLIT run with one body per
@@ -906,8 +962,10 @@ def _bind_own_units(cls: str, unit_names: list,
       * singleton slots (bare-string entries) bind their names mandatorily;
       * a k-run may sit at base s only if the name appears at every slot
         s..s+k-1 and none of those slots is claimed by another unit;
-      * remaining (fold-ambiguous) units are matched to free candidate
-        slots by exact backtracking, leftmost-first for determinism;
+      * fold-ambiguous units: candidate slots are ordered by cross-table
+        OVERRIDE EVIDENCE (build_override_votes) before any positional
+        fallback; a unit whose vote evidence is CONTRADICTORY (two names
+        vote for the same (unit-set, slot) arrangement) is UNKNOWN;
       * impossible assignments raise with the class/slot list
         (fail-closed).
     """
@@ -958,6 +1016,46 @@ def _bind_own_units(cls: str, unit_names: list,
         for s in slots:
             claimed[s] = name
 
+    # 0) CONTRADICTION SCAN (override-vote evidence): a unit whose
+    #    vote evidence is contradicted -- another unit of this class
+    #    also carries a vote for the same slot -- is UNKNOWN: it must
+    #    not be bound by vote priority NOR fall back to positional
+    #    order. It stays UNCLAIMED; the walk emits placeholders.
+    unknown_units: list[str] = []
+    if override_votes is not None:
+        for u in unit_names:
+            if u in unbindable or u in name_slots:
+                continue  # singleton-anchored: not fold-ambiguous
+            for b in appears.get(u, ()):
+                u_has = (u, b) in override_votes
+                others = [o for o in unit_names
+                          if o != u and (o, b) in override_votes]
+                if u_has and others:
+                    unknown_units.append(u)
+                    break
+    unknown_set = set(unknown_units)
+
+    # Slots EVIDENCED for an unknown unit are unprovable for this
+    # class when that unit cannot bind: an unknown unit's vote is real
+    # evidence that the virtual sits at that slot, so a THIRD unit
+    # claiming it by backtracking would fabricate an arrangement the
+    # evidence contradicts. Both contested slots (two units voting for
+    # the same slot) and exclusively-voted slots (only the unknown unit
+    # votes) stay placeholders; slots with no vote evidence remain
+    # backtrackable.
+    reserved_slots = set()
+    if override_votes is not None:
+        for u in unknown_units:
+            for b in appears.get(u, ()):
+                if (u, b) in override_votes:
+                    reserved_slots.add(b)
+    if reserved_slots:
+        appears = {u: {s for s in ss if s not in reserved_slots}
+                   for u, ss in appears.items()}
+        # (name_slots entries at reserved slots are impossible here:
+        # a singleton slot cannot be fold-ambiguous, and unknown units
+        # are never singleton-anchored)
+
     # 1) singleton-anchored units first (their slot is mandatory), then
     #    unanchored units by fewest candidates; ties by name. Anchoring
     #    first prevents a fold-only unit from stealing a run's tail slot
@@ -967,7 +1065,7 @@ def _bind_own_units(cls: str, unit_names: list,
         0 if u in name_slots else 1, len(appears.get(u, ())), u))
     ambiguous: list[str] = []
     for u in order:
-        if u in unbindable:
+        if u in unbindable or u in unknown_set:
             continue
         k = n_virtuals.get(u, 1)
         ss = None
@@ -975,8 +1073,25 @@ def _bind_own_units(cls: str, unit_names: list,
         if sl:
             ss = unit_slots(u, sl[0])
         if ss is None:
-            # try every candidate base
-            for b in sorted(appears.get(u, ())):
+            # try every candidate base, OVERRIDE-VOTE evidence first
+            # (a descendant's singleton at a shared slot index pins the
+            # virtual identity; see build_override_votes). A unit with
+            # contradictory vote evidence is UNKNOWN, not guessed.
+            cand = sorted(appears.get(u, ()))
+            if override_votes is not None:
+                # a vote exists when SOME class carries `u` as a
+                # singleton at slot b (values are voter classes; the
+                # vote's EXISTENCE is the evidence). The vote is only
+                # TRUSTED when no OTHER unit of this class also has a
+                # vote for the same slot (a split vote is a
+                # contradiction -> unit stays for the UNKNOWN path).
+                voted = [
+                    b for b in cand if (u, b) in override_votes
+                    and not any((o, b) in override_votes
+                                for o in unit_names if o != u)]
+                if voted:
+                    cand = sorted(set(voted))
+            for b in cand:
                 ss = unit_slots(u, b)
                 if ss is not None:
                     break
@@ -986,6 +1101,8 @@ def _bind_own_units(cls: str, unit_names: list,
             ambiguous.append(u)
 
     # 2) ambiguous units: exact backtracking over free candidate slots.
+    #    Candidate order per unit: override-vote evidence first, then
+    #    ascending slot index (deterministic).
     ambiguous.sort(key=lambda u: (len(appears.get(u, ())), u))
 
     def solve(k: int) -> bool:
@@ -1017,12 +1134,13 @@ def _bind_own_units(cls: str, unit_names: list,
         ss = sorted(s for s, uu in claimed.items() if uu == u)
         slots_of[u] = ss
         name_slot[u] = ss[0]
-    return name_slot, unbindable, name_slots, slots_of
+    return name_slot, unbindable, name_slots, slots_of, unknown_units
 
 
 def contract_reorder(cls: str, members: list, slot_lists: list,
                      base_prefix: int = 0,
-                     base_names: set | None = None) -> list:
+                     base_names: set | None = None,
+                     override_votes: dict | None = None) -> list:
     """Reorder one class's member declarations into real vtable slot order
     (W5 full-contract v1). `members` is the per-class callable list;
     `slot_lists` is this class's entry from pinned/vtable-slots.json
@@ -1039,9 +1157,10 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     for name, group in by_name.items():
         n_virtuals[name] = sum(1 for s in group if _is_vtable_virtual(s))
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, binder_unbound, name_slots_actual, binder_slots = _bind_own_units(
+    name_slot, binder_unbound, name_slots_actual, binder_slots, binder_unknown = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
-        base_prefix=base_prefix, base_names=base_names)
+        base_prefix=base_prefix, base_names=base_names,
+        override_votes=override_votes)
 
     # --- unit construction ----------------------------------------------
     unit_order: dict[str, list] = {}
@@ -1055,8 +1174,9 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
             continue
         s0 = name_slot.get(name)
         if s0 is None:
-            # generator synthetic or structurally unbindable (no candidate
-            # slot): keep order, report (do NOT guess a slot)
+            # generator synthetic, structurally unbindable (no candidate
+            # slot), or fold-UNKNOWN (contradictory/absent override
+            # evidence): keep order, report (do NOT guess a slot)
             unbound.append(name)
             unit_order[name] = nonvirt + virt
             continue
@@ -1207,15 +1327,22 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
         raise SystemExit(
             f"contract_reorder: {cls}: units never emitted: {leftover[:6]}")
 
-    # unbound virtual-bearing units next (stable, original order): these
-    # are generator synthetics (On*Virt etc.) -- in v2 a class whose
-    # header virtuals cannot be placed in the real table is REJECTED
-    # upstream, so reaching here means the class was classified bound
-    # and any leftover unit is a bug; fail closed.
+    # unbound virtual-bearing units next (stable, original order).
+    # Two populations reach here:
+    #   * generator synthetics (On*Virt etc.) -- pipeline bugs; and
+    #   * fold-UNKNOWN units (contradictory/absent override evidence):
+    #     their slots became placeholders ABOVE (covered never includes
+    #     them), and the unit's virtuals are appended here in original
+    #     order so the header still declares them (an unbound
+    #     declaration does not enter the vtable walk). This is the
+    #     fail-closed UNKNOWN path: never a guessed slot.
     if unbound:
-        raise SystemExit(
-            f"contract_reorder: {cls}: v2 classified bound but {len(unbound)} "
-            f"unit(s) have no candidate slot: {unbound[:6]} -- refuse to emit")
+        synth = [n for n in unbound if n not in binder_unknown]
+        if synth:
+            raise SystemExit(
+                f"contract_reorder: {cls}: v2 classified bound but "
+                f"{len(synth)} unit(s) have no candidate slot: "
+                f"{synth[:6]} -- refuse to emit")
 
     # remaining pure-nonvirtual sets, access-grouped, original order
     for acc in ("public", "protected", "private"):
@@ -1234,7 +1361,8 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
 def contract_classify(cls: str, members: list, slot_lists: list,
                       exported_virtuals: set,
                       base_prefix: int = 0,
-                      base_names: set | None = None) -> dict:
+                      base_names: set | None = None,
+                      override_votes: dict | None = None) -> dict:
     """v2 classification for one class against its contract table.
 
     Returns one of:
@@ -1294,9 +1422,10 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     n_virtuals = {n: sum(1 for s in g if _is_vtable_virtual(s))
                   for n, g in by_name.items()}
     unit_names = [n for n, k in n_virtuals.items() if k > 0]
-    name_slot, unbindable, name_slots_actual, binder_slots = _bind_own_units(
+    name_slot, unbindable, name_slots_actual, binder_slots, _unknown = _bind_own_units(
         cls, unit_names, n_virtuals, slot_lists,
-        base_prefix=base_prefix, base_names=base_names)
+        base_prefix=base_prefix, base_names=base_names,
+        override_votes=override_votes)
     covered = set()
     for n, s0v in name_slot.items():
         # use the CHOSEN slot set (a split unit covers exactly its k
@@ -1511,7 +1640,8 @@ def render_class_header(cls: str, members: list, data_members: list,
                         slot_lists: list | None = None,
                         base_prefix: int = 0,
                         exported_virtuals_by_class: dict | None = None,
-                        base_names: set | None = None) -> str:
+                        base_names: set | None = None,
+                        override_votes: dict | None = None) -> str:
     """Render one class header file content."""
     tpl = is_template_class(cls)
     tid = template_id(cls) if tpl else cls
@@ -1613,7 +1743,8 @@ def render_class_header(cls: str, members: list, data_members: list,
             if base_prefix else None)
         classification = contract_classify(
             cls, members, slot_lists, cls_exp_virt,
-            base_prefix=base_prefix or 0, base_names=base_names)
+            base_prefix=base_prefix or 0, base_names=base_names,
+            override_votes=override_votes)
         if classification["mode"] in ("rejected", "l2"):
             rejected_info = classification
             slot_lists = None  # canonical order; banner below
@@ -1621,7 +1752,8 @@ def render_class_header(cls: str, members: list, data_members: list,
             assert_element_pilot_migration(cls, members, slot_lists)
             items = contract_reorder(cls, members, slot_lists,
                                      base_prefix=base_prefix or 0,
-                                     base_names=base_names)
+                                     base_names=base_names,
+                                     override_votes=override_votes)
             # v2 item stream: member dicts + "__PH__<slot>" markers, in
             # real slot order (with or without placeholders)
             members = items
@@ -2532,6 +2664,14 @@ def main(argv=None) -> int:
     global slot_tables_global
     slot_tables_global = slot_tables
 
+    # Cross-table override evidence for fold-ambiguous slot binding
+    # (derived ONLY from the pinned contracts: vtable-slots.json tables;
+    # a descendant's singleton entry at a shared slot index pins the
+    # virtual's identity -- see build_override_votes). Alphabetical /
+    # leftmost tie-breaks are no longer trusted for fold pairs.
+    override_votes = build_override_votes(inheritance, slot_tables)
+    n_votes = sum(len(v) for v in override_votes.values())
+
     stats = {}
     contract_rows = []
     v2_rows = []
@@ -2591,14 +2731,16 @@ def main(argv=None) -> int:
                     cls, inheritance, exp_virt_by_class)
             classification = contract_classify(
                 cls, members, slot_lists, cls_exp_virt,
-                base_prefix=base_prefix or 0, base_names=base_names)
+                base_prefix=base_prefix or 0, base_names=base_names,
+                override_votes=override_votes)
         content = render_class_header(cls, members, data_members, tr,
                                       classes, inheritance, banner,
                                       has_own_vftable=has_own_vftable,
                                       slot_lists=slot_lists,
                                       base_prefix=base_prefix,
                                       exported_virtuals_by_class=exp_virt_by_class,
-                                      base_names=base_names)
+                                      base_names=base_names,
+                                      override_votes=override_votes)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
         if slot_lists is not None:
@@ -2646,6 +2788,9 @@ def main(argv=None) -> int:
         return 2
 
     print(f"emit_headers: wrote {len(stats) + 3} files to {out_dir}")
+    print(f"  fold-constraint solver: {len(override_votes)} (name,slot) "
+          f"override-vote keys, {n_votes} total votes "
+          f"(evidence: pinned vtable-slots.json singletons)")
     # v2 classification report: full-bound / placeholder-bound / rejected
     n_tab = len(v2_rows)
     full_bound = [r for r in v2_rows if r["mode"] == "bound"

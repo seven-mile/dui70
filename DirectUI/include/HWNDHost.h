@@ -46,8 +46,8 @@ namespace DirectUI
         public:
         virtual long GetAccessibleImpl(IAccessible**);
         virtual HWND__* GetHWND(void);
-        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnNotify(unsigned int, unsigned __int64, __int64, __int64*);
+        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnSysChar(unsigned short);
         virtual bool OnSinkThemeChanged(unsigned int, unsigned __int64, __int64, __int64*);
         virtual bool OnCtrlThemeChanged(unsigned int, unsigned __int64, __int64, __int64*);

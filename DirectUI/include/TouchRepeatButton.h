@@ -151,15 +151,6 @@ namespace DirectUI
         // ABI placeholder: real slot 47 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_TouchRepeatButton_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchRepeatButton_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchRepeatButton_49(void) = 0;
-        // ABI placeholder: real slot 50 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_TouchRepeatButton_50(void) = 0;
         TouchRepeatButton(void);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

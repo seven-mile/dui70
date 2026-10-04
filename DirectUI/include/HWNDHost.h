@@ -157,27 +157,6 @@ namespace DirectUI
         virtual bool EraseBkgnd(HDC__*, __int64*);
 
         public:
-        // ABI placeholder: real slot 56 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_56(void) = 0;
-        // ABI placeholder: real slot 57 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_57(void) = 0;
-        // ABI placeholder: real slot 58 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_58(void) = 0;
-        // ABI placeholder: real slot 59 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_59(void) = 0;
-        // ABI placeholder: real slot 60 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_60(void) = 0;
-        // ABI placeholder: real slot 61 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_61(void) = 0;
-        // ABI placeholder: real slot 62 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_HWNDHost_62(void) = 0;
         HWNDHost& operator=(HWNDHost const&);
         static PropertyInfo const* BackgroundOwnerIDProp(void);
         static long Create(unsigned int, unsigned int, Element*, unsigned long*, Element**);

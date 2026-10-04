@@ -153,15 +153,6 @@ namespace DirectUI
         // ABI placeholder: real slot 44 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_ModernProgressBar_44(void) = 0;
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_ModernProgressBar_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_ModernProgressBar_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_ModernProgressBar_47(void) = 0;
         static long Create(Element*, unsigned long*, Element**);
         static PropertyInfo const* DeterminateProp(void);
         static IClassInfo* GetClassInfoPtr(void);

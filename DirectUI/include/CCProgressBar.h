@@ -192,21 +192,6 @@ namespace DirectUI
         // ABI placeholder: real slot 59 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CCProgressBar_59(void) = 0;
-        // ABI placeholder: real slot 60 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCProgressBar_60(void) = 0;
-        // ABI placeholder: real slot 61 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCProgressBar_61(void) = 0;
-        // ABI placeholder: real slot 62 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCProgressBar_62(void) = 0;
-        // ABI placeholder: real slot 63 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCProgressBar_63(void) = 0;
-        // ABI placeholder: real slot 64 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCProgressBar_64(void) = 0;
         CCProgressBar& operator=(CCProgressBar&&);
         CCProgressBar& operator=(CCProgressBar const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);

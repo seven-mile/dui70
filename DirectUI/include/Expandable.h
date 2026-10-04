@@ -149,27 +149,6 @@ namespace DirectUI
         // ABI placeholder: real slot 44 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_Expandable_44(void) = 0;
-        // ABI placeholder: real slot 45 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_45(void) = 0;
-        // ABI placeholder: real slot 46 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_46(void) = 0;
-        // ABI placeholder: real slot 47 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_47(void) = 0;
-        // ABI placeholder: real slot 48 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_48(void) = 0;
-        // ABI placeholder: real slot 49 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_49(void) = 0;
-        // ABI placeholder: real slot 50 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_50(void) = 0;
-        // ABI placeholder: real slot 51 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_Expandable_51(void) = 0;
         Expandable& operator=(Expandable&&);
         Expandable& operator=(Expandable const&);
         static long Create(Element*, unsigned long*, Element**);

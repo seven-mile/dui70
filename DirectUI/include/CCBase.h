@@ -178,30 +178,6 @@ namespace DirectUI
         // ABI placeholder: real slot 59 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_CCBase_59(void) = 0;
-        // ABI placeholder: real slot 60 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_60(void) = 0;
-        // ABI placeholder: real slot 61 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_61(void) = 0;
-        // ABI placeholder: real slot 62 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_62(void) = 0;
-        // ABI placeholder: real slot 63 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_63(void) = 0;
-        // ABI placeholder: real slot 64 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_64(void) = 0;
-        // ABI placeholder: real slot 65 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_65(void) = 0;
-        // ABI placeholder: real slot 66 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_66(void) = 0;
-        // ABI placeholder: real slot 67 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_CCBase_67(void) = 0;
         CCBase& operator=(CCBase const&);
         static long Create(unsigned int, Element*, unsigned long*, Element**);
         static long Create(Element*, unsigned long*, Element**);

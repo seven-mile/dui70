@@ -57,9 +57,6 @@ namespace DirectUI
         virtual void PageDown(unsigned int);
         virtual void Home(void);
         virtual void End(void);
-        // ABI placeholder: real slot 18 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_18(void) = 0;
         BaseScrollBar(BaseScrollBar&&);
         BaseScrollBar(BaseScrollBar const&);
         BaseScrollBar(void);

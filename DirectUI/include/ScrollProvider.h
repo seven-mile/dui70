@@ -2,44 +2,43 @@
 
 // DirectUI::ScrollProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "IScrollProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_ScrollProvider_IScrollProvider_5.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class ScrollProvider
-        : public IProvider, public RefcountBase
+        : public IScrollProvider, public PatternProvider<ScrollProvider, IScrollProvider, 5>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        ScrollProvider(void);
         virtual ~ScrollProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long Scroll(ScrollAmount, ScrollAmount);
-        virtual long SetScrollPercent(double, double);
-        virtual long get_HorizontalScrollPercent(double*);
-        virtual long get_HorizontalViewSize(double*);
-        virtual long get_HorizontallyScrollable(int*);
-        virtual long get_VerticalScrollPercent(double*);
-        virtual long get_VerticalViewSize(double*);
-        virtual long get_VerticallyScrollable(int*);
+        ScrollProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long Scroll(ScrollAmount, ScrollAmount) override;
+        virtual long SetScrollPercent(double, double) override;
+        virtual long get_HorizontalScrollPercent(double*) override;
+        virtual long get_HorizontalViewSize(double*) override;
+        virtual long get_HorizontallyScrollable(int*) override;
+        virtual long get_VerticalScrollPercent(double*) override;
+        virtual long get_VerticalViewSize(double*) override;
+        virtual long get_VerticallyScrollable(int*) override;
     };
 
 } // namespace DirectUI

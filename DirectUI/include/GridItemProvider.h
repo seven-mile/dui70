@@ -2,41 +2,40 @@
 
 // DirectUI::GridItemProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "IGridItemProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_GridItemProvider_IGridItemProvider_2.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class GridItemProvider
-        : public IProvider, public RefcountBase
+        : public IGridItemProvider, public PatternProvider<GridItemProvider, IGridItemProvider, 2>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        GridItemProvider(void);
         virtual ~GridItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long get_Column(int*);
-        virtual long get_ColumnSpan(int*);
-        virtual long get_ContainingGrid(IRawElementProviderSimple**);
-        virtual long get_Row(int*);
-        virtual long get_RowSpan(int*);
+        GridItemProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long get_Column(int*) override;
+        virtual long get_ColumnSpan(int*) override;
+        virtual long get_ContainingGrid(IRawElementProviderSimple**) override;
+        virtual long get_Row(int*) override;
+        virtual long get_RowSpan(int*) override;
     };
 
 } // namespace DirectUI

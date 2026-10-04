@@ -2,39 +2,51 @@
 
 // DirectUI::PatternProvider<RangeValueProvider, IRangeValueProvider, 4> -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
-
 #include "RefcountBase.h"
 
-#include "RangeValueProvider.h"
+#include "IProvider.h"
 
 namespace DirectUI
 {
     class Element;
     class ElementProvider;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
+    class RangeValueProvider;
+}
+
+struct IRangeValueProvider;
+
+namespace DirectUI
+{
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
     template <>
     class PatternProvider<RangeValueProvider, IRangeValueProvider, 4>
-        : public IProvider, public RefcountBase
+        : public RefcountBase, public IProvider
     {
     public:
-        PatternProvider<RangeValueProvider, IRangeValueProvider, 4>(void);
         virtual ~PatternProvider<RangeValueProvider, IRangeValueProvider, 4>(void);
+        PatternProvider<RangeValueProvider, IRangeValueProvider, 4>(void);
         static long Create(ElementProvider*, IUnknown**);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual void Init(ElementProvider*);
 
         protected:
         long DoInvoke(int, ...);
+
+        public:
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
+        virtual void Init(ElementProvider*);
     };
 
 } // namespace DirectUI

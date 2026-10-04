@@ -2,37 +2,36 @@
 
 // DirectUI::ScrollItemProvider -- declarations derived from the real
 // dui70.dll export table + PDB publics.
+// W5 stage-2 MI emission: base-subobject vftables verified
+// against pinned mi-tables.json (schema 2).
 #pragma once
 
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "IProvider.h"
+#include "IScrollItemProvider.h"
 
-#include "RefcountBase.h"
+#include "PatternProvider_ScrollItemProvider_IScrollItemProvider_6.h"
 
 namespace DirectUI
 {
     class Element;
     class ProviderProxy;
+}
 
+namespace DirectUI
+{
     class ScrollItemProvider
-        : public IProvider, public RefcountBase
+        : public IScrollItemProvider, public PatternProvider<ScrollItemProvider, IScrollItemProvider, 6>
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): GetProxyCreator
-
-        ScrollItemProvider(void);
         virtual ~ScrollItemProvider(void);
-        virtual unsigned long AddRef(void);
-        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
-        virtual long QueryInterface(_GUID const&, void**);
-        virtual unsigned long Release(void);
-        virtual long ScrollIntoView(void);
+        ScrollItemProvider(void);
+        virtual unsigned long AddRef(void) override;
+        virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*) override;
+        virtual long QueryInterface(_GUID const&, void**) override;
+        virtual unsigned long Release(void) override;
+        virtual long ScrollIntoView(void) override;
     };
 
 } // namespace DirectUI

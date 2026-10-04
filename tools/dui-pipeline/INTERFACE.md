@@ -312,3 +312,42 @@ verify.py 的 mtime 守卫会拦截）。`gen_uitest_proj.ps1 -Lib` 必须传绝
 
 **另见**：`manifest.dll.file_version` 的口径（FixedFileInfo vs System32 路径的
 WRP 服务元数据）、repro 门禁的断言层次与负向测试，见 `CI.md` §7。
+
+## pinned/mi-tables.json (schema 3) -- order-contract track
+
+Produced by `extract-mi-tables.py --dll <dui70.dll> --symbols
+pinned/symbols.json --lengths pinned/mi-interface-lengths.json`.
+Two sections:
+
+- `derived` -- a function of DLL bytes + symbols.json + the manual
+  lengths input. repro.py gate R3'' proves CONDITIONAL
+  re-derivability (same committed manual input -> byte-identical
+  derived section) and asserts manual == committed lengths input
+  verbatim + schema == 3; it is NOT an independent proof of the
+  manual values themselves. Per class:
+  `primary` / `secondaries` tables with `identity`, `rva`, `slots`,
+  `length_provenance` (`next-vftable` | `manual` | `manual-conflict`
+  | `ignored-redundant` | `hard-stop` | `unknown`), plus
+  `ctor_vftable_references`: the rip-relative LEA references to the
+  class's OWN vftables, bounded by the ctor's function extent --
+  `scan: pdata-bounded` when .pdata covers the ctor, else
+  `scan: symbol-bounded-safe` (the ctor symbol's own extent from the
+  pinned symbols table, conservative cap); on this binary: 84
+  pdata-bounded + 84 symbol-bounded-safe, 0 refused. ALL alias
+  candidates at a target RVA kept, none dropped. SEMANTICS:
+  reference-only evidence, order=ORDER-UNKNOWN; these are NOT stores
+  (no this+offset write is traced) and NO base order, emission order,
+  or declaration order is derived from the field. Move constructors
+  (`$$QEAV` by-value&& parameter) count as constructors when a class
+  has no other ctor.
+- `manual` -- verbatim copy of mi-interface-lengths.json: human ABI
+  inputs (G1-locked). Family-wide `interface_lengths` apply only
+  where no `class_interface_lengths` entry exists. A manual value
+  SHORTER than an in-binary visible bound is a CONFLICT: the table is
+  emitted with its visible slots and `length_provenance:
+  manual-conflict`, and consumers (R6, emitter) must refuse the class
+  -- a human input may tighten an unobservable tail, never deny
+  visible slots.
+
+Consumers: `uia_order_verify.py` (R6 gate), the stage-2 MI emission
+track (PR #15 branch), length_input_control.py (negative controls).

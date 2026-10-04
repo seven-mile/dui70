@@ -665,3 +665,93 @@ CI 自身**不写** `pinned/` 或 `DirectUI/`；唯一会写的文件是
 `pinned.sha256`（仅显式 `hash --write`）与 `.local/` 下的临时产物
 （repro 把下载件与隔离重建结果放在 `.local/build/repro/`）。
 **不修改 git index。**
+
+## R6 -- multi-vtable shape/slot checker (report-only, fail-closed structure)
+
+Stage-2 order-contract track (PR: w5/stage2-order-contract). Tool:
+`uia_order_verify.py`; pinned input: `pinned/mi-tables.json` schema 3.
+
+What it audits: every class with a header in `DirectUI/include` AND
+>=2 tables in the schema-3 mi-tables (or one of the mandatory 17) gets
+an isolated compile probe (dtor-only TU first, sub-force TU when a
+table is missing) whose per-base vftables are split by `??_R4` block
+and compared slot-by-slot against the pinned DLL bytes at each
+table's RVA.
+
+THIS STAGE IS A SHAPE/SLOT CHECKER. It does not compare or validate
+any base ORDER: `ctor_vftable_references` is reference-only evidence
+(order=ORDER-UNKNOWN), reported as context and never used for a
+verdict. No order-agreement verdict exists or is promised.
+
+Coverage disclosure (the JSON artifact's `coverage` block states the
+same numbers): of 324 derived classes, 168 carry ctor reference
+evidence -- scan states 84 pdata-bounded + 84 symbol-bounded-safe,
+0 refused; 254 references total. The 156 without evidence decompose
+as 110 templates (no in-symbols ctor of their own) + 46 concrete
+classes whose ctor is not in the pinned symbols; leaf classes
+without multi-table inheritance are outside this gate's audit set
+either way. This is NOT a full-coverage claim.
+
+Per-class report: table identity (primary / secondary:<base>), RVA,
+slot count, length provenance, per-slot verdict (EXACT / FOLD-UNKNOWN
+/ THUNK-UNKNOWN / UNRESOLVED / FAIL) with full mangled symbol sets
+(untruncated in the artifact), probe-observed this-offsets
+(W-adjustor encodings, unknown when none decodable -- never an empty
+list presented as measured), and the reference-only
+ctor_vftable_references context when present.
+
+Verdicts: VERIFIED / VERIFIED-UNKNOWN-SLOTS / REJECTED. A REJECTED
+verdict names its ACTUAL probe mismatches (slot counts, mangled
+identity divergences, missing probe tables, manual-conflict) -- no
+blanket attribution to inheritance-order debt. On the current
+integration shape the 17 mandatory classes are REJECTED by their
+individual probe mismatches; recorded, never masked.
+
+Fail-closed structure rules (enforced even in report-only mode):
+- missing pinned/mi-tables.json or schema != 3 = tooling error;
+- manual-conflict tables (manual length denying in-binary visible
+  slots) are REJECTED, never truncated; manual lengths LARGER than
+  an in-binary bound are recorded ignored-redundant, never silently
+  clamped;
+- mandatory-17 coverage asserted (a missing mandatory class = error).
+
+Evidence grades (stated in the tool and the artifact):
+- Solid: table shapes/slots (DLL bytes), slot identity hits;
+- reference-only: ctor_vftable_references (LEA references inside the
+  ctor's function extent -- pdata-bounded or symbol-bounded-safe;
+  NOT stores, NO order derived from them).
+
+Enforced selftest (runs before the report-only audit): T1 scan
+bounds (both modes), T2 paired control -- pair 1 committed
+references == re-derivation, pair 2 a DELETED reference must be
+caught -- T3 fake-order verdict-independence, T4 offsets honesty,
+T5 full symbol sets, T6 manual-conflict refusal; INCONCLUSIVE
+controls are non-rc0.
+
+## R3'' -- mi-tables.json derived-section re-derivation
+
+`repro.py` gate R3'' re-derives `pinned/mi-tables.json` from the DLL
+bytes + symbols.json + the COMMITTED manual lengths input and asserts
+(1) the `derived` section is identical (LF-canonical), (2) schema ==
+3, and (3) the `manual` section equals the committed
+mi-interface-lengths.json input verbatim. (1) is CONDITIONAL
+re-derivability (determinism + committed-match), NOT an independent
+proof of the manual values. The `manual` section is deliberately NOT
+asserted derivable: interface lengths are human ABI inputs, not
+facts (G1 locks them; the length_input_control controls prove they
+are live: loosening cannot fabricate slots, denying is refused as
+manual-conflict). A missing lengths input is fail-closed upstream
+(extractor requires --lengths; rc 2).
+
+## length_input_control -- manual length negative controls (enforced: gate LIC)
+
+Control A (loosen ElementProvider RefcountBase 5->6): slot content
+must stay stable (in-binary bounds hold -- no fabrication) while
+length_provenance flips manual -> ignored-redundant (the input is
+recorded, never silently clamped).
+Control B (deny RefcountBase 2->1): every affected table must come
+out length_provenance == manual-conflict with its VISIBLE slots kept
+(fail-closed deny; silent truncation would be a defect).
+Wired into ci.ps1 as the enforced LIC gate: rc 0 PASS (both controls
+PASS), rc 1 FAIL, rc 2 NOT EXECUTED (cached DLL absent) is a tooling
+error -- never a silent pass on a clean checkout.

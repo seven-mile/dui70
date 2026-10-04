@@ -230,7 +230,61 @@ def cmd_totals(args: argparse.Namespace) -> int:
 #       widening of what "the generated tree" contains and must be reviewed as one.
 #
 # Kept at module scope so G3 (existence) and G5 (compile) read one registry.
-GENERATED_EXTRA = {"DirectUI", "Interfaces", "dui_abi_types"}
+# W5 stage-2: the 13 synthesized UIA pattern interface headers
+# (IInvokeProvider.h etc.) are GENERATED from pinned mi-tables.json
+# (schema 2) by the provider-MI emission path -- reproducible from
+# pinned/, exactly like the other GENERATED_EXTRA entries. The set is
+# data-derived in the same place the emitter decides membership (see
+# emit_headers.load_mi_tables / mi_provider_shape), never hardcoded
+# per class: a provider family that stops qualifying stops emitting
+# its interface header and this registry follows.
+def _mi_pattern_interfaces() -> set:
+    """The pattern interface names the provider-MI path will emit,
+    derived from pinned/mi-tables.json + classes.json the same way
+    emit_headers.py derives them (same validators, same inputs).
+
+    Schema 2 and schema 3 are both accepted: schema 3 is a strict
+    superset of schema 2 for everything this validator reads (same
+    derived structure, same provenance values). Rejecting schema 3
+    here would desynchronize this registry from the emitter (which
+    accepts both) and redden G3 while the emitter is healthy."""
+    import json
+    pinned = Path(__file__).resolve().parent.parent.parent / "pinned"
+    doc_path = pinned / "mi-tables.json"
+    if not doc_path.is_file():
+        return set()
+    try:
+        doc = json.loads(doc_path.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    if doc.get("schema") not in (2, 3):
+        return set()
+    out: set = set()
+    for cls, entry in (doc.get("derived") or {}).items():
+        if cls.startswith("?$") or not isinstance(entry, dict):
+            continue
+        pri = entry.get("primary")
+        secs = entry.get("secondaries") or {}
+        ip = secs.get("IProvider")
+        rb = secs.get("RefcountBase")
+        if not (isinstance(pri, dict) and isinstance(ip, dict)
+                and isinstance(rb, dict)):
+            continue
+        slots = pri.get("slots")
+        if (pri.get("length_provenance") == "next-vftable"
+                and isinstance(slots, list) and len(slots) >= 3
+                and slots[0] == "QueryInterface" and slots[1] == "AddRef"
+                and slots[2] == "Release"
+                and ip.get("length_provenance") == "manual"
+                and ip.get("slots") == ["GetProxyCreator"]
+                and rb.get("length_provenance") == "manual"
+                and isinstance(rb.get("slots"), list)
+                and len(rb["slots"]) == 2):
+            out.add("I" + cls)
+    return out
+
+
+GENERATED_EXTRA = {"DirectUI", "Interfaces", "dui_abi_types"} | _mi_pattern_interfaces()
 # ChildrenView is hand-written for the same reason DuiEnums is: it cannot be
 # derived from pinned/. It encodes the measured DynamicArray<Element*,0> borrow
 # contract (GetChildren returns a Value* the caller must Release) as a type, so
@@ -422,8 +476,12 @@ def cmd_headers(args: argparse.Namespace) -> int:
     for name in sample:
         tu = tmp / f"hdrcheck_{name.replace('.', '_')}.cpp"
         tu.write_text(f"#include <{name}>\n", encoding="ascii", newline="\n")
+        # /Zc:wchar_t- matches the provider ABI compile mode (Option D:
+        # the SDK UIA interfaces' wchar_t params mangle PEBG == the
+        # pinned exports only in this mode; default wchar_t diverges
+        # and ValueProvider.h C3668s on SetValue/get_Value).
         rc, out = _run([str(cl), "/nologo", "/Zs", "/std:c++17", "/EHsc", "/W3",
-                        *inc_flags, str(tu)])
+                        "/Zc:wchar_t-", *inc_flags, str(tu)])
         warn_total += out.count("warning C")
         if rc != 0:
             first = "\n".join(out.strip().splitlines()[:12])

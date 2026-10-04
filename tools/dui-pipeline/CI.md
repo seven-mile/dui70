@@ -162,9 +162,15 @@ python tools\dui-pipeline\ci_checks.py totals --json
 
 **背景**：生成器把类头虚函数按 symbols.json 字母序输出（`model.py:760`
 `sorted(all_names)` → `emit_headers.py` 按该序分段），而 C++ 的 vtable 槽序 =
-**声明序**。实测 **103 个可判定类中 82 个**头声明序与真实 vtable 槽序不同
+**声明序**。实测 **103 个可判定类中约四成**头声明序与真实 vtable 槽序不同
 （W5：消费方经生成头调虚函数读错槽）。G4 只验**名字集**，对槽序不设防 ——
 J1 补的正是这条缝。
+
+> **该数字会随分支漂移，不要把具体值当常量引用。** 同一 J1 在不同树上实测：
+> `c58af62` = **36/103** 不同序，`5ee1308`（W5 集成分支，PR#6 补了 15+1 条继承边）
+> = **40/103**。早期文档里的 "82/103" 是**旧数字，已作废**（当时漏斗未修正/口径不同）。
+> 权威值始终以 J1 自己的输出与 JSON artifact 为准：日志打印
+> `same-order N   DIFFERENT-ORDER M`，不要在此硬编码。
 
 **真值**：`pinned/vtable-slots.json`，见 §7 的 R3'。它**不是手写表**：
 `extract-vtable-slots.py` 的输出是 `dui70.dll 字节 + pinned/symbols.json`

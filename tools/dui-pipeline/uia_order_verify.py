@@ -58,7 +58,7 @@ USAGE
 """
 from __future__ import annotations
 
-from mi_schema import MI_TABLES_SCHEMA_OK
+from mi_schema import MI_R6_SCHEMA_OK
 
 import argparse
 import json
@@ -230,6 +230,11 @@ def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
     length to deny a visible bound (2 to 1) must make the extractor
     emit manual-conflict (not truncation), and R6 must REJECT the
     affected class.
+
+    T7 (schema2 input refused): a mi-tables.json whose schema is
+    downgraded to 2 (R6 requires schema-3-only fields: identity,
+    ctor_vftable_references, provenance honesty) must be REFUSED as
+    a structural rc 2 -- never audited on narrowed inputs.
     """
     import copy
     import shutil
@@ -593,6 +598,32 @@ def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
                       "manual-conflict attribution)")
                 ok = False
 
+    # ---- T7: schema2 input must be refused (rc 2) ----
+    t7root = root / "t7"
+    (t7root / "pinned").mkdir(parents=True, exist_ok=True)
+    import shutil as _sh7
+    for f_ in pinned.iterdir():
+        if f_.is_file():
+            _sh7.copy(f_, t7root / "pinned" / f_.name)
+    m7 = json.loads((t7root / "pinned" / "mi-tables.json")
+                    .read_text(encoding="utf-8"))
+    m7["schema"] = 2
+    (t7root / "pinned" / "mi-tables.json").write_text(
+        json.dumps(m7), encoding="utf-8")
+    r7 = subprocess.run(
+        [sys.executable, str(here / "uia_order_verify.py"),
+         "--pinned", str(t7root / "pinned"), "--include", str(inc),
+         "--workdir", str(t7root / "w"), "--dll", str(dll),
+         "--classes", "InvokeProvider"],
+        capture_output=True, text=True)
+    if r7.returncode == 2:
+        print("selftest T7: PASS (schema2 input refused rc 2 -- R6 "
+              "keeps its stricter schema set)")
+    else:
+        print(f"selftest T7: FAIL (schema2 input rc={r7.returncode}, "
+              f"expected 2)")
+        ok = False
+
     print(f"uia_order_verify selftest: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 
@@ -650,9 +681,9 @@ def main(argv: list[str] | None = None) -> int:
               "(run extract-mi-tables.py first)", file=sys.stderr)
         return 2
     mi_doc = json.loads(mi_path.read_text(encoding="utf-8"))
-    if mi_doc.get("schema") not in MI_TABLES_SCHEMA_OK:
+    if mi_doc.get("schema") not in MI_R6_SCHEMA_OK:
         print(f"uia_order_verify: ERROR mi-tables schema "
-              f"{mi_doc.get('schema')} not in {MI_TABLES_SCHEMA_OK} "
+              f"{mi_doc.get('schema')} not in {MI_R6_SCHEMA_OK} "
               f"(the shape/slot checker "
               "consumes schema 3: ctor_vftable_references + identity "
               "fields + fail-closed manual conflicts)", file=sys.stderr)
@@ -1061,7 +1092,49 @@ def main(argv: list[str] | None = None) -> int:
                 st_ = cvr.get("scan", "?")
                 scan_states[st_] = scan_states.get(st_, 0) + 1
                 n_ref += len(cvr.get("references", []))
-        n_tpl = sum(1 for c in derived if "?" in c or "<" in c)
+        # TRUE PARTITION (not an arithmetic identity): every class
+        # lands in exactly ONE bucket -- with-evidence / template-
+        # without-evidence / concrete-without-evidence. Buckets are
+        # built as disjoint sets and their union is asserted to be
+        # the whole class set: a duplicate classification or a
+        # missed class FAILS (rc 2), never silently drops out of the
+        # disclosure.
+        set_evid: set = set()
+        for c, e in derived.items():
+            cvr = e.get("ctor_vftable_references") or {}
+            if cvr:
+                set_evid.add(c)
+        set_tpl = {c for c in derived
+                   if ("?" in c or "<" in c) and c not in set_evid}
+        set_no_ctor = {c for c in derived
+                       if c not in set_evid and c not in set_tpl}
+        union = set_evid | set_tpl | set_no_ctor
+        # disjointness is by construction of the comprehensions; the
+        # UNION check is the real guard (missed keys) and the
+        # arithmetic guard catches any future edit that breaks it
+        if union != set(derived) or \
+                len(set_evid) + len(set_tpl) + len(set_no_ctor) \
+                != len(derived):
+            missing = sorted(set(derived) - union)[:5]
+            extra = sorted(union - set(derived))[:5]
+            print(f"uia_order_verify: ERROR coverage partition "
+                  f"broken: union!=classset "
+                  f"(missing={missing}, extra={extra}, "
+                  f"{len(set_evid)}+{len(set_tpl)}+{len(set_no_ctor)}"
+                  f"!={len(derived)})", file=sys.stderr)
+            return 2
+        # per-class negative control: the scan_states counter (an
+        # independent count) must agree with the partition's
+        # evidence set -- a class counted twice by the counter or
+        # missed by the partition FAILS here
+        if sum(scan_states.values()) != len(set_evid):
+            print(f"uia_order_verify: ERROR coverage evidence count "
+                  f"mismatch: counter={sum(scan_states.values())} "
+                  f"partition={len(set_evid)}", file=sys.stderr)
+            return 2
+        n_evid = len(set_evid)
+        n_tpl = len(set_tpl)
+        n_no_ctor = len(set_no_ctor)
         cov_claim = ("ctor reference evidence is PARTIAL: scan "
                      "states above; classes without evidence are "
                      "templates (no in-symbols ctor of their own) or "
@@ -1069,17 +1142,6 @@ def main(argv: list[str] | None = None) -> int:
                      "pinned symbols; leaf classes without "
                      "multi-table inheritance are outside this gate "
                      "audit set; NOT a full-coverage claim")
-        n_evid = sum(scan_states.values())
-        n_no_ctor = len(derived) - n_evid - n_tpl
-        # arithmetic guard: the decomposition must be exact and
-        # non-negative -- a wrong count is a tooling bug, never a
-        # silently-drifted disclosure
-        if n_evid + n_tpl + n_no_ctor != len(derived) or \
-                n_no_ctor < 0:
-            print(f"uia_order_verify: ERROR coverage decomposition "
-                  f"broken: {n_evid}+{n_tpl}+{n_no_ctor} != "
-                  f"{len(derived)}", file=sys.stderr)
-            return 2
         cov = {
             "classes_total": len(derived),
             "classes_with_ctor_reference_evidence": n_evid,

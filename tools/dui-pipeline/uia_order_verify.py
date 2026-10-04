@@ -1,46 +1,39 @@
 #!/usr/bin/env python3
-"""uia_order_verify.py -- R6: MI inheritance-order + table-truth gate.
+"""uia_order_verify.py -- R6: multi-vtable shape/slot checker.
 
-WHAT THIS GATES (stage2 order-contract track, Lead ruling e18ca202)
+WHAT THIS GATES (stage2 order-contract track, Lead rulings e18ca202
+and 131ca2bb)
     For every class with a header in --include AND tables in pinned
     mi-tables.json (schema 3), compile an isolated probe TU that
-    forces the class's complete vftable SET (primary + secondaries),
-    split the object's relocation rows into per-base tables (??_R4
-    block anchoring), and verify EVERY table slot-by-slot against the
-    pinned DLL bytes at the table's RVA.
+    forces the class's vftable SET, split the object's relocation
+    rows into per-base tables (??_R4 block anchoring), and verify
+    EVERY table slot-by-slot against the pinned DLL bytes at the
+    table's RVA.
+
+    THIS STAGE IS A SHAPE/SLOT CHECKER. It does NOT compare or
+    validate any base ORDER: the schema-3 ctor_vftable_references
+    field is reference-only (ORDER-UNKNOWN) and is reported as
+    evidence context, never used for a verdict. No order-compare
+    verdict exists or is promised at this stage.
 
 PER-CLASS REPORT (stdout + --json-out artifact)
     * table list with identity (primary / secondary:<base>), RVA,
       slot count, length provenance;
-    * per-slot verdict: the FULL MANGLED symbol set at the DLL's slot
-      address, the probe's symbol, and EXACT / FOLD-UNKNOWN /
-      THUNK-UNKNOWN / FAIL / UNRESOLVED;
-    * this-offsets: probe-observed subobject displacements (the
-      W<off> adjustor encodings of thunk symbols per secondary table);
-    * ctor_store_order evidence (schema 3) when present.
+    * per-slot verdict with the FULL mangled symbol set at the DLL's
+      slot address and the probe's symbol (sets stored untruncated
+      in the artifact; stdout may elide for readability);
+    * this-offsets: probe-observed W-adjustor encodings per table,
+      marked "unknown" when none are decodable (an absent encoding
+      is never reported as a measured offset);
+    * ctor_vftable_references evidence context (reference-only,
+      ORDER-UNKNOWN) when present.
 
-ORDER CONTRACT CHECK (fail-closed)
-    The header's base-clause order must not CONTRADICT the schema-3
-    ctor_store_order evidence. Evidence semantics (documented, not
-    hidden): ctor store order is an OBJECT-LAYOUT OBSERVATION (Solid
-    Evidence) -- the sequence in which the constructor's code
-    references the class's own vftables. It is NOT the source-level
-    base-declaration order; store order may legitimately differ from
-    declaration order (compiler store reordering), so the check is
-    one-directional:
-      * a header whose clause order EQUALS the ctor-store order:
-        CONSISTENT (verified);
-      * a header whose clause order is a DIFFERENT permutation but
-        whose tables all verify against DLL bytes: the class is
-        reported ORDER-UNKNOWN (layout-verified, declaration order
-        not pinned) -- never silently passed as ordered;
-      * a header whose tables FAIL slot verification: FAIL (regardless
-        of clause order);
-      * a class with mi tables but NO ctor-store evidence and NO
-        header: covered elsewhere; a class with a header but NO
-        schema-3 mi entry while carrying >=2 base clauses of its own:
-        REJECTED (fail-closed: emission without table truth is not
-        auditable -- exactly the ScrollBar/CCVScrollBar debt).
+REJECT ATTRIBUTION
+    A REJECTED verdict names the ACTUAL probe mismatches (slot
+    counts, mangled identity divergences, missing probe tables,
+    manual-conflict). It does NOT attribute the rejection to any
+    inheritance-order claim -- order diagnosis is out of scope for
+    this gate at this stage.
 
 MANDATORY COVERAGE (Lead ruling: all 17)
     The 13 pattern providers, ElementProvider, HWNDElementProvider,
@@ -49,18 +42,19 @@ MANDATORY COVERAGE (Lead ruling: all 17)
     gate itself, not a warning.
 
 EVIDENCE GRADES (schema 3, stated not implied)
-    Solid: table shapes/slots (DLL bytes), ctor-store order
-    (disassembly observation), slot identity hits.
-    Strong Inference: any emission ORDERING strategy built on the
-    above (store order != declaration order); reported as such.
+    Solid: table shapes/slots (DLL bytes), slot identity hits.
+    The ctor_vftable_references field is reference-only evidence:
+    no order (base/emission/declaration) is derived from it here.
 
 USAGE
     python tools/dui-pipeline/uia_order_verify.py \
         --pinned pinned --include DirectUI/include \
-        --workdir <dir> [--json-out r6.json] [--dll <dui70.dll>]
+        --workdir <dir> [--json-out r6.json] [--dll <dui70.dll>] \
+        [--selftest]
 
     Exit codes: 0 PASS (all classes verified or UNKNOWN-reported,
-    mandatory set covered); 1 FAIL; 2 structural error.
+    mandatory set covered); 1 FAIL; 2 structural error / selftest
+    not executed where required.
 """
 from __future__ import annotations
 
@@ -195,6 +189,296 @@ def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
     return False
 
 
+def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
+              workdir: pathlib.Path, dll: pathlib.Path) -> int:
+    """Paired negative controls -- one per review BLOCK item
+    (Lead review message). Each control mutates an ISOLATED COPY of
+    the pinned inputs (never the tree under test) and asserts the
+    gate/tool FAILS or REFUSES as required; the unmutated pair must
+    behave normally. A control that cannot fail is reported as an
+    error (never vacuous).
+
+    T1 (F1 scan bounds): every ctor_vftable_references entry that
+    claims scan=pdata-bounded must keep ALL reference offsets inside
+    the .pdata function extent it reports, and that extent must be
+    the actual .pdata entry containing the ctor RVA. A fixed-window
+    scan (the BLOCKed behavior) would produce references past the
+    extent -- the shipped scan must not.
+
+    T2 (F1 alias lists): an RVA carrying TWO alias vftable symbols
+    (ICF) must record BOTH candidates -- drop-last-wins must not
+    occur. Verified structurally on the pinned artifact.
+
+    T3 (F3/F4 no order claims): the pinned artifact carries
+    ORDER-UNKNOWN semantics and no order-compare verdict field
+    exists in the gate.
+
+    T4 (offsets honesty): every table row this_offsets is either a
+    non-empty list of decodings or the string unknown -- never an
+    empty list masquerading as measured.
+
+    T5 (full sets): every fail-slot entry carries the FULL
+    dll_symbols list (len == the RVA symbol-set size), untruncated.
+
+    T6 (manual-conflict refusal): tampering the manual RefcountBase
+    length to deny a visible bound (2 to 1) must make the extractor
+    emit manual-conflict (not truncation), and R6 must REJECT the
+    affected class.
+    """
+    import copy
+    import shutil
+    import subprocess
+    repo = pathlib.Path(__file__).resolve().parents[2]
+    here = repo / "tools" / "dui-pipeline"
+    root = workdir / "selftest"
+    if root.exists():
+        shutil.rmtree(root)
+    root.mkdir(parents=True)
+    ok = True
+    mi = json.loads((pinned / "mi-tables.json").read_text(
+        encoding="utf-8"))
+
+    # ---- T1: .pdata-bounding of the reference scan ----
+    import struct as _s
+    blob = dll.read_bytes()
+    e = _s.unpack_from("<I", blob, 0x3C)[0]
+    coff = e + 4
+    nsec = _s.unpack_from("<H", blob, coff + 2)[0]
+    optsz = _s.unpack_from("<H", blob, coff + 16)[0]
+    opt = coff + 20
+    pdata_extents = []
+    for i in range(nsec):
+        o = opt + optsz + i * 40
+        name = blob[o:o + 8].rstrip(b"\0").decode("ascii", "replace")
+        if name == ".pdata":
+            _, vaddr, _, raddr = _s.unpack_from("<IIII", blob, o + 8)
+            vsize = _s.unpack_from("<I", blob, o + 8)[0]
+            for j in range(vsize // 12):
+                b, en, _u = _s.unpack_from("<III", blob, raddr + j * 12)
+                if b or en:
+                    pdata_extents.append((b, en))
+    bad = 0
+    checked = 0
+    for cls, e_ in mi["derived"].items():
+        cvr = e_.get("ctor_vftable_references")
+        if not cvr or cvr.get("scan") != "pdata-bounded":
+            continue
+        b, en = (int(cvr["function_extent"][0], 16),
+                 int(cvr["function_extent"][1], 16))
+        ctor = int(cvr["ctor_rva"], 16)
+        refs = cvr.get("references", [])
+        checked += 1
+        # every reference offset must land inside the extent
+        if any(not (b <= ctor + r["offset"] < en) for r in refs):
+            bad += 1
+        # extent must actually be the .pdata entry containing the ctor
+        if not any(bb <= ctor < ee and (bb, ee) == (b, en)
+                   for bb, ee in pdata_extents):
+            bad += 1
+    print(f"selftest T1: {checked} pdata-bounded entries, "
+          f"{bad} with out-of-extent references/extent mismatch")
+    if bad or not checked:
+        print("selftest T1: FAIL")
+        ok = False
+    else:
+        print("selftest T1: PASS (all references inside .pdata extents)")
+
+    # ---- T2: alias candidates preserved ----
+    alias_seen = 0
+    for cls, e_ in mi["derived"].items():
+        cvr = e_.get("ctor_vftable_references") or {}
+        for r in cvr.get("references", []):
+            if len(r.get("candidates", [])) > 1:
+                alias_seen += 1
+    # structural floor: SOME class in this binary references an RVA
+    # with multiple alias vftables (ICF); if none, the test cannot
+    # prove alias preservation on this input -- report honestly.
+    if alias_seen:
+        print(f"selftest T2: PASS ({alias_seen} references carry "
+              f"multiple alias candidates -- none dropped)")
+    else:
+        print("selftest T2: INCONCLUSIVE (no alias RVA referenced in "
+              "this binary's ctors) -- structural check only")
+        # structural check: extractor keeps candidates as a list
+        src = (here / "extract-mi-tables.py").read_text(encoding="utf-8")
+        if '"candidates": cands' not in src:
+            print("selftest T2: FAIL (candidates list not present)")
+            ok = False
+
+    # ---- T3: no order verdict fields anywhere ----
+    # Scan the GATE portion of the source only (everything before the
+    # selftest function): the selftest's own guard strings would
+    # otherwise trip the scan.
+    artifact_txt = json.dumps(mi)
+    gate_src_full = (here / "uia_order_verify.py").read_text(
+        encoding="utf-8")
+    gate_src = gate_src_full[:gate_src_full.index("def _selftest(")]
+    marker = "CONSIST" + "ENT"
+    order_emit = '"order": ' + 'cvr'
+    if "ORDER-UNKNOWN" not in artifact_txt:
+        print("selftest T3: FAIL (ORDER-UNKNOWN semantics missing)")
+        ok = False
+    elif marker in gate_src:
+        print("selftest T3: FAIL (order-compare language remains)")
+        ok = False
+    elif order_emit.replace("cvr", "cvr.get") not in gate_src and \
+            '"order"' in gate_src.replace(
+                '"order": "ORDER-UNKNOWN"', ""):
+        print("selftest T3: FAIL (order verdict emission remains)")
+        ok = False
+    else:
+        print("selftest T3: PASS (reference-only + ORDER-UNKNOWN; no "
+              "order-compare verdicts)")
+
+    # ---- T4/T5: run the gate on ONE class and inspect the artifact --
+    cls = "InvokeProvider"
+    art = root / "r6-one.json"
+    r = subprocess.run(
+        [sys.executable, str(here / "uia_order_verify.py"),
+         "--pinned", str(pinned), "--include", str(inc),
+         "--workdir", str(root / "w-one"), "--dll", str(dll),
+         "--classes", cls, "--json-out", str(art)],
+        capture_output=True, text=True)
+    if r.returncode not in (0, 1) or not art.is_file():
+        print(f"selftest T4/T5: FAIL (gate rc={r.returncode})")
+        ok = False
+    else:
+        doc = json.loads(art.read_text(encoding="utf-8"))
+        rep = doc["audited"].get(cls)
+        if rep is None:
+            print("selftest T4/T5: FAIL (class not audited)")
+            ok = False
+        else:
+            bad4 = [t for t, tr in rep["tables"].items()
+                    if tr.get("this_offsets") == []]
+            if bad4:
+                print(f"selftest T4: FAIL (empty this_offsets on "
+                      f"{bad4})")
+                ok = False
+            else:
+                print("selftest T4: PASS (this_offsets never an empty "
+                      "list; unknown when undecodable)")
+            symd = json.loads((pinned / "symbols.json").read_text(
+                encoding="utf-8"))["symbols"]
+            full = {}
+            for s in symd:
+                rv = s.get("rva")
+                if rv:
+                    full.setdefault(int(rv, 16), []).append(
+                        s["mangled"])
+            bad5 = 0
+            for t, tr in rep["tables"].items():
+                for fs in tr.get("fail_slots", []):
+                    if "dll_symbols" not in fs:
+                        continue
+                    # recompute the true set size at the slot
+                    rva = int(tr["rva"], 16)
+                    slot = fs["slot"]
+                    off = None
+                    for va, vs, ra, rs in [(x[0], x[1], x[2], x[3])
+                                           for x in _pe_secs(blob)]:
+                        if va <= rva < va + vs:
+                            off = ra + (rva - va)
+                            break
+                    if off is None or slot is None:
+                        continue
+                    va = _s.unpack_from("<Q", blob, off + 8 * slot)[0]
+                    true_set = full.get(va - _pe_base(blob), [])
+                    if len(fs["dll_symbols"]) != len(true_set):
+                        bad5 += 1
+            if bad5:
+                print(f"selftest T5: FAIL ({bad5} truncated symbol "
+                      f"sets in fail slots)")
+                ok = False
+            else:
+                print("selftest T5: PASS (fail slots carry full DLL "
+                      "symbol sets)")
+
+    # ---- T6: manual-conflict refusal (deny direction) ----
+    mut = root / "deny"
+    (mut / "pinned").mkdir(parents=True)
+    for f in pinned.iterdir():
+        if f.is_file():
+            shutil.copy(f, mut / "pinned" / f.name)
+    ld = json.loads((mut / "pinned" / "mi-interface-lengths.json")
+                    .read_text(encoding="utf-8"))
+    ld["interface_lengths"]["RefcountBase"] = 1
+    (mut / "pinned" / "mi-interface-lengths.json").write_text(
+        json.dumps(ld), encoding="utf-8")
+    rx = subprocess.run(
+        [sys.executable, str(here / "extract-mi-tables.py"),
+         "--dll", str(dll),
+         "--symbols", str(mut / "pinned" / "symbols.json"),
+         "--lengths", str(mut / "pinned" / "mi-interface-lengths.json"),
+         "--out", str(mut / "pinned" / "mi-tables.json")],
+        capture_output=True, text=True)
+    if rx.returncode != 0:
+        print("selftest T6: FAIL (extractor rejected the tamper input "
+              "outright)")
+        ok = False
+    else:
+        mdoc = json.loads((mut / "pinned" / "mi-tables.json")
+                          .read_text(encoding="utf-8"))["derived"]
+        conf = [c for c, e_ in mdoc.items()
+                for k, t_ in (e_.get("secondaries") or {}).items()
+                if t_.get("length_provenance") == "manual-conflict"]
+        trunc = [c for c, e_ in mdoc.items()
+                 for k, t_ in (e_.get("secondaries") or {}).items()
+                 if t_.get("length_provenance") == "manual-conflict"
+                 and len(t_["slots"]) < len(
+                     (mi["derived"].get(c, {})
+                      .get("secondaries") or {}).get(k, {})
+                     .get("slots", []))]
+        if not conf:
+            print("selftest T6: FAIL (deny not refused)")
+            ok = False
+        elif trunc:
+            print("selftest T6: FAIL (silent truncation)")
+            ok = False
+        else:
+            r6 = subprocess.run(
+                [sys.executable,
+                 str(here / "uia_order_verify.py"),
+                 "--pinned", str(mut / "pinned"),
+                 "--include", str(inc),
+                 "--workdir", str(mut / "w"),
+                 "--dll", str(dll), "--classes",
+                 "InvokeProvider,ElementProvider"],
+                capture_output=True, text=True)
+            inv_ok = "manual-conflict" in (r6.stdout + r6.stderr)
+            if r6.returncode == 1 and inv_ok:
+                print("selftest T6: PASS (deny -> manual-conflict, "
+                      "visible slots kept, R6 REJECTs)")
+            else:
+                print("selftest T6: FAIL (R6 did not reject with "
+                      "manual-conflict attribution)")
+                ok = False
+
+    print(f"uia_order_verify selftest: {'PASS' if ok else 'FAIL'}")
+    return 0 if ok else 1
+
+
+def _pe_secs(blob):
+    import struct as _s
+    e = _s.unpack_from("<I", blob, 0x3C)[0]
+    coff = e + 4
+    nsec = _s.unpack_from("<H", blob, coff + 2)[0]
+    optsz = _s.unpack_from("<H", blob, coff + 16)[0]
+    opt = coff + 20
+    out = []
+    for i in range(nsec):
+        o = opt + optsz + i * 40
+        vsize, vaddr, rsize, raddr = _s.unpack_from("<IIII", blob, o + 8)
+        out.append((vaddr, vsize, raddr, rsize))
+    return out
+
+
+def _pe_base(blob):
+    import struct as _s
+    e = _s.unpack_from("<I", blob, 0x3C)[0]
+    return _s.unpack_from("<Q", blob, e + 4 + 20 + 24)[0]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pinned", required=True)
@@ -202,6 +486,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--workdir", required=True)
     ap.add_argument("--dll", default=None)
     ap.add_argument("--json-out", default=None)
+    ap.add_argument("--selftest", action="store_true",
+                    help="paired negative controls per the review "
+                         "BLOCK items (scan bounds, alias lists, no "
+                         "order claims, offsets honesty, full symbol "
+                         "sets, manual-conflict refusal)")
     ap.add_argument("--classes", default=None,
                     help="comma list; default: all classes with both "
                          "header and mi-tables entry")
@@ -212,6 +501,10 @@ def main(argv: list[str] | None = None) -> int:
     work = pathlib.Path(args.workdir)
     work.mkdir(parents=True, exist_ok=True)
 
+    if args.selftest:
+        dll = pathlib.Path(args.dll) if args.dll else _resolve_dll(pinned)
+        return _selftest(pinned, inc, work, dll)
+
     mi_path = pinned / "mi-tables.json"
     if not mi_path.is_file():
         print("uia_order_verify: ERROR pinned/mi-tables.json missing "
@@ -220,8 +513,9 @@ def main(argv: list[str] | None = None) -> int:
     mi_doc = json.loads(mi_path.read_text(encoding="utf-8"))
     if mi_doc.get("schema") != 3:
         print(f"uia_order_verify: ERROR mi-tables schema "
-              f"{mi_doc.get('schema')} != 3 (order-contract track "
-              "needs schema 3)", file=sys.stderr)
+              f"{mi_doc.get('schema')} != 3 (the shape/slot checker "
+              "consumes schema 3: ctor_vftable_references + identity "
+              "fields + fail-closed manual conflicts)", file=sys.stderr)
         return 2
     derived = mi_doc["derived"]
 
@@ -274,7 +568,7 @@ def main(argv: list[str] | None = None) -> int:
             continue
         txt = hp.read_text(encoding="utf-8")
 
-        report = {"class": cls, "tables": {}, "order": {},
+        report = {"class": cls, "tables": {},
                   "verdict": None, "notes": []}
 
         # fail-closed: manual-conflict tables reject the class outright
@@ -404,12 +698,15 @@ def main(argv: list[str] | None = None) -> int:
                         continue
                     key = re.sub(r"@\d+@$", "@", m.group(1)).rstrip("@")
                     tables[key] = [sym for _, sym in rn[1:]]
-                    offs = sorted({int(mm.group(1)) for sym in
-                                   tables[key]
-                                   for mm in [re.match(
-                                       r"\?\S+@\w+@DirectUI@@W(\d+)",
-                                       sym)] if mm})
-                    offs_map[key] = offs
+                    dec = sorted({int(mm.group(1)) for sym in
+                                  tables[key]
+                                  for mm in [re.match(
+                                      r"\?\S+@\w+@DirectUI@@W(\d+)",
+                                      sym)] if mm})
+                    # absent W-encodings are UNKNOWN, never an empty
+                    # list presented as a measured result
+                    offs_map[key] = dec if dec else "unknown"
+
             return tables, offs_map
 
         probe_tables, this_offsets = split_tables(obj)
@@ -468,8 +765,9 @@ def main(argv: list[str] | None = None) -> int:
                     "probe_slots": len(got) if got is not None else None,
                     "verified": 0, "fold_unknown": 0,
                     "thunk_unknown": 0, "unresolved": 0,
-                    "fail_slots": [], "this_offsets": this_offsets.get(
-                        base_key if base_key else "", [])}
+                    "fail_slots": [], "slot_detail": [],
+                    "this_offsets": this_offsets.get(
+                        base_key if base_key else "", "unknown")}
             rva = int(tinfo["rva"], 16)
             if got is None:
                 trow["fail_slots"].append(
@@ -494,6 +792,9 @@ def main(argv: list[str] | None = None) -> int:
                                 {"slot": i, "err": f"expected vdtor, "
                                                    f"got {sym[:60]}"})
                         continue
+                    trow["slot_detail"].append({
+                        "slot": i, "probe_symbol": sym,
+                        "dll_symbols": sorted(exp_set)})
                     if sym in exp_set:
                         if len(exp_set) > 1:
                             trow["fold_unknown"] += 1
@@ -513,28 +814,43 @@ def main(argv: list[str] | None = None) -> int:
                         continue
                     trow["fail_slots"].append({
                         "slot": i,
-                        "err": f"mangled identity -- DLL "
-                               f"{sorted(exp_set)[:1]}, object {sym[:56]}"})
+                        "err": "mangled identity divergence",
+                        "dll_symbols": sorted(exp_set),
+                        # None when the probe table ran out of slots
+                        # (never an empty string that looks like a
+                        # symbol)
+                        "probe_symbol": sym or None})
             if trow["fail_slots"]:
                 any_fail = True
             report["tables"][tname] = trow
 
-        # ---- order-contract check ----
-        cso = entry.get("ctor_store_order")
-        if cso:
-            seq = [s["base"] for s in cso["stores"]]
-            report["order"]["ctor_store_order"] = seq
-            report["order"]["evidence"] = (
-                "object-layout observation (Solid); NOT declaration "
-                "order; emission ordering on it = Strong Inference")
+        # ---- ctor vftable references: evidence CONTEXT only ----
+        # Reference-only (ORDER-UNKNOWN); NOT used for any verdict.
+        # This gate does not compare base orders at this stage.
+        cvr = entry.get("ctor_vftable_references")
+        if cvr:
+            report["ctor_vftable_references"] = {
+                "scan": cvr.get("scan"),
+                "order": cvr.get("order", "ORDER-UNKNOWN"),
+                "semantics": "reference-only evidence context; no "
+                             "order verdict is derived from it",
+                "function_extent": cvr.get("function_extent"),
+                "references": [
+                    {"offset": r.get("offset"),
+                     "bases": [c.get("base")
+                               for c in r.get("candidates", [])]}
+                    for r in cvr.get("references", [])],
+            }
         else:
-            report["order"]["ctor_store_order"] = None
-            report["order"]["evidence"] = (
-                "no ctor-store evidence (ctor not in pinned symbols or "
-                "own-table refs filtered: ICF-merged code)")
+            report["ctor_vftable_references"] = None
 
         if any_fail:
             report["verdict"] = "REJECTED"
+            kinds = sorted({fs.get("err", "?").split(":")[0].strip()
+                            for tr in report["tables"].values()
+                            for fs in tr["fail_slots"]})
+            report["notes"].append(
+                "rejected by probe mismatch: " + ", ".join(kinds))
             failed_classes.append(cls)
         else:
             total_unk = sum(t["fold_unknown"] + t["thunk_unknown"] +
@@ -572,7 +888,17 @@ def main(argv: list[str] | None = None) -> int:
             print(f"     - {n}")
         for t, t_ in sorted(r["tables"].items()):
             for fs in t_["fail_slots"][:3]:
-                print(f"     * {t} slot {fs['slot']}: {fs['err']}")
+                if "dll_symbols" in fs:
+                    dll_syms = ", ".join(fs["dll_symbols"][:2])
+                    more = (f" (+{len(fs['dll_symbols'])-2} more)"
+                            if len(fs["dll_symbols"]) > 2 else "")
+                    psym = fs.get("probe_symbol")
+                    psym = psym[:56] if psym else "(no probe symbol)"
+                    print(f"     * {t} slot {fs['slot']}: "
+                          f"{fs['err']} -- DLL [{dll_syms}{more}], "
+                          f"object {psym}")
+                else:
+                    print(f"     * {t} slot {fs['slot']}: {fs['err']}")
     if args.json_out:
         pathlib.Path(args.json_out).write_text(
             json.dumps({"gate": "R6 MI order + table truth",

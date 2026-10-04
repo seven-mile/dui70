@@ -678,9 +678,13 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
     section only (schema 3).
 
     mi-tables.json has two sections by design (extract-mi-tables.py):
-      * "derived" -- a pure function of DLL bytes + symbols.json +
-        the manual interface-lengths; re-derivable, byte-compared here
-        (LF-canonical, same rule as R3');
+      * "derived" -- a function of DLL bytes + symbols.json + the
+        manual interface-length input. R3'' proves CONDITIONAL
+        re-derivability: given the same committed manual input, the
+        derived section re-derives byte-identically (LF-canonical,
+        same rule as R3'). This is NOT an independent proof of the
+        manual values -- it proves the derivation is deterministic
+        and the committed derived section matches it.
       * "manual"  -- HUMAN ABI INPUTS (interface lengths). G1 locks
         the file via pinned.sha256; R3'' deliberately does NOT assert
         manual values are derivable -- they are inputs, not facts. A
@@ -735,11 +739,11 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
         return 1
     if rb.get("derived") == cb.get("derived"):
         n = len(cb.get("derived") or {})
-        n_cso = sum(1 for e in (cb.get("derived") or {}).values()
-                    if "ctor_store_order" in e)
+        n_cvr = sum(1 for e in (cb.get("derived") or {}).values()
+                    if "ctor_vftable_references" in e)
         ok("R3''", f"mi-tables.json derived section re-derived identical "
                    f"(schema {cb.get('schema')}; {n} classes, "
-                   f"{n_cso} with ctor_store_order)")
+                   f"{n_cvr} with ctor_vftable_references)")
         return 0
 
     a, b = rb.get("derived") or {}, cb.get("derived") or {}
@@ -750,7 +754,8 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
               f"only in committed: {sorted(set(b) - set(a))[:5]}"]
     for c in cls_diff[:6]:
         ea, eb = a.get(c) or {}, b.get(c) or {}
-        for part in ("primary", "secondaries", "ctor_store_order"):
+        for part in ("primary", "secondaries",
+                     "ctor_vftable_references"):
             if ea.get(part) != eb.get(part):
                 detail.append(f"  {c}: {part} differs")
     fail("R3''", "mi-tables.json derived section re-derived identical",

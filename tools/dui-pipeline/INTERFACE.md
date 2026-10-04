@@ -319,16 +319,21 @@ Produced by `extract-mi-tables.py --dll <dui70.dll> --symbols
 pinned/symbols.json --lengths pinned/mi-interface-lengths.json`.
 Two sections:
 
-- `derived` -- pure function of DLL bytes + symbols.json + the manual
-  lengths (re-derived and compared by repro.py gate R3''). Per class:
+- `derived` -- a function of DLL bytes + symbols.json + the manual
+  lengths input. repro.py gate R3'' proves CONDITIONAL
+  re-derivability (same committed manual input -> byte-identical
+  derived section); it is NOT an independent proof of the manual
+  values themselves. Per class:
   `primary` / `secondaries` tables with `identity`, `rva`, `slots`,
   `length_provenance` (`next-vftable` | `manual` | `manual-conflict`
-  | `hard-stop` | `unknown`), plus `ctor_store_order`: the sequence of
-  the class's OWN vftable references in its constructor's code
-  (rip-relative LEA targets), with the ctor RVA. SEMANTICS: an
-  OBJECT-LAYOUT OBSERVATION (Solid Evidence) -- NOT the source-level
-  base-declaration order; any emission ordering strategy built on it
-  is Strong Inference.
+  | `hard-stop` | `unknown`), plus `ctor_vftable_references`: the
+  rip-relative LEA references to the class's OWN vftables, strictly
+  within the ctor's .pdata function extent (scan refused when .pdata
+  is unavailable; ALL alias candidates at a target RVA kept, none
+  dropped). SEMANTICS: reference-only evidence, order=ORDER-UNKNOWN;
+  these are NOT stores (no this+offset write is traced) and NO base
+  order, emission order, or declaration order is derived from the
+  field.
 - `manual` -- verbatim copy of mi-interface-lengths.json: human ABI
   inputs (G1-locked). Family-wide `interface_lengths` apply only
   where no `class_interface_lengths` entry exists. A manual value

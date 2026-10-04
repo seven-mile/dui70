@@ -8091,24 +8091,28 @@
    }
   },
   "AccessibleButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B65B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B65B0",
+     "0x000B6600"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7AccessibleButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 43,
-      "symbol": "??_7AccessibleButton@DirectUI@@6B@",
-      "table_rva": "0x0010A998"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 315,
-      "symbol": "??_7AccessibleButton@DirectUI@@6B@",
       "table_rva": "0x0010A998"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -8924,24 +8928,10 @@
    }
   },
   "AnimationStrip": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D3BD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7AnimationStrip@DirectUI@@6B@",
-      "table_rva": "0x00112470"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 54,
-      "symbol": "??_7AnimationStrip@DirectUI@@6B@",
-      "table_rva": "0x00112470"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -9364,24 +9354,28 @@
    }
   },
   "AutoButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B66C0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B66C0",
+     "0x000B671A"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7AutoButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 70,
-      "symbol": "??_7AutoButton@DirectUI@@6B@",
-      "table_rva": "0x001122B0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 135,
-      "symbol": "??_7AutoButton@DirectUI@@6B@",
       "table_rva": "0x001122B0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -9772,24 +9766,10 @@
    }
   },
   "BaseScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A7EA0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7BaseScrollBar@DirectUI@@6B@",
-      "table_rva": "0x0010ED70"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 565,
-      "symbol": "??_7BaseScrollBar@DirectUI@@6B@",
-      "table_rva": "0x0010ED70"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -9818,24 +9798,10 @@
    }
   },
   "BaseScrollViewer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0008AF50",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 27,
-      "symbol": "??_7BaseScrollViewer@DirectUI@@6BElement@1@@",
-      "table_rva": "0x001057F0"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 37,
-      "symbol": "??_7BaseScrollViewer@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x00105978"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "Element": {
@@ -10464,24 +10430,28 @@
    }
   },
   "Bind": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6760",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6760",
+     "0x000B6782"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Bind@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7Bind@DirectUI@@6B@",
-      "table_rva": "0x00111E60"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 75,
-      "symbol": "??_7Bind@DirectUI@@6B@",
       "table_rva": "0x00111E60"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -10908,18 +10878,10 @@
    }
   },
   "BorderLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00071EA0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7BorderLayout@DirectUI@@6B@",
-      "table_rva": "0x001079B0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -10939,24 +10901,28 @@
    }
   },
   "Browser": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6810",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6810",
+     "0x000B684C"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Browser@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7Browser@DirectUI@@6B@",
-      "table_rva": "0x00111B80"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 107,
-      "symbol": "??_7Browser@DirectUI@@6B@",
       "table_rva": "0x00111B80"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -11382,24 +11348,10 @@
    }
   },
   "BrowserSelectionProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EF850",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7BrowserSelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x001173F8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7BrowserSelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x001173F8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -11412,18 +11364,10 @@
    }
   },
   "Button": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000735E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7Button@DirectUI@@6B@",
-      "table_rva": "0x00107F18"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -11808,24 +11752,39 @@
    }
   },
   "CBinaryXmlReader": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00076B44",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00076B44",
+     "0x00076BD6"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "IXmlReader@",
+      "candidates": [
+       {
+        "base": "IXmlReader@",
+        "symbol": "??_7CBinaryXmlReader@DirectUI@@6BIXmlReader@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 47,
-      "symbol": "??_7CBinaryXmlReader@DirectUI@@6BIXmlReader@@@",
       "table_rva": "0x00104F98"
      },
      {
-      "base": "?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@",
+      "candidates": [
+       {
+        "base": "?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@",
+        "symbol": "??_7CBinaryXmlReader@DirectUI@@6B?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 57,
-      "symbol": "??_7CBinaryXmlReader@DirectUI@@6B?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@@@",
       "table_rva": "0x00105070"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@": {
@@ -12448,18 +12407,28 @@
    }
   },
   "CCAVI": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A7F90",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A7F90",
+     "0x000A7FB2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCAVI@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCAVI@DirectUI@@6B@",
       "table_rva": "0x0010F878"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -12961,18 +12930,10 @@
    }
   },
   "CCBase": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007CAA0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 47,
-      "symbol": "??_7CCBase@DirectUI@@6B@",
-      "table_rva": "0x001091F8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -13514,24 +13475,28 @@
    }
   },
   "CCBaseCheckRadioButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8030",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8030",
+     "0x000A8052"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCBaseCheckRadioButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCBaseCheckRadioButton@DirectUI@@6B@",
-      "table_rva": "0x001105D8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 102,
-      "symbol": "??_7CCBaseCheckRadioButton@DirectUI@@6B@",
       "table_rva": "0x001105D8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -13986,18 +13951,28 @@
    }
   },
   "CCBaseScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A80C0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A80C0",
+     "0x000A8116"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "CCBase",
+      "candidates": [
+       {
+        "base": "CCBase",
+        "symbol": "??_7CCBaseScrollBar@DirectUI@@6BCCBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 52,
-      "symbol": "??_7CCBaseScrollBar@DirectUI@@6BCCBase@1@@",
       "table_rva": "0x00109628"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -14556,24 +14531,28 @@
    }
   },
   "CCCheckBox": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8120",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8120",
+     "0x000A8142"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCCheckBox@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCCheckBox@DirectUI@@6B@",
-      "table_rva": "0x001103E0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 102,
-      "symbol": "??_7CCCheckBox@DirectUI@@6B@",
       "table_rva": "0x001103E0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -15027,24 +15006,28 @@
    }
   },
   "CCCommandLink": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A81B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A81B0",
+     "0x000A81D2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCCommandLink@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCCommandLink@DirectUI@@6B@",
-      "table_rva": "0x001107D0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 102,
-      "symbol": "??_7CCCommandLink@DirectUI@@6B@",
       "table_rva": "0x001107D0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -15552,18 +15535,28 @@
    }
   },
   "CCHScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8240",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8240",
+     "0x000A8270"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "CCBase",
+      "candidates": [
+       {
+        "base": "CCBase",
+        "symbol": "??_7CCHScrollBar@DirectUI@@6BCCBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCHScrollBar@DirectUI@@6BCCBase@1@@",
       "table_rva": "0x0010D5E0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -16121,18 +16114,28 @@
    }
   },
   "CCListBox": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8280",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8280",
+     "0x000A82A2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCListBox@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCListBox@DirectUI@@6B@",
       "table_rva": "0x0010FC38"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -16673,18 +16676,28 @@
    }
   },
   "CCListView": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A82B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A82B0",
+     "0x000A82D2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCListView@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCListView@DirectUI@@6B@",
       "table_rva": "0x00110008"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -17225,18 +17238,28 @@
    }
   },
   "CCProgressBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A82E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A82E0",
+     "0x000A8302"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCProgressBar@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCProgressBar@DirectUI@@6B@",
       "table_rva": "0x0010E1A8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -17777,18 +17800,28 @@
    }
   },
   "CCPushButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8310",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8310",
+     "0x000A8332"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCPushButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCPushButton@DirectUI@@6B@",
       "table_rva": "0x001067A8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -18262,18 +18295,28 @@
    }
   },
   "CCRadioButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8340",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8340",
+     "0x000A8362"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCRadioButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCRadioButton@DirectUI@@6B@",
       "table_rva": "0x001101E8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -18727,18 +18770,28 @@
    }
   },
   "CCSysLink": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8370",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8370",
+     "0x000A8392"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCSysLink@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCSysLink@DirectUI@@6B@",
       "table_rva": "0x0010FA58"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -19259,18 +19312,28 @@
    }
   },
   "CCTrackBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A83A0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A83A0",
+     "0x000A83C2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCTrackBar@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCTrackBar@DirectUI@@6B@",
       "table_rva": "0x0010F698"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -19762,24 +19825,28 @@
    }
   },
   "CCTreeView": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A83D0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A83D0",
+     "0x000A83F2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7CCTreeView@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCTreeView@DirectUI@@6B@",
-      "table_rva": "0x0010FE18"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 102,
-      "symbol": "??_7CCTreeView@DirectUI@@6B@",
       "table_rva": "0x0010FE18"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -20438,24 +20505,39 @@
    }
   },
   "CCVScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A8460",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A8460",
+     "0x000A8490"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "CCBase",
+      "candidates": [
+       {
+        "base": "CCBase",
+        "symbol": "??_7CCVScrollBar@DirectUI@@6BCCBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7CCVScrollBar@DirectUI@@6BCCBase@1@@",
       "table_rva": "0x0010E648"
      },
      {
-      "base": "BaseScrollBar",
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7CCVScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7CCVScrollBar@DirectUI@@6BBaseScrollBar@1@@",
       "table_rva": "0x00109808"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -21231,36 +21313,39 @@
    }
   },
   "CIHMCallback": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D56D0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000D56D0",
+     "0x000D5739"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "CSafeElementProxy@",
+      "candidates": [
+       {
+        "base": "CSafeElementProxy@",
+        "symbol": "??_7CIHMCallback@DirectUI@@6BCSafeElementProxy@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7CIHMCallback@DirectUI@@6BCSafeElementProxy@@@",
       "table_rva": "0x00115A18"
      },
      {
-      "base": "ITouchKeyboardNotificationCallback@",
+      "candidates": [
+       {
+        "base": "ITouchKeyboardNotificationCallback@",
+        "symbol": "??_7CIHMCallback@DirectUI@@6BITouchKeyboardNotificationCallback@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7CIHMCallback@DirectUI@@6BITouchKeyboardNotificationCallback@@@",
-      "table_rva": "0x00115A20"
-     },
-     {
-      "base": "CSafeElementProxy@",
-      "offset": 278,
-      "symbol": "??_7CIHMCallback@DirectUI@@6BCSafeElementProxy@@@",
-      "table_rva": "0x00115A18"
-     },
-     {
-      "base": "ITouchKeyboardNotificationCallback@",
-      "offset": 291,
-      "symbol": "??_7CIHMCallback@DirectUI@@6BITouchKeyboardNotificationCallback@@@",
       "table_rva": "0x00115A20"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "CSafeElementProxy@": {
@@ -21307,7 +21392,7 @@
     },
     "RefcountBase": {
      "identity": "secondary:RefcountBase",
-     "length_provenance": "next-vftable",
+     "length_provenance": "ignored-redundant",
      "rva": "0x00114B10",
      "slots": [
       [
@@ -21360,18 +21445,28 @@
    }
   },
   "CTouchEditInnerTextHost": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C2EE4",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C2EE4",
+     "0x000C2F1D"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "IRichEditOleCallbackImpl@",
+      "candidates": [
+       {
+        "base": "IRichEditOleCallbackImpl@",
+        "symbol": "??_7CTouchEditInnerTextHost@DirectUI@@6BIRichEditOleCallbackImpl@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 16,
-      "symbol": "??_7CTouchEditInnerTextHost@DirectUI@@6BIRichEditOleCallbackImpl@@@",
       "table_rva": "0x001140A0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IRichEditOleCallbackImpl@": {
@@ -22532,7 +22627,7 @@
     },
     "RefcountBase": {
      "identity": "secondary:RefcountBase",
-     "length_provenance": "next-vftable",
+     "length_provenance": "ignored-redundant",
      "rva": "0x00114300",
      "slots": [
       [
@@ -23284,18 +23379,10 @@
    }
   },
   "CheckBoxGlyph": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B2300",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 33,
-      "symbol": "??_7CheckBoxGlyph@DirectUI@@6B@",
-      "table_rva": "0x0010F368"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -23703,18 +23790,10 @@
    }
   },
   "ClassInfoBase": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00075230",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7ClassInfoBase@DirectUI@@6B@",
-      "table_rva": "0x001082C8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -24202,18 +24281,28 @@
    }
   },
   "Clipper": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6890",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6890",
+     "0x000B68B2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Clipper@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7Clipper@DirectUI@@6B@",
       "table_rva": "0x00105E10"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -24594,30 +24683,10 @@
    }
   },
   "Combobox": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B3750",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 34,
-      "symbol": "??_7Combobox@DirectUI@@6B@",
-      "table_rva": "0x00110E88"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 64,
-      "symbol": "??_7Combobox@DirectUI@@6B@",
-      "table_rva": "0x00110E88"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 165,
-      "symbol": "??_7Combobox@DirectUI@@6B@",
-      "table_rva": "0x00110E88"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -25071,18 +25140,10 @@
    }
   },
   "ConcreteElementProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0006F0EC",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7ConcreteElementProxy@DirectUI@@6B@",
-      "table_rva": "0x00107910"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -25095,18 +25156,10 @@
    }
   },
   "ConcreteHWNDElementProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00073DBC",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7ConcreteHWNDElementProxy@DirectUI@@6B@",
-      "table_rva": "0x001080A0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -25120,6 +25173,17 @@
    }
   },
   "ContentLayoutInvalidateBehavior": {
+   "ctor_vftable_references": {
+    "ctor_rva": "0x000C7664",
+    "function_extent": [
+     "0x000C7664",
+     "0x000C768A"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
+   },
    "primary": {
     "identity": "primary",
     "length_provenance": "next-vftable",
@@ -29870,18 +29934,10 @@
    }
   },
   "DCSurface": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0006EDD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7DCSurface@DirectUI@@6B@",
-      "table_rva": "0x001074D0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -29935,18 +29991,10 @@
    }
   },
   "DUIBehaviorFactory": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00097F00",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7DUIBehaviorFactory@DirectUI@@6B@",
-      "table_rva": "0x0010EE80"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -29961,18 +30009,28 @@
    }
   },
   "DUIXmlParser": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00029AA0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00029AA0",
+     "0x00029B81"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7DUIXmlParser@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 6,
-      "symbol": "??_7DUIXmlParser@DirectUI@@6B@",
       "table_rva": "0x00103698"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -29997,24 +30055,39 @@
    }
   },
   "DialogElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B2340",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B2340",
+     "0x000B23A8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "HWNDElement",
+      "candidates": [
+       {
+        "base": "HWNDElement",
+        "symbol": "??_7DialogElement@DirectUI@@6BHWNDElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7DialogElement@DirectUI@@6BHWNDElement@1@@",
       "table_rva": "0x00110C78"
      },
      {
-      "base": "IDialogElement",
+      "candidates": [
+       {
+        "base": "IDialogElement",
+        "symbol": "??_7DialogElement@DirectUI@@6BIDialogElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 45,
-      "symbol": "??_7DialogElement@DirectUI@@6BIDialogElement@1@@",
       "table_rva": "0x00110C00"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "HWNDElement": {
@@ -30721,18 +30794,10 @@
    }
   },
   "DuiAccessible": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00068CC0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "IAccessible@",
-      "offset": 0,
-      "symbol": "??_7DuiAccessible@DirectUI@@6BIAccessible@@@",
-      "table_rva": "0x00107D78"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -31635,18 +31700,10 @@
    }
   },
   "Edit": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000913A0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 34,
-      "symbol": "??_7Edit@DirectUI@@6B@",
-      "table_rva": "0x0010DD88"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -32091,18 +32148,10 @@
    }
   },
   "Element": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00067CE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7Element@DirectUI@@6B@",
-      "table_rva": "0x001037C0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -32701,24 +32750,39 @@
    }
   },
   "ElementProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0003ADE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0003ADE0",
+     "0x0003AE34"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ElementProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 31,
-      "symbol": "??_7ElementProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001050A8"
      },
      {
-      "base": "IRawElementProviderSimple2@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderSimple2@",
+        "symbol": "??_7ElementProvider@DirectUI@@6BIRawElementProviderSimple2@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 41,
-      "symbol": "??_7ElementProvider@DirectUI@@6BIRawElementProviderSimple2@@@",
       "table_rva": "0x001050D0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IRawElementProviderAdviseEvents@": {
@@ -32779,18 +32843,28 @@
    }
   },
   "ElementWithHWND": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000A0D40",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000A0D40",
+     "0x000A0D62"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ElementWithHWND@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ElementWithHWND@DirectUI@@6B@",
       "table_rva": "0x00108A90"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -33401,18 +33475,28 @@
    }
   },
   "ExpandCollapseBehavior": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EA9DC",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EA9DC",
+     "0x000EAA07"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ExpandCollapseBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 18,
-      "symbol": "??_7ExpandCollapseBehavior@DirectUI@@6B@",
       "table_rva": "0x00116E38"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -34083,30 +34167,50 @@
    }
   },
   "ExpandCollapseProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB670",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EB670",
+     "0x000EB6A8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ExpandCollapseProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ExpandCollapseProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117190"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7ExpandCollapseProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7ExpandCollapseProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117148"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ExpandCollapseProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7ExpandCollapseProvider@DirectUI@@6B@",
       "table_rva": "0x00117150"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -34142,24 +34246,10 @@
    }
   },
   "ExpandCollapseProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB6B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ExpandCollapseProxy@DirectUI@@6B@",
-      "table_rva": "0x00117180"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ExpandCollapseProxy@DirectUI@@6B@",
-      "table_rva": "0x00117180"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -34172,18 +34262,28 @@
    }
   },
   "Expandable": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B68E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B68E0",
+     "0x000B6902"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Expandable@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7Expandable@DirectUI@@6B@",
       "table_rva": "0x001098C8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -34611,18 +34711,28 @@
    }
   },
   "Expando": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6910",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6910",
+     "0x000B694A"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Expando@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7Expando@DirectUI@@6B@",
       "table_rva": "0x00108CA8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35045,18 +35155,10 @@
    }
   },
   "ExpandoButtonGlyph": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B23B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 33,
-      "symbol": "??_7ExpandoButtonGlyph@DirectUI@@6B@",
-      "table_rva": "0x0010F078"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35466,18 +35568,10 @@
    }
   },
   "FillLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00076C80",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7FillLayout@DirectUI@@6B@",
-      "table_rva": "0x00106260"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35497,18 +35591,10 @@
    }
   },
   "FlowLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007A090",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7FlowLayout@DirectUI@@6B@",
-      "table_rva": "0x00106218"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35528,18 +35614,10 @@
    }
   },
   "FontCache": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0009B470",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7FontCache@DirectUI@@6B@",
-      "table_rva": "0x0010EF00"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35569,18 +35647,28 @@
    }
   },
   "GdiTextRenderer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00061CF8",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00061CF8",
+     "0x00061D69"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GdiTextRenderer@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 10,
-      "symbol": "??_7GdiTextRenderer@DirectUI@@6B@",
       "table_rva": "0x001065C8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35607,30 +35695,50 @@
    }
   },
   "GridItemProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000ECE50",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000ECE50",
+     "0x000ECE88"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7GridItemProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7GridItemProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001172B0"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7GridItemProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7GridItemProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117258"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GridItemProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7GridItemProvider@DirectUI@@6B@",
       "table_rva": "0x00117260"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35674,30 +35782,10 @@
    }
   },
   "GridItemProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000ECE90",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7GridItemProxy@DirectUI@@6B@",
-      "table_rva": "0x001172A0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7GridItemProxy@DirectUI@@6B@",
-      "table_rva": "0x001172A0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 552,
-      "symbol": "??_7GridItemProxy@DirectUI@@6B@",
-      "table_rva": "0x001172A0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35710,18 +35798,10 @@
    }
   },
   "GridLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D6CD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7GridLayout@DirectUI@@6B@",
-      "table_rva": "0x0010E540"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35744,30 +35824,50 @@
    }
   },
   "GridProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000ED520",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000ED520",
+     "0x000ED558"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7GridProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7GridProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117300"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7GridProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7GridProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117310"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7GridProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7GridProvider@DirectUI@@6B@",
       "table_rva": "0x001172D0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -35803,30 +35903,10 @@
    }
   },
   "GridProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000ED560",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7GridProxy@DirectUI@@6B@",
-      "table_rva": "0x00117318"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7GridProxy@DirectUI@@6B@",
-      "table_rva": "0x00117318"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 552,
-      "symbol": "??_7GridProxy@DirectUI@@6B@",
-      "table_rva": "0x00117318"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -35839,18 +35919,10 @@
    }
   },
   "HWNDElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007D180",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7HWNDElement@DirectUI@@6B@",
-      "table_rva": "0x00109418"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -36358,18 +36430,28 @@
    }
   },
   "HWNDElementAccessible": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00068B40",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00068B40",
+     "0x00068B8E"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "IAccessible@",
+      "candidates": [
+       {
+        "base": "IAccessible@",
+        "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIAccessible@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7HWNDElementAccessible@DirectUI@@6BIAccessible@@@",
       "table_rva": "0x001070E0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -37272,24 +37354,39 @@
    }
   },
   "HWNDElementProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0004DBD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0004DBD0",
+     "0x0004DC21"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7HWNDElementProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7HWNDElementProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00104EA0"
      },
      {
-      "base": "IRawElementProviderSimple2@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderSimple2@",
+        "symbol": "??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderSimple2@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7HWNDElementProvider@DirectUI@@6BIRawElementProviderSimple2@@@",
       "table_rva": "0x00104E60"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -37363,18 +37460,10 @@
    }
   },
   "HWNDHost": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007B380",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7HWNDHost@DirectUI@@6B@",
-      "table_rva": "0x00103278"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -37880,18 +37969,28 @@
    }
   },
   "HWNDHostAccessible": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00096CB0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00096CB0",
+     "0x00096CFE"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "IAccessible@",
+      "candidates": [
+       {
+        "base": "IAccessible@",
+        "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIAccessible@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7HWNDHostAccessible@DirectUI@@6BIAccessible@@@",
       "table_rva": "0x0010EC68"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -38217,42 +38316,72 @@
    }
   },
   "HWNDHostClientAccessible": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0004BCE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0004BCE0",
+     "0x0004BD2E"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "IAccessible@",
+      "candidates": [
+       {
+        "base": "IAccessible@",
+        "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIAccessible@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIAccessible@@@",
       "table_rva": "0x001044D8"
      },
      {
-      "base": "IEnumVARIANT@",
+      "candidates": [
+       {
+        "base": "IEnumVARIANT@",
+        "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIEnumVARIANT@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIEnumVARIANT@@@",
       "table_rva": "0x00104460"
      },
      {
-      "base": "IOleWindow@",
+      "candidates": [
+       {
+        "base": "IOleWindow@",
+        "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIOleWindow@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIOleWindow@@@",
       "table_rva": "0x00104438"
      },
      {
-      "base": "IAccIdentity@",
+      "candidates": [
+       {
+        "base": "IAccIdentity@",
+        "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIAccIdentity@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 46,
-      "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIAccIdentity@@@",
       "table_rva": "0x00104498"
      },
      {
-      "base": "IServiceProvider@",
+      "candidates": [
+       {
+        "base": "IServiceProvider@",
+        "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIServiceProvider@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 57,
-      "symbol": "??_7HWNDHostClientAccessible@DirectUI@@6BIServiceProvider@@@",
       "table_rva": "0x001044B8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -38578,6 +38707,11 @@
    }
   },
   "IDataEngine": {
+   "ctor_vftable_references": {
+    "ctor_rva": "0x00092440",
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
+   },
    "primary": {
     "identity": "primary",
     "length_provenance": "next-vftable",
@@ -38593,18 +38727,10 @@
    }
   },
   "IDataEntry": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00092440",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7IDataEntry@DirectUI@@6B@",
-      "table_rva": "0x0010E630"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -38670,6 +38796,11 @@
    }
   },
   "ISBLeak": {
+   "ctor_vftable_references": {
+    "ctor_rva": "0x0009B630",
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
+   },
    "primary": {
     "identity": "primary",
     "length_provenance": "hard-stop",
@@ -38747,18 +38878,10 @@
    }
   },
   "IXElementCP": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6A60",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7IXElementCP@DirectUI@@6B@",
-      "table_rva": "0x001118A0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -38771,18 +38894,10 @@
    }
   },
   "IXProviderCP": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0009B630",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7IXProviderCP@DirectUI@@6B@",
-      "table_rva": "0x0010EF20"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -39483,18 +39598,28 @@
    }
   },
   "InvokeHelper": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00084D20",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00084D20",
+     "0x00084D5C"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7InvokeHelper@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7InvokeHelper@DirectUI@@6B@",
       "table_rva": "0x00103CD8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -39506,30 +39631,50 @@
    }
   },
   "InvokeProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB6F0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EB6F0",
+     "0x000EB728"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7InvokeProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7InvokeProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001171C0"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7InvokeProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7InvokeProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x001171D0"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7InvokeProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7InvokeProvider@DirectUI@@6B@",
       "table_rva": "0x001171A0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -39563,24 +39708,10 @@
    }
   },
   "InvokeProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB730",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7InvokeProxy@DirectUI@@6B@",
-      "table_rva": "0x001171D8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7InvokeProxy@DirectUI@@6B@",
-      "table_rva": "0x001171D8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -39593,18 +39724,10 @@
    }
   },
   "ItemList": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00085D90",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7ItemList@DirectUI@@6B@",
-      "table_rva": "0x0010B278"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -40076,18 +40199,10 @@
    }
   },
   "Layout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00070120",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7Layout@DirectUI@@6B@",
-      "table_rva": "0x00107D00"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -40149,18 +40264,28 @@
    }
   },
   "LayoutInvalidateBehavior": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C76A8",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C76A8",
+     "0x000C76C9"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7LayoutInvalidateBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7LayoutInvalidateBehavior@DirectUI@@6B@",
       "table_rva": "0x001148C8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -40872,18 +40997,28 @@
    }
   },
   "Macro": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6A80",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6A80",
+     "0x000B6AFC"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Macro@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7Macro@DirectUI@@6B@",
       "table_rva": "0x0010DA20"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -41326,18 +41461,28 @@
    }
   },
   "MaxSizeBehavior": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EAA10",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EAA10",
+     "0x000EAA35"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7MaxSizeBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 12,
-      "symbol": "??_7MaxSizeBehavior@DirectUI@@6B@",
       "table_rva": "0x00116D08"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -42008,18 +42153,10 @@
    }
   },
   "ModernProgressBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00015750",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 16,
-      "symbol": "??_7ModernProgressBar@DirectUI@@6B@",
-      "table_rva": "0x00100AB8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -42442,24 +42579,10 @@
    }
   },
   "ModernProgressBarRangeValueProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB770",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ModernProgressBarRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117010"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ModernProgressBarRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117010"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -42472,18 +42595,28 @@
    }
   },
   "ModernProgressRing": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0005EDE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0005EDE0",
+     "0x0005EE5D"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ModernProgressRing@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 11,
-      "symbol": "??_7ModernProgressRing@DirectUI@@6B@",
       "table_rva": "0x0010CDF0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -42906,18 +43039,10 @@
    }
   },
   "Movie": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000880A0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7Movie@DirectUI@@6B@",
-      "table_rva": "0x0010C6A8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -43340,18 +43465,10 @@
    }
   },
   "NativeHWNDHost": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0008AF90",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7NativeHWNDHost@DirectUI@@6B@",
-      "table_rva": "0x00103CE0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -43372,24 +43489,28 @@
    }
   },
   "Navigator": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6B10",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6B10",
+     "0x000B6B32"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Navigator@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7Navigator@DirectUI@@6B@",
-      "table_rva": "0x00111CE8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 87,
-      "symbol": "??_7Navigator@DirectUI@@6B@",
       "table_rva": "0x00111CE8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -43779,24 +43900,10 @@
    }
   },
   "NavigatorSelectionItemProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB7B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7NavigatorSelectionItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117138"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7NavigatorSelectionItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117138"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -43809,18 +43916,10 @@
    }
   },
   "NineGridLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007C880",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7NineGridLayout@DirectUI@@6B@",
-      "table_rva": "0x001061D0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -43840,18 +43939,10 @@
    }
   },
   "PText": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6CB0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7PText@DirectUI@@6B@",
-      "table_rva": "0x001118B0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -44409,18 +44500,28 @@
    }
   },
   "Page": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6CE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6CE0",
+     "0x000B6D02"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Page@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7Page@DirectUI@@6B@",
       "table_rva": "0x0010D3E0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -44847,24 +44948,28 @@
    }
   },
   "Pages": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6D10",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6D10",
+     "0x000B6D4A"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Pages@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7Pages@DirectUI@@6B@",
-      "table_rva": "0x0010E040"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 91,
-      "symbol": "??_7Pages@DirectUI@@6B@",
       "table_rva": "0x0010E040"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -45301,30 +45406,10 @@
    }
   },
   "Progress": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B4220",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7Progress@DirectUI@@6B@",
-      "table_rva": "0x001110D8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 48,
-      "symbol": "??_7Progress@DirectUI@@6B@",
-      "table_rva": "0x001110D8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 149,
-      "symbol": "??_7Progress@DirectUI@@6B@",
-      "table_rva": "0x001110D8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -45750,24 +45835,10 @@
    }
   },
   "ProgressRangeValueProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB7F0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ProgressRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117030"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ProgressRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117030"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -46210,18 +46281,28 @@
    }
   },
   "Proxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00086640",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00086640",
+     "0x0008667E"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Proxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 6,
-      "symbol": "??_7Proxy@DirectUI@@6B@",
       "table_rva": "0x0010C810"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -46273,24 +46354,28 @@
    }
   },
   "PushButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6D80",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6D80",
+     "0x000B6DA2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7PushButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7PushButton@DirectUI@@6B@",
-      "table_rva": "0x00112138"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 87,
-      "symbol": "??_7PushButton@DirectUI@@6B@",
       "table_rva": "0x00112138"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -46681,18 +46766,10 @@
    }
   },
   "RadioButtonGlyph": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B23F0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 33,
-      "symbol": "??_7RadioButtonGlyph@DirectUI@@6B@",
-      "table_rva": "0x0010F1F0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -47100,30 +47177,50 @@
    }
   },
   "RangeValueProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB830",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EB830",
+     "0x000EB868"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7RangeValueProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7RangeValueProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00116FF8"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7RangeValueProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7RangeValueProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117008"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RangeValueProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7RangeValueProvider@DirectUI@@6B@",
       "table_rva": "0x00116FA8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -47163,6 +47260,11 @@
    }
   },
   "RangeValueProxy": {
+   "ctor_vftable_references": {
+    "ctor_rva": "0x000EB890",
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
+   },
    "primary": {
     "identity": "primary",
     "length_provenance": "next-vftable",
@@ -47174,30 +47276,10 @@
    }
   },
   "RefPointElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B5BE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7RefPointElement@DirectUI@@6B@",
-      "table_rva": "0x00111340"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 48,
-      "symbol": "??_7RefPointElement@DirectUI@@6B@",
-      "table_rva": "0x00111340"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 149,
-      "symbol": "??_7RefPointElement@DirectUI@@6B@",
-      "table_rva": "0x00111340"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -47620,18 +47702,28 @@
    }
   },
   "RefcountBase": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0003AE40",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0003AE40",
+     "0x0003AE69"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RefcountBase@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 6,
-      "symbol": "??_7RefcountBase@DirectUI@@6B@",
       "table_rva": "0x00103928"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -47643,18 +47735,10 @@
    }
   },
   "RepeatButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B61B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 33,
-      "symbol": "??_7RepeatButton@DirectUI@@6B@",
-      "table_rva": "0x001114A8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -48038,24 +48122,28 @@
    }
   },
   "Repeater": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6DF0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B6DF0",
+     "0x000B6E2C"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7Repeater@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7Repeater@DirectUI@@6B@",
-      "table_rva": "0x00111FC8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 107,
-      "symbol": "??_7Repeater@DirectUI@@6B@",
       "table_rva": "0x00111FC8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -48490,18 +48578,28 @@
    }
   },
   "RichText": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000619D0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000619D0",
+     "0x00061AB1"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7RichText@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 9,
-      "symbol": "??_7RichText@DirectUI@@6B@",
       "table_rva": "0x001062A8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -48926,24 +49024,10 @@
    }
   },
   "RichTextCache": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B9C28",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 4,
-      "symbol": "??_7RichTextCache@DirectUI@@6B@",
-      "table_rva": "0x001125E0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 530,
-      "symbol": "??_7RichTextCache@DirectUI@@6B@",
-      "table_rva": "0x001125E0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -48965,24 +49049,10 @@
    }
   },
   "RichTextExtraFormatting": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0001B838",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "IDUIRichTextRenderOffset@",
-      "offset": 0,
-      "symbol": "??_7RichTextExtraFormatting@DirectUI@@6BIDUIRichTextRenderOffset@@@",
-      "table_rva": "0x00107EF8"
-     },
-     {
-      "base": "IDUIRichTextRenderColor@",
-      "offset": 18,
-      "symbol": "??_7RichTextExtraFormatting@DirectUI@@6BIDUIRichTextRenderColor@@@",
-      "table_rva": "0x00107ED8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "IDUIRichTextRenderColor@": {
@@ -49026,18 +49096,10 @@
    }
   },
   "RowLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00085A00",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7RowLayout@DirectUI@@6B@",
-      "table_rva": "0x001060F8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -49057,24 +49119,10 @@
    }
   },
   "ScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00097790",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 27,
-      "symbol": "??_7ScrollBar@DirectUI@@6BElement@1@@",
-      "table_rva": "0x00105A38"
-     },
-     {
-      "base": "BaseScrollBar",
-      "offset": 37,
-      "symbol": "??_7ScrollBar@DirectUI@@6BBaseScrollBar@1@@",
-      "table_rva": "0x00105BA8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -49484,24 +49532,10 @@
    }
   },
   "ScrollBarRangeValueProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB8B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ScrollBarRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117020"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ScrollBarRangeValueProxy@DirectUI@@6B@",
-      "table_rva": "0x00117020"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -49514,30 +49548,50 @@
    }
   },
   "ScrollItemProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EE440",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EE440",
+     "0x000EE478"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ScrollItemProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ScrollItemProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117368"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7ScrollItemProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7ScrollItemProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117378"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ScrollItemProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7ScrollItemProvider@DirectUI@@6B@",
       "table_rva": "0x00117348"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49571,30 +49625,10 @@
    }
   },
   "ScrollItemProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EE480",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ScrollItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117380"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ScrollItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117380"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 552,
-      "symbol": "??_7ScrollItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117380"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -49607,30 +49641,50 @@
    }
   },
   "ScrollProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB8F0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EB8F0",
+     "0x000EB928"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ScrollProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ScrollProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001170C0"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7ScrollProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7ScrollProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117050"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ScrollProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7ScrollProvider@DirectUI@@6B@",
       "table_rva": "0x00117058"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -49671,24 +49725,10 @@
    }
   },
   "ScrollProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB930",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ScrollProxy@DirectUI@@6B@",
-      "table_rva": "0x001170B0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ScrollProxy@DirectUI@@6B@",
-      "table_rva": "0x001170B0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -49701,24 +49741,10 @@
    }
   },
   "ScrollViewer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0008CA40",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 2,
-      "symbol": "??_7ScrollViewer@DirectUI@@6BElement@1@@",
-      "table_rva": "0x0010DBD0"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 12,
-      "symbol": "??_7ScrollViewer@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x0010DD58"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "Element": {
@@ -50327,30 +50353,50 @@
    }
   },
   "SelectionItemProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB970",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EB970",
+     "0x000EB9A8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7SelectionItemProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7SelectionItemProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117110"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7SelectionItemProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7SelectionItemProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117120"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectionItemProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7SelectionItemProvider@DirectUI@@6B@",
       "table_rva": "0x001170D0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -50388,6 +50434,11 @@
    }
   },
   "SelectionItemProxy": {
+   "ctor_vftable_references": {
+    "ctor_rva": "0x000EB890",
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
+   },
    "primary": {
     "identity": "primary",
     "length_provenance": "next-vftable",
@@ -50399,30 +50450,50 @@
    }
   },
   "SelectionProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EF890",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EF890",
+     "0x000EF8C8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7SelectionProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7SelectionProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001173D8"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7SelectionProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7SelectionProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x001173A0"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectionProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7SelectionProvider@DirectUI@@6B@",
       "table_rva": "0x001173A8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -50461,18 +50532,10 @@
    }
   },
   "SelectionProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB890",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7SelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x00117040"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -50485,18 +50548,10 @@
    }
   },
   "Selector": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00082AE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7Selector@DirectUI@@6B@",
-      "table_rva": "0x0010ADF0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -50925,18 +50980,28 @@
    }
   },
   "SelectorNoDefault": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B3EE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B3EE0",
+     "0x000B3F02"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7SelectorNoDefault@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7SelectorNoDefault@DirectUI@@6B@",
       "table_rva": "0x0010B108"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -51364,24 +51429,10 @@
    }
   },
   "SelectorSelectionItemProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EB9B0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7SelectorSelectionItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117128"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7SelectorSelectionItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117128"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -51394,30 +51445,10 @@
    }
   },
   "SelectorSelectionProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EF8D0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7SelectorSelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x001173E8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7SelectorSelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x001173E8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 600,
-      "symbol": "??_7SelectorSelectionProxy@DirectUI@@6B@",
-      "table_rva": "0x001173E8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -51813,18 +51844,10 @@
    }
   },
   "ShellBorderLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007CA60",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7ShellBorderLayout@DirectUI@@6B@",
-      "table_rva": "0x00106140"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -52291,7 +52314,7 @@
     },
     "RefcountBase": {
      "identity": "secondary:RefcountBase",
-     "length_provenance": "next-vftable",
+     "length_provenance": "ignored-redundant",
      "rva": "0x00104628",
      "slots": [
       [
@@ -52724,18 +52747,10 @@
    }
   },
   "StyleSheet": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00097ED0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7StyleSheet@DirectUI@@6B@",
-      "table_rva": "0x0010EE18"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -52759,24 +52774,10 @@
    }
   },
   "StyledScrollViewer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BB190",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 27,
-      "symbol": "??_7StyledScrollViewer@DirectUI@@6BElement@1@@",
-      "table_rva": "0x0010F510"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 37,
-      "symbol": "??_7StyledScrollViewer@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x0010F4E0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "Element": {
@@ -53385,18 +53386,10 @@
    }
   },
   "Surface": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000979F0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7Surface@DirectUI@@6B@",
-      "table_rva": "0x00108090"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -53409,18 +53402,28 @@
    }
   },
   "TSVEnableVirtualizationBehavior": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EAA3C",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EAA3C",
+     "0x000EAA58"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TSVEnableVirtualizationBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 9,
-      "symbol": "??_7TSVEnableVirtualizationBehavior@DirectUI@@6B@",
       "table_rva": "0x00116DA0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54138,18 +54141,28 @@
    }
   },
   "TSVVirtualizedContainerBehavior": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EAA60",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EAA60",
+     "0x000EAA85"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TSVVirtualizedContainerBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TSVVirtualizedContainerBehavior@DirectUI@@6B@",
       "table_rva": "0x00116ED0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54803,30 +54816,50 @@
    }
   },
   "TableItemProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EFFA0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EFFA0",
+     "0x000EFFD8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7TableItemProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TableItemProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117458"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7TableItemProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7TableItemProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117418"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TableItemProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7TableItemProvider@DirectUI@@6B@",
       "table_rva": "0x00117420"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54864,30 +54897,10 @@
    }
   },
   "TableItemProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EFFE0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7TableItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117448"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7TableItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117448"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 696,
-      "symbol": "??_7TableItemProxy@DirectUI@@6B@",
-      "table_rva": "0x00117448"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -54900,18 +54913,10 @@
    }
   },
   "TableLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B6FB0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7TableLayout@DirectUI@@6B@",
-      "table_rva": "0x00112428"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -54931,30 +54936,50 @@
    }
   },
   "TableProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000F06D0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000F06D0",
+     "0x000F0708"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7TableProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TableProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x001174B0"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7TableProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7TableProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00117478"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TableProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7TableProvider@DirectUI@@6B@",
       "table_rva": "0x00117480"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -54996,30 +55021,10 @@
    }
   },
   "TableProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000F0710",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7TableProxy@DirectUI@@6B@",
-      "table_rva": "0x001174C0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7TableProxy@DirectUI@@6B@",
-      "table_rva": "0x001174C0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 552,
-      "symbol": "??_7TableProxy@DirectUI@@6B@",
-      "table_rva": "0x001174C0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -55032,24 +55037,10 @@
    }
   },
   "TaskPage": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000DDC40",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "IElementListener",
-      "offset": 0,
-      "symbol": "??_7TaskPage@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x0010E470"
-     },
-     {
-      "base": "IXProviderCP",
-      "offset": 10,
-      "symbol": "??_7TaskPage@DirectUI@@6BIXProviderCP@1@@",
-      "table_rva": "0x0010E458"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "IElementListener": {
@@ -55855,24 +55846,28 @@
    }
   },
   "TextGraphic": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B7030",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000B7030",
+     "0x000B707A"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TextGraphic@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7TextGraphic@DirectUI@@6B@",
-      "table_rva": "0x00111A18"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 107,
-      "symbol": "??_7TextGraphic@DirectUI@@6B@",
       "table_rva": "0x00111A18"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -56307,18 +56302,10 @@
    }
   },
   "Thumb": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007BAD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7Thumb@DirectUI@@6B@",
-      "table_rva": "0x00108FB0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -56708,30 +56695,50 @@
    }
   },
   "ToggleProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EC530",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000EC530",
+     "0x000EC568"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ToggleProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ToggleProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00117228"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7ToggleProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7ToggleProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x001171F8"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ToggleProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7ToggleProvider@DirectUI@@6B@",
       "table_rva": "0x00117200"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -56766,24 +56773,10 @@
    }
   },
   "ToggleProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000EC570",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ToggleProxy@DirectUI@@6B@",
-      "table_rva": "0x00117238"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ToggleProxy@DirectUI@@6B@",
-      "table_rva": "0x00117238"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -56796,24 +56789,10 @@
    }
   },
   "TooltipEventSink@TouchHWNDElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D5740",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "CSafeElementListenerCB@",
-      "offset": 2,
-      "symbol": "??_7TooltipEventSink@TouchHWNDElement@DirectUI@@6BCSafeElementListenerCB@@@",
-      "table_rva": "0x00115988"
-     },
-     {
-      "base": "ITouchTooltipEventSink@",
-      "offset": 12,
-      "symbol": "??_7TooltipEventSink@TouchHWNDElement@DirectUI@@6BITouchTooltipEventSink@@@",
-      "table_rva": "0x00115A50"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -57011,18 +56990,28 @@
    }
   },
   "TouchButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00061980",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00061980",
+     "0x000619C6"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 16,
-      "symbol": "??_7TouchButton@DirectUI@@6B@",
       "table_rva": "0x00106448"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -57595,24 +57584,10 @@
    }
   },
   "TouchCarouselList": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BCC3C",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 2,
-      "symbol": "??_7TouchCarouselList@DirectUI@@6BElement@1@@",
-      "table_rva": "0x00113288"
-     },
-     {
-      "base": "CSafeElementListenerCB@",
-      "offset": 19,
-      "symbol": "??_7TouchCarouselList@DirectUI@@6BCSafeElementListenerCB@@@",
-      "table_rva": "0x00113258"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -58217,30 +58192,10 @@
    }
   },
   "TouchCarouselScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BCD38",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 2,
-      "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6BElement@1@@",
-      "table_rva": "0x00112E88"
-     },
-     {
-      "base": "BaseScrollBar",
-      "offset": 19,
-      "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6BBaseScrollBar@1@@",
-      "table_rva": "0x00112DF8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 33,
-      "symbol": "??_7TouchCarouselScrollBar@DirectUI@@6B@",
-      "table_rva": "0x00112DC8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -58751,18 +58706,28 @@
    }
   },
   "TouchCheckBox": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000635E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000635E0",
+     "0x00063602"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchCheckBox@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchCheckBox@DirectUI@@6B@",
       "table_rva": "0x00105F78"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -59153,18 +59118,28 @@
    }
   },
   "TouchCheckBoxGlyph": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BB760",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000BB760",
+     "0x000BB782"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchCheckBoxGlyph@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchCheckBoxGlyph@DirectUI@@6B@",
       "table_rva": "0x00112B80"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -59554,18 +59529,28 @@
    }
   },
   "TouchCommandButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BB790",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000BB790",
+     "0x000BB7B2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchCommandButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchCommandButton@DirectUI@@6B@",
       "table_rva": "0x00112820"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -59953,24 +59938,39 @@
    }
   },
   "TouchDialogElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000DCB94",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000DCB94",
+     "0x000DCBFE"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "TouchHWNDElement",
+      "candidates": [
+       {
+        "base": "TouchHWNDElement",
+        "symbol": "??_7TouchDialogElement@DirectUI@@6BTouchHWNDElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchDialogElement@DirectUI@@6BTouchHWNDElement@1@@",
       "table_rva": "0x001160A8"
      },
      {
-      "base": "IDialogElement",
+      "candidates": [
+       {
+        "base": "IDialogElement",
+        "symbol": "??_7TouchDialogElement@DirectUI@@6BIDialogElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 31,
-      "symbol": "??_7TouchDialogElement@DirectUI@@6BIDialogElement@1@@",
       "table_rva": "0x00116288"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "IDialogElement": {
@@ -60796,24 +60796,10 @@
    }
   },
   "TouchEdit2": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C0670",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "TouchEditBase",
-      "offset": 2,
-      "symbol": "??_7TouchEdit2@DirectUI@@6BTouchEditBase@1@@",
-      "table_rva": "0x00113600"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 12,
-      "symbol": "??_7TouchEdit2@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x001135D0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "IElementListener": {
@@ -62757,36 +62743,39 @@
    }
   },
   "TouchEditInner": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C2F3C",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C2F3C",
+     "0x000C30C4"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "TouchEditBase",
+      "candidates": [
+       {
+        "base": "TouchEditBase",
+        "symbol": "??_7TouchEditInner@DirectUI@@6BTouchEditBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 9,
-      "symbol": "??_7TouchEditInner@DirectUI@@6BTouchEditBase@1@@",
       "table_rva": "0x00114338"
      },
      {
-      "base": "CSafeElementListenerCB@",
+      "candidates": [
+       {
+        "base": "CSafeElementListenerCB@",
+        "symbol": "??_7TouchEditInner@DirectUI@@6BCSafeElementListenerCB@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 21,
-      "symbol": "??_7TouchEditInner@DirectUI@@6BCSafeElementListenerCB@@@",
-      "table_rva": "0x00114308"
-     },
-     {
-      "base": "TouchEditBase",
-      "offset": 606,
-      "symbol": "??_7TouchEditInner@DirectUI@@6BTouchEditBase@1@@",
-      "table_rva": "0x00114338"
-     },
-     {
-      "base": "CSafeElementListenerCB@",
-      "offset": 619,
-      "symbol": "??_7TouchEditInner@DirectUI@@6BCSafeElementListenerCB@@@",
       "table_rva": "0x00114308"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -64673,18 +64662,10 @@
    }
   },
   "TouchHWNDElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0002C910",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7TouchHWNDElement@DirectUI@@6B@",
-      "table_rva": "0x00103FB8"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -65305,18 +65286,28 @@
    }
   },
   "TouchHyperLink": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000BB7C0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000BB7C0",
+     "0x000BB7E2"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchHyperLink@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchHyperLink@DirectUI@@6B@",
       "table_rva": "0x001129D0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -65706,18 +65697,28 @@
    }
   },
   "TouchRepeatButton": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00062720",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00062720",
+     "0x00062763"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchRepeatButton@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchRepeatButton@DirectUI@@6B@",
       "table_rva": "0x00106A10"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -66183,24 +66184,39 @@
    }
   },
   "TouchScrollBar": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00062C30",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x00062C30",
+     "0x00062D28"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "Element",
+      "candidates": [
+       {
+        "base": "Element",
+        "symbol": "??_7TouchScrollBar@DirectUI@@6BElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 12,
-      "symbol": "??_7TouchScrollBar@DirectUI@@6BElement@1@@",
       "table_rva": "0x00105230"
      },
      {
-      "base": "BaseScrollBar",
+      "candidates": [
+       {
+        "base": "BaseScrollBar",
+        "symbol": "??_7TouchScrollBar@DirectUI@@6BBaseScrollBar@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 29,
-      "symbol": "??_7TouchScrollBar@DirectUI@@6BBaseScrollBar@1@@",
       "table_rva": "0x001059A8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -66609,24 +66625,10 @@
    }
   },
   "TouchScrollViewer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00091890",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "Element",
-      "offset": 3,
-      "symbol": "??_7TouchScrollViewer@DirectUI@@6BElement@1@@",
-      "table_rva": "0x001053A0"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 24,
-      "symbol": "??_7TouchScrollViewer@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x001057C0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "Element": {
@@ -67247,24 +67249,28 @@
    }
   },
   "TouchSelect": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C9E10",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C9E10",
+     "0x000C9EBF"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelect@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 16,
-      "symbol": "??_7TouchSelect@DirectUI@@6B@",
-      "table_rva": "0x00114EA0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 694,
-      "symbol": "??_7TouchSelect@DirectUI@@6B@",
       "table_rva": "0x00114EA0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -67564,24 +67570,28 @@
    }
   },
   "TouchSelectItem": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C9ED0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C9ED0",
+     "0x000C9EFA"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelectItem@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 22,
-      "symbol": "??_7TouchSelectItem@DirectUI@@6B@",
-      "table_rva": "0x00114CF0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 598,
-      "symbol": "??_7TouchSelectItem@DirectUI@@6B@",
       "table_rva": "0x00114CF0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -68673,102 +68683,127 @@
    }
   },
   "TouchSelectPopupProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C9F00",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C9F00",
+     "0x000C9F8F"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00114AA8"
      },
      {
-      "base": "IRawElementProviderSimple2@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderSimple2@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderSimple2@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderSimple2@@@",
       "table_rva": "0x00114A68"
      },
      {
-      "base": "IRawElementProviderFragment@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderFragment@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderFragment@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderFragment@@@",
       "table_rva": "0x00104F20"
      },
      {
-      "base": "IRawElementProviderAdviseEvents@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderAdviseEvents@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 46,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@",
       "table_rva": "0x00104EF8"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 57,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6B@",
       "table_rva": "0x00104ED0"
      },
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 76,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00114AA8"
      },
      {
-      "base": "IRawElementProviderSimple2@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderSimple2@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderSimple2@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 86,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderSimple2@@@",
       "table_rva": "0x00114A68"
      },
      {
-      "base": "IRawElementProviderFragment@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderFragment@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderFragment@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 97,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderFragment@@@",
       "table_rva": "0x00104F20"
      },
      {
-      "base": "IRawElementProviderAdviseEvents@",
+      "candidates": [
+       {
+        "base": "IRawElementProviderAdviseEvents@",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 108,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@",
       "table_rva": "0x00104EF8"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 119,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6B@",
-      "table_rva": "0x00104ED0"
-     },
-     {
-      "base": "RefcountBase",
-      "offset": 230,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BRefcountBase@1@@",
-      "table_rva": "0x00114AA8"
-     },
-     {
-      "base": "IRawElementProviderSimple2@",
-      "offset": 243,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderSimple2@@@",
-      "table_rva": "0x00114A68"
-     },
-     {
-      "base": "IRawElementProviderFragment@",
-      "offset": 254,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderFragment@@@",
-      "table_rva": "0x00104F20"
-     },
-     {
-      "base": "IRawElementProviderAdviseEvents@",
-      "offset": 265,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6BIRawElementProviderAdviseEvents@@@",
-      "table_rva": "0x00104EF8"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 276,
-      "symbol": "??_7TouchSelectPopupProvider@DirectUI@@6B@",
       "table_rva": "0x00104ED0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -68847,18 +68882,28 @@
    }
   },
   "TouchSelectPopupProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C9F98",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C9F98",
+     "0x000C9FB4"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelectPopupProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 9,
-      "symbol": "??_7TouchSelectPopupProxy@DirectUI@@6B@",
       "table_rva": "0x001149C0"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -68937,18 +68982,28 @@
    }
   },
   "TouchSelectProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000C9FBC",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000C9FBC",
+     "0x000C9FD8"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSelectProxy@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 9,
-      "symbol": "??_7TouchSelectProxy@DirectUI@@6B@",
       "table_rva": "0x00114990"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -68962,24 +69017,28 @@
    }
   },
   "TouchSlider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000CF8E8",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000CF8E8",
+     "0x000CF99B"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchSlider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 8,
-      "symbol": "??_7TouchSlider@DirectUI@@6B@",
-      "table_rva": "0x00115300"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 205,
-      "symbol": "??_7TouchSlider@DirectUI@@6B@",
       "table_rva": "0x00115300"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -69809,30 +69868,50 @@
    }
   },
   "TouchTooltip": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0004229C",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0004229C",
+     "0x00042465"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "NativeHWNDHost",
+      "candidates": [
+       {
+        "base": "NativeHWNDHost",
+        "symbol": "??_7TouchTooltip@DirectUI@@6BNativeHWNDHost@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 105,
-      "symbol": "??_7TouchTooltip@DirectUI@@6BNativeHWNDHost@1@@",
       "table_rva": "0x00103D58"
      },
      {
-      "base": "?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@",
+      "candidates": [
+       {
+        "base": "?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@",
+        "symbol": "??_7TouchTooltip@DirectUI@@6B?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 127,
-      "symbol": "??_7TouchTooltip@DirectUI@@6B?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@@@",
       "table_rva": "0x00103DA0"
      },
      {
-      "base": "CSafeElementListenerCB@",
+      "candidates": [
+       {
+        "base": "CSafeElementListenerCB@",
+        "symbol": "??_7TouchTooltip@DirectUI@@6BCSafeElementListenerCB@@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 147,
-      "symbol": "??_7TouchTooltip@DirectUI@@6BCSafeElementListenerCB@@@",
       "table_rva": "0x00103CF8"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "secondaries": {
     "?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@": {
@@ -71891,18 +71970,28 @@
    }
   },
   "TouchXProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D8610",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000D8610",
+     "0x000D8632"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7TouchXProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7TouchXProvider@DirectUI@@6B@",
       "table_rva": "0x00115C10"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -71993,30 +72082,10 @@
    }
   },
   "UnknownElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B1B10",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 27,
-      "symbol": "??_7UnknownElement@DirectUI@@6B@",
-      "table_rva": "0x00110A98"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 48,
-      "symbol": "??_7UnknownElement@DirectUI@@6B@",
-      "table_rva": "0x00110A98"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 149,
-      "symbol": "??_7UnknownElement@DirectUI@@6B@",
-      "table_rva": "0x00110A98"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -72439,30 +72508,50 @@
    }
   },
   "ValueProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x0007E220",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x0007E220",
+     "0x0007E258"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "RefcountBase",
+      "candidates": [
+       {
+        "base": "RefcountBase",
+        "symbol": "??_7ValueProvider@DirectUI@@6BRefcountBase@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7ValueProvider@DirectUI@@6BRefcountBase@1@@",
       "table_rva": "0x00109A80"
      },
      {
-      "base": "IProvider",
+      "candidates": [
+       {
+        "base": "IProvider",
+        "symbol": "??_7ValueProvider@DirectUI@@6BIProvider@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7ValueProvider@DirectUI@@6BIProvider@1@@",
       "table_rva": "0x00109A78"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ValueProvider@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 35,
-      "symbol": "??_7ValueProvider@DirectUI@@6B@",
       "table_rva": "0x00109A90"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -72498,24 +72587,10 @@
    }
   },
   "ValueProxy": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000F15E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 8,
-      "symbol": "??_7ValueProxy@DirectUI@@6B@",
-      "table_rva": "0x001174F0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 32,
-      "symbol": "??_7ValueProxy@DirectUI@@6B@",
-      "table_rva": "0x001174F0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -72528,18 +72603,10 @@
    }
   },
   "VerticalFlowLayout": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00081FD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 5,
-      "symbol": "??_7VerticalFlowLayout@DirectUI@@6B@",
-      "table_rva": "0x00106188"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -72559,18 +72626,10 @@
    }
   },
   "Viewer": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x00081AD0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 2,
-      "symbol": "??_7Viewer@DirectUI@@6B@",
-      "table_rva": "0x0010A240"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -73331,60 +73390,61 @@
    }
   },
   "XBaby": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D86E0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
+    "function_extent": [
+     "0x000D86E0",
+     "0x000D872C"
+    ],
+    "order": "ORDER-UNKNOWN",
+    "references": [
      {
-      "base": "HWNDElement",
+      "candidates": [
+       {
+        "base": "HWNDElement",
+        "symbol": "??_7XBaby@DirectUI@@6BHWNDElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 14,
-      "symbol": "??_7XBaby@DirectUI@@6BHWNDElement@1@@",
       "table_rva": "0x00115D70"
      },
      {
-      "base": "IElementListener",
+      "candidates": [
+       {
+        "base": "IElementListener",
+        "symbol": "??_7XBaby@DirectUI@@6BIElementListener@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 24,
-      "symbol": "??_7XBaby@DirectUI@@6BIElementListener@1@@",
       "table_rva": "0x00110C48"
      },
      {
-      "base": "IDialogElement",
+      "candidates": [
+       {
+        "base": "IDialogElement",
+        "symbol": "??_7XBaby@DirectUI@@6BIDialogElement@1@@"
+       }
+      ],
+      "kind": "reference",
       "offset": 38,
-      "symbol": "??_7XBaby@DirectUI@@6BIDialogElement@1@@",
       "table_rva": "0x00115CC0"
      },
      {
-      "base": "PRIMARY",
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7XBaby@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
       "offset": 52,
-      "symbol": "??_7XBaby@DirectUI@@6B@",
-      "table_rva": "0x00115D08"
-     },
-     {
-      "base": "HWNDElement",
-      "offset": 230,
-      "symbol": "??_7XBaby@DirectUI@@6BHWNDElement@1@@",
-      "table_rva": "0x00115D70"
-     },
-     {
-      "base": "IElementListener",
-      "offset": 245,
-      "symbol": "??_7XBaby@DirectUI@@6BIElementListener@1@@",
-      "table_rva": "0x00110C48"
-     },
-     {
-      "base": "IDialogElement",
-      "offset": 259,
-      "symbol": "??_7XBaby@DirectUI@@6BIDialogElement@1@@",
-      "table_rva": "0x00115CC0"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 280,
-      "symbol": "??_7XBaby@DirectUI@@6B@",
       "table_rva": "0x00115D08"
      }
-    ]
+    ],
+    "scan": "pdata-bounded",
+    "semantics": "reference-only"
    },
    "primary": {
     "identity": "primary",
@@ -74184,36 +74244,10 @@
    }
   },
   "XElement": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D8740",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "HWNDHost",
-      "offset": 2,
-      "symbol": "??_7XElement@DirectUI@@6BHWNDHost@1@@",
-      "table_rva": "0x001116E0"
-     },
-     {
-      "base": "IXElementCP",
-      "offset": 12,
-      "symbol": "??_7XElement@DirectUI@@6BIXElementCP@1@@",
-      "table_rva": "0x001116D0"
-     },
-     {
-      "base": "HWNDHost",
-      "offset": 230,
-      "symbol": "??_7XElement@DirectUI@@6BHWNDHost@1@@",
-      "table_rva": "0x001116E0"
-     },
-     {
-      "base": "IXElementCP",
-      "offset": 243,
-      "symbol": "??_7XElement@DirectUI@@6BIXElementCP@1@@",
-      "table_rva": "0x001116D0"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "secondaries": {
     "HWNDHost": {
@@ -74668,24 +74702,10 @@
    }
   },
   "XProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000D8790",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7XProvider@DirectUI@@6B@",
-      "table_rva": "0x00111638"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 214,
-      "symbol": "??_7XProvider@DirectUI@@6B@",
-      "table_rva": "0x00111638"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",
@@ -74773,24 +74793,10 @@
    }
   },
   "XResourceProvider": {
-   "ctor_store_order": {
+   "ctor_vftable_references": {
     "ctor_rva": "0x000B71C0",
-    "evidence": "rip-relative LEA sequence in ctor code",
-    "semantics": "object-layout observation (Solid); NOT source-level declaration order",
-    "stores": [
-     {
-      "base": "PRIMARY",
-      "offset": 0,
-      "symbol": "??_7XResourceProvider@DirectUI@@6B@",
-      "table_rva": "0x00111620"
-     },
-     {
-      "base": "PRIMARY",
-      "offset": 336,
-      "symbol": "??_7XResourceProvider@DirectUI@@6B@",
-      "table_rva": "0x00111620"
-     }
-    ]
+    "reason": "ctor rva not covered by .pdata",
+    "scan": "unknown-scan-refused"
    },
    "primary": {
     "identity": "primary",

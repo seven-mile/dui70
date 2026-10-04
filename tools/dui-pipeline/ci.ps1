@@ -15,10 +15,10 @@
       G4  ABI fidelity      modname N/N + extern-C N/N (compile-derived)
       G5  headers           random sample syntax-checked with cl /Zs
       J1  vtable slots      report-only: slot-order verdict recorded, exit 0
-      R6  MI order+tables   report-only: schema-3 mi-tables order/table
-                            verdict recorded; fail-closed on missing
-                            schema-3 input, manual-conflict tables, or
-                            missing mandatory-17 coverage
+      R6  vtable shape/slot  report-only: multi-vtable shape/slot
+                            checker verdict recorded; fail-closed on
+                            missing schema-3 input, manual-conflict
+                            tables, or missing mandatory-17 coverage
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
@@ -731,18 +731,19 @@ if ($SkipJ1) {
     }
 }
 
-# ------------------------------------------------------- R6 MI order + tables
-# MI inheritance-order + table-truth gate (tracked tool
+# ------------------------------------------------ R6 multi-vtable shape/slot
+# Multi-vtable shape/slot checker (tracked tool
 # tools/dui-pipeline/uia_order_verify.py; pinned input
 # pinned/mi-tables.json schema 3, produced by extract-mi-tables.py).
-# REPORT-ONLY on the current integration shape: the a208b14 headers
-# carry the ordinal-sorted classes.json base order, which the ctor
-# -store evidence contradicts for 17 classes (13 pattern providers +
-# ElementProvider/HWNDElementProvider + ScrollBar/CCVScrollBar), and
-# the table probes surface those divergences as REJECTED verdicts.
-# The verdict is recorded into the log and a JSON artifact (exit 0 in
-# report-only mode), NEVER masked as PASS. The fail-closed STRUCTURE
-# rules are enforced even in report-only mode:
+# REPORT-ONLY on the current integration shape: the probe mismatches
+# (slot counts, mangled identity divergences, missing probe tables,
+# manual-conflict) surface as REJECTED verdicts, each attributed to
+# its actual mismatch. The verdict is recorded into the log and a
+# JSON artifact (exit 0 in report-only mode), NEVER masked as PASS.
+# This gate does NOT compare or validate any base ORDER at this
+# stage: ctor_vftable_references is reference-only (ORDER-UNKNOWN)
+# evidence context. The fail-closed STRUCTURE rules are enforced even
+# in report-only mode:
 #   * pinned/mi-tables.json must exist at schema 3 (missing/older
 #     schema = tooling error, fails the run);
 #   * manual-conflict tables (manual length denying in-binary visible
@@ -752,10 +753,10 @@ if ($SkipJ1) {
 # Enforced mode (table truth for every audited class) is a separate
 # deliberate decision after the emission-order fix lands.
 if ($SkipJ1) {
-    Write-Head 'R6  MI order + table truth (skipped: -SkipJ1)'
-    Add-Gate 'R6' 'MI order + tables' 'SKIP' 0 'via -SkipJ1'
+    Write-Head 'R6  multi-vtable shape/slot checker (skipped: -SkipJ1)'
+    Add-Gate 'R6' 'vtable shape/slot' 'SKIP' 0 'via -SkipJ1'
 } else {
-    Write-Head 'R6  MI order + table truth (report-only, fail-closed structure)'
+    Write-Head 'R6  multi-vtable shape/slot checker (report-only, fail-closed structure)'
     $t0 = Get-Date
     $r6 = Join-Path $PSScriptRoot 'uia_order_verify.py'
     $miTables = Join-Path $script:Repo 'pinned/mi-tables.json'
@@ -773,6 +774,22 @@ if ($SkipJ1) {
                 "  --dll <pinned dui70.dll> --symbols pinned/symbols.json",
                 "  --lengths pinned/mi-interface-lengths.json --out $miTables") $dt
     } else {
+        # selftest: review-BLOCK items as paired negative controls
+        # (ENFORCED -- a vacuous or failing control reddens the run)
+        $t0s = Get-Date
+        $rs = Invoke-Tool $py @($r6, '--selftest', '--pinned',
+            (Join-Path $script:Repo 'pinned'), '--include',
+            (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
+            (Join-Path $WorkDir 'r6-selftest')) -Echo
+        $dts = ((Get-Date) - $t0s).TotalSeconds
+        if ($rs.Rc -ne 0) {
+            $tail = ($rs.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'R6' 'vtable shape/slot selftest' `
+                'review-item controls: T1-T6 non-vacuous' `
+                "selftest rc=$($rs.Rc)" $tail $dts
+        } else {
+            Write-Ok 'selftest: review-item controls T1-T6 non-vacuous'
+        }
         $t1 = Get-Date
         $ra = Invoke-Tool $py @($r6, '--pinned',
             (Join-Path $script:Repo 'pinned'), '--include',
@@ -793,7 +810,7 @@ if ($SkipJ1) {
                 Select-Object -First 1)
             $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
             Write-Info "verdict recorded: $verdict -- $summary"
-            Add-Gate 'R6' 'MI order + tables' 'REPORT' $dta "$verdict -- $summary (report-only)"
+            Add-Gate 'R6' 'vtable shape/slot' 'REPORT' $dta "$verdict -- $summary (report-only)"
         }
     }
 }

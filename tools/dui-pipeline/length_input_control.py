@@ -47,8 +47,12 @@ def _run_extract(lengths_json: dict, out_dir: pathlib.Path):
 
 def main() -> int:
     if not DLL.is_file():
-        print("length-input control: SKIP (pinned DLL not cached locally)")
-        return 0
+        # NOT a PASS: the controls did not run. rc 2 = "not executed"
+        # (distinct from 0 PASS / 1 FAIL) so a clean checkout without
+        # the cached DLL can never report green.
+        print("length-input control: NOT EXECUTED (pinned DLL not "
+              "cached locally) -- rc 2, not a pass")
+        return 2
     ok = True
 
     # ---- Control A: loosening must not fabricate slots ----
@@ -76,12 +80,15 @@ def main() -> int:
         ep_old = old["ElementProvider"]["secondaries"]["RefcountBase"]
         ep_new = new["ElementProvider"]["secondaries"]["RefcountBase"]
         content_stable = ep_old["slots"] == ep_new["slots"]
+        # live-record proof: the redundant input is RECORDED
+        # (ignored-redundant), not silently clamped away
         prov_flipped = (ep_old.get("length_provenance") == "manual"
-                        and ep_new.get("length_provenance") == "next-vftable")
+                        and ep_new.get("length_provenance")
+                        == "ignored-redundant")
         print(f"length-input control A: ElementProvider RB slots "
               f"{'stable' if content_stable else 'CHANGED'} under 5->6, "
               f"provenance {ep_old.get('length_provenance')} -> "
-              f"{ep_new.get('length_provenance')}")
+              f"{ep_new.get('length_provenance')} (recorded, not clamped)")
         if not content_stable:
             print("length-input control A: FAIL (loosening fabricated "
                   "slot content -- derived bounds are not holding)")

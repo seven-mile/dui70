@@ -666,7 +666,7 @@ CI 自身**不写** `pinned/` 或 `DirectUI/`；唯一会写的文件是
 （repro 把下载件与隔离重建结果放在 `.local/build/repro/`）。
 **不修改 git index。**
 
-## R6 -- MI order + table truth (report-only, fail-closed structure)
+## R6 -- multi-vtable shape/slot checker (report-only, fail-closed structure)
 
 Stage-2 order-contract track (PR: w5/stage2-order-contract). Tool:
 `uia_order_verify.py`; pinned input: `pinned/mi-tables.json` schema 3.
@@ -678,38 +678,50 @@ table is missing) whose per-base vftables are split by `??_R4` block
 and compared slot-by-slot against the pinned DLL bytes at each
 table's RVA.
 
+THIS STAGE IS A SHAPE/SLOT CHECKER. It does not compare or validate
+any base ORDER: `ctor_vftable_references` is reference-only evidence
+(order=ORDER-UNKNOWN), reported as context and never used for a
+verdict. No order-agreement verdict exists or is promised.
+
 Per-class report: table identity (primary / secondary:<base>), RVA,
 slot count, length provenance, per-slot verdict (EXACT / FOLD-UNKNOWN
-/ THUNK-UNKNOWN / UNRESOLVED / FAIL) with full mangled symbols,
-probe-observed this-offsets (W-adjustor encodings), and the schema-3
-ctor_store_order evidence when present.
+/ THUNK-UNKNOWN / UNRESOLVED / FAIL) with full mangled symbol sets
+(untruncated in the artifact), probe-observed this-offsets
+(W-adjustor encodings, unknown when none decodable -- never an empty
+list presented as measured), and the reference-only
+ctor_vftable_references context when present.
 
-Verdicts: VERIFIED / VERIFIED-UNKNOWN-SLOTS / REJECTED. On the
-current integration shape (a208b14 headers carry the ordinal-sorted
-classes.json base order) the 17 mandatory classes are REJECTED --
-that is the documented inheritance-order debt, recorded never masked.
+Verdicts: VERIFIED / VERIFIED-UNKNOWN-SLOTS / REJECTED. A REJECTED
+verdict names its ACTUAL probe mismatches (slot counts, mangled
+identity divergences, missing probe tables, manual-conflict) -- no
+blanket attribution to inheritance-order debt. On the current
+integration shape the 17 mandatory classes are REJECTED by their
+individual probe mismatches; recorded, never masked.
 
 Fail-closed structure rules (enforced even in report-only mode):
 - missing pinned/mi-tables.json or schema != 3 = tooling error;
 - manual-conflict tables (manual length denying in-binary visible
-  slots) are REJECTED, never truncated;
+  slots) are REJECTED, never truncated; manual lengths LARGER than
+  an in-binary bound are recorded ignored-redundant, never silently
+  clamped;
 - mandatory-17 coverage asserted (a missing mandatory class = error).
 
 Evidence grades (stated in the tool and the artifact):
-- Solid: table shapes/slots (DLL bytes), ctor-store order
-  (disassembly observation), slot identity hits;
-- Strong Inference: any EMISSION ORDERING strategy built on them
-  (ctor store order is not necessarily source declaration order).
+- Solid: table shapes/slots (DLL bytes), slot identity hits;
+- reference-only: ctor_vftable_references (LEA references inside the
+  ctor's .pdata extent; NOT stores, NO order derived from them).
 
 ## R3'' -- mi-tables.json derived-section re-derivation
 
 `repro.py` gate R3'' re-derives `pinned/mi-tables.json` from the DLL
-bytes + symbols.json + the COMMITTED manual lengths file and asserts
-the `derived` section is identical (LF-canonical). The `manual`
-section is deliberately NOT asserted derivable: interface lengths are
-human ABI inputs, not facts (G1 locks them; the length_input_control
-controls prove they are live: loosening cannot fabricate slots,
-denying is refused as manual-conflict).
+bytes + symbols.json + the COMMITTED manual lengths input and asserts
+the `derived` section is identical (LF-canonical). That is
+CONDITIONAL re-derivability (determinism + committed-match), NOT an
+independent proof of the manual values. The `manual` section is
+deliberately NOT asserted derivable: interface lengths are human ABI
+inputs, not facts (G1 locks them; the length_input_control controls
+prove they are live: loosening cannot fabricate slots, denying is
+refused as manual-conflict).
 
 ## length_input_control -- manual length negative controls
 

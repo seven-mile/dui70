@@ -23,19 +23,23 @@ SCHEMA 3 ADDS (over schema 2)
 TWO-SECTION SCHEMA (deliberate; see "length provenance")
     {
       "schema": 3,
-      "derived": { ... },   # pure function of DLL bytes + symbols.json
+      "derived": { ... },   # function(DLL bytes, symbols.json,
+                            #          manual-length input)
       "manual": {           # HUMAN ABI INPUTS -- never claimed derived
         "interface_lengths": {"IProvider": 1, "RefcountBase": 2},
         "class_interface_lengths": {"ElementProvider": {"RefcountBase": 5}}
       }
     }
 
-    The `derived` section is re-derivable and byte-compared by repro.py
-    gate R3'' (R3-double-prime). The `manual` section is locked by G1
-    (pinned.sha256) but is NOT covered by any re-derivation claim: a
-    table whose length has no in-binary evidence is bounded by a HUMAN
-    interface-length input, and mixing that into a "pure function"
-    claim would be self-certification. Derived vs manual is recorded
+    The `derived` section is a function of the DLL bytes, symbols.json
+    AND the manual-length input; repro.py gate R3'' proves CONDITIONAL
+    re-derivability: given the same committed manual input, the derived
+    section re-derives byte-identically. That is NOT an independent
+    proof of the manual values themselves -- the manual section is
+    locked by G1 (pinned.sha256) and is never claimed derived: a table
+    whose length has no in-binary evidence is bounded by a HUMAN
+    interface-length input, and claiming that input as derived would
+    be self-certification. Derived vs manual is recorded
     per table as "length_provenance":
         "next-vftable"  bounded by the next vftable symbol RVA
                         (vftables are packed in .rdata; hard evidence)
@@ -74,18 +78,25 @@ DERIVATION RULES (identical philosophy to schema 1)
     * template classes (`??_7?$...`) are included with their full
       mangled class key; nothing about them is special-cased.
 
-CTOR-STORE ORDER (schema 3)
+CTOR VFTABLE REFERENCES (schema 3)
     For each class with an in-symbols constructor `??0<C>@DirectUI@@QEAA...`,
-    the extractor disassembles a window of the ctor and records the
-    sequence of rip-relative LEA instructions whose targets are the
-    class's OWN vftables (`??_7<C>@DirectUI@@6B...`). The sequence is
-    the store order of subobject vptrs = object-layout observation
-    (Solid Evidence). Caveats, documented not hidden:
-      * store order is not necessarily declaration order (the compiler
-        may reorder stores), so the EMISSION ORDERING STRATEGY derived
-        from it stays Strong Inference;
-      * ICF can merge ctor tails of sibling classes; only references to
-        the class's OWN tables are kept;
+    the extractor records the rip-relative LEA instructions, WITHIN the
+    constructor's .pdata function extent only, whose targets are the
+    class's OWN vftables (`??_7<C>@DirectUI@@6B...`). These are
+    REFERENCES, not stores: proving a vptr STORE requires tracing the
+    subsequent `this+offset` write (dataflow), which this extractor
+    does not do. Every entry therefore carries
+    semantics='reference-only' and order='ORDER-UNKNOWN'; NO base
+    order, emission order, or declaration order is derived from this
+    field. Honest limits, documented not hidden:
+      * the scan is bounded by .pdata (BeginAddress/EndAddress of the
+        function containing the ctor RVA); when .pdata or a covering
+        entry is unavailable the field is 'unknown-scan-refused' --
+        a fixed-window scan is refused rather than guessed;
+      * one RVA can carry SEVERAL alias vftable symbols (ICF); ALL
+        aliases are recorded as a candidate list, none dropped;
+      * references inside the extent can still belong to
+        compiler-generated helpers, not to C++ base initialisation;
       * classes without an in-symbols ctor get no entry (no guessing).
 
 USAGE
@@ -155,6 +166,38 @@ def exec_ranges(blob: bytes) -> list[tuple[int, int]]:
     return ranges
 
 
+def _pdata_functions(blob: bytes, secs) -> list[tuple[int, int]]:
+    """Function extents from .pdata RUNTIME_FUNCTION entries.
+
+    Returns [(BeginAddress, EndAddress), ...] sorted; empty when the
+    image has no .pdata (scan consumers must REFUSE to scan then --
+    a fixed window is never an acceptable substitute)."""
+    e = struct.unpack_from("<I", blob, 0x3C)[0]
+    coff = e + 4
+    for va, vsize, raddr, rsize in secs:
+        pass
+    # locate .pdata by section name
+    opt = coff + 20
+    nsec = struct.unpack_from("<H", blob, coff + 2)[0]
+    optsz = struct.unpack_from("<H", blob, coff + 16)[0]
+    for i in range(nsec):
+        o = opt + optsz + i * 40
+        name = blob[o:o + 8].rstrip(b"\0").decode("ascii", "replace")
+        if name != ".pdata":
+            continue
+        _, vaddr, _, raddr = struct.unpack_from("<IIII", blob, o + 8)
+        vsize = struct.unpack_from("<I", blob, o + 8)[0]
+        out = []
+        n = vsize // 12
+        for j in range(n):
+            b, en, _u = struct.unpack_from("<III", blob, raddr + j * 12)
+            if b or en:
+                out.append((b, en))
+        out.sort()
+        return out
+    return []
+
+
 def classify_vftable(mangled: str):
     """Return (class_key, base_or_None) for a ??_7 symbol, else None.
 
@@ -217,6 +260,7 @@ def main(argv: list[str] | None = None) -> int:
         blob = dll.read_bytes()
         image_base, secs = parse_pe(blob)
         exec_rng = exec_ranges(blob)
+        pdata_bounds = _pdata_functions(blob, secs)
         if not exec_rng:
             print("extract-mi-tables: ERROR no executable sections",
                   file=sys.stderr)
@@ -352,18 +396,35 @@ def main(argv: list[str] | None = None) -> int:
                         return slots2, "manual-conflict"
                     provenance = "manual"
                     break
-                provenance = "next-vftable"
+                if max_len is not None and k < max_len:
+                    # manual value LARGER than the in-binary bound:
+                    # the input is redundant for this table (the
+                    # bound already cuts earlier). Record that the
+                    # manual input was ignored -- provenance must not
+                    # silently swallow a redundant human input.
+                    stat["manual_redundant"] += 1
+                    provenance = "ignored-redundant"
+                else:
+                    provenance = "next-vftable"
                 break
             if k >= 400:
                 provenance = "unknown"
                 break
             p = struct.unpack_from("<Q", blob, off + 8 * k)[0]
             if p == 0:
-                provenance = "hard-stop"
+                if max_len is not None and k < max_len:
+                    stat["manual_redundant"] += 1
+                    provenance = "ignored-redundant"
+                else:
+                    provenance = "hard-stop"
                 break
             if not is_code_target(p - image_base):
                 if k > 0:
-                    provenance = "hard-stop"
+                    if max_len is not None and k < max_len:
+                        stat["manual_redundant"] += 1
+                        provenance = "ignored-redundant"
+                    else:
+                        provenance = "hard-stop"
                     break
                 stat["bad_slot0"] += 1
                 slots.append([])
@@ -416,15 +477,46 @@ def main(argv: list[str] | None = None) -> int:
         else:
             by_class[cls].setdefault("_secondaries", {})[base] = rva
 
-    # ---- ctor-store-order (schema 3): object-layout observation ----
-    def ctor_store_order(cls: str, limit: int = 0x300):
+    # ---- ctor vftable REFERENCES (schema 3): reference-only ----
+    # An RVA can carry several ALIAS vftable symbols (ICF); keep ALL
+    # of them per reference, none dropped (no last-wins).
+    vt_aliases_at: dict[int, list[str]] = collections.defaultdict(list)
+    for rva, m in vt_by_rva.items():
+        vt_aliases_at[rva].append(m)
+    for rva in vt_aliases_at:
+        vt_aliases_at[rva].sort()
+
+    def ctor_vftable_references(cls: str):
+        """Rip-relative LEA references to the class's OWN vftables,
+        strictly within the ctor's .pdata function extent.
+
+        REFERENCE-ONLY: a vptr store would additionally require a
+        traced `this+offset` write (dataflow) -- out of scope, so
+        order='ORDER-UNKNOWN' and NO base/emission order is derived.
+        When .pdata or a covering function entry is unavailable the
+        scan is REFUSED (fixed windows are not an acceptable
+        substitute)."""
         crva = ctor_rva.get(cls)
         if crva is None:
             return None
+        if not pdata_bounds:
+            return {"scan": "unknown-scan-refused",
+                    "reason": "no .pdata function extents in image"}
+        extent = None
+        for b, en in pdata_bounds:
+            if b <= crva < en:
+                extent = (b, en)
+                break
+        if extent is None:
+            return {"scan": "unknown-scan-refused",
+                    "reason": "ctor rva not covered by .pdata"}
         off = rva_to_off(crva)
         if off is None:
             return None
-        code = blob[off:off + limit]
+        end_off = rva_to_off(extent[1])
+        if end_off is None:
+            end_off = off + (extent[1] - extent[0])
+        code = blob[off:end_off]
         events = []
         i = 0
         while i < len(code) - 7:
@@ -433,17 +525,33 @@ def main(argv: list[str] | None = None) -> int:
                     (code[i + 2] & 0xC7) == 0x05:
                 disp = struct.unpack_from("<i", code, i + 3)[0]
                 target = crva + i + 7 + disp
-                m = vt_by_rva.get(target)
-                if m and m.startswith(f"??_7{cls}@DirectUI@@6B"):
-                    parsed = classify_vftable(m)
-                    if parsed is not None:
-                        base = parsed[1] or "PRIMARY"
-                        events.append({"offset": i, "table_rva": "0x%08X" % target,
-                                       "base": base, "symbol": m})
+                if target in vt_aliases_at:
+                    aliases = [m for m in vt_aliases_at[target]
+                               if m.startswith(f"??_7{cls}@DirectUI@@6B")]
+                    if aliases:
+                        cands = []
+                        for m in aliases:
+                            parsed = classify_vftable(m)
+                            base = (parsed[1] or "PRIMARY") \
+                                if parsed is not None else "?"
+                            cands.append({"base": base, "symbol": m})
+                        events.append({
+                            "offset": i,
+                            "kind": "reference",
+                            "table_rva": "0x%08X" % target,
+                            "candidates": cands,
+                        })
                 i += 7
                 continue
             i += 1
-        return events or None
+        return {
+            "scan": "pdata-bounded",
+            "function_extent": ["0x%08X" % extent[0],
+                                "0x%08X" % extent[1]],
+            "semantics": "reference-only",
+            "order": "ORDER-UNKNOWN",
+            "references": events,
+        }
 
     derived: dict[str, dict] = {}
     n_tables = 0
@@ -478,18 +586,12 @@ def main(argv: list[str] | None = None) -> int:
                 n_tables += 1
             if sec_out:
                 entry["secondaries"] = sec_out
-        # ctor-store-order: object-layout observation (Solid); the
-        # EMISSION ordering strategy built on it is Strong Inference
-        # (store order != declaration order) -- documented in schema
-        cso = ctor_store_order(cls)
-        if cso is not None:
-            entry["ctor_store_order"] = {
-                "ctor_rva": "0x%08X" % ctor_rva[cls],
-                "evidence": "rip-relative LEA sequence in ctor code",
-                "semantics": "object-layout observation (Solid); "
-                             "NOT source-level declaration order",
-                "stores": cso,
-            }
+        # ctor vftable REFERENCES (reference-only, ORDER-UNKNOWN):
+        # no base order / emission order is derived from this field
+        cvr = ctor_vftable_references(cls)
+        if cvr is not None:
+            cvr = {"ctor_rva": "0x%08X" % ctor_rva[cls], **cvr}
+            entry["ctor_vftable_references"] = cvr
         if entry:
             derived[cls] = entry
 
@@ -512,7 +614,11 @@ def main(argv: list[str] | None = None) -> int:
 
     n_prim = sum(1 for e in derived.values() if "primary" in e)
     n_sec = sum(len(e.get("secondaries", {})) for e in derived.values())
-    n_cso = sum(1 for e in derived.values() if "ctor_store_order" in e)
+    n_cso = sum(1 for e in derived.values()
+                if "ctor_vftable_references" in e)
+    n_refused = sum(1 for e in derived.values()
+                    if (e.get("ctor_vftable_references") or {})
+                    .get("scan") == "unknown-scan-refused")
     provs = collections.Counter()
     for e in derived.values():
         if "primary" in e:
@@ -521,7 +627,7 @@ def main(argv: list[str] | None = None) -> int:
             provs[s["length_provenance"]] += 1
     print(f"extract-mi-tables: classes={len(derived)} "
           f"primary={n_prim} secondary={n_sec} total={n_tables} "
-          f"ctor_store_order={n_cso}")
+          f"ctor_vftable_references={n_cso} (scan-refused={n_refused})")
     print(f"  slot stats: {dict(stat)}")
     print(f"  length provenance: {dict(provs)}")
     print(f"  manual interface_lengths: {len(iface_lengths)} entries")

@@ -394,6 +394,18 @@ def cmd_headers(args: argparse.Namespace) -> int:
     for must in ("dui_abi_types.h", *(f"{h}.h" for h in sorted(HANDWRITTEN))):
         if must in all_h:
             sample.add(must)
+    # A rename/move would make the membership test above silently false: the
+    # force-add would vanish, these files would fall back into a 12-of-194 draw,
+    # and the gate would report OK while never compiling them. G3 catches a
+    # registered header that was DELETED; this catches one that is still in the
+    # registry but no longer matches any real file name. Assert only -- no extra
+    # compilation, so the sample set is unchanged.
+    missing_reg = sorted(m for m in (f"{h}.h" for h in HANDWRITTEN)
+                         if m not in all_h)
+    if missing_reg:
+        fail("G5", "every registered hand-written header is present in include/",
+             f"registry/file mismatch: {missing_reg}")
+        return 1
     sample = sorted(sample)
 
     # SDK-style include set; explicit so this works outside a dev prompt.

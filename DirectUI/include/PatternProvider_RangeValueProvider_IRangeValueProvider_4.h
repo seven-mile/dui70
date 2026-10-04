@@ -23,8 +23,12 @@ namespace DirectUI
 namespace DirectUI
 {
     class RangeValueProvider;
-    struct IRangeValueProvider;
+}
 
+struct IRangeValueProvider;
+
+namespace DirectUI
+{
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
@@ -36,7 +40,11 @@ namespace DirectUI
         virtual ~PatternProvider<RangeValueProvider, IRangeValueProvider, 4>(void);
         PatternProvider<RangeValueProvider, IRangeValueProvider, 4>(void);
         static long Create(ElementProvider*, IUnknown**);
+
+        protected:
         long DoInvoke(int, ...);
+
+        public:
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
     };

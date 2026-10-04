@@ -23,8 +23,12 @@ namespace DirectUI
 namespace DirectUI
 {
     class SelectionProvider;
-    struct ISelectionProvider;
+}
 
+struct ISelectionProvider;
+
+namespace DirectUI
+{
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
@@ -36,7 +40,11 @@ namespace DirectUI
         virtual ~PatternProvider<SelectionProvider, ISelectionProvider, 8>(void);
         PatternProvider<SelectionProvider, ISelectionProvider, 8>(void);
         static long Create(ElementProvider*, IUnknown**);
+
+        protected:
         long DoInvoke(int, ...);
+
+        public:
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
     };

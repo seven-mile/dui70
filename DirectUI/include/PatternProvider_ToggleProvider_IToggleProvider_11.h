@@ -23,8 +23,12 @@ namespace DirectUI
 namespace DirectUI
 {
     class ToggleProvider;
-    struct IToggleProvider;
+}
 
+struct IToggleProvider;
+
+namespace DirectUI
+{
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
@@ -36,7 +40,11 @@ namespace DirectUI
         virtual ~PatternProvider<ToggleProvider, IToggleProvider, 11>(void);
         PatternProvider<ToggleProvider, IToggleProvider, 11>(void);
         static long Create(ElementProvider*, IUnknown**);
+
+        protected:
         long DoInvoke(int, ...);
+
+        public:
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
     };

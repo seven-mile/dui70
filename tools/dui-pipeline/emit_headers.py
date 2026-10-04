@@ -1793,22 +1793,29 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
     pattern methods. Signatures are lifted from the concrete class's
     own override members (same mangling shape; the override and the
     interface method have identical signatures by C++ rules).
+
+    SCOPE: the interface is declared at GLOBAL scope. Evidence: the
+    pinned template mangles the arg UNQUALIFIED (UIInvokeProvider@@,
+    no @DirectUI@@ component) while the concrete class arg IS
+    qualified (VInvokeProvider@DirectUI@@) -- the real pattern
+    interfaces live outside namespace DirectUI (UIA header
+    convention), unlike IProvider/RefcountBase (6BIProvider@1@@).
     """
     lines = [banner,
-             f"// DirectUI::{iface} -- UIA pattern interface synthesized",
+             f"// {iface} -- UIA pattern interface synthesized",
              f"// from the pinned mi-tables.json primary vftable of",
              f"// DirectUI::{cls} (slot order == declaration order).",
+             "// NOTE: global scope (the pinned mangled template args carry",
+             "//       no @DirectUI@@ qualifier for the interface parameter).",
              "#pragma once",
              "",
              '#include "dui_abi_types.h"',
              "",
-             "namespace DirectUI",
-             "{",
-             f"    struct {iface};",
+             f"struct {iface};",
              "",
-             f"    struct {iface}",
-             "    {",
-             "    public:"]
+             f"struct {iface}",
+             "{",
+             "public:"]
     by_name: dict[str, dict] = {}
     for s in members:
         by_name.setdefault(s["member"], s)
@@ -1829,17 +1836,15 @@ def render_mi_pattern_iface_header(iface: str, cls: str, members: list,
         if resolved is None:
             # fold entry with no recoverable signature: placeholder
             # (declared in order -- the slot stays ABI-true)
-            lines.append("        // ABI placeholder: fold slot, member-level")
-            lines.append("        // identity not provable from the pinned data.")
-            lines.append(f"        virtual void __DuiAbiSlot_{iface}_{len(lines)}(void) = 0;")
+            lines.append("    // ABI placeholder: fold slot, member-level")
+            lines.append("    // identity not provable from the pinned data.")
+            lines.append(f"    virtual void __DuiAbiSlot_{iface}_{len(lines)}(void) = 0;")
             continue
         s = by_name[resolved]
         md = MemberDecl(s, cls)
         sig = md.signature(tr)
-        lines.append(f"        virtual {sig} = 0;")
-    lines.append("    };")
-    lines.append("")
-    lines.append("} // namespace DirectUI")
+        lines.append(f"    virtual {sig} = 0;")
+    lines.append("};")
     lines.append("")
     return "\n".join(lines)
 
@@ -2039,17 +2044,21 @@ def render_mi_template_header(tpl_id: str, members: list,
             lines.append(f"    {kw} {name};")
         lines.append("}")
         lines.append("")
+    # the specialization arguments reference the concrete provider
+    # class (DirectUI scope) and the pattern interface (GLOBAL scope:
+    # its mangled arg carries no DirectUI qualifier). This header is
+    # INCLUDED BY the concrete class's header, so they can only be
+    # forward-declared here (complete types come from their own
+    # headers).
     lines.append("namespace DirectUI")
     lines.append("{")
-    # the specialization arguments reference the concrete provider
-    # class and the pattern interface; this header is INCLUDED BY the
-    # concrete class's header, so they can only be forward-declared
-    # here (complete types come from their own headers). The interface
-    # forward uses STRUCT (the real DLL declares the pattern
-    # interfaces as struct; the class-key is part of the mangling).
     lines.append(f"    class {mi_shape.get('_concrete', '_Unknown')};")
-    lines.append(f"    struct {iface};")
+    lines.append("}")
     lines.append("")
+    lines.append(f"struct {iface};")
+    lines.append("")
+    lines.append("namespace DirectUI")
+    lines.append("{")
     lines.append("    template <typename PROVIDER, typename INTERFACE, int ID>")
     lines.append("    class PatternProvider;")
     lines.append("")
@@ -2064,10 +2073,19 @@ def render_mi_template_header(tpl_id: str, members: list,
     dtor = next((s for s in members if classify_dtor(s)), None)
     if dtor is not None:
         lines.append(f"        virtual ~{tid}(void);")
+    # access sections in walk order (mangled names encode access:
+    # ?DoInvoke@...IEAA... is PRIVATE -- rendering it public would
+    # mangle QEAA and miss the real export).
+    cur_acc = "public"
     for s in members:
         name = s["member"]
         if classify_dtor(s) or classify_scalar_dtor(s) or is_synth_member(s):
             continue
+        acc = access_of(s)
+        if acc != cur_acc:
+            lines.append("")
+            lines.append(f"        {acc}:")
+            cur_acc = acc
         md = MemberDecl(s, tpl_id)
         if s.get("kind") == "ctor":
             lines.append(f"        {md.signature(tr)};")

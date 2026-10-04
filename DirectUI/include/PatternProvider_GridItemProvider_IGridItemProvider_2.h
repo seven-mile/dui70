@@ -23,8 +23,12 @@ namespace DirectUI
 namespace DirectUI
 {
     class GridItemProvider;
-    struct IGridItemProvider;
+}
 
+struct IGridItemProvider;
+
+namespace DirectUI
+{
     template <typename PROVIDER, typename INTERFACE, int ID>
     class PatternProvider;
 
@@ -36,7 +40,11 @@ namespace DirectUI
         virtual ~PatternProvider<GridItemProvider, IGridItemProvider, 2>(void);
         PatternProvider<GridItemProvider, IGridItemProvider, 2>(void);
         static long Create(ElementProvider*, IUnknown**);
+
+        protected:
         long DoInvoke(int, ...);
+
+        public:
         virtual auto GetProxyCreator(void) -> ProviderProxy* (__cdecl *)(Element*);
         virtual void Init(ElementProvider*);
     };

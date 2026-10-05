@@ -841,6 +841,62 @@ if ($SkipJ1) {
         }
     }
 
+    # ------------------------------------------- DAC dynarray-contract controls
+    # ENFORCED: paired negative controls prove the tracked
+    # dynarray-contract chain is load-bearing (P1a hand-edit drift,
+    # P1b byte tamper, P1c law-inconsistency refusal). rc 0 PASS /
+    # rc 1 FAIL / rc 2 NOT EXECUTED (missing cached DLL) = tooling
+    # error -- never a silent pass.
+    Write-Head 'DAC  dynarray-contract negative controls (enforced)'
+    $dac = Join-Path $script:Repo 'tools/dui-pipeline/dynarray_contract_control.py'
+    if (-not (Test-Path $dac)) {
+        Fail-Gate 'DAC' 'dynarray-contract controls' `
+            'tool present' 'missing' @() 0
+    } else {
+        $t0d = Get-Date
+        $rd = Invoke-Tool $py @($dac) -Echo
+        $dtd = ((Get-Date) - $t0d).TotalSeconds
+        $taild = @($rd.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 8)
+        if ($rd.Rc -eq 0 -and ($rd.Out -match 'control P1a: PASS') -and
+            ($rd.Out -match 'control P1b: PASS') -and
+            ($rd.Out -match 'control P1c: PASS')) {
+            Write-Ok 'controls P1a+P1b+P1c PASS (contract chain live)'
+            Add-Gate 'DAC' 'dynarray-contract controls' 'PASS' $dtd 'P1a+P1b+P1c PASS'
+        } elseif ($rd.Rc -eq 2) {
+            Fail-Gate 'DAC' 'dynarray-contract controls' `
+                'executed (cached DLL present)' `
+                'NOT EXECUTED rc=2 -- missing pinned DLL' $taild $dtd
+        } else {
+            Fail-Gate 'DAC' 'dynarray-contract controls' `
+                'P1a drift, P1b tamper, P1c law-refusal' `
+                "rc=$($rd.Rc)" $taild $dtd
+        }
+    }
+
+    # ------------------------------------------- G-lite dynarray contract
+    # ENFORCED: ChildrenView.h (HANDWRITTEN) constants must match the
+    # machine-derived pinned/dynarray-contracts.json (Element* instance).
+    # rc 0 PASS / rc 1 drift FAIL / rc 2 source-parse failure = structural
+    # error, never a silent pass. The contract itself is locked by G1
+    # (pinned.sha256) and re-derived by repro.py R3'''.
+    Write-Head 'GLI ChildrenView vs dynarray contract (enforced)'
+    $t0g = Get-Date
+    $rg = Invoke-Tool $py @($script:Checks, 'dynarray') -Echo
+    $dtg = ((Get-Date) - $t0g).TotalSeconds
+    $tailg = @($rg.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 8)
+    if ($rg.Rc -eq 0) {
+        Add-Gate 'GLI' 'ChildrenView vs dynarray contract' 'PASS' $dtg `
+            'constants match tracked contract'
+    } elseif ($rg.Rc -eq 2) {
+        Fail-Gate 'GLI' 'ChildrenView vs dynarray contract' `
+            'source parseable + contract present' `
+            'structural error rc=2' $tailg $dtg
+    } else {
+        Fail-Gate 'GLI' 'ChildrenView vs dynarray contract' `
+            'constants match dynarray-contracts.json' `
+            "rc=$($rg.Rc)" $tailg $dtg
+    }
+
     # ------------------------------------------- LIC manual-length controls
     # ENFORCED (N4): length_input_control negative controls prove the
     # manual interface-length inputs are LIVE (loosen recorded as

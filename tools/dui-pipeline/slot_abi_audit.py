@@ -296,7 +296,68 @@ def main():
     inc = pathlib.Path(args.include)
     work = pathlib.Path(args.workdir)
     work.mkdir(parents=True, exist_ok=True)
-    doc = json.loads((pathlib.Path(args.pinned) / "vtable-slots.json").read_text(encoding="utf-8"))
+
+    # ---- input preflight (fail-closed, rc 2 = tooling error) ----
+    # A missing/mismatched input is NEVER conflated with a real ABI
+    # divergence (rc 1): before any parsing, every input the audit
+    # depends on must exist and, for the DLL, hash-verify against
+    # pinned/manifest.json. Previously a missing pinned dir or DLL
+    # surfaced as a raw FileNotFoundError traceback with rc 1 --
+    # indistinguishable from a real FAIL in CI's rc dispatch.
+    pin = pathlib.Path(args.pinned)
+    for name in ("vtable-slots.json", "symbols.json", "manifest.json"):
+        if not (pin / name).is_file():
+            print(f"slot-abi-audit: ERROR pinned input missing: "
+                  f"{pin / name} (rc 2, tooling error)", file=sys.stderr)
+            return 2
+    if args.dll:
+        dll_path = pathlib.Path(args.dll)
+        if not dll_path.is_file():
+            print(f"slot-abi-audit: ERROR --dll not found: {dll_path} "
+                  f"(rc 2, tooling error)", file=sys.stderr)
+            return 2
+    else:
+        dll_path = None  # resolved (and verified) below via _resolve_dll
+    import hashlib
+    try:
+        man = json.loads((pin / "manifest.json").read_text(encoding="utf-8"))
+        want_sha = man["dll"]["sha256"].lower()
+    except (json.JSONDecodeError, OSError, KeyError) as exc:
+        print(f"slot-abi-audit: ERROR pinned/manifest.json unreadable: "
+              f"{exc} (rc 2, tooling error)", file=sys.stderr)
+        return 2
+
+    def _verify_dll(path: pathlib.Path) -> int:
+        if not path.is_file():
+            print(f"slot-abi-audit: ERROR pinned DLL not found: {path} "
+                  f"(rc 2, tooling error)", file=sys.stderr)
+            return 2
+        got = hashlib.sha256(path.read_bytes()).hexdigest()
+        if got.lower() != want_sha:
+            print(f"slot-abi-audit: ERROR DLL sha mismatch for {path}: "
+                  f"{got} != manifest {want_sha} -- refusing "
+                  f"(rc 2, tooling error)", file=sys.stderr)
+            return 2
+        return 0
+
+    if dll_path is not None:
+        rc = _verify_dll(dll_path)
+        if rc:
+            return rc
+    else:
+        # _resolve_dll verifies the sha itself (and may download);
+        # its failure paths raise SystemExit(str) -> normalize to rc 2
+        try:
+            dll_path = _resolve_dll(pin)
+        except SystemExit as exc:
+            print(f"slot-abi-audit: ERROR {exc} (rc 2, tooling error)",
+                  file=sys.stderr)
+            return 2
+        rc = _verify_dll(dll_path)
+        if rc:
+            return rc
+
+    doc = json.loads((pin / "vtable-slots.json").read_text(encoding="utf-8"))
     classes = doc["classes"]
 
     # ---- independent expected-slot model (DLL bytes + symbols.json) ----
@@ -310,7 +371,6 @@ def main():
     # hit, but the slot is additionally recorded fold=UNKNOWN (a hit
     # proves only that SOME member of the fold sits there, not which).
     import struct
-    dll_path = pathlib.Path(args.dll) if args.dll else _resolve_dll(args.pinned)
     blob = dll_path.read_bytes()
     e_lfanew = struct.unpack_from("<I", blob, 0x3C)[0]
     coff = e_lfanew + 4

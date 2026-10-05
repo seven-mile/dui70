@@ -83,6 +83,190 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+# ----------------------------------------------------------------- capi-evidence
+# The FIVE plain-name C API exports that carry STRONG signature
+# evidence: a unique (or family-consistent) decorated C++ symbol at
+# the SAME RVA in pinned/symbols.json. The mangled form pins the
+# parameter COUNT and the pointer-ness of each parameter. The check
+# below derives those two facts from the mangled name and compares
+# them against the declaration the pipeline emits; a disagreement is
+# a hard FAIL. Everything else (81 exports, incl. the 4 sitting on
+# the 68-symbol ret-void mega-fold) has NO signature evidence and is
+# counted UNKNOWN -- never failed, never upgraded.
+CAPI_STRONG_EVIDENCE = {
+    # export name -> (decorated symbol, param count, pointer param
+    # positions as a set of 0-based indices, pointer TYPEDEF names --
+    # SDK typedefs that denote pointers without a literal '*')
+    "CreateDUIWrapperTouchEx":
+        ("?CreateDUIWrapperTouchEx@DirectUI@@YAJPEAVElement@1@"
+         "PEAVIXProviderCP@1@PEAPEAUIUnknown@@@Z", 3, {0, 1, 2}, set()),
+    "DUI70_DUIXmlParserSetXMLFromResource":
+        # long DUIXmlParser::SetXMLFromResource(u16, HINSTANCE, HINSTANCE)
+        # -- thiscall member: resId value + 2 HINSTANCE pointer params.
+        # The DECL adds the leading `parser` this-pointer and spells
+        # the HINSTANCEs via the SDK typedef (a pointer type without
+        # a literal '*'), so pointer-ness at decl positions {0, 2, 3}
+        # is asserted with the typedef knowledge embedded here:
+        # HINSTANCE == HINSTANCE__*.
+        ("?SetXMLFromResource@DUIXmlParser@DirectUI@@QEAAJI"
+         "PEAUHINSTANCE__@@0@Z", 4, {0, 2, 3}, {"HINSTANCE"}),
+    "DUI70_RichTextCreate":
+        ("?Create@RichText@DirectUI@@SAJPEAVElement@2@PEAKPEAPEAV32@@Z",
+         3, {0, 1, 2}, set()),
+    "DuiCreateObject":
+        ("?DuiCreateObject@@YAJAEBU_GUID@@0PEAPEAX@Z", 3, {2}, set()),
+    "DUI70_DUIXmlParserDestroy":
+        ("??$HDelete@VElement@DirectUI@@@DirectUI@@YAXPEAVElement@0@@Z",
+         1, {0}, set()),
+}
+
+
+def _decl_parts(decl: str):
+    """The parameter texts of a C declaration, split at top-level
+    commas. [''] for a void/empty parameter list."""
+    m = re.match(r"^[^()]+?\((.*)\)\s*;\s*$", decl, re.S)
+    if not m:
+        return None
+    params = m.group(1).strip()
+    if params in ("", "void"):
+        return []
+    parts, depth, cur = [], 0, []
+    for ch in params:
+        if ch in "(<[":
+            depth += 1
+        elif ch in ")>]":
+            depth -= 1
+        if ch == "," and depth == 0:
+            parts.append("".join(cur).strip())
+            cur = []
+        else:
+            cur.append(ch)
+    parts.append("".join(cur).strip())
+    return parts
+
+
+def _decl_signature(decl: str):
+    """Parse a C declaration like
+    'long WINAPI DuiCreateObject(struct _GUID const&, struct _GUID
+    const&, void** out);' into (name, param_count, pointer_positions).
+    Reference parameters (T&) count as non-pointer positions; T* /
+    T** count as pointer positions. Returns None if unparseable."""
+    m = re.match(r"^[^()]+?\b(\w+)\s*\((.*)\)\s*;\s*$", decl, re.S)
+    if not m:
+        return None
+    name = m.group(1)
+    parts = _decl_parts(decl)
+    if parts is None:
+        return None
+    ptr = {i for i, p in enumerate(parts) if "*" in p}
+    return (name, len(parts), ptr)
+
+
+def cmd_capi_evidence(args: argparse.Namespace) -> int:
+    """G-capi: declaration-vs-evidence check for the plain-name C API.
+
+    FAILS only when a declaration with STRONG evidence (same-RVA
+    decorated symbol, table above) disagrees with that evidence in
+    parameter count or pointer-ness. Declarations without evidence
+    stay UNKNOWN (counted, printed, never failed -- lead ruling: the
+    35 void*-shape exports are honest UNKNOWN, not violations).
+    """
+    exports_p: Path = args.exports
+    inc: Path = args.include
+    hdr = inc / "DirectUI.h"
+    if not exports_p.is_file():
+        fail("G-capi", f"{exports_p}", "missing")
+        return 2
+    if not hdr.is_file():
+        fail("G-capi", f"{hdr}", "missing")
+        return 2
+    try:
+        exports = json.loads(exports_p.read_text(encoding="utf-8"))["exports"]
+        src = hdr.read_text(encoding="utf-8")
+    except (json.JSONDecodeError, OSError) as exc:
+        fail("G-capi", "inputs parse", f"{exc}")
+        return 2
+
+    # plain-name exports and their RVAs
+    plain = {e["name"]: int(e["rva"], 16) for e in exports
+             if not e["name"].startswith("?")}
+    # decorated symbols by RVA (to re-confirm the evidence table's
+    # symbol really sits at the export RVA -- the table itself must
+    # not drift from the pinned facts)
+    syms = json.loads((args.pinned / "symbols.json").read_text(
+        encoding="utf-8"))["symbols"]
+    rva_map: dict[int, list[str]] = {}
+    for s in syms:
+        r = s.get("rva")
+        if r:
+            rva_map.setdefault(int(r, 16), []).append(s["mangled"])
+
+    # extract the extern-C decl block from DirectUI.h
+    m = re.search(r'extern "C" \{(.*?)\} // extern "C"', src, re.S)
+    if not m:
+        fail("G-capi", "DirectUI.h extern-C block found", "absent")
+        return 2
+    block = m.group(1)
+    decls = {}
+    for d in block.splitlines():
+        d = d.strip()
+        if not d or d.startswith("//"):
+            continue
+        sig = _decl_signature(d)
+        if sig:
+            decls[sig[0]] = (d, sig[1], sig[2])
+
+    problems = []
+    unknown = 0
+    checked = 0
+    for name, (decl, pcount, ptr) in sorted(decls.items()):
+        if name not in plain:
+            problems.append(f"{name}: declared but NOT exported "
+                            f"(stale decl?)")
+            continue
+        ev = CAPI_STRONG_EVIDENCE.get(name)
+        if ev is None:
+            unknown += 1
+            continue
+        sym, ev_count, ev_ptr, ptr_typedefs = ev
+        checked += 1
+        # confirm the evidence symbol is really at the export RVA
+        if sym not in rva_map.get(plain[name], []):
+            problems.append(
+                f"{name}: evidence symbol not at export RVA "
+                f"0x{plain[name]:X} -- evidence table drifted from "
+                f"pinned symbols.json")
+            continue
+        if pcount != ev_count:
+            problems.append(
+                f"{name}: param count decl={pcount} evidence={ev_count} "
+                f"({sym[:60]}...)")
+        # effective pointer positions: literal '*' OR a pointer
+        # typedef name in the parameter text
+        eff_ptr = set()
+        for i, part in enumerate(_decl_parts(decl)):
+            if "*" in part or any(t in part for t in ptr_typedefs):
+                eff_ptr.add(i)
+        if eff_ptr != ev_ptr:
+            problems.append(
+                f"{name}: pointer positions decl={sorted(eff_ptr)} "
+                f"evidence={sorted(ev_ptr)} ({sym[:60]}...)")
+
+    n_total = len(decls)
+    if problems:
+        detail = "\n".join(f"  - {p}" for p in problems)
+        fail("G-capi",
+             f"{checked} strong-evidence decls consistent; "
+             f"{unknown} UNKNOWN (no evidence, counted not failed)",
+             f"{len(problems)} problem(s)", detail)
+        return 1
+    ok("G-capi", f"C API decl-evidence: {checked}/{checked} strong-"
+                 f"evidence decls consistent; {unknown}/{n_total} "
+                 f"decls UNKNOWN (no same-RVA signature evidence -- "
+                 f"counted, never failed); {n_total} total decls")
+    return 0
+
+
 # --------------------------------------------------------------------------- hash
 def pinned_files(pinned: Path) -> list[Path]:
     """Every regular file under pinned/, recursively, sorted by relative posix path."""
@@ -1118,6 +1302,16 @@ def main(argv: list[str] | None = None) -> int:
     da.add_argument("--contract", type=Path,
                     default=DEFAULT_PINNED / "dynarray-contracts.json")
     da.set_defaults(func=cmd_dynarray)
+
+    ce = sub.add_parser(
+        "capi-evidence",
+        help="G-capi: C API declarations vs same-RVA strong evidence "
+             "(conflict-only FAIL; no-evidence stays UNKNOWN)")
+    ce.add_argument("--include", type=Path, default=DEFAULT_OUT / "include")
+    ce.add_argument("--exports", type=Path,
+                    default=DEFAULT_PINNED / "exports.json")
+    ce.add_argument("--pinned", type=Path, default=DEFAULT_PINNED)
+    ce.set_defaults(func=cmd_capi_evidence)
 
     j1 = sub.add_parser(
         "j1", help="vtable slot-order gate (report-only transitional mode)")

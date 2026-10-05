@@ -7,9 +7,9 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "Element.h"
+#include "BaseScrollViewer.h"
 
-#include "Interfaces.h"
+#include "TouchScrollBar.h"
 
 namespace DirectUI
 {
@@ -18,7 +18,7 @@ namespace DirectUI
     class Value;
 
     class TouchScrollViewer
-        : public Element, public IElementListener
+        : public BaseScrollViewer
     {
     public:
         bool CanPerformManualVisualSwap(void);
@@ -109,12 +109,12 @@ namespace DirectUI
         static UID UpdateView(void);
         long ZoomToRect(tagRECT const*, bool);
         long ZoomToRectManualVisualSwap(float, float, float, float, int const*, float, float, float, bool);
+        virtual long OnViewportStatusChanged(IDirectManipulationViewport*, DIRECTMANIPULATION_STATUS, DIRECTMANIPULATION_STATUS);
+        virtual long OnViewportUpdated(IDirectManipulationViewport*);
         virtual long OnContentUpdated(IDirectManipulationViewport*, IDirectManipulationContent*);
         virtual void OnInput(InputEvent*);
         virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual long OnViewportStatusChanged(IDirectManipulationViewport*, DIRECTMANIPULATION_STATUS, DIRECTMANIPULATION_STATUS);
-        virtual long OnViewportUpdated(IDirectManipulationViewport*);
         virtual ~TouchScrollViewer(void);
 
         protected:

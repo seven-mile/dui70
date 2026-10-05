@@ -26,14 +26,14 @@ namespace DirectUI
         // Rule C: mi secondary tail slots beyond the
         // base prefix (DLL: _purecall here; derived
         // classes override at the same absolute slot).
-        // slot 45 (Element): no recoverable identity.
-        virtual void __DuiAbiSlot_BaseScrollViewer_45(void) = 0;
-        // slot 46 (Element): no recoverable identity.
-        virtual void __DuiAbiSlot_BaseScrollViewer_46(void) = 0;
-        // slot 47 (Element): no recoverable identity.
-        virtual void __DuiAbiSlot_BaseScrollViewer_47(void) = 0;
-        // slot 48 (Element): no recoverable identity.
-        virtual void __DuiAbiSlot_BaseScrollViewer_48(void) = 0;
+        // slot 45 (Element): recovered from a derived override.
+        virtual long CreateScrollBars(void) = 0;
+        // slot 46 (Element): recovered from a derived override.
+        virtual long AddChildren(void) = 0;
+        // slot 47 (Element): recovered from a derived override.
+        virtual BaseScrollBar* GetHScroll(void) = 0;
+        // slot 48 (Element): recovered from a derived override.
+        virtual BaseScrollBar* GetVScroll(void) = 0;
         BaseScrollViewer(BaseScrollViewer const&);
         BaseScrollViewer(void);
         virtual ~BaseScrollViewer(void);

@@ -1128,6 +1128,24 @@ def _mi_own_slot_names(cls: str) -> set | None:
     evidence the class declares these virtuals; used to admit
     non-exported PDB methods into the member set (override
     declarations the export table cannot show)."""
+    names = _mi_own_slot_mangles(cls)
+    if names is None:
+        return None
+    out: set = set()
+    for sl in names:
+        out.add(sl)
+    return out or None
+
+
+def _mi_own_slot_mangles(cls: str) -> set | None:
+    """FULL mangled names appearing in the class's own mi-tables
+    slot mangles (schema-4; falls back to slot names when absent).
+    A PDB public whose mangled name appears verbatim here is
+    owner-contract evidence: the slot BYTES point at that exact
+    function, whatever the PDB's is_virtual bit says (the PDB marks
+    TouchScrollViewer's GetHScroll() -> BaseScrollBar* non-virtual
+    because it is an override the PDB classifies through its base;
+    the slot mangle proves the class declares it)."""
     doc = _MI_DOC_CACHE
     if doc is None:
         return None
@@ -1144,6 +1162,11 @@ def _mi_own_slot_names(cls: str) -> set | None:
                 names.add(sl)
             else:
                 names |= set(sl)
+        for mg in (td.get("mangles") or []):
+            if isinstance(mg, list):
+                names |= set(mg)
+            elif isinstance(mg, str):
+                names.add(mg)
     return names or None
 
 
@@ -2422,6 +2445,19 @@ def base_list(inheritance: dict, cls: str) -> list:
     return [b for b in v if b]
 
 
+def _ancestor_names(cls: str, inheritance: dict) -> set:
+    """All ancestors of cls via the (post-fix) inheritance map."""
+    seen: set = set()
+    stack = list(inheritance.get(cls) or ())
+    while stack:
+        b = stack.pop()
+        if b in seen:
+            continue
+        seen.add(b)
+        stack.extend(inheritance.get(b) or ())
+    return seen
+
+
 def base_chain_virtual_names(cls: str, inheritance: dict,
                              exported_virtuals_by_class: dict | None) -> set:
     """Names that the WHOLE base chain of `cls` declares as exported
@@ -3089,6 +3125,177 @@ def render_mi_template_header(tpl_id: str, members: list,
     return "\n".join(lines)
 
 
+def _covariant_return_includes(cls: str, members: list,
+                               inheritance: dict) -> list:
+    """Batch-3e: DirectUI classes whose headers this class must
+    include because a declared virtual returns a pointer/reference to
+    a class that is NOT a base (a covariant override of an inherited
+    pure whose return is a base of the returned type). MSVC requires
+    the returned type complete at the override declaration (C2555
+    else). Evidence: the class's own member signatures + the
+    inheritance map; nothing is guessed."""
+    chain = base_chain_virtual_names(cls, inheritance, {}) or set()
+    # all ancestors of cls (post-fix inheritance)
+    anc: set = set()
+    stack = list(inheritance.get(cls) or ())
+    while stack:
+        b = stack.pop()
+        if b in anc:
+            continue
+        anc.add(b)
+        stack.extend(inheritance.get(b) or ())
+    out: list = []
+    for m in members:
+        if not isinstance(m, dict) or not m.get("is_virtual"):
+            continue
+        rt = m.get("return_type") or ""
+        mm = re.match(r"(?:class |struct )?(?:DirectUI::)?([A-Z]\w*)\s*\*\s*$",
+                      rt.strip())
+        if not mm:
+            continue
+        t_cls = mm.group(1)
+        if t_cls in anc or t_cls in out:
+            continue
+        # is t_cls a descendant of some ancestor (the pure's return)?
+        t_anc: set = set()
+        st = list(inheritance.get(t_cls) or ())
+        while st:
+            b = st.pop()
+            if b in t_anc:
+                continue
+            t_anc.add(b)
+            st.extend(inheritance.get(b) or ())
+        if t_anc & anc:
+            out.append(t_cls)
+    return out
+
+
+def _tail_order_members(cls: str, members: list, inheritance: dict,
+                        exp_virt_by_class: dict) -> None:
+    """Batch-3d: order the class's appending virtuals by their
+    first-base secondary tail slot index (in place).
+
+    A class with NO primary vtable-slots entry appends its own new
+    virtuals to the FIRST base's table. The canonical walk declares
+    them in PDB publics order (alphabetical), which appends them in
+    the wrong order when the real source declared them differently
+    (TouchScrollViewer's OnViewportStatusChanged/fold/OnContent
+    Updated rotation). The mi-tables first-base secondary tail IS
+    the append region in DLL order: slot names there (singletons
+    and fold members) identify the appending virtuals.
+
+    Slot-driven matching: for each tail slot the class's virtual
+    member with the slot's name (exactly one; a slot whose names
+    match several of the class's virtuals or a virtual matching no
+    slot makes the shape undecidable -- refuse, fail-closed).
+    Members not matched (base-chain overrides, non-virtuals,
+    dtor) keep their canonical positions; the matched virtuals are
+    re-placed, in slot order, at the position of the first matched
+    one."""
+    doc = _MI_DOC_CACHE
+    if doc is None:
+        return
+    entry = (doc.get("derived") or {}).get(cls)
+    if not isinstance(entry, dict):
+        return
+    secs = entry.get("secondaries") or {}
+    bases = _inheritance_order_global.get(cls) or []
+    # the mi-tables secondaries are keyed by the ULTIMATE base names
+    # (the vftable symbol suffix names the topmost subobject base,
+    # e.g. TouchScrollViewer's tables are @6BElement@@ /
+    # @6BIElementListener@@ even though the direct base is
+    # BaseScrollViewer): descend the first-base chain until a
+    # secondary matches
+    first_base = None
+    _walk = bases[0] if bases else None
+    _seen_fb: set = set()
+    while _walk and _walk not in _seen_fb:
+        _seen_fb.add(_walk)
+        if _walk in secs:
+            first_base = _walk
+            break
+        _nb = (_inheritance_order_global.get(_walk) or [])
+        _walk = _nb[0] if _nb else None
+    if first_base is None:
+        return
+    fb_slots = (secs.get(first_base) or {}).get("slots") or []
+    if not fb_slots:
+        return
+    # tail start: first slot beyond the longest boundary of the
+    # WHOLE ancestor chain (an ancestor's own first-base secondary
+    # length is where ITS declared tail ends; the class's append
+    # region begins strictly after the deepest such boundary --
+    # BaseScrollViewer's Element secondary is 49 slots, so
+    # TouchScrollViewer's append region is 49+, its 45-48 slots are
+    # overrides of BSV's recovered pures, not appends)
+    # the append boundary runs along the FIRST-BASE chain only (the
+    # table being appended to); sibling subobject bases (e.g.
+    # IElementListener, no tables of its own anywhere) cannot move
+    # the first-base table's boundary
+    prefix = 0
+    _fb_chain: list = []
+    _walk2 = bases[0] if bases else None
+    _seen2: set = set()
+    while _walk2 and _walk2 not in _seen2:
+        _seen2.add(_walk2)
+        _fb_chain.append(_walk2)
+        _nb2 = (inheritance.get(_walk2) or [])
+        _walk2 = _nb2[0] if _nb2 else None
+    for _a in _fb_chain:
+        _ae = ((doc.get("derived") or {}).get(_a) or {})
+        _be = _slot_tables_global.get(_a)
+        if not (_ae.get("secondaries")
+                or isinstance(_be, dict)):
+            # first-base chain member with NO table evidence: the
+            # boundary is unknown -- refuse (fail-closed)
+            return
+        if isinstance(_be, dict) and isinstance(_be.get("slots"), list):
+            prefix = max(prefix, len(_be["slots"]))
+        for td in ((_ae.get("secondaries") or {}).values()):
+            if isinstance(td, dict) and isinstance(td.get("slots"), list):
+                prefix = max(prefix, len(td["slots"]))
+    tail = fb_slots[prefix:]
+    if not tail:
+        return
+    # virtual members of the class (dict items only)
+    virts = [m for m in members
+             if isinstance(m, dict) and m.get("is_virtual")
+             and m.get("kind") != "dtor"]
+    if not virts:
+        return
+    # match tail slots to virtuals by name
+    matched: dict[int, dict] = {}
+    name_counts: dict[str, int] = {}
+    for m in virts:
+        name_counts[m.get("member")] = name_counts.get(m.get("member"), 0) + 1
+    for i, sl in enumerate(tail):
+        names = [sl] if isinstance(sl, str) else list(sl)
+        names = [n for n in names if n and not n.startswith("_")]
+        if not names:
+            continue  # purecall/unresolved: no identity to match
+        hits = [m for m in virts if m.get("member") in names]
+        if len(hits) == 1 and name_counts[hits[0].get("member")] == 1:
+            matched[i] = hits[0]
+    if len(matched) < 2:
+        return  # nothing (order-relevant) to reorder
+    # a virtual matched at TWO slots (overload pair: GetHScroll at
+    # 47/52) is compiler-generated covariance, not an append-order
+    # decision: order only the singly-matched virtuals
+    slot_by_member: dict[str, list] = {}
+    for i, m in matched.items():
+        slot_by_member.setdefault(m.get("member"), []).append(i)
+    order_pairs = [(i, m) for i, m in matched.items()
+                   if len(slot_by_member[m.get("member")]) == 1]
+    if len(order_pairs) < 2:
+        return
+    order_pairs.sort(key=lambda kv: kv[0])
+    sorted_new = [m for _, m in order_pairs]
+    member_ids = {id(m) for m in sorted_new}
+    first_idx = min(i for i, m in enumerate(members) if id(m) in member_ids)
+    others = [m for m in members if id(m) not in member_ids]
+    members[:] = others[:first_idx] + sorted_new + others[first_idx:]
+
+
 def render_class_header(cls: str, members: list, data_members: list,
                         tr: TypeTranslator, classes: list,
                         inheritance: dict, banner: str,
@@ -3137,6 +3344,20 @@ def render_class_header(cls: str, members: list, data_members: list,
     for b in bases:
         if b in classes:
             lines.append(f'#include "{safe_name(b)}.h"')
+            lines.append("")
+    # Batch-3e: covariant-override return types must be COMPLETE at
+    # this class's declaration (C2555 otherwise: MSVC checks the
+    # derived-to-base conversion when the override's return type
+    # differs from the inherited pure's). TouchScrollViewer's
+    # GetHScroll() -> TouchScrollBar* covariantly overrides
+    # BaseScrollViewer's pure (BaseScrollBar*): TouchScrollBar must
+    # be a complete type here. Generic rule: a virtual whose return
+    # class T is a STRICT descendant (through this class's base
+    # chain) of an inherited pure's return class S needs T's header.
+    _cov_inc = _covariant_return_includes(cls, members, inheritance)
+    for c in _cov_inc:
+        if c in classes:
+            lines.append(f'#include "{safe_name(c)}.h"')
             lines.append("")
     for b in bases:
         if b in EXTERNAL_BASE_INCLUDES:
@@ -3249,6 +3470,24 @@ def render_class_header(cls: str, members: list, data_members: list,
             # v2 item stream: member dicts + "__PH__<slot>" markers, in
             # real slot order (with or without placeholders)
             members = items
+
+    # Batch-3d: first-base secondary tail ordering. A class with NO
+    # primary vtable-slots entry (slot_lists None) whose own NEW
+    # virtuals (names not in any base chain) all bind tail slots of
+    # its FIRST-base secondary table appends those virtuals to the
+    # first base's table in DLL slot order. The canonical walk
+    # declares them alphabetically (PDB publics order), which
+    # appends them in the WRONG order (TouchScrollViewer's
+    # OnContentUpdated/OnViewportStatusChanged/OnViewportUpdated
+    # rotation). Evidence: the class's own mi-tables first-base
+    # secondary slot content names those virtuals; ordering by slot
+    # index is the .rdata truth. Fail-closed: applies only when
+    # EVERY own-new virtual name appears in that tail (a name
+    # missing from the tail means the shape is not a pure
+    # append-tail and the pass refuses).
+    if slot_lists is None and _MI_DOC_CACHE is not None:
+        _tail_order_members(cls, members, inheritance,
+                            exported_virtuals_by_class)
     sections = {"public": [], "protected": [], "private": []}
     for sym in members:
         if isinstance(sym, str):
@@ -4452,6 +4691,117 @@ def main(argv=None) -> int:
               f"({len(mi_shapes)} concrete + {len(mi_template_shapes)} "
               f"templates)")
 
+    # Batch-3b: flattened-intermediate recovery from slot OWNER
+    # evidence (schema-4 mangles). The PDB (classes.json) can report
+    # a class's direct bases FLATTENED: TouchScrollBar's real base is
+    # ScrollBar (whose base is BaseScrollBar), but the PDB collapsed
+    # the chain and listed [BaseScrollBar, Element] directly; the
+    # three scroll viewers really derive BaseScrollViewer alone, but
+    # the PDB listed BSV's bases [Element, IElementListener] directly
+    # (BSV itself dropped entirely); XBaby really derives DialogElement
+    # (+ IXBaby), not HWNDElement/IDialogElement/IElementListener
+    # directly. The DLL proves it: the class's secondary table for
+    # base B carries the INTERMEDIATE's exported implementations,
+    # readable from the per-slot mangled class component.
+    # Rule (evidence-driven, corpus-wide, no per-class lists): for
+    # class D with base B in D's secondary tables, count slots whose
+    # FULL mangled candidates resolve to exactly ONE owner class O
+    # (single-owner slots are owner evidence; multi-candidate folds
+    # are not and abstain). If some candidate C (C : B, C != D, C not
+    # already a D base) owns >= 2 single-owner slots, every other
+    # single-owner slot's owner is D, B or the SAME C, and no
+    # single-owner slot names a different class, then B is a
+    # flattened intermediate: D really derives C. D's base list
+    # becomes [C] plus D's bases outside C's base closure (re-listing
+    # a base both directly and through C would duplicate the
+    # subobject; the probe shape keeps only what C does not carry).
+    # Order: C takes B's position (the ctor-reference order fix above
+    # already established the truthful base order).
+    # Fail-closed: any contradicting single-owner slot vetoes; folds
+    # abstain; below the 2-slot floor nothing fires.
+    if mi_doc is not None:
+        _flat_cls: list[str] = []
+
+        def _base_closure(c: str, seen: set | None = None) -> set:
+            if seen is None:
+                seen = set()
+            if c in seen:
+                return seen
+            seen.add(c)
+            # bases absent from inheritance are interface leaves with
+            # no entry of their own: still part of the closure
+            for b in inheritance.get(c, ()):
+                _base_closure(b, seen)
+            return seen
+
+        for d_cls, d_entry in sorted((mi_doc.get("derived") or {}).items()):
+            if d_cls in mi_shapes or d_cls in mi_template_shapes:
+                # provider families render via their own MI path and
+                # never consume the generic inheritance walk
+                continue
+            cur = inheritance.get(d_cls)
+            if not isinstance(cur, list) or len(cur) < 2:
+                continue
+            for b in list(cur):
+                sec = ((d_entry or {}).get("secondaries") or {}).get(b)
+                if not isinstance(sec, dict):
+                    continue
+                mangles = sec.get("mangles")
+                if not isinstance(mangles, list) or len(mangles) < 2:
+                    continue
+                cands = [c for c, cb in inheritance.items()
+                         if c != d_cls and isinstance(cb, list)
+                         and b in cb and c not in cur]
+                if not cands:
+                    continue
+                votes: dict[str, int] = {}
+                veto = False
+                for m_slot in mangles:
+                    if not isinstance(m_slot, list) or not m_slot:
+                        continue
+                    owners = set()
+                    for m in m_slot:
+                        mm = re.match(r"\?+\??(\w+)@(\w+)@DirectUI@", m)
+                        if mm:
+                            owners.add(mm.group(2))
+                    if not owners:
+                        continue
+                    if len(owners) == 1:
+                        o = next(iter(owners))
+                        if o in (d_cls, b):
+                            continue
+                        if o in cands:
+                            votes[o] = votes.get(o, 0) + 1
+                        else:
+                            veto = True
+                            break
+                    # multi-owner fold: abstain (no owner evidence)
+                if veto or len(votes) != 1:
+                    continue
+                c_best, n_votes = next(iter(votes.items()))
+                if n_votes < 2:
+                    continue
+                cc = _base_closure(c_best)
+                new_bases = [c_best if x == b else x for x in cur]
+                # drop D's other bases covered by C's closure: the
+                # real declaration listed C, and the PDB flattened
+                # C's own bases up into D's list
+                keep = [x for x in new_bases
+                        if x == c_best or x not in cc]
+                if len(keep) == len(new_bases) and c_best not in cur:
+                    # no base was actually a flatten (C replaced B but
+                    # nothing else was C's): still a substitution
+                    pass
+                inheritance[d_cls] = keep
+                _inheritance_order_global[d_cls] = list(keep)
+                _flat_cls.append(f"{d_cls}: {cur} -> {keep}")
+        if _flat_cls:
+            print("emit_headers: flattened-intermediate recovery "
+                  f"({len(_flat_cls)} classes)")
+            for line in _flat_cls:
+                print(f"  {line}")
+
+
     stats = {}
     contract_rows = []
     v2_rows = []
@@ -4614,6 +4964,10 @@ def main(argv=None) -> int:
                             _sl = _slots[_k]
                             _names = [_sl] if isinstance(_sl, str) else list(_sl)
                             _singleton = (_names[0] if len(_names) == 1 else None)
+                            if _singleton is not None and _singleton.startswith("_"):
+                                # underscore pseudo-names (_purecall, _E...) are
+                                # absence-of-identity markers, not identities
+                                _singleton = None
                             # a singleton name the class ITSELF already
                             # declares is covered by the normal member walk
                             # (its declaration binds/appends naturally);
@@ -4635,8 +4989,55 @@ def main(argv=None) -> int:
                                 # our problem -- the probe TU only instantiates
                                 # __Probe subclasses that override pures).
                                 continue
+                            _sym = None
+                            if _singleton is None:
+                                # Rule E for tail pures (batch-3c): the pure
+                                # slot's IDENTITY is recoverable from a DERIVED
+                                # class's same-base secondary at the same
+                                # absolute slot when that slot is a SINGLETON
+                                # naming an exported virtual of the derived
+                                # class. Pinned evidence class: singleton slot
+                                # names (same as IXProviderCP slot recovery);
+                                # folds/underscores do not qualify. The derived
+                                # symbol supplies the SIGNATURE (the base's
+                                # pure must accept the override: covariant
+                                # return divergence would be a probe-mismatch
+                                # fail, not a silent lie).
+                                for _dc, _de in (_MI_DOC_CACHE
+                                                 .get("derived") or {}).items():
+                                    if _dc == cls:
+                                        continue
+                                    if cls not in _ancestor_names(_dc, inheritance):
+                                        continue
+                                    _dsec = ((_de or {}).get("secondaries")
+                                             or {}).get(_bname)
+                                    if not isinstance(_dsec, dict):
+                                        continue
+                                    _dslots = _dsec.get("slots") or []
+                                    if _k >= len(_dslots):
+                                        continue
+                                    _dsl = _dslots[_k]
+                                    _dn = ([_dsl] if isinstance(_dsl, str)
+                                           else list(_dsl))
+                                    if len(_dn) != 1:
+                                        continue
+                                    _name = _dn[0]
+                                    if _name.startswith("_") or _name.startswith("__"):
+                                        continue
+                                    _dsym = next(
+                                        (s for s in symbols
+                                         if s.get("class") == _dc
+                                         and s.get("member") == _name
+                                         and s.get("is_virtual")
+                                         and s.get("is_exported")
+                                         and in_directui_scope(s)
+                                         and is_callable(s)),
+                                        None)
+                                    if _dsym is not None:
+                                        _sym = _dsym
+                                        break
                             _tail.append({"slot": _k, "name": _singleton,
-                                          "sym": None, "base": _bname})
+                                          "sym": _sym, "base": _bname})
                         if _tail:
                             mi_tail_pures = _tail
                         break

@@ -7,9 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "Element.h"
-
-#include "Interfaces.h"
+#include "BaseScrollViewer.h"
 
 namespace DirectUI
 {
@@ -18,7 +16,7 @@ namespace DirectUI
     class Value;
 
     class TouchScrollViewer
-        : public Element, public IElementListener
+        : public BaseScrollViewer
     {
     public:
         bool CanPerformManualVisualSwap(void);

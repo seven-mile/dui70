@@ -7,11 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "HWNDElement.h"
-
-#include "dui_abi_types.h"
-
-#include "Interfaces.h"
+#include "DialogElement.h"
 
 namespace DirectUI
 {
@@ -25,29 +21,34 @@ namespace DirectUI
     class XProvider;
 
     class XBaby
-        : public HWNDElement, public IDialogElement, public IElementListener, public IXBaby
+        : public DialogElement, public IXBaby
     {
     public:
+        virtual HWNDElement* GetXBabyElement(void);
+        virtual void CacheParser(DUIXmlParser*);
+        virtual long SetToHost(Element*);
+        virtual tagSIZE GetContentDesiredSize(int, int);
         virtual bool CanSetFocus(void);
+        virtual long GetHostedElementID(unsigned short*);
+        virtual void ForceThemeChange(unsigned __int64, __int64);
+        virtual bool GetDefaultButtonTracking(void);
+        virtual long SetDefaultButtonTracking(bool);
+        virtual long SetButtonClassAcceptsEnterKey(bool);
+        virtual bool ClickDefaultButton(void);
+        virtual long SetRegisteredDefaultButton(Element*);
+        virtual long SetHandleEnterKey(bool);
         XBaby(XBaby const&);
         XBaby(void);
         virtual ~XBaby(void);
         XBaby& operator=(XBaby const&);
-        virtual void CacheParser(DUIXmlParser*);
-        virtual bool ClickDefaultButton(void);
         static long Create(Element*, unsigned long*, Element**);
         static long Create(IXElementCP*, XProvider*, HWND__*, Element*, unsigned long*, Element**);
         virtual long CreateStyleParser(DUIXmlParser**);
-        virtual void ForceThemeChange(unsigned __int64, __int64);
         virtual Element* GetAdjacent(Element*, int, NavReference const*, unsigned long);
         static IClassInfo* GetClassInfoPtr(void);
         virtual IClassInfo* GetClassInfoW(void);
-        virtual tagSIZE GetContentDesiredSize(int, int);
-        virtual bool GetDefaultButtonTracking(void);
         virtual long GetElementProviderImpl(InvokeHelper*, ElementProvider**);
         virtual Element* GetFocusableElement(void);
-        virtual long GetHostedElementID(unsigned short*);
-        virtual HWNDElement* GetXBabyElement(void);
         virtual bool OnChildLostFocus(Element*);
         virtual bool OnChildReceivedFocus(Element*);
         virtual void OnEvent(Event*);
@@ -55,13 +56,8 @@ namespace DirectUI
         virtual void OnThemeChanged(ThemeChangedEvent*);
         virtual void OnWmThemeChanged(unsigned __int64, __int64);
         static long Register(void);
-        virtual long SetButtonClassAcceptsEnterKey(bool);
         static void SetClassInfoPtr(IClassInfo*);
-        virtual long SetDefaultButtonTracking(bool);
-        virtual long SetHandleEnterKey(bool);
         virtual void SetKeyFocus(void);
-        virtual long SetRegisteredDefaultButton(Element*);
-        virtual long SetToHost(Element*);
 
         protected:
         long Initialize(IXElementCP*, XProvider*, HWND__*, Element*, unsigned long*);

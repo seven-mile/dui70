@@ -4452,6 +4452,117 @@ def main(argv=None) -> int:
               f"({len(mi_shapes)} concrete + {len(mi_template_shapes)} "
               f"templates)")
 
+    # Batch-3b: flattened-intermediate recovery from slot OWNER
+    # evidence (schema-4 mangles). The PDB (classes.json) can report
+    # a class's direct bases FLATTENED: TouchScrollBar's real base is
+    # ScrollBar (whose base is BaseScrollBar), but the PDB collapsed
+    # the chain and listed [BaseScrollBar, Element] directly; the
+    # three scroll viewers really derive BaseScrollViewer alone, but
+    # the PDB listed BSV's bases [Element, IElementListener] directly
+    # (BSV itself dropped entirely); XBaby really derives DialogElement
+    # (+ IXBaby), not HWNDElement/IDialogElement/IElementListener
+    # directly. The DLL proves it: the class's secondary table for
+    # base B carries the INTERMEDIATE's exported implementations,
+    # readable from the per-slot mangled class component.
+    # Rule (evidence-driven, corpus-wide, no per-class lists): for
+    # class D with base B in D's secondary tables, count slots whose
+    # FULL mangled candidates resolve to exactly ONE owner class O
+    # (single-owner slots are owner evidence; multi-candidate folds
+    # are not and abstain). If some candidate C (C : B, C != D, C not
+    # already a D base) owns >= 2 single-owner slots, every other
+    # single-owner slot's owner is D, B or the SAME C, and no
+    # single-owner slot names a different class, then B is a
+    # flattened intermediate: D really derives C. D's base list
+    # becomes [C] plus D's bases outside C's base closure (re-listing
+    # a base both directly and through C would duplicate the
+    # subobject; the probe shape keeps only what C does not carry).
+    # Order: C takes B's position (the ctor-reference order fix above
+    # already established the truthful base order).
+    # Fail-closed: any contradicting single-owner slot vetoes; folds
+    # abstain; below the 2-slot floor nothing fires.
+    if mi_doc is not None:
+        _flat_cls: list[str] = []
+
+        def _base_closure(c: str, seen: set | None = None) -> set:
+            if seen is None:
+                seen = set()
+            if c in seen:
+                return seen
+            seen.add(c)
+            # bases absent from inheritance are interface leaves with
+            # no entry of their own: still part of the closure
+            for b in inheritance.get(c, ()):
+                _base_closure(b, seen)
+            return seen
+
+        for d_cls, d_entry in sorted((mi_doc.get("derived") or {}).items()):
+            if d_cls in mi_shapes or d_cls in mi_template_shapes:
+                # provider families render via their own MI path and
+                # never consume the generic inheritance walk
+                continue
+            cur = inheritance.get(d_cls)
+            if not isinstance(cur, list) or len(cur) < 2:
+                continue
+            for b in list(cur):
+                sec = ((d_entry or {}).get("secondaries") or {}).get(b)
+                if not isinstance(sec, dict):
+                    continue
+                mangles = sec.get("mangles")
+                if not isinstance(mangles, list) or len(mangles) < 2:
+                    continue
+                cands = [c for c, cb in inheritance.items()
+                         if c != d_cls and isinstance(cb, list)
+                         and b in cb and c not in cur]
+                if not cands:
+                    continue
+                votes: dict[str, int] = {}
+                veto = False
+                for m_slot in mangles:
+                    if not isinstance(m_slot, list) or not m_slot:
+                        continue
+                    owners = set()
+                    for m in m_slot:
+                        mm = re.match(r"\?+\??(\w+)@(\w+)@DirectUI@", m)
+                        if mm:
+                            owners.add(mm.group(2))
+                    if not owners:
+                        continue
+                    if len(owners) == 1:
+                        o = next(iter(owners))
+                        if o in (d_cls, b):
+                            continue
+                        if o in cands:
+                            votes[o] = votes.get(o, 0) + 1
+                        else:
+                            veto = True
+                            break
+                    # multi-owner fold: abstain (no owner evidence)
+                if veto or len(votes) != 1:
+                    continue
+                c_best, n_votes = next(iter(votes.items()))
+                if n_votes < 2:
+                    continue
+                cc = _base_closure(c_best)
+                new_bases = [c_best if x == b else x for x in cur]
+                # drop D's other bases covered by C's closure: the
+                # real declaration listed C, and the PDB flattened
+                # C's own bases up into D's list
+                keep = [x for x in new_bases
+                        if x == c_best or x not in cc]
+                if len(keep) == len(new_bases) and c_best not in cur:
+                    # no base was actually a flatten (C replaced B but
+                    # nothing else was C's): still a substitution
+                    pass
+                inheritance[d_cls] = keep
+                _inheritance_order_global[d_cls] = list(keep)
+                _flat_cls.append(f"{d_cls}: {cur} -> {keep}")
+        if _flat_cls:
+            print("emit_headers: flattened-intermediate recovery "
+                  f"({len(_flat_cls)} classes)")
+            for line in _flat_cls:
+                print(f"  {line}")
+
+
     stats = {}
     contract_rows = []
     v2_rows = []

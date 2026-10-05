@@ -58,6 +58,10 @@ def fail(gate: str, expected: str, actual: str, extra: str = "") -> None:
         print(extra.rstrip(), file=sys.stderr)
 
 
+def ok(gate: str, msg: str) -> None:
+    print(f"[ OK ] {gate}: {msg}")
+
+
 def sha256_file(path: Path) -> str:
     """sha256 of the file's **LF-canonical** content.
 
@@ -957,6 +961,121 @@ def cmd_j1if(args: argparse.Namespace) -> int:
     return 0 if verdict == "PASS" else 1
 
 
+def cmd_dynarray(args: argparse.Namespace) -> int:
+    """G-lite: machine-compare ChildrenView.h source constants against
+    the tracked DynamicArray contract (pinned/dynarray-contracts.json).
+
+    ChildrenView is HANDWRITTEN and stays that way (it encodes the
+    BORROW contract, not the layout itself) -- but its five layout
+    constants must agree with the machine-derived per-instance
+    contract for DynamicArray<Element*,0>:
+
+      kDataOffset    == 0x08        (data/inline base)
+      kCapacityOffset== 0x10        (capacity field)
+      kCountMask     == 0x0FFFFFFF  (header bits 0..27)
+      kOnHeapBit     == 0x10000000  (header bit 28)
+      Element* stride== sizeof(void*) == contract element_stride
+      sizeof law     == contract sizeof == 24 for Element*,0
+
+    Static source parse failure is rc 2 (structural error: the
+    parser drifted from the header's shape -- never a silent pass).
+    A constant/value disagreement is rc 1 (drift between the
+    hand-written view and the tracked contract).
+    """
+    inc: Path = args.include
+    contract_p: Path = args.contract
+    hdr = inc / "ChildrenView.h"
+    if not hdr.is_file():
+        fail("G-lite", f"{hdr}", "missing")
+        return 2
+    if not contract_p.is_file():
+        fail("G-lite", f"{contract_p}", "missing",
+             "regenerate with extract-dynarray-contracts.py")
+        return 2
+    try:
+        doc = json.loads(contract_p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        fail("G-lite", "dynarray-contracts.json parses", f"{exc}")
+        return 2
+    derived = doc.get("derived") or {}
+    el = None
+    for key, entry in derived.items():
+        if key == "PEAVElement@DirectUI@@":
+            el = entry
+            break
+    if el is None:
+        fail("G-lite",
+             "contract carries the DynamicArray<Element*,0> instance",
+             "instance absent from derived set",
+             "the extractor dropped it -- re-run with the pinned DLL "
+             "and check the dropped[] diagnostics")
+        return 2
+
+    src = hdr.read_text(encoding="utf-8")
+
+    def const(name: str) -> str:
+        m = re.search(rf"constexpr\s+unsigned\s+{name}\s*=\s*(0x[0-9A-Fa-f]+|\d+)u?", src)
+        if not m:
+            fail("G-lite", f"ChildrenView.h declares {name}",
+                 "constant not found (source parse failed -- parser or "
+                 "header shape drifted)")
+            raise SystemExit(2)
+        return m.group(1)
+
+    checks = []
+    try:
+        checks.append(("kDataOffset", int(const("kDataOffset"), 0), 0x08))
+        checks.append(("kCapacityOffset", int(const("kCapacityOffset"), 0), 0x10))
+        checks.append(("kCountMask", int(const("kCountMask"), 0), 0x0FFFFFFF))
+        checks.append(("kOnHeapBit", int(const("kOnHeapBit"), 0), 0x10000000))
+    except SystemExit:
+        return 2
+    # stride: the header multiplies by sizeof(Element*) in ElementAt;
+    # the contract's element_stride for the Element* instance must be
+    # pointer-sized on this target.
+    stride = el.get("element_stride")
+    if stride != 8:
+        checks.append(("contract element_stride (Element* instance)",
+                       stride, 8))
+    # sizeof law for Element* (pointer T): 8 + max(16, 8*cap)
+    cap = el.get("inline_capacity")
+    size = el.get("sizeof")
+    expected_size = 8 + max(16, 8 * cap) if cap is not None else None
+    if expected_size is not None and size != expected_size:
+        checks.append(("contract sizeof law (Element* instance)", size,
+                       expected_size))
+    # header sizeof reference in the static_assert message
+    m = re.search(r"sizeof\(DynamicArray<Element\*,0>\)\s*==\s*(\d+)", src)
+    if not m:
+        fail("G-lite",
+             "ChildrenView.h static_assert cites the DynamicArray sizeof",
+             "citation not found (source parse failed)")
+        return 2
+    if size is not None and int(m.group(1)) != size:
+        checks.append(("static_assert cited sizeof", int(m.group(1)), size))
+    m = re.search(r"inline capacity (\d+)", src)
+    if not m:
+        fail("G-lite",
+             "ChildrenView.h static_assert cites the inline capacity",
+             "citation not found (source parse failed)")
+        return 2
+    if cap is not None and int(m.group(1)) != cap:
+        checks.append(("static_assert cited capacity", int(m.group(1)), cap))
+
+    bad = [(n, a, b) for n, a, b in checks if a != b]
+    if bad:
+        detail = "; ".join(f"{n}: source={a} contract={b}" for n, a, b in bad)
+        fail("G-lite",
+             "ChildrenView.h constants match dynarray-contracts.json",
+             "drift", detail)
+        return 1
+    n_all = len(derived)
+    ok("G-lite", f"ChildrenView.h constants match the tracked contract "
+                 f"(Element* instance: sizeof={size}, cap={cap}, "
+                 f"stride={stride}; {n_all} instances tracked)")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -991,6 +1110,14 @@ def main(argv: list[str] | None = None) -> int:
     st = sub.add_parser("selftest", help="verify this script's own verdict logic")
     st.add_argument("--pinned", type=Path, default=DEFAULT_PINNED)
     st.set_defaults(func=cmd_selftest)
+
+    da = sub.add_parser(
+        "dynarray",
+        help="G-lite: ChildrenView.h constants vs pinned/dynarray-contracts.json")
+    da.add_argument("--include", type=Path, default=DEFAULT_OUT / "include")
+    da.add_argument("--contract", type=Path,
+                    default=DEFAULT_PINNED / "dynarray-contracts.json")
+    da.set_defaults(func=cmd_dynarray)
 
     j1 = sub.add_parser(
         "j1", help="vtable slot-order gate (report-only transitional mode)")

@@ -784,6 +784,77 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
     return 1
 
 
+# ------------------------------------------------------------------ gate R3'''
+def compare_dynarray_contracts(args, dll: pathlib.Path) -> int:
+    """R3''': re-derive pinned/dynarray-contracts.json and
+    byte-compare it (LF-canonical, same rule as R3').
+
+    The contract file is machine-derived end to end (DLL bytes +
+    symbols.json); there is NO manual section and NO escape hatch:
+    a hand edit to any value (sizeof, inline_capacity, element_
+    stride, law_consistent) diverges from the re-derivation and
+    fails here. Instances whose bytes cannot be decoded are dropped
+    fail-closed by the extractor; the extractor's own vacuous guard
+    (< 5 instances) makes an empty contract a hard error, never a
+    silent pass."""
+    committed = args.pinned / "dynarray-contracts.json"
+    if not committed.is_file():
+        fail("R3'''", "committed dynarray-contracts.json exists",
+             "missing",
+             "regenerate with extract-dynarray-contracts.py "
+             "--dll <pinned dll> --symbols pinned/symbols.json "
+             "--out pinned/dynarray-contracts.json")
+        return 1
+    work = args.work / "r3prime3"
+    if work.exists():
+        shutil.rmtree(work)
+    work.mkdir(parents=True)
+    rebuilt = work / "dynarray-contracts.json"
+    cmd = [sys.executable,
+           str(HERE / "extract-dynarray-contracts.py"),
+           "--dll", str(dll),
+           "--symbols", str(args.pinned / "symbols.json"),
+           "--out", str(rebuilt)]
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=300,
+                           cwd=str(REPO))
+    except (OSError, subprocess.SubprocessError) as exc:
+        fail("R3'''", "extract-dynarray-contracts.py re-derives the "
+             "contract", f"{type(exc).__name__}: {exc}")
+        return 1
+    if p.returncode != 0:
+        fail("R3'''", "extract-dynarray-contracts.py re-derives the "
+             "contract", f"rc={p.returncode}",
+             (p.stdout or "")[-800:] + (p.stderr or "")[-800:])
+        return 1
+    a = rebuilt.read_bytes().replace(b"\r\n", b"\n")
+    b = committed.read_bytes().replace(b"\r\n", b"\n")
+    if a == b:
+        doc = json.loads(b.decode("utf-8"))
+        n = len(doc.get("derived") or {})
+        n_drop = len(doc.get("dropped") or {})
+        ok("R3'''", f"dynarray-contracts.json re-derived byte-identically "
+                    f"(schema {doc.get('schema')}; {n} instances, "
+                    f"{n_drop} dropped fail-closed)")
+        return 0
+    try:
+        ra = json.loads(a.decode("utf-8")).get("derived") or {}
+        cb = json.loads(b.decode("utf-8")).get("derived") or {}
+        diff = [k for k in sorted(set(ra) | set(cb)) if ra.get(k) != cb.get(k)]
+        detail = [f"rebuilt instances={len(ra)} committed={len(cb)}",
+                  f"instances differing: {len(diff)}",
+                  f"only in rebuilt: {sorted(set(ra) - set(cb))[:5]}",
+                  f"only in committed: {sorted(set(cb) - set(ra))[:5]}"]
+        for k in diff[:6]:
+            detail.append(f"  {k[:60]}: rebuilt={ra.get(k)}")
+            detail.append(f"  {' ' * 60}  committed={cb.get(k)}")
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        detail = ["(non-JSON content in one side)"]
+    fail("R3'''", "dynarray-contracts.json re-derived byte-identical "
+         "to committed", "differs", "\n".join(detail))
+    return 1
+
+
 # ------------------------------------------------------------------------ main
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
@@ -825,6 +896,12 @@ def main(argv=None) -> int:
     print("R3'' re-derive pinned/mi-tables.json derived section (schema 4)")
     print("=" * 74)
     if compare_mi_tables(args, pathlib.Path(inputs["dll"])) != 0:
+        return 1
+    print()
+    print("=" * 74)
+    print("R3''' re-derive pinned/dynarray-contracts.json (per-instance layouts)")
+    print("=" * 74)
+    if compare_dynarray_contracts(args, pathlib.Path(inputs["dll"])) != 0:
         return 1
     print()
     print("ALL REPRO ASSERTIONS PASS")

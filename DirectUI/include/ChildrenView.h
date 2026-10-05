@@ -29,7 +29,10 @@
 //   single instantiation whose layout is measured on the pinned DLL.
 //
 //   Measured on dui70.dll sha256 2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC0ACAD9AA556
-//   (see .local/audit/w1-dynamicarray-contract.md and .local/build/w1/):
+//   (machine-tracked in pinned/dynarray-contracts.json -- re-derived and
+//   byte-compared by repro.py gate R3''' and cross-checked against this
+//   header's constants by the CI G-lite gate; original read-only audit:
+//   .local/audit/w1-dynamicarray-contract.md and .local/build/w1/):
 //     +0x00  uint32 header : bits 0..27 = count, bit 28 = on-heap, bit 29 = owns
 //                          (bit 30/31 UNPROVEN -- not read here)
 //     +0x08  T* data, or the inline element storage

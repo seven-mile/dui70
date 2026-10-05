@@ -1,0 +1,109 @@
+{
+ "derived": {
+  "PEAG": {
+   "create_rva": "0x6ee20",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAUClipRectWithElement@DirectUI@@": {
+   "create_rva": "0xac6a8",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAUSafeElementIndexPair@DirectUI@@": {
+   "create_rva": "0xac750",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAV?$DynamicArray@PEAUSafeElementIndexPair@DirectUI@@$0A@@DirectUI@@": {
+   "create_rva": "0xac7f8",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAV?$DynamicArray@UParserCacheEntry@Impl@DirectUI@@$0A@@DirectUI@@": {
+   "create_rva": "0x35f00",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAVElement@DirectUI@@": {
+   "create_rva": "0x32bc4",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "PEAVValue@DirectUI@@": {
+   "create_rva": "0x29898",
+   "element_stride": 8,
+   "fold_members": 1,
+   "inline_capacity": 2,
+   "law_consistent": true,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 24
+  },
+  "UReaderState@CBinaryXmlReader@DirectUI@@": {
+   "create_rva": "0x52b74",
+   "fold_members": 1,
+   "inline_capacity": 1,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 32
+  },
+  "UResourcePosition@CBinaryFile@BinaryFile@DirectUI@@": {
+   "create_rva": "0x52c14",
+   "fold_members": 1,
+   "inline_capacity": 1,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 32
+  },
+  "UXMLParserCond@DirectUI@@": {
+   "create_rva": "0x390b4",
+   "fold_members": 1,
+   "inline_capacity": 1,
+   "provenance": "create-alloc-request+inline-gate",
+   "sizeof": 32
+  }
+ },
+ "dropped": {
+  "0x29d40": "inline gate not decodable",
+  "0x3485c": "inline gate not decodable",
+  "0x35c88": "inline gate not decodable",
+  "0x38de4": "inline gate not decodable",
+  "0x42b80": "inline gate not decodable",
+  "0x551ec": "inline gate not decodable",
+  "0x586e4": "inline gate not decodable",
+  "0x67d10": "inline gate not decodable",
+  "0x75130": "inline gate not decodable",
+  "0x78d28": "inline gate not decodable",
+  "0xb4960": "inline gate not decodable"
+ },
+ "law": {
+  "formula": "8 + max(16, sizeof(T))"
+ },
+ "schema": 1,
+ "source": {
+  "dll_sha256": "2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC0ACAD9AA556",
+  "symbols": "pinned/symbols.json"
+ }
+}

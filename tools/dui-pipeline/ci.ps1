@@ -16,12 +16,21 @@
       G4-Y Option D yield   R1 symbol-exactness + R2 slot order + R5
                             compile matrix + N1-N4 tamper controls
       G5  headers           random sample syntax-checked with cl /Zs
-      J1  vtable slots      report-only: slot-order verdict recorded, exit 0
-      R6  vtable shape/slot  report-only: multi-vtable shape/slot
-                            checker verdict recorded (enforced T1-T6
-                            selftest first); fail-closed on missing
-                            schema-3 input, manual-conflict tables, or
-                            missing mandatory-17 coverage
+      J1  vtable slots      report-only FOREVER (lead ruling): the
+                            first-occurrence name heuristic is
+                            diagnostic only; verdict recorded, exit 0
+      R6  vtable shape/slot enforced: multi-vtable shape/slot checker
+                            (enforced T1-T10 selftest first); rc0 PASS /
+                            rc1 divergence = HARD FAIL / rc2 tooling =
+                            fatal; fail-closed on missing schema input,
+                            manual-conflict tables, missing mandatory-17
+                            coverage, and audited-subset shrink (floor
+                            33, PARTIAL 33/324 by design)
+      A1  slot-ABI identity enforced: input preflight (missing pinned/
+                            DLL or sha mismatch -> rc2) then full audit;
+                            rc0 PASS / rc1 divergence = HARD FAIL / rc2
+                            tooling = fatal; fold-UNKNOWN (657) is
+                            counted honest debt, never a failure
       LIC manual-length ctl enforced negative controls: A loosen =
                             ignored-redundant recorded, B deny =
                             manual-conflict refused; rc2 NOT EXECUTED
@@ -710,7 +719,7 @@ if ($SkipJ1) {
     Write-Head 'A1  slot-ABI identity (skipped: -SkipJ1)'
     Add-Gate 'A1' 'slot-ABI identity' 'SKIP' 0 'via -SkipJ1'
 } else {
-    Write-Head 'A1  slot-ABI identity (report + enforced selftest)'
+    Write-Head 'A1  slot-ABI identity (enforced: fail-closed rc dispatch)'
     $t0 = Get-Date
     $audit = Join-Path $PSScriptRoot 'slot_abi_audit.py'
     $a1Json = Join-Path $WorkDir 'a1-report.json'
@@ -733,27 +742,33 @@ if ($SkipJ1) {
         } else {
             Write-Ok 'selftest: paired negative controls non-vacuous (swap FAILs, clean PASSes)'
         }
-        # 2) full audit: REPORT-ONLY verdict, true FAILs printed, never masked
+        # 2) full audit: ENFORCED verdict. rc 0 = PASS (UNKNOWN slots
+        # allowed, counted, never passed); rc 1 = real ABI divergence
+        # -- HARD FAIL (lead ruling: the audit's true-ABI criteria are
+        # now blocking; the 657 fold-UNKNOWN debt stays UNKNOWN, it is
+        # not a divergence); rc >= 2 = tooling error (fatal).
         $t1 = Get-Date
         $ra = Invoke-Tool $py @($audit, '--pinned',
             (Join-Path $script:Repo 'pinned'), '--include',
             (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
             (Join-Path $WorkDir 'a1-audit'), '--json-out', $a1Json) -Echo
         $dta = ((Get-Date) - $t1).TotalSeconds
-        # rc 0 = all pass; rc 1 = real divergences (recorded, not fatal
-        # in report-only mode); rc >= 2 = tooling error (fatal)
         if ($ra.Rc -ge 2) {
             $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
             Fail-Gate 'A1' 'slot-ABI identity' `
-                'audit runs (rc 0/1 = verdicts; rc>=2 = tooling error)' `
+                'audit runs (rc 0 = pass; rc 1 = divergence; rc>=2 = tooling error)' `
                 "tooling error (rc=$($ra.Rc))" $tail $dta
+        } elseif ($ra.Rc -eq 1) {
+            $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'A1' 'slot-ABI identity' `
+                '0 failed classes (fold-UNKNOWN is counted debt, not failure)' `
+                "real divergence (rc=1)" $tail $dta
         } else {
             $summary = @($ra.Out -split "`r?`n" |
                 Where-Object { $_ -match 'checked \d+ classes' } |
                 Select-Object -First 1)
-            $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
-            Write-Info "verdict recorded: $verdict -- $summary"
-            Add-Gate 'A1' 'slot-ABI identity' 'REPORT' $dta "$verdict -- $summary (report-only)"
+            Write-Info "verdict: PASS -- $summary"
+            Add-Gate 'A1' 'slot-ABI identity' 'PASS' $dta "$summary"
         }
     }
 }
@@ -783,7 +798,7 @@ if ($SkipJ1) {
     Write-Head 'R6  multi-vtable shape/slot checker (skipped: -SkipJ1)'
     Add-Gate 'R6' 'vtable shape/slot' 'SKIP' 0 'via -SkipJ1'
 } else {
-    Write-Head 'R6  multi-vtable shape/slot checker (report-only, fail-closed structure)'
+    Write-Head 'R6  multi-vtable shape/slot checker (enforced, fail-closed structure)'
     $t0 = Get-Date
     $r6 = Join-Path $PSScriptRoot 'uia_order_verify.py'
     $miTables = Join-Path $script:Repo 'pinned/mi-tables.json'
@@ -823,22 +838,88 @@ if ($SkipJ1) {
             (Join-Path $script:Repo 'DirectUI/include'), '--workdir',
             (Join-Path $WorkDir 'r6-audit'), '--json-out', $r6Json) -Echo
         $dta = ((Get-Date) - $t1).TotalSeconds
-        # rc 0 = all classes verified/UNKNOWN-reported; rc 1 = real
-        # divergences (recorded, not fatal in report-only mode);
-        # rc 2 = tooling/schema error (fatal)
+        # ENFORCED verdict (lead ruling): rc 0 = PASS (UNKNOWN slots
+        # allowed, counted, never passed -- the 368 fold / 8 thunk
+        # UNKNOWN debt is honest, not a divergence); rc 1 = real
+        # probe/table divergence -- HARD FAIL; rc 2 = tooling/schema/
+        # coverage error (fatal). The audited set is PARTIAL by design
+        # (33/324) and the tool itself asserts the subset + floor.
         if ($ra.Rc -ge 2) {
             $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
             Fail-Gate 'R6' 'MI order + tables' `
-                'gate runs (rc 0/1 = verdicts; rc>=2 = tooling error)' `
+                'gate runs (rc 0 = pass; rc 1 = divergence; rc>=2 = tooling error)' `
                 "tooling error (rc=$($ra.Rc))" $tail $dta
+        } elseif ($ra.Rc -eq 1) {
+            $tail = ($ra.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 20)
+            Fail-Gate 'R6' 'MI order + tables' `
+                '0 rejected classes, 0 fail slots (UNKNOWN is counted debt, not failure)' `
+                "real divergence (rc=1)" $tail $dta
         } else {
             $summary = @($ra.Out -split "`r?`n" |
                 Where-Object { $_ -match 'audited \d+ classes' } |
                 Select-Object -First 1)
-            $verdict = if ($ra.Rc -eq 0) { 'REPORT-ONLY: PASS' } else { 'REPORT-ONLY: FAIL' }
-            Write-Info "verdict recorded: $verdict -- $summary"
-            Add-Gate 'R6' 'vtable shape/slot' 'REPORT' $dta "$verdict -- $summary (report-only)"
+            Write-Info "verdict: PASS -- $summary"
+            Add-Gate 'R6' 'vtable shape/slot' 'PASS' $dta "$summary"
         }
+    }
+
+    # ------------------------------------------- FCC failclosed controls
+    # ENFORCED: paired negative controls for the fail-closed closing
+    # batch (C-I1 A1 preflight, C-I2 R6 audited floor + PARTIAL,
+    # C-I4 capi-evidence conflict-only). rc 0 PASS / rc 1 FAIL /
+    # rc 2 NOT EXECUTED (missing cached DLL) = tooling error.
+    Write-Head 'FCC  fail-closed controls (enforced)'
+    $fcc = Join-Path $script:Repo 'tools/dui-pipeline/failclosed_controls.py'
+    if (-not (Test-Path $fcc)) {
+        Fail-Gate 'FCC' 'failclosed controls' `
+            'tool present' 'missing' @() 0
+    } else {
+        $t0f = Get-Date
+        $rf = Invoke-Tool $py @($fcc) -Echo
+        $dtf = ((Get-Date) - $t0f).TotalSeconds
+        $tailf = @($rf.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 8)
+        if ($rf.Rc -eq 0 -and ($rf.Out -match 'C-I1a: PASS') -and
+            ($rf.Out -match 'C-I1b: PASS') -and
+            ($rf.Out -match 'C-I2a: PASS') -and
+            ($rf.Out -match 'C-I2b: PASS') -and
+            ($rf.Out -match 'C-I4a: PASS') -and
+            ($rf.Out -match 'C-I4b: PASS')) {
+            Write-Ok 'controls C-I1a/b, C-I2a/b, C-I4a/b PASS'
+            Add-Gate 'FCC' 'failclosed controls' 'PASS' $dtf 'C-I1/I2/I4 all PASS'
+        } elseif ($rf.Rc -eq 2) {
+            Fail-Gate 'FCC' 'failclosed controls' `
+                'executed (cached DLL present)' `
+                'NOT EXECUTED rc=2 -- missing pinned DLL' $tailf $dtf
+        } else {
+            Fail-Gate 'FCC' 'failclosed controls' `
+                'C-I1a/b, C-I2a/b, C-I4a/b' `
+                "rc=$($rf.Rc)" $tailf $dtf
+        }
+    }
+
+    # ------------------------------------------- G-capi C API decl evidence
+    # ENFORCED (conflict-only): the 5 strong-evidence C API decls
+    # (same-RVA decorated symbol) must agree with that evidence in
+    # param count and pointer-ness. The 81 no-evidence decls (incl.
+    # the 68-symbol ret-void mega-fold occupants) are UNKNOWN --
+    # counted, never failed, never upgraded (lead ruling).
+    Write-Head 'GCA  C API decl-evidence (enforced, conflict-only)'
+    $t0c = Get-Date
+    $rc_ = Invoke-Tool $py @($script:Checks, 'capi-evidence',
+        '--include', (Join-Path $script:Repo 'DirectUI/include')) -Echo
+        $dtc = ((Get-Date) - $t0c).TotalSeconds
+    $tailc = @($rc_.Out.TrimEnd() -split "`r?`n" | Select-Object -Last 8)
+    if ($rc_.Rc -eq 0) {
+        Add-Gate 'GCA' 'C API decl-evidence' 'PASS' $dtc `
+            '5/5 strong-evidence consistent; UNKNOWN counted'
+    } elseif ($rc_.Rc -eq 2) {
+        Fail-Gate 'GCA' 'C API decl-evidence' `
+            'inputs parse (DirectUI.h + exports.json)' `
+            'structural error rc=2' $tailc $dtc
+    } else {
+        Fail-Gate 'GCA' 'C API decl-evidence' `
+            'strong-evidence decls consistent' `
+            "rc=$($rc_.Rc)" $tailc $dtc
     }
 
     # ------------------------------------------- DAC dynarray-contract controls

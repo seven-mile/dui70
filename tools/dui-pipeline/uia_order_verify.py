@@ -78,6 +78,14 @@ MANDATORY = [
     "ScrollBar", "CCVScrollBar",
 ]
 
+# Audited-set floor (audited at the 3c4834a baseline; see the
+# audited-subset integrity guard in main()). The audit is PARTIAL
+# by design: 33 of 324 derived classes -- the multi-table audit
+# set. The floor pins the audit width so coverage loss cannot pass
+# silently; growing the audited set is fine, shrinking below this
+# baseline is a hard tooling error (rc 2).
+AUDITED_FLOOR = 33
+
 
 def _find_tool(name: str, hardcoded: str) -> str:
     if pathlib.Path(hardcoded).is_file():
@@ -1419,6 +1427,36 @@ def main(argv: list[str] | None = None) -> int:
                 if m not in mandatory_missing:
                     mandatory_missing.append(m)
 
+    # ---- audited-subset integrity (full runs only) ----
+    # The audited set is a SUBSET of the derived class set by
+    # construction (loop source: sorted(derived)). A future edit that
+    # lets a class escape the audit WITHOUT landing in mandatory_
+    # missing (e.g. a header-presence `continue` firing for a class
+    # that used to be audited) would silently shrink the audited
+    # denominator and re-label genuine coverage loss as "pass". Two
+    # hard guards, both rc 2:
+    #   * membership: every audited class must be a derived key;
+    #   * floor: the audited set must not shrink below the audited-
+    #     at-record baseline (33). The audit is PARTIAL by design
+    #     (33/324): single-table classes are covered by the schema-1
+    #     track, templates emit no vftable; the floor pins the
+    #     multi-table audit width, never claims full coverage.
+    if not only:
+        strays = sorted(c for c in audited if c not in derived)
+        if strays:
+            print(f"uia_order_verify: ERROR audited set not a subset "
+                  f"of derived classes: {strays[:5]}", file=sys.stderr)
+            return 2
+        if len(audited) < AUDITED_FLOOR:
+            print(f"uia_order_verify: ERROR audited set shrank below "
+                  f"floor: {len(audited)} < {AUDITED_FLOOR} "
+                  f"(coverage loss must be explained, not silent)",
+                  file=sys.stderr)
+            return 2
+        print(f"  audited subset: {len(audited)}/{len(derived)} classes "
+              f"PARTIAL (multi-table audit set; single-table classes "
+              f"are schema-1 track; NOT a full-coverage claim)")
+
     # Counter semantics (histogram bug fix): "VERIFIED" means CLEAN
     # verified -- zero fold/thunk/unresolved slots in every table.
     # VERIFIED-UNKNOWN-SLOTS is a separate bucket and must NOT be
@@ -1449,7 +1487,9 @@ def main(argv: list[str] | None = None) -> int:
     print(f"R6 uia-order-verify: audited {len(audited)} classes -- "
           f"{n_ver} VERIFIED (clean), "
           f"{n_unk} VERIFIED-UNKNOWN-SLOTS, "
-          f"{n_rej} REJECTED")
+          f"{n_rej} REJECTED"
+          + (f" [PARTIAL {len(audited)}/{len(derived)} audited]"
+             if not only else ""))
     print(f"  slot totals: {tot_tables} tables -- verified={tot_v}, "
           f"unknown={tot_u}, fail_slots={tot_f}")
     tot_tv = sum(t_.get("thunk_verified", 0) for r in audited.values()
@@ -1561,6 +1601,10 @@ def main(argv: list[str] | None = None) -> int:
                         "counts": {"verified": n_ver,
                                    "verified_unknown": n_unk,
                                    "rejected": n_rej,
+                                   "coverage": (
+                                       f"PARTIAL {len(audited)}/"
+                                       f"{len(derived)} audited classes"
+                                       if not only else None),
                                    "counting_semantics":
                                        "verified = clean (no unknown "
                                        "slots); verified_unknown and "

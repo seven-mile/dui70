@@ -781,6 +781,10 @@ _MI_DOC_CACHE: dict | None = None
 SYMBOLS_CACHE: list | None = None
 _RULE_E_RECOVERED: dict = {}  # (cls, slot) -> rec
 _RULE_C_PLACEHOLDERS: dict[str, int] = {}
+# Batch-4b: contract slots whose ICF fold was resolved to the
+# class's own virtual by derived-witness singleton evidence
+# (cls -> [slot indices])
+_RULE_C_WITNESS_RESOLVED: dict[str, list] = {}
 
 # Hand-modeled abstract consumer interfaces (no own vftable in the
 # DLL, hence no vtable-slots entry): their pure-virtual counts are
@@ -4801,6 +4805,169 @@ def main(argv=None) -> int:
             for line in _flat_cls:
                 print(f"  {line}")
 
+        # Batch-4a: missing-edge recovery from full-table alignment
+        # (schema-4 mangles). The PDB can drop a class's inheritance
+        # edge ENTIRELY (classes.json lists TouchEditBase: None) --
+        # the header then renders as a standalone interface and the
+        # probe shape explodes (TouchEdit2 58 vs DLL 50). The DLL
+        # proves the edge: the class's table region seen inside a
+        # derived class aligns slot-for-slot with a real base's
+        # PRIMARY contract, every differing slot is override-shaped,
+        # and the class adds its OWN tail beyond the base length.
+        # Rule (evidence-driven, corpus-wide, no per-class lists):
+        # for class C with NO inheritance entry that appears as a
+        # secondary key in some derived D's mi entry:
+        #   * alignment gate: the C-subobject table's slot NAMES
+        #     match base B's PRIMARY contract slot names positionally
+        #     (B's length prefix; per-slot fold-name sets overlap),
+        #   * override gate: every C-subobject slot whose single
+        #     mangled owner differs from B's resolves to owner C or
+        #     the derived class D (an override body) -- any other
+        #     single-owner class vetoes,
+        #   * tail gate: the C-subobject table extends beyond B's
+        #     length AND the extension's single-owner slots resolve
+        #     to C or D (C's own declared virtuals),
+        #   * sibling gate: C is not already any class's inheritance
+        #     base via a DIFFERENT edge... simply: C has real bodies
+        #     (C appears in symbols.json with exported virtuals),
+        #     C != B, C not in D's own base list, and C is not an
+        #     SDK/WRL template (template names carry '@' or '?' or
+        #     start uppercase-I interface markers with @ suffix).
+        # Then emit C : B.
+        # Fail-closed: alignment below 100% of B's prefix vetoes; a
+        # single contradicting owner vetoes; no tail no recovery.
+        _miss_cls: list[str] = []
+        _derived_of: dict[str, list] = {}
+        for d_cls2, d_e2 in sorted((mi_doc.get("derived") or {}).items()):
+            for bk2 in ((d_e2 or {}).get("secondaries") or {}):
+                _derived_of.setdefault(bk2, []).append(d_cls2)
+        for c_cls, d_witnesses in sorted(_derived_of.items()):
+            if inheritance.get(c_cls):
+                continue  # edge already known (or recovered above)
+            if not c_cls or not re.match(r"^[A-Z][A-Za-z0-9_]*$", c_cls):
+                # template / SDK interface keys (trailing '@', '?$'
+                # prefixes) can never be a DirectUI class edge
+                continue
+            if c_cls not in classes:
+                continue  # not an emitted class (SDK interface etc.)
+            # real bodies: exported virtuals of C itself
+            c_virts = {s["member"] for s in symbols
+                       if s.get("class") == c_cls
+                       and s.get("is_virtual")
+                       and s.get("is_exported")}
+            if not c_virts:
+                continue  # interface-style, no bodies: not our case
+            # try each witness's table for C against each base B
+            # candidate that has a PRIMARY contract
+            for d_cls in d_witnesses:
+                d_sec = (((mi_doc.get("derived") or {}).get(d_cls)
+                          or {}).get("secondaries") or {}).get(c_cls)
+                if not isinstance(d_sec, dict):
+                    continue
+                c_slots = d_sec.get("slots")
+                c_mangs = d_sec.get("mangles")
+                if not (isinstance(c_slots, list)
+                        and isinstance(c_mangs, list)
+                        and len(c_slots) == len(c_mangs)):
+                    continue
+                d_bases = inheritance.get(d_cls) or []
+                for b_cls, b_entry in sorted(slot_tables.items()):
+                    if b_cls in (c_cls, d_cls):
+                        continue
+                    b_slots = (b_entry or {}).get("slots")                         if isinstance(b_entry, dict) else None
+                    if not isinstance(b_slots, list) or not b_slots:
+                        continue
+                    n = len(b_slots)
+                    if len(c_slots) <= n:
+                        continue  # no own tail: nothing to recover
+                    # B must carry real interface evidence: a
+                    # contract that is all dtor/purecall markers (or
+                    # a single marker slot) aligns with anything and
+                    # proves nothing
+                    _b_named = sum(
+                        1 for _x in b_slots
+                        if any(not str(_n).startswith("_")
+                               for _n in (_x if isinstance(_x, list)
+                                          else [_x])))
+                    if _b_named < 2:
+                        continue
+                    # alignment: every B slot's fold-name set must
+                    # intersect the C-subobject slot's fold-name set
+                    ok = True
+                    for k in range(n):
+                        bn = b_slots[k]
+                        bn = set(bn) if isinstance(bn, list) else {bn}
+                        cn = c_slots[k]
+                        cn = set(cn) if isinstance(cn, list) else {cn}
+                        bu = {x for x in bn if not x.startswith("_")}
+                        cu = {x for x in cn if not x.startswith("_")}
+                        if bu and cu:
+                            if not (bu & cu):
+                                ok = False
+                                break
+                        elif bu or cu:
+                            # one side names a real virtual where the
+                            # other carries only markers: misalignment
+                            ok = False
+                            break
+                        elif k > 0:
+                            # both marker-only BEYOND the dtor slot:
+                            # purecall-vs-purecall is not interface
+                            # evidence; refuse
+                            ok = False
+                            break
+                        # else k == 0: the dtor slot's deleting-dtor
+                        # folds carry different class markers on each
+                        # side; positional alignment continues
+                        # else: both marker-only (dtor/purecall slots
+                        # -- deleting-dtor folds carry different class
+                        # markers; positional alignment continues)
+                    if not ok:
+                        continue
+                    # override + tail gates: single-owner slots in
+                    # the WHOLE C-subobject table must resolve to
+                    # C, D or B
+                    veto = False
+                    tail_owner = False
+                    for k in range(len(c_slots)):
+                        m_slot = c_mangs[k]
+                        if not isinstance(m_slot, list) or not m_slot:
+                            continue
+                        owners = set()
+                        for m in m_slot:
+                            mm = re.match(r"\?+\??(\w+)@(\w+)@DirectUI@", m)
+                            if mm:
+                                owners.add(mm.group(2))
+                        if not owners or len(owners) != 1:
+                            continue
+                        o = next(iter(owners))
+                        if o not in (c_cls, d_cls, b_cls):
+                            veto = True
+                            break
+                        if k >= n and o in (c_cls, d_cls):
+                            tail_owner = True
+                    if veto or not tail_owner:
+                        continue
+                    # sibling gate: C must not already be a base of D
+                    # (directly or via the flattened list), and B
+                    # must not equal any existing D base whose
+                    # closure already includes C
+                    if c_cls in d_bases:
+                        continue
+                    # committed: C : B
+                    inheritance[c_cls] = [b_cls]
+                    _inheritance_order_global[c_cls] = [b_cls]
+                    _miss_cls.append(f"{c_cls}: (no edge) -> [{b_cls}] "
+                                     f"(witness {d_cls})")
+                    break
+                if _miss_cls and _miss_cls[-1].startswith(f"{c_cls}:"):
+                    break
+        if _miss_cls:
+            print("emit_headers: missing-edge recovery "
+                  f"({len(_miss_cls)} classes)")
+            for line in _miss_cls:
+                print(f"  {line}")
+
 
     stats = {}
     contract_rows = []
@@ -5139,6 +5306,96 @@ def main(argv=None) -> int:
                 synth_slots, _flen2, _fb = synth_info
                 slot_lists = synth_slots
                 synth_applied = True
+        # Batch-4b: witness fold-resolution for the OWN-TAIL region.
+        # A class's contract (vtable-slots.json) records ICF folds as
+        # name lists; in the class's own append region (beyond the
+        # base prefix) a fold's members are body-sharing noise -- the
+        # slot's TRUE identity is the class's own declared virtual,
+        # visible as a SINGLETON in any derived class's secondary
+        # table for this class at the same index (the derived class
+        # overrides the slot with its own body, escaping the fold).
+        # Pinned evidence: derived-witness singleton naming one of
+        # the class's own exported virtuals; disagreement between
+        # witnesses vetoes (fail-closed).
+        if (slot_lists is not None and not synth_applied
+                and _MI_DOC_CACHE is not None):
+            _w_bp = 0
+            for _b in base_list(inheritance, cls):
+                _be = slot_tables.get(_b)
+                if isinstance(_be, dict) and isinstance(_be.get("slots"), list):
+                    _w_bp = max(_w_bp, len(_be["slots"]))
+            if _w_bp and len(slot_lists) > _w_bp:
+                _own_v = {s.get("member") for s in members
+                          if isinstance(s, dict)
+                          and s.get("is_virtual")}
+                _wit_slots: dict[int, set] = {}
+                for _dc, _de in ((_MI_DOC_CACHE.get("derived")
+                                  or {}).items()):
+                    if _dc == cls:
+                        continue
+                    _wsec = ((_de or {}).get("secondaries")
+                             or {}).get(cls)
+                    if not isinstance(_wsec, dict):
+                        continue
+                    _ws = _wsec.get("slots") or []
+                    for _k in range(_w_bp, len(slot_lists)):
+                        if _k >= len(_ws):
+                            continue
+                        _wn = _ws[_k]
+                        _wn = [_wn] if isinstance(_wn, str) else list(_wn)
+                        if len(_wn) != 1:
+                            continue
+                        _nm = _wn[0]
+                        if (_nm.startswith("_") or _nm not in _own_v):
+                            continue
+                        _wit_slots.setdefault(_k, set()).add(_nm)
+                _changed = False
+                # names appearing at MULTIPLE contract slots are
+                # ambiguous (overload pairs, or a contract mutation
+                # duplicating a name): witness evidence cannot
+                # disambiguate which slot the override targets --
+                # refuse (fail-closed; the slots stay honest folds)
+                # CROSS-CONTRACT SINGLETON VETO: a name that is a
+                # SINGLETON slot-identity in ANOTHER class's contract
+                # already pins a (possibly different) slot in the
+                # corpus; binding it here from witness evidence alone
+                # would override a contradicting vote (the A1
+                # selftest C control: mutating CCBase[46] OnNotify ->
+                # OnMessage creates a 1-vs-14 split vote across the
+                # family tables -- both slots must stay unbound).
+                # Fold MEMBERSHIP is body-sharing noise (the TEB
+                # mega-folds contain GetTextDocument at 45 AND 46)
+                # and does not veto; only singleton identities do.
+                _other_singletons: set = set()
+                for _oc, _oe in slot_tables.items():
+                    if _oc == cls:
+                        continue
+                    for _sl in (_oe.get("slots") or []):
+                        _ns = (_sl if isinstance(_sl, list) else [_sl])
+                        _ns = [x for x in _ns
+                               if isinstance(x, str)
+                               and not x.startswith("_")]
+                        if len(_ns) == 1:
+                            _other_singletons.add(_ns[0])
+                for _k in range(_w_bp, len(slot_lists)):
+                    if _k not in _wit_slots:
+                        continue
+                    _cand = _wit_slots[_k]
+                    if len(_cand) != 1:
+                        continue  # witness disagreement: honest fold
+                    _nm = next(iter(_cand))
+                    if _nm in _other_singletons:
+                        continue  # cross-contract conflict: fail closed
+                    _cur = slot_lists[_k]
+                    _cur_n = ([_cur] if isinstance(_cur, str)
+                              else list(_cur))
+                    if _cur_n == [_nm]:
+                        continue  # already a singleton
+                    slot_lists[_k] = _nm
+                    _changed = True
+                if _changed:
+                    _RULE_C_WITNESS_RESOLVED.setdefault(cls, []).extend(
+                        sorted(_wit_slots.keys()))
         if slot_lists is not None and not synth_applied:
             for b in base_list(inheritance, cls):
                 be = slot_tables.get(b)

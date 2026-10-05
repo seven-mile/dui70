@@ -9,7 +9,7 @@
 #   python tools/dui-pipeline/ci_checks.py hash --write
 # Format: <sha256>  <path relative to pinned/>  (sorted, LF, lowercase hex)
 e4c6d33987b97e9fcae32fa8e8e07f891f8c34a7de82d170fb54eebd7a8820c8  class-inventory.csv
-409dc2e49ff76893a4ba0890a904966fdcbc136ba981d72ce50e4829eaf3fd7e  classes.json
+95386ce19045dad42d6c9f8d522e7257de7b102fb71d432d58562b4992efe4a4  classes.json
 3634ee413550ceb75b204ead44da7d5e462256eb2d5b43cde2e30381d4690e81  exports.json
 068da6ad1ffa42d501e3db84d311ec50e9894d146cb018ad2dc258b3174ee652  manifest.json
 f2fc84d52d6811a05b03f8676c01628db2366a764a7ea5ddf3877330b87fbfca  mi-interface-lengths.json

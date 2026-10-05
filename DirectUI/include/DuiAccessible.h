@@ -9,11 +9,11 @@
 
 #include "oleacc.h"
 
-#include "oleacc.h"
-
 #include "oleauto.h"
 
 #include "oleidl.h"
+
+#include "oleacc.h"
 
 #include "servprov.h"
 
@@ -23,11 +23,10 @@ namespace DirectUI
     class Element;
 
     class DuiAccessible
-        : public IAccIdentity, public IAccessible, public IEnumVARIANT, public IOleWindow, public IServiceProvider
+        : public IAccessible, public IEnumVARIANT, public IOleWindow, public IAccIdentity, public IServiceProvider
     {
     public:
         DuiAccessible(void);
-        virtual ~DuiAccessible(void);
         static long AccNavigate(Element*, long, Element**);
         virtual unsigned long AddRef(void);
         virtual long Clone(IEnumVARIANT**);
@@ -69,6 +68,7 @@ namespace DirectUI
         virtual long get_accValue(tagVARIANT, unsigned short**);
         virtual long put_accName(tagVARIANT, unsigned short*);
         virtual long put_accValue(tagVARIANT, unsigned short*);
+        virtual ~DuiAccessible(void);
 
         protected:
         long GetAccName(tagVARIANT, int, unsigned short**);

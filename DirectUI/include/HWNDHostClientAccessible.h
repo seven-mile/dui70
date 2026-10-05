@@ -7,15 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "oleacc.h"
-
-#include "oleacc.h"
-
-#include "oleauto.h"
-
-#include "oleidl.h"
-
-#include "servprov.h"
+#include "HWNDHostAccessible.h"
 
 namespace DirectUI
 {
@@ -23,7 +15,7 @@ namespace DirectUI
     class Element;
 
     class HWNDHostClientAccessible
-        : public IAccIdentity, public IAccessible, public IEnumVARIANT, public IOleWindow, public IServiceProvider
+        : public HWNDHostAccessible
     {
     public:
         HWNDHostClientAccessible(void);

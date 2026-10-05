@@ -9,6 +9,8 @@
 
 #include "BaseScrollViewer.h"
 
+#include "TouchScrollBar.h"
+
 namespace DirectUI
 {
     class Element;
@@ -107,12 +109,12 @@ namespace DirectUI
         static UID UpdateView(void);
         long ZoomToRect(tagRECT const*, bool);
         long ZoomToRectManualVisualSwap(float, float, float, float, int const*, float, float, float, bool);
+        virtual long OnViewportStatusChanged(IDirectManipulationViewport*, DIRECTMANIPULATION_STATUS, DIRECTMANIPULATION_STATUS);
+        virtual long OnViewportUpdated(IDirectManipulationViewport*);
         virtual long OnContentUpdated(IDirectManipulationViewport*, IDirectManipulationContent*);
         virtual void OnInput(InputEvent*);
         virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
         virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
-        virtual long OnViewportStatusChanged(IDirectManipulationViewport*, DIRECTMANIPULATION_STATUS, DIRECTMANIPULATION_STATUS);
-        virtual long OnViewportUpdated(IDirectManipulationViewport*);
         virtual ~TouchScrollViewer(void);
 
         protected:

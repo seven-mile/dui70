@@ -7,12 +7,17 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "BaseScrollBar.h"
+
+#include "Element.h"
+
 namespace DirectUI
 {
     class Element;
     class Value;
 
     class TouchScrollBar
+        : public BaseScrollBar, public Element
     {
     public:
         TouchScrollBar(void);

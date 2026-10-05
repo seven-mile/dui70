@@ -8092,12 +8092,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 43,
       "offset": 43,
+      "store_at": 50,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010A998"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -8929,12 +8933,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112470"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -9373,12 +9381,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 70,
       "offset": 70,
+      "store_at": 77,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001122B0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -9785,12 +9797,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010ED70"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -9835,7 +9851,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001057F0"
      },
      {
@@ -9846,12 +9866,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 37,
       "offset": 37,
+      "store_at": 44,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x00105978"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "Element": {
@@ -10496,12 +10520,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111E60"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -10944,12 +10972,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001079B0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -10985,12 +11017,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111B80"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -11432,12 +11468,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001173F8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -11466,12 +11506,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00107F18"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -11872,7 +11916,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 47,
       "offset": 47,
+      "store_at": 54,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00104F98"
      },
      {
@@ -11883,12 +11931,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00105070"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "?$ImplementsHelper@U?$RuntimeClassFlags@$01@WRL@Microsoft@@$00UIDuiBinaryReader@DirectUI@@@Details@WRL@Microsoft@": {
@@ -12527,12 +12579,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F878"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -13050,12 +13106,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 47,
       "offset": 47,
+      "store_at": 54,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001091F8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -13613,12 +13673,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001105D8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -14089,7 +14153,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 52,
       "offset": 52,
+      "store_at": 59,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00109628"
      },
      {
@@ -14100,12 +14168,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 62,
       "offset": 62,
+      "store_at": 69,
+      "store_kind": "mov-m64",
+      "store_offset": 352,
       "table_rva": "0x00109808"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -14680,12 +14752,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001103E0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -15155,12 +15231,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001107D0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -15610,7 +15690,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010D5E0"
      },
      {
@@ -15621,12 +15705,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 352,
       "table_rva": "0x00109808"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -16200,12 +16288,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010FC38"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -16762,12 +16854,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00110008"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -17324,12 +17420,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E1A8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -17886,12 +17986,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001067A8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -18381,12 +18485,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001101E8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -18856,12 +18964,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010FA58"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -19398,12 +19510,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F698"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -19911,12 +20027,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010FE18"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -20591,7 +20711,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E648"
      },
      {
@@ -20602,12 +20726,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 352,
       "table_rva": "0x00109808"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -21399,7 +21527,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00115A18"
      },
      {
@@ -21410,12 +21542,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 48,
       "table_rva": "0x00115A20"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "CSafeElementProxy@": {
@@ -21525,12 +21661,29 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 16,
       "offset": 16,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x001140A0"
+     },
+     {
+      "candidates": [
+       {
+        "base": "ITextHost2Impl@",
+        "symbol": "??_7CTouchEditInnerTextHost@DirectUI@@6BITextHost2Impl@@@"
+       }
+      ],
+      "kind": "reference",
+      "lea_offset": 31,
+      "offset": 31,
+      "store_kind": "untraced",
+      "store_offset": null,
+      "table_rva": "0x00114108"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IRichEditOleCallbackImpl@": {
@@ -23140,12 +23293,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 33,
       "offset": 33,
+      "store_at": 40,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F368"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -23569,12 +23726,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001082C8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -23662,12 +23823,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00105E10"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -24064,12 +24229,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 34,
       "offset": 34,
+      "store_at": 41,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00110E88"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -24539,12 +24708,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00107910"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -24573,12 +24746,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001080A0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -24599,9 +24776,24 @@
      "0x000C768A"
     ],
     "order": "ORDER-UNKNOWN",
-    "references": [],
+    "references": [
+     {
+      "candidates": [
+       {
+        "base": "PRIMARY",
+        "symbol": "??_7ContentLayoutInvalidateBehavior@DirectUI@@6B@"
+       }
+      ],
+      "kind": "reference",
+      "lea_offset": 14,
+      "offset": 14,
+      "store_kind": "untraced",
+      "store_offset": null,
+      "table_rva": "0x00114798"
+     }
+    ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -25882,12 +26074,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x001074D0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -25957,12 +26152,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EE80"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -25993,12 +26192,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 6,
       "offset": 6,
+      "store_at": 20,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103698"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -26039,7 +26242,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00110C78"
      },
      {
@@ -26050,7 +26257,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 31,
       "offset": 31,
+      "store_at": 38,
+      "store_kind": "mov-m64",
+      "store_offset": 256,
       "table_rva": "0x00110C48"
      },
      {
@@ -26061,12 +26272,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 45,
       "offset": 45,
+      "store_at": 52,
+      "store_kind": "mov-m64",
+      "store_offset": 264,
       "table_rva": "0x00110C00"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "HWNDElement": {
@@ -26789,7 +27004,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00107D78"
      },
      {
@@ -26800,7 +27019,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 10,
       "offset": 10,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00107068"
      },
      {
@@ -26811,7 +27034,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00107040"
      },
      {
@@ -26822,7 +27049,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 32,
       "offset": 32,
+      "store_at": 39,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x001070A0"
      },
      {
@@ -26833,12 +27064,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 43,
       "offset": 43,
+      "store_at": 50,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001070C0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -27757,12 +27992,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 34,
       "offset": 34,
+      "store_at": 41,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010DD88"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -28223,12 +28462,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001037C0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -28843,7 +29086,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 31,
       "offset": 31,
+      "store_at": 38,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001050A8"
      },
      {
@@ -28854,7 +29101,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 41,
       "offset": 41,
+      "store_at": 48,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x001050D0"
      },
      {
@@ -28865,7 +29116,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 52,
       "offset": 52,
+      "store_at": 59,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00105138"
      },
      {
@@ -28876,12 +29131,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 63,
       "offset": 63,
+      "store_at": 70,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00105110"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IRawElementProviderAdviseEvents@": {
@@ -28958,12 +29217,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00108A90"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -29590,12 +29853,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 18,
       "offset": 18,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116E38"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -30282,7 +30549,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117190"
      },
      {
@@ -30293,7 +30564,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117148"
      },
      {
@@ -30304,12 +30579,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117150"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -30361,12 +30640,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117180"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -30395,12 +30678,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001098C8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -30844,12 +31131,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00108CA8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31288,12 +31579,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 33,
       "offset": 33,
+      "store_at": 40,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F078"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31719,12 +32014,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106260"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31760,12 +32059,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106218"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31801,12 +32104,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EF00"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31852,12 +32159,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 10,
       "offset": 10,
+      "store_at": 26,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001065C8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31900,7 +32211,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001172B0"
      },
      {
@@ -31911,7 +32226,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117258"
      },
      {
@@ -31922,12 +32241,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117260"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -31987,12 +32310,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001172A0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -32021,12 +32348,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E540"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -32062,7 +32393,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117300"
      },
      {
@@ -32073,7 +32408,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117310"
      },
      {
@@ -32084,12 +32423,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001172D0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -32141,12 +32484,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117318"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -32175,12 +32522,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00109418"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -32704,7 +33055,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001070E0"
      },
      {
@@ -32715,7 +33070,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00107068"
      },
      {
@@ -32726,7 +33085,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00107040"
      },
      {
@@ -32737,7 +33100,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 46,
       "offset": 46,
+      "store_at": 53,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x001070A0"
      },
      {
@@ -32748,12 +33115,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001070C0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -33672,7 +34043,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00104EA0"
      },
      {
@@ -33683,7 +34058,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00104E60"
      },
      {
@@ -33694,7 +34073,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00104F20"
      },
      {
@@ -33705,7 +34088,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 46,
       "offset": 46,
+      "store_at": 53,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00104EF8"
      },
      {
@@ -33716,12 +34103,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 280,
       "table_rva": "0x00104ED0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -33811,12 +34202,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103278"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -34338,7 +34733,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EC68"
      },
      {
@@ -34349,7 +34748,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00104460"
      },
      {
@@ -34360,7 +34763,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00104438"
      },
      {
@@ -34371,7 +34778,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 46,
       "offset": 46,
+      "store_at": 53,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00104498"
      },
      {
@@ -34382,12 +34793,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001044B8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -34729,7 +35144,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001044D8"
      },
      {
@@ -34740,7 +35159,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00104460"
      },
      {
@@ -34751,7 +35174,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00104438"
      },
      {
@@ -34762,7 +35189,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 46,
       "offset": 46,
+      "store_at": 53,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00104498"
      },
      {
@@ -34773,12 +35204,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001044B8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IAccIdentity@": {
@@ -35120,12 +35555,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E630"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35158,12 +35597,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E630"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35231,12 +35674,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EF20"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35266,12 +35713,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001118A0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35300,12 +35751,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EF20"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35957,12 +36412,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 47,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103CD8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -35990,7 +36449,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001171C0"
      },
      {
@@ -36001,7 +36464,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x001171D0"
      },
      {
@@ -36012,12 +36479,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001171A0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -36067,12 +36538,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001171D8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -36101,12 +36576,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010B278"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -36551,12 +37030,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00107D00"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -36634,12 +37117,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001148C8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -37367,12 +37854,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010DA20"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -37831,12 +38322,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116D08"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -38523,12 +39018,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 16,
       "offset": 16,
+      "store_at": 23,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00100AB8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -38967,12 +39466,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117010"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -39001,12 +39504,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 11,
       "offset": 11,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x0010CDF0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -39445,12 +39951,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010C6A8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -39889,12 +40399,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103CE0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -39931,12 +40445,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111CE8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -40342,12 +40860,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117138"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -40376,12 +40898,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001061D0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -40417,12 +40943,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001118B0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -40996,12 +41526,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010D3E0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -41444,12 +41978,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E040"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -41902,12 +42440,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001110D8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -42349,12 +42891,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117030"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -42813,12 +43359,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 6,
       "offset": 6,
+      "store_at": 16,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010C810"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -42886,12 +43436,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112138"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -43298,12 +43852,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 33,
       "offset": 33,
+      "store_at": 40,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F1F0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -43727,7 +44285,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116FF8"
      },
      {
@@ -43738,7 +44300,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117008"
      },
      {
@@ -43749,12 +44315,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00116FA8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -43810,12 +44380,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117040"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -43844,12 +44418,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111340"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -44288,12 +44866,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 6,
       "offset": 6,
+      "store_at": 20,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103928"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -44321,12 +44903,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 33,
       "offset": 33,
+      "store_at": 40,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001114A8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -44726,12 +45312,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111FC8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -45182,12 +45772,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 9,
       "offset": 9,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x001062A8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -45628,12 +46221,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 4,
       "offset": 4,
+      "store_at": 16,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001125E0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -45671,7 +46268,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00107EF8"
      },
      {
@@ -45682,12 +46283,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 18,
       "offset": 18,
+      "store_at": 25,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00107ED8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IDUIRichTextRenderColor@": {
@@ -45747,12 +46352,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001060F8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -45788,7 +46397,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00105A38"
      },
      {
@@ -45799,12 +46412,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 37,
       "offset": 37,
+      "store_at": 44,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x00105BA8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -46230,12 +46847,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117020"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -46264,7 +46885,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117368"
      },
      {
@@ -46275,7 +46900,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117378"
      },
      {
@@ -46286,12 +46915,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117348"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -46341,12 +46974,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117380"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -46375,7 +47012,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001170C0"
      },
      {
@@ -46386,7 +47027,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117050"
      },
      {
@@ -46397,12 +47042,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117058"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -46459,12 +47108,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001170B0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -46493,7 +47146,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010DBD0"
      },
      {
@@ -46504,12 +47161,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x0010DD58"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "Element": {
@@ -47134,7 +47795,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117110"
      },
      {
@@ -47145,7 +47810,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117120"
      },
      {
@@ -47156,12 +47825,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001170D0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -47215,12 +47888,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117040"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -47249,7 +47926,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001173D8"
      },
      {
@@ -47260,7 +47941,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x001173A0"
      },
      {
@@ -47271,12 +47956,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x001173A8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -47331,12 +48020,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117040"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -47365,12 +48058,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010ADF0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -47815,12 +48512,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010B108"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -48264,12 +48965,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117128"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -48298,12 +49003,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001173E8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -48715,12 +49424,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106140"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -49636,12 +50349,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010EE18"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -49677,7 +50394,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010F510"
      },
      {
@@ -49688,12 +50409,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 37,
       "offset": 37,
+      "store_at": 44,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x0010F4E0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "Element": {
@@ -50318,12 +51043,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00108090"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -50352,12 +51081,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 9,
       "offset": 9,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116DA0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -51091,12 +51824,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116ED0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -51766,7 +52503,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117458"
      },
      {
@@ -51777,7 +52518,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117418"
      },
      {
@@ -51788,12 +52533,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117420"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -51847,12 +52596,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117448"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -51881,12 +52634,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 12,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112428"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -51922,7 +52679,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001174B0"
      },
      {
@@ -51933,7 +52694,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00117478"
      },
      {
@@ -51944,12 +52709,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117480"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -52007,12 +52776,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001174C0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -52041,7 +52814,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 7,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010E470"
      },
      {
@@ -52052,12 +52829,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 10,
       "offset": 10,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x0010E458"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IElementListener": {
@@ -52879,12 +53660,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111A18"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -53335,12 +54120,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00108FB0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -53746,7 +54535,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117228"
      },
      {
@@ -53757,7 +54550,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x001171F8"
      },
      {
@@ -53768,12 +54565,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00117200"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -53824,12 +54625,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00117238"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -53858,7 +54663,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00115988"
      },
      {
@@ -53869,12 +54678,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 8,
       "table_rva": "0x00115A50"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -54088,12 +54901,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 16,
       "offset": 16,
+      "store_at": 23,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106448"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -54682,7 +55499,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00113288"
      },
      {
@@ -54693,12 +55514,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 19,
       "offset": 19,
+      "store_at": 26,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x00113258"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -55319,7 +56144,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112E88"
      },
      {
@@ -55330,7 +56159,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 19,
       "offset": 19,
+      "store_at": 26,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x00112DF8"
      },
      {
@@ -55341,12 +56174,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 33,
       "offset": 33,
+      "store_at": 40,
+      "store_kind": "mov-m64",
+      "store_offset": 264,
       "table_rva": "0x00112DC8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -55873,12 +56710,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00105F78"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -56285,12 +57126,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112B80"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -56696,12 +57541,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00112820"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -57105,7 +57954,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001160A8"
      },
      {
@@ -57116,7 +57969,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 31,
       "offset": 31,
+      "store_at": 38,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00116288"
      },
      {
@@ -57127,12 +57984,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 48,
       "offset": 48,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x0010E920"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IDialogElement": {
@@ -57974,7 +58834,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00113600"
      },
      {
@@ -57985,12 +58849,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 208,
       "table_rva": "0x001135D0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "IElementListener": {
@@ -59950,7 +60818,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 9,
       "offset": 9,
+      "store_at": 18,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114338"
      },
      {
@@ -59961,12 +60833,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 21,
       "offset": 21,
+      "store_at": 28,
+      "store_kind": "mov-m64",
+      "store_offset": 208,
       "table_rva": "0x00114308"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "CSafeElementListenerCB@": {
@@ -60467,12 +61343,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103FB8"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -61109,12 +61989,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001129D0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -61520,12 +62404,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106A10"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -62007,7 +62895,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00105230"
      },
      {
@@ -62018,12 +62910,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 29,
       "offset": 29,
+      "store_at": 36,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x001059A8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "BaseScrollBar": {
@@ -62448,7 +63344,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 3,
       "offset": 3,
+      "store_at": 10,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001053A0"
      },
      {
@@ -62459,12 +63359,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 200,
       "table_rva": "0x001057C0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "Element": {
@@ -63101,12 +64005,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 16,
       "offset": 16,
+      "store_at": 23,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114EA0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -63422,12 +64330,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 22,
       "offset": 22,
+      "store_at": 29,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114CF0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -64535,7 +65447,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114AA8"
      },
      {
@@ -64546,7 +65462,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00114A68"
      },
      {
@@ -64557,7 +65477,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00104F20"
      },
      {
@@ -64568,7 +65492,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 46,
       "offset": 46,
+      "store_at": 53,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00104EF8"
      },
      {
@@ -64579,7 +65507,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 57,
       "offset": 57,
+      "store_at": 64,
+      "store_kind": "mov-m64",
+      "store_offset": 280,
       "table_rva": "0x00104ED0"
      },
      {
@@ -64590,7 +65522,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 76,
       "offset": 76,
+      "store_at": 83,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114AA8"
      },
      {
@@ -64601,7 +65537,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 86,
       "offset": 86,
+      "store_at": 93,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00114A68"
      },
      {
@@ -64612,7 +65552,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 97,
       "offset": 97,
+      "store_at": 104,
+      "store_kind": "mov-m64",
+      "store_offset": 24,
       "table_rva": "0x00104F20"
      },
      {
@@ -64623,7 +65567,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 108,
       "offset": 108,
+      "store_at": 115,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00104EF8"
      },
      {
@@ -64634,12 +65582,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 119,
       "offset": 119,
+      "store_at": 126,
+      "store_kind": "mov-m64",
+      "store_offset": 280,
       "table_rva": "0x00104ED0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -64734,12 +65686,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 9,
       "offset": 9,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001149C0"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -64834,12 +65790,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 9,
       "offset": 9,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00114990"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -64869,12 +65829,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x00115300"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -65720,7 +66683,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 105,
       "offset": 105,
+      "store_at": 119,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103D58"
      },
      {
@@ -65731,7 +66698,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 127,
       "offset": 127,
+      "store_at": 141,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00103DA0"
      },
      {
@@ -65742,12 +66713,15 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 147,
       "offset": 147,
+      "store_kind": "untraced",
+      "store_offset": null,
       "table_rva": "0x00103CF8"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "?$RuntimeClass@U?$RuntimeClassFlags@$01@WRL@Microsoft@@UITouchTooltip@@@WRL@Microsoft@": {
@@ -67782,12 +68756,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00115C10"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -67894,12 +68872,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 27,
       "offset": 27,
+      "store_at": 34,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00110A98"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -68338,7 +69320,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00109A80"
      },
      {
@@ -68349,7 +69335,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 16,
       "table_rva": "0x00109A78"
      },
      {
@@ -68360,12 +69350,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 35,
       "offset": 35,
+      "store_at": 42,
+      "store_kind": "mov-m64",
+      "store_offset": 32,
       "table_rva": "0x00109A90"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -68417,12 +69411,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 8,
       "offset": 8,
+      "store_at": 15,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001174F0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -68451,12 +69449,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 5,
       "offset": 5,
+      "store_at": 17,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00106188"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -68492,12 +69494,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x0010A240"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -69274,7 +70280,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 14,
       "offset": 14,
+      "store_at": 21,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00115D70"
      },
      {
@@ -69285,7 +70295,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 24,
       "offset": 24,
+      "store_at": 31,
+      "store_kind": "mov-m64",
+      "store_offset": 256,
       "table_rva": "0x00110C48"
      },
      {
@@ -69296,7 +70310,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 38,
       "offset": 38,
+      "store_at": 45,
+      "store_kind": "mov-m64",
+      "store_offset": 264,
       "table_rva": "0x00115CC0"
      },
      {
@@ -69307,12 +70325,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 52,
       "offset": 52,
+      "store_at": 59,
+      "store_kind": "mov-m64",
+      "store_offset": 296,
       "table_rva": "0x00115D08"
      }
     ],
     "scan": "pdata-bounded",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -70128,7 +71150,11 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 2,
       "offset": 2,
+      "store_at": 9,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x001116E0"
      },
      {
@@ -70139,12 +71165,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 12,
       "offset": 12,
+      "store_at": 19,
+      "store_kind": "mov-m64",
+      "store_offset": 320,
       "table_rva": "0x001116D0"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "secondaries": {
     "HWNDHost": {
@@ -70615,12 +71645,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 14,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111638"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",
@@ -70724,12 +71758,16 @@
        }
       ],
       "kind": "reference",
+      "lea_offset": 0,
       "offset": 0,
+      "store_at": 13,
+      "store_kind": "mov-m64",
+      "store_offset": 0,
       "table_rva": "0x00111620"
      }
     ],
     "scan": "symbol-bounded-safe",
-    "semantics": "reference-only"
+    "semantics": "reference+store-offset"
    },
    "primary": {
     "identity": "primary",

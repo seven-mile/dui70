@@ -777,6 +777,121 @@ POLYMORPHIC_BASE_CLASSES = {
 }
 
 _MI_DOC_LOADED = False
+_MI_DOC_CACHE: dict | None = None
+SYMBOLS_CACHE: list | None = None
+_RULE_E_RECOVERED: dict = {}  # (cls, slot) -> rec
+_RULE_C_PLACEHOLDERS: dict[str, int] = {}
+
+
+def _rule_e_recoveries(cls: str, members: list, tr,
+                               slot_lists: list) -> dict:
+    """Rule E: recover placeholder slots' real declarations from
+    derived classes' mi-tables secondaries.
+
+    For a class `cls` emitted with __PH__ placeholder items (its own
+    contract table has no recoverable names), any derived class D may
+    carry an IMPLEMENTED secondary table keyed `cls` whose slot
+    content IS the real virtual's name; D's exported virtual symbol
+    supplies the signature. Emitting the real pure virtual here lets
+    D's own declaration override the slot in place (vtable slot
+    identity) instead of MSVC appending it to D's first base table
+    (the "58 vs 56" extra-slot failure).
+
+    Constraints (all fail-closed, no guessing):
+      * the secondary slot must be a singleton (no folds);
+      * the name must have an exported virtual symbol on D;
+      * a name the class ITSELF already declares is skipped (the
+        existing declaration binds; emitting twice would be a
+        duplicate-member error);
+      * the pseudo-symbol keeps D's params/return so forward
+        declarations render exactly as a member path would.
+
+    Returns {(cls, slot): {"decl": str, "source": str,
+    "impl_class": str, "sym": dict}}."""
+    out: dict = {}
+    doc = _MI_DOC_CACHE
+    if doc is None:
+        return out
+    own_names = {s.get("member") for s in members}
+    # class's own contract table slots -> placeholder positions only
+    for d_cls, entry in (doc.get("derived") or {}).items():
+        if d_cls == cls:
+            continue
+        sec = (entry.get("secondaries") or {}).get(cls)
+        if not isinstance(sec, dict):
+            continue
+        slots = sec.get("slots") or []
+        for slot, sl in enumerate(slots):
+            # ONLY the class's OWN placeholder slots are recoverable:
+            # the derived secondary's absolute slot index must map to
+            # a real slot of THIS class's table whose own entry is an
+            # unresolved _purecall (slots beyond this class's table
+            # length are the DERIVED class's own appended virtuals,
+            # not this class's slot identities).
+            if slot >= len(slot_lists):
+                continue
+            own_entry = slot_lists[slot]
+            own_names = ([own_entry] if isinstance(own_entry, str)
+                         else list(own_entry))
+            if any(n != "_purecall" for n in own_names):
+                continue  # this class has a real (or fold) identity here
+            names = [sl] if isinstance(sl, str) else list(sl)
+            if len(names) != 1:
+                continue  # fold/ambiguous: never guess
+            name = names[0]
+            if name.startswith("_") or name.startswith("__"):
+                continue  # dtor markers / placeholders
+            if name in own_names:
+                continue  # class declares it already
+            if (cls, slot) in out:
+                continue  # first evidence wins; deterministic order
+            sym = next((s for s in (SYMBOLS_CACHE or [])
+                        if s.get("class") == d_cls
+                        and s.get("member") == name
+                        and s.get("is_virtual")
+                        and s.get("is_exported")
+                        and in_directui_scope(s)
+                        and is_callable(s)), None)
+            if sym is None:
+                continue
+            md = MemberDecl(sym, cls)
+            decl = md.full_decl(tr)
+            if "= 0" not in decl:
+                decl = decl.rstrip(";") + " = 0;"
+            out[(cls, slot)] = {
+                "decl": decl, "source": cls, "impl_class": d_cls,
+                "sym": {"params": sym.get("params") or [],
+                        "return_type": sym.get("return_type"),
+                        "mangled": sym.get("mangled") or "",
+                        "member": name, "kind": "method",
+                        "is_virtual": True},
+            }
+    return out
+
+
+def _mi_own_slot_names(cls: str) -> set | None:
+    """Names appearing in the class's own mi-tables slot content
+    (primary + all secondaries). The vftable BYTES are direct
+    evidence the class declares these virtuals; used to admit
+    non-exported PDB methods into the member set (override
+    declarations the export table cannot show)."""
+    doc = _MI_DOC_CACHE
+    if doc is None:
+        return None
+    entry = (doc.get("derived") or {}).get(cls)
+    if not isinstance(entry, dict):
+        return None
+    names: set = set()
+    tables = dict(entry.get("secondaries") or {})
+    if isinstance(entry.get("primary"), dict):
+        tables["PRIMARY"] = entry["primary"]
+    for td in tables.values():
+        for sl in (td.get("slots") or []):
+            if isinstance(sl, str):
+                names.add(sl)
+            else:
+                names |= set(sl)
+    return names or None
 
 
 def mi_doc_loaded() -> bool:
@@ -2639,7 +2754,8 @@ def render_class_header(cls: str, members: list, data_members: list,
                         exported_virtuals_by_class: dict | None = None,
                         base_names: set | None = None,
                         override_votes: dict | None = None,
-                        mi_shape: dict | None = None) -> str:
+                        mi_shape: dict | None = None,
+                        mi_tail_pures: list | None = None) -> str:
     """Render one class header file content.
 
     mi_shape: when the class qualifies for schema-2 MI emission (see
@@ -2713,9 +2829,25 @@ def render_class_header(cls: str, members: list, data_members: list,
         lines.append('#include "Interfaces.h"')
         lines.append("")
 
+    # Rule E: placeholder-slot recovery from derived secondaries.
+    # Computed BEFORE the forward-declaration pass so the recovered
+    # declarations' types contribute exactly like member signatures
+    # (the pseudo-symbols carry params/return_type). Populated map is
+    # consumed at the __PH__ render site; the counter feeds the
+    # fail-closed placeholder accounting.
+    if slot_lists is not None:
+        _rec = _rule_e_recoveries(cls, members, tr, slot_lists)
+        if _rec:
+            _RULE_E_RECOVERED.update(_rec)
     # forward declarations for the DirectUI classes this header actually
-    # references (computed from the member signatures), not every sibling
-    fwd = referenced_class_types(cls, members, data_members, classes, None)
+    # references (computed from the member signatures), not every sibling.
+    # Rule E recovered declarations reference types too; their
+    # pseudo-symbols join ONLY this fwd-decl pass (never the member
+    # walk or classification).
+    _fwd_extra = [_r["sym"] for (_k, _slot), _r in _RULE_E_RECOVERED.items()
+                  if _k == cls]
+    fwd = referenced_class_types(cls, list(members) + _fwd_extra,
+                                 data_members, classes, None)
     fwd = [n for n in fwd if n not in NESTED_TYPE_HOSTS]
     fwd_kw = {n: ("struct" if n in STRUCT_TAG_CLASSES else "class") for n in fwd}
     if global_cls:
@@ -2974,11 +3106,27 @@ def render_class_header(cls: str, members: list, data_members: list,
                 if isinstance(it, str):
                     m = re.match(r"__PH__(\d+)$", it)
                     assert m, it
-                    lines.append(f"        // ABI placeholder: real slot "
-                                 f"{m.group(1)} has no recoverable signature.")
-                    lines.append(f"        // ABI placeholder: never call.")
-                    lines.append(f"        virtual void __DuiAbiSlot_{cls}_"
-                                 f"{m.group(1)}(void) = 0;")
+                    slot = int(m.group(1))
+                    # Rule E: a derived class's mi-tables secondary keyed
+                    # by THIS class may carry the real slot NAME (the
+                    # implementing override). If an exported virtual
+                    # symbol of that derived class matches, emit the real
+                    # pure-virtual declaration here so the derived class's
+                    # own declaration OVERRIDES this slot in place instead
+                    # of being appended to its first base's table (the
+                    # "58 vs 56" extra-slot failure).
+                    rec = _RULE_E_RECOVERED.get((cls, slot))
+                    if rec is not None:
+                        lines.append(f"        // Rule E: slot {slot} recovered "
+                                     f"from {rec['source']} secondary table "
+                                     f"({rec['impl_class']}).")
+                        lines.append(f"        {rec['decl']}")
+                    else:
+                        lines.append(f"        // ABI placeholder: real slot "
+                                     f"{slot} has no recoverable signature.")
+                        lines.append(f"        // ABI placeholder: never call.")
+                        lines.append(f"        virtual void __DuiAbiSlot_{cls}_"
+                                     f"{slot}(void) = 0;")
                 else:
                     md = MemberDecl(it, cls)
                     decl = md.full_decl(tr)
@@ -2996,6 +3144,31 @@ def render_class_header(cls: str, members: list, data_members: list,
                 data_by_access[a] = []
     else:
         first = True
+        # Rule C tail pures (mi secondary slots beyond the base
+        # prefix): recovered names from derived overrides where a
+        # singleton exists, placeholders otherwise. Pure declarations
+        # only -- the DLL slots are _purecall for THIS class.
+        if mi_tail_pures:
+            lines.append("")
+            lines.append("        // Rule C: mi secondary tail slots beyond the")
+            lines.append("        // base prefix (DLL: _purecall here; derived")
+            lines.append("        // classes override at the same absolute slot).")
+            for tp in mi_tail_pures:
+                if tp["sym"] is not None:
+                    md = MemberDecl(tp["sym"], cls)
+                    decl = md.full_decl(tr)
+                    if "= 0" not in decl:
+                        decl = decl.rstrip(";") + " = 0;"
+                    lines.append(f"        // slot {tp['slot']} ({tp['base']}): "
+                                 f"recovered from a derived override.")
+                    lines.append(f"        {decl}")
+                else:
+                    _RULE_C_PLACEHOLDERS[cls] = \
+                        _RULE_C_PLACEHOLDERS.get(cls, 0) + 1
+                    lines.append(f"        // slot {tp['slot']} ({tp['base']}): "
+                                 f"no recoverable identity.")
+                    lines.append(f"        virtual void __DuiAbiSlot_{cls}_"
+                                 f"{tp['slot']}(void) = 0;")
         for acc in ("public", "protected", "private"):
             syms = sections.get(acc) or []
             data_syms = data_by_access.get(acc) or []
@@ -3404,8 +3577,14 @@ def render_interfaces_header(banner: str) -> str:
     lines.append("        virtual void OnListenerAttach(Element* elem) = 0;")
     lines.append("        // slot 1")
     lines.append("        virtual void OnListenerDetach(Element* elem) = 0;")
-    lines.append("        // slot 2 -- returns false to cancel")
-    lines.append("        virtual bool OnPropertyChanging(Element* elem, PropertyInfo const* prop, int unk, Value* before, Value* after) = 0;")
+    lines.append("        // slot 2 -- returns false to cancel; name+signature")
+    lines.append("        // pinned from implementers' exported virtuals")
+    lines.append("        // (?OnListenedPropertyChanging@BaseScrollViewer@...: every")
+    lines.append("        // listener implementer exports THIS name; the ICF twin")
+    lines.append("        // OnPropertyChanging shares the body RVA but no class")
+    lines.append("        // exports a 5-arg listener OnPropertyChanging, so the")
+    lines.append("        // override-bind name is OnListenedPropertyChanging).")
+    lines.append("        virtual bool OnListenedPropertyChanging(Element* elem, PropertyInfo const* prop, int unk, Value* before, Value* after) = 0;")
     lines.append("        // slot 3")
     lines.append("        virtual void OnListenedPropertyChanged(Element* elem, PropertyInfo const* prop, int type, Value* before, Value* after) = 0;")
     lines.append("        // slot 4")
@@ -3744,6 +3923,10 @@ def main(argv=None) -> int:
     # decided from the pinned data alone (mi_provider_shape); the
     # interface-length manual inputs are part of pinned (G1-locked).
     mi_doc = load_mi_tables(args.pinned)
+    global _MI_DOC_CACHE
+    _MI_DOC_CACHE = mi_doc
+    global SYMBOLS_CACHE
+    SYMBOLS_CACHE = symbols
     global _MI_DOC_LOADED
     _MI_DOC_LOADED = mi_doc is not None
     mi_build_template_id_maps(symbols)
@@ -3841,6 +4024,151 @@ def main(argv=None) -> int:
                    and s.get("is_exported")
                    and in_directui_scope(s)
                    and is_callable(s)]
+        # Rule D+ (MI edge classes): the class's own vftable BYTES
+        # (mi-tables primary/secondary slot content) are evidence of
+        # a declared virtual even when the PDB method is not in the
+        # dll export table (non-exported overrides: e.g.
+        # TouchEdit2::OnListenerAttach). Without the declaration the
+        # concrete class stays abstract (C2259) and no probe TU can
+        # reproduce the table; with it the override takes its base
+        # slot exactly like the real binary. Scope: classes with a
+        # classes.json inheritance edge (base_list non-empty) whose
+        # member name appears in the class's own mi-tables slot
+        # content -- vftable evidence, never a name guess.
+        if inheritance.get(cls) and mi_doc_loaded():
+            own_slot_names = _mi_own_slot_names(cls)
+            if own_slot_names:
+                extra = [s for s in symbols
+                         if s.get("class") == cls
+                         and not s.get("is_exported")
+                         and s.get("is_virtual")
+                         and in_directui_scope(s)
+                         and is_callable(s)
+                         and s.get("member") in own_slot_names]
+                if extra:
+                    seen_names = {m.get("member") for m in members}
+                    members.extend(
+                        s for s in extra
+                        if s.get("member") not in seen_names)
+                # virtual dtor: a `_E<cls>` marker inside the class's
+                # own mi-tables proves a declared virtual dtor even
+                # when the ??1 symbol is missing from PDB publics
+                # (ICF fold / non-exported). Without the declaration
+                # the dtor TU cannot be built (C2600) and the sub
+                # probe cannot bind the marker slot. Synthesize the
+                # minimal dtor member from the marker evidence.
+                if not any(classify_dtor(s) for s in members):
+                    own_tables = (_MI_DOC_CACHE or {}).get(
+                        "derived", {}).get(cls) or {}
+                    tables = dict(own_tables.get("secondaries") or {})
+                    if isinstance(own_tables.get("primary"), dict):
+                        tables["PRIMARY"] = own_tables["primary"]
+                    has_marker = any(
+                        (isinstance(sl, str) and sl.startswith(f"_E{cls}"))
+                        or (isinstance(sl, list)
+                            and any(x.startswith(f"_E{cls}") for x in sl))
+                        for td in tables.values()
+                        for sl in (td.get("slots") or []))
+                    if has_marker:
+                        members.append({
+                            "class": cls, "member": cls, "kind": "dtor",
+                            "mangled": f"??1{cls}@DirectUI@@UEAA@XZ",
+                            "rva": None, "is_virtual": True,
+                            "is_exported": False,
+                        })
+        # Rule C (mi tail pures): a class whose mi-tables SECONDARY
+        # tables extend beyond the base chain prefix carries REAL
+        # additional slots (pure in this class, overridden in
+        # derived classes -- e.g. BaseScrollViewer Element 45-48
+        # _purecall, overridden by ScrollViewer's CreateScrollBars/
+        # AddChildren/GetHScroll/GetVScroll). Without declaring them
+        # the class's table stops at the base prefix (probe 45 vs
+        # DLL 49). Names recover from ANY derived class's same-base
+        # secondary at the same absolute slot (Rule E evidence
+        # discipline: singleton slots only); unrecovered slots stay
+        # placeholders. Only applies when the class itself has NO
+        # primary contract (slot_lists None -- the root MI shape).
+        mi_tail_pures = None
+        if inheritance.get(cls) and _MI_DOC_CACHE is not None:
+            _entry = (_MI_DOC_CACHE.get("derived") or {}).get(cls) or {}
+            _prefix = 0
+            for _b in base_list(inheritance, cls):
+                _be = slot_tables.get(_b)
+                if isinstance(_be, dict) and isinstance(_be.get("slots"), list):
+                    _prefix = max(_prefix, len(_be["slots"]))
+            if _prefix:
+                _own_member_names = {s.get("member") for s in members}
+                _base_chain_names = base_chain_virtual_names(
+                    cls, inheritance, exp_virt_by_class) or set()
+                _own_new_virtuals = sorted(
+                    n for n, s in ((m.get("member"), m) for m in members)
+                    if n not in _base_chain_names
+                    and s.get("is_virtual")
+                    and s.get("kind") != "dtor")
+                # interface-name space per base: names appearing in
+                # ANY class's secondary tables for that base (the base's
+                # virtual identity space, folds included). A class's own
+                # virtual whose name lives in base B's identity space
+                # binds B's table, not another base's tail.
+                _base_name_space: dict[str, set] = {}
+                for _d2, _de2 in (_MI_DOC_CACHE.get("derived") or {}).items():
+                    for _bn2, _td2 in (_de2.get("secondaries") or {}).items():
+                        _ns2 = _base_name_space.setdefault(_bn2, set())
+                        for _s2 in (_td2.get("slots") or []):
+                            if isinstance(_s2, str):
+                                if not _s2.startswith("_"):
+                                    _ns2.add(_s2)
+                            else:
+                                _ns2.update(x for x in _s2
+                                            if not x.startswith("_"))
+                for _bname, _td in (_entry.get("secondaries") or {}).items():
+                    _slots = _td.get("slots") or []
+                    _tail_any_singleton = any(
+                        isinstance(_s, str) and not _s.startswith("_")
+                        for _s in _slots[_prefix:])
+                    # If the class declares own NEW virtuals (beyond base
+                    # chain names) or any tail slot already carries a real
+                    # singleton, the tail is the class's own-virtual run:
+                    # those declarations append positionally and placeholders
+                    # would double-count. Placeholders apply ONLY to a pure
+                    # tail (every slot _purecall/fold, no own new virtuals).
+                    _ns = _base_name_space.get(_bname, set())
+                    _own_new_here = [n for n in _own_new_virtuals
+                                     if n not in _ns]
+                    if _own_new_here or _tail_any_singleton:
+                        continue
+                    if len(_slots) > _prefix:
+                        _tail = []
+                        for _k in range(_prefix, len(_slots)):
+                            _sl = _slots[_k]
+                            _names = [_sl] if isinstance(_sl, str) else list(_sl)
+                            _singleton = (_names[0] if len(_names) == 1 else None)
+                            # a singleton name the class ITSELF already
+                            # declares is covered by the normal member walk
+                            # (its declaration binds/appends naturally);
+                            # placeholdering it would double-count.
+                            if _singleton is not None and _singleton in _own_member_names:
+                                continue
+                            if _singleton is not None and \
+                                    not _singleton.startswith("_") and \
+                                    not _singleton.startswith("__"):
+                                # The class's own table carries a real name the
+                                # class itself does NOT declare: the virtual was
+                                # declared by THIS class in the real source but
+                                # is non-exported (no PDB symbol). Emitting it as
+                                # a pure here would be a GUESS of purity; the DLL
+                                # slot content proves the NAME only. Declaring a
+                                # non-pure virtual would need a body (linkage) --
+                                # out of scope. Leave to a future rule; do not
+                                # placeholder (the class's concrete-ness is not
+                                # our problem -- the probe TU only instantiates
+                                # __Probe subclasses that override pures).
+                                continue
+                            _tail.append({"slot": _k, "name": _singleton,
+                                          "sym": None, "base": _bname})
+                        if _tail:
+                            mi_tail_pures = _tail
+                        break
         if (cls == "IProvider" and mi_doc_loaded()
                 and cls in POLYMORPHIC_BASE_CLASSES):
             # W5 stage-2: IProvider's PDB members (ctor/assign folds)
@@ -3942,7 +4270,8 @@ def main(argv=None) -> int:
                                       base_prefix=base_prefix,
                                       exported_virtuals_by_class=exp_virt_by_class,
                                       base_names=base_names,
-                                      override_votes=override_votes)
+                                      override_votes=override_votes,
+                                      mi_tail_pures=mi_tail_pures)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
         if slot_lists is not None:
@@ -3973,6 +4302,23 @@ def main(argv=None) -> int:
     cls_ph_by_class = {r["cls"]: len(r["placeholders"])
                        for r in v2_rows if r["mode"] == "bound"
                        and r.get("placeholders")}
+    # Rule E: recovered placeholder slots render as real declarations;
+    # the classification count must drop by exactly the rendered
+    # recoveries (same process, single source -- fail-closed below).
+    rec_by_class: dict[str, int] = {}
+    for (k, _slot), _r in _RULE_E_RECOVERED.items():
+        rec_by_class[k] = rec_by_class.get(k, 0) + 1
+    for k, n in rec_by_class.items():
+        if cls_ph_by_class.get(k, 0) < n:
+            print(f"emit_headers: ERROR  Rule E recovered {n} slots of "
+                  f"{k} but classification saw only "
+                  f"{cls_ph_by_class.get(k, 0)} placeholders "
+                  "(fail-closed)", file=sys.stderr)
+            return 2
+        if cls_ph_by_class.get(k):
+            cls_ph_by_class[k] -= n
+            if not cls_ph_by_class[k]:
+                del cls_ph_by_class[k]
     # MI pattern-interface headers carry fold placeholders by design
     # (fold entries emit ABI placeholders -- no first-appearance pick).
     # The expected count per iface = its mi_shape fold entries (the same
@@ -3996,6 +4342,11 @@ def main(argv=None) -> int:
             return 2
         # account for: remove from the strict cross-check below
         hdr_ph_by_class.pop(k, None)
+    # Rule C tail placeholders render only in the canonical branch
+    # (classes with no primary contract); classification never sees
+    # them. Expected header count = classification + Rule C count.
+    for k, n in _RULE_C_PLACEHOLDERS.items():
+        cls_ph_by_class[k] = cls_ph_by_class.get(k, 0) + n
     if hdr_ph_by_class != cls_ph_by_class:
         only_hdr = {k: v for k, v in hdr_ph_by_class.items()
                     if cls_ph_by_class.get(k) != v}

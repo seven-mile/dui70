@@ -7,12 +7,18 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "Element.h"
+
+#include "Interfaces.h"
+
 namespace DirectUI
 {
     class Element;
+    class TouchScrollBar;
     class Value;
 
     class TouchScrollViewer
+        : public Element, public IElementListener
     {
     public:
         bool CanPerformManualVisualSwap(void);
@@ -103,6 +109,27 @@ namespace DirectUI
         static UID UpdateView(void);
         long ZoomToRect(tagRECT const*, bool);
         long ZoomToRectManualVisualSwap(float, float, float, float, int const*, float, float, float, bool);
+        virtual long OnContentUpdated(IDirectManipulationViewport*, IDirectManipulationContent*);
+        virtual void OnInput(InputEvent*);
+        virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
+        virtual void OnPropertyChanged(PropertyInfo const*, int, Value*, Value*);
+        virtual long OnViewportStatusChanged(IDirectManipulationViewport*, DIRECTMANIPULATION_STATUS, DIRECTMANIPULATION_STATUS);
+        virtual long OnViewportUpdated(IDirectManipulationViewport*);
+        virtual ~TouchScrollViewer(void);
+
+        protected:
+        virtual long AddChildren(void);
+        virtual long CreateScrollBars(void);
+        virtual TouchScrollBar* GetHScroll(void);
+        virtual TouchScrollBar* GetVScroll(void);
+        virtual unsigned int MessageCallback(tagGMSG*);
+        virtual void OnDestroy(void);
+        virtual void OnEvent(Event*);
+        virtual void OnGroupChanged(int, bool);
+        virtual void OnHosted(Element*);
+        virtual void OnKeyFocusMoved(Element*, Element*);
+        virtual void OnMouseFocusMoved(Element*, Element*);
+        virtual void OnUnHosted(Element*);
     };
 
 } // namespace DirectUI

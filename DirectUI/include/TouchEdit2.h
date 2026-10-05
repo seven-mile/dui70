@@ -7,12 +7,17 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
+#include "TouchEditBase.h"
+
+#include "Interfaces.h"
+
 namespace DirectUI
 {
     class Element;
     class Value;
 
     class TouchEdit2
+        : public TouchEditBase, public IElementListener
     {
     public:
         TouchEdit2(void);
@@ -66,10 +71,15 @@ namespace DirectUI
         long SetSuppressClearButton(bool);
         static PropertyInfo const* ShowClearButtonMinWidthProp(void);
         static PropertyInfo const* SuppressClearButtonProp(void);
+        virtual ~TouchEdit2(void);
 
         private:
         virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
         virtual void OnListenerDetach(Element*);
+        virtual void OnListenedEvent(Element*, Event*);
+        virtual void OnListenedInput(Element*, InputEvent*);
+        virtual bool OnListenedPropertyChanging(Element*, PropertyInfo const*, int, Value*, Value*);
+        virtual void OnListenerAttach(Element*);
     };
 
 } // namespace DirectUI

@@ -9,17 +9,18 @@
 
 namespace DirectUI
 {
+    class DUIXmlParser;
+    class Element;
+    class HWNDElement;
     class IXProviderCP;
 
     class IXProviderCP
     {
     public:
-        // ABI placeholder: real slot 0 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_IXProviderCP_0(void) = 0;
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_IXProviderCP_1(void) = 0;
+        // Rule E: slot 0 recovered from IXProviderCP secondary table (TaskPage).
+        virtual long CreateDUICP(HWNDElement*, HWND__*, HWND__*, Element**, DUIXmlParser**) = 0;
+        // Rule E: slot 1 recovered from IXProviderCP secondary table (TaskPage).
+        virtual long CreateParserCP(DUIXmlParser**) = 0;
         // ABI placeholder: real slot 2 has no recoverable signature.
         // ABI placeholder: never call.
         virtual void __DuiAbiSlot_IXProviderCP_2(void) = 0;

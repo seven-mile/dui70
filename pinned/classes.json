@@ -464,6 +464,18 @@
   ],
   "AccessibleButton": [
    "Button"
+  ],
+  "TouchScrollViewer": [
+   "Element",
+   "IElementListener"
+  ],
+  "TouchEdit2": [
+   "TouchEditBase",
+   "IElementListener"
+  ],
+  "TouchScrollBar": [
+   "BaseScrollBar",
+   "Element"
   ]
  }
 }

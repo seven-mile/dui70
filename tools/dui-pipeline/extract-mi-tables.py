@@ -577,37 +577,101 @@ def main(argv: list[str] | None = None) -> int:
             end_off = off + (extent[1] - extent[0])
         code = blob[off:end_off]
         events = []
+
+        def decode_lea(idx: int):
+            """(target_rva, reg) for a rip-relative LEA at idx, else None."""
+            if code[idx] in (0x48, 0x4C) and code[idx + 1] == 0x8D \
+                    and (code[idx + 2] & 0xC7) == 0x05:
+                disp = struct.unpack_from("<i", code, idx + 3)[0]
+                reg = ((code[idx + 2] >> 3) & 7) + \
+                    (8 if code[idx] == 0x4C else 0)
+                return (crva + idx + 7 + disp, reg)
+            return None
+
         i = 0
         while i < len(code) - 7:
-            # rip-relative LEA: 48 8D /r with mod=00 rm=101
-            if code[i] == 0x48 and code[i + 1] == 0x8D and \
-                    (code[i + 2] & 0xC7) == 0x05:
-                disp = struct.unpack_from("<i", code, i + 3)[0]
-                target = crva + i + 7 + disp
-                if target in vt_by_rva:
-                    aliases = [m for m in vt_by_rva[target]
-                               if m.startswith(f"??_7{cls}@DirectUI@@6B")]
-                    if aliases:
-                        cands = []
-                        for m in aliases:
-                            parsed = classify_vftable(m)
-                            base = (parsed[1] or "PRIMARY") \
-                                if parsed is not None else "?"
-                            cands.append({"base": base, "symbol": m})
-                        events.append({
-                            "offset": i,
-                            "kind": "reference",
-                            "table_rva": "0x%08X" % target,
-                            "candidates": cands,
-                        })
-                i += 7
+            lea = decode_lea(i)
+            if lea is None:
+                i += 1
                 continue
-            i += 1
+            target, lea_reg = lea
+            i += 7
+            if target not in vt_by_rva:
+                continue
+            aliases = [m for m in vt_by_rva[target]
+                       if m.startswith(f"??_7{cls}@DirectUI@@6B")]
+            if not aliases:
+                continue
+            cands = []
+            for m in aliases:
+                parsed = classify_vftable(m)
+                base = (parsed[1] or "PRIMARY") \
+                    if parsed is not None else "?"
+                cands.append({"base": base, "symbol": m})
+            # vptr STORE decode: walk forward for a MOV [reg+disp], reg2
+            # (89 /r with SIB or no-SIB disp8/disp32, REX.W) whose source
+            # register is the LEA destination. The disp IS the subobject
+            # this-offset; without a traced store the reference keeps
+            # store_offset=None (position never substitutes for offset).
+            store_offset = None
+            store_at = None
+            j = i
+            while j < min(i + 24, len(code) - 4):
+                # a new vptr computation (LEA) ends this store window
+                if decode_lea(j) is not None:
+                    break
+                b0, b1, b2 = code[j], code[j + 1], code[j + 2]
+                if b0 in (0x48, 0x49, 0x4C, 0x4D) and b1 == 0x89:
+                    mod = (b2 >> 6) & 3
+                    rm = b2 & 7
+                    src = ((b2 >> 3) & 7) + (8 if b0 & 1 else 0)
+                    if rm == 4:
+                        sib = code[j + 3]
+                        if (sib & 7) == 5:
+                            j += 1
+                            continue  # RIP-relative: not a vptr store
+                        base_reg = (sib & 7) + (8 if b0 & 2 else 0)
+                        disp_off = j + 4
+                    else:
+                        base_reg = rm + (8 if b0 & 2 else 0)
+                        disp_off = j + 3
+                    if src == lea_reg:
+                        if mod == 0:
+                            disp = 0
+                        elif mod == 1:
+                            disp = struct.unpack_from("<b", code,
+                                                      disp_off)[0]
+                        elif mod == 2:
+                            disp = struct.unpack_from("<i", code,
+                                                      disp_off)[0]
+                        else:
+                            j += 1
+                            continue
+                        store_offset = disp
+                        store_at = j
+                        break
+                    if mod in (0, 1, 2):
+                        break  # store of a DIFFERENT reg: stop
+                j += 1
+            events.append({
+                "lea_offset": i - 7,
+                "kind": "reference",
+                "table_rva": "0x%08X" % target,
+                "candidates": cands,
+                "store_offset": store_offset,
+                "store_kind": "mov-m64" if store_offset is not None
+                              else "untraced",
+                **({"store_at": store_at} if store_at is not None else {}),
+                # legacy field retained for schema stability; equals the
+                # LEA position and is NOT a this-offset. Consumers must
+                # use store_offset (None = untraced).
+                "offset": i - 7,
+            })
         return {
             "scan": scan_mode,
             "function_extent": ["0x%08X" % extent[0],
                                 "0x%08X" % extent[1]],
-            "semantics": "reference-only",
+            "semantics": "reference+store-offset",
             "order": "ORDER-UNKNOWN",
             "references": events,
         }

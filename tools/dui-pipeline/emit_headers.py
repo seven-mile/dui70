@@ -4356,6 +4356,35 @@ def main(argv=None) -> int:
     global _MI_DOC_LOADED
     _MI_DOC_LOADED = mi_doc is not None
     mi_build_template_id_maps(symbols)
+
+    # Batch-3: base-clause order from DLL truth. classes.json carries
+    # the PDB's base order, which can DIFFER from the real declaration
+    # order; the constructor's vftable reference order (mi-tables
+    # ctor_vftable_references) is .rdata truth (verified: TaskPage
+    # [IElementListener, IXProviderCP] matches its verified layout;
+    # the ScrollBar twins' ctor references [Element, BaseScrollBar]
+    # while classes.json says [BaseScrollBar, Element] -- the twins'
+    # own tail virtual CreateButtons sits in the DLL's ELEMENT table
+    # at slot 45, so Element is the real first base). Reorder each
+    # class's base list to the ctor reference order where BOTH are
+    # known; classes without the evidence keep classes.json order
+    # (fail-closed: no invented order).
+    if mi_doc is not None:
+        for d_cls, d_entry in (mi_doc.get("derived") or {}).items():
+            refs = ((d_entry or {}).get("ctor_vftable_references")
+                    or {}).get("references") or []
+            order = []
+            for ref in refs:
+                cands = ref.get("candidates") or []
+                if len(cands) == 1:
+                    b = cands[0].get("base")
+                    if b and b not in order:
+                        order.append(b)
+            cur = inheritance.get(d_cls)
+            if (order and isinstance(cur, list) and len(cur) == len(order)
+                    and set(cur) == set(order) and cur != order):
+                inheritance[d_cls] = list(order)
+                _inheritance_order_global[d_cls] = list(order)
     mi_shapes: dict[str, dict] = {}
     mi_template_shapes: dict[str, dict] = {}
     if mi_doc is not None:

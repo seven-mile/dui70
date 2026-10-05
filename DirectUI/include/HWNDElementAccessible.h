@@ -7,15 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "oleacc.h"
-
-#include "oleacc.h"
-
-#include "oleauto.h"
-
-#include "oleidl.h"
-
-#include "servprov.h"
+#include "DuiAccessible.h"
 
 namespace DirectUI
 {
@@ -23,15 +15,15 @@ namespace DirectUI
     class HWNDElement;
 
     class HWNDElementAccessible
-        : public IAccIdentity, public IAccessible, public IEnumVARIANT, public IOleWindow, public IServiceProvider
+        : public DuiAccessible
     {
     public:
         HWNDElementAccessible(void);
-        virtual ~HWNDElementAccessible(void);
         static long Create(HWNDElement*, DuiAccessible**);
         virtual long Disconnect(void);
         long Initialize(HWNDElement*);
         virtual long get_accParent(IDispatch**);
+        virtual ~HWNDElementAccessible(void);
     };
 
 } // namespace DirectUI

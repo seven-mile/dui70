@@ -188,10 +188,18 @@ def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
     level, but same member provable)."""
     m_obj = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_obj)
     m_dll = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_dll)
-    if not (m_obj and m_dll):
-        return False
-    if m_obj.group(1) != m_dll.group(1) or m_obj.group(2) != m_dll.group(2):
-        return False
+    if m_obj and m_dll:
+        if m_obj.group(1) != m_dll.group(1) or \
+                m_obj.group(2) != m_dll.group(2):
+            # different member or class under the '?M@C@' skin; the
+            # W-adjustor rules below cover vdtor '??_E' names (which
+            # never match this skin), so only return early here.
+            return False
+    else:
+        # vdtor '??_E...' forms: fall through to the W-adjustor rules
+        # (a same-member vdtor pair with adjustor skin is provable);
+        # everything else (mixed skins) returns False at the end.
+        pass
     m2t = re.match(r"\?\w+@\w+@DirectUI@@W", s_obj)
     m3t = re.match(r"\?\w+@\w+@DirectUI@@W", s_dll)
     if m2t and m3t:
@@ -209,6 +217,24 @@ def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
                                            "A", "B", "C", "D", "F", "G"}:
             if {m2.group(3), m3.group(3)} == {"U", "M"}:
                 return True
+    # this-adjustor skin: one side '@W<digits>' adjustor form, the
+    # other the direct form of the SAME member (e.g. probe
+    # '??_ECCHScrollBar@DirectUI@@W7EAA...' vs DLL
+    # '??_ECCHScrollBar@DirectUI@@UEAA...'; also plain-member forms
+    # '?Foo@Bar@DirectUI@@W3EAA...'). The adjustor encodes the modeled
+    # subobject offset; the member identity is still provable.
+    # Handles vdtor '??_E' names too (the patterns above require
+    # '?Member@Class@'; vdtor names never matched any earlier rule).
+    m_w = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@W\d+(.*)$", s_obj)
+    m_d = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@([A-Z])(.*)$", s_dll)
+    if m_w and m_d and m_w.group(1) == m_d.group(1) \
+            and m_w.group(2) == m_d.group(3):
+        return True
+    m_w2 = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@W\d+(.*)$", s_dll)
+    m_d2 = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@([A-Z])(.*)$", s_obj)
+    if m_w2 and m_d2 and m_w2.group(1) == m_d2.group(1) \
+            and m_w2.group(2) == m_d2.group(3):
+        return True
     return False
 
 

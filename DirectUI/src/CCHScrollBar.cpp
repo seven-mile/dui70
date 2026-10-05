@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCHScrollBar::CCHScrollBar(CCHScrollBar&&a0)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCHScrollBar::CCHScrollBar(CCHScrollBar const&a0)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCHScrollBar::CCHScrollBar(void)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCHScrollBar::~CCHScrollBar(void)
 {}

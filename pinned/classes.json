@@ -224,8 +224,7 @@
    "CCPushButton"
   ],
   "CCHScrollBar": [
-   "BaseScrollBar",
-   "CCBase"
+   "CCBaseScrollBar"
   ],
   "CCListBox": [
    "CCBase"
@@ -252,8 +251,7 @@
    "CCBase"
   ],
   "CCVScrollBar": [
-   "BaseScrollBar",
-   "CCBase"
+   "CCBaseScrollBar"
   ],
   "Combobox": [
    "HWNDHost"
@@ -264,10 +262,10 @@
    "IElementListener"
   ],
   "DuiAccessible": [
-   "IAccIdentity",
    "IAccessible",
    "IEnumVARIANT",
    "IOleWindow",
+   "IAccIdentity",
    "IServiceProvider"
   ],
   "Edit": [
@@ -295,11 +293,7 @@
    "Element"
   ],
   "HWNDElementAccessible": [
-   "IAccIdentity",
-   "IAccessible",
-   "IEnumVARIANT",
-   "IOleWindow",
-   "IServiceProvider"
+   "DuiAccessible"
   ],
   "HWNDElementProvider": [
    "IRawElementProviderAdviseEvents",
@@ -308,18 +302,10 @@
    "RefcountBase"
   ],
   "HWNDHostAccessible": [
-   "IAccIdentity",
-   "IAccessible",
-   "IEnumVARIANT",
-   "IOleWindow",
-   "IServiceProvider"
+   "DuiAccessible"
   ],
   "HWNDHostClientAccessible": [
-   "IAccIdentity",
-   "IAccessible",
-   "IEnumVARIANT",
-   "IOleWindow",
-   "IServiceProvider"
+   "HWNDHostAccessible"
   ],
   "HWNDHost": [
    "Element"

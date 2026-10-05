@@ -2755,7 +2755,8 @@ def render_class_header(cls: str, members: list, data_members: list,
                         base_names: set | None = None,
                         override_votes: dict | None = None,
                         mi_shape: dict | None = None,
-                        mi_tail_pures: list | None = None) -> str:
+                        mi_tail_pures: list | None = None,
+                        dtor_last: bool = False) -> str:
     """Render one class header file content.
 
     mi_shape: when the class qualifies for schema-2 MI emission (see
@@ -3171,6 +3172,13 @@ def render_class_header(cls: str, members: list, data_members: list,
                                  f"{tp['slot']}(void) = 0;")
         for acc in ("public", "protected", "private"):
             syms = sections.get(acc) or []
+            if dtor_last:
+                # dtor-last evidence (mi secondary): declare the dtor
+                # AFTER the other virtuals of the same bucket so the
+                # probe appends them in DLL order.
+                _nd = [s for s in syms if s.get("kind") != "dtor"]
+                _dd = [s for s in syms if s.get("kind") == "dtor"]
+                syms = _nd + _dd
             data_syms = data_by_access.get(acc) or []
             if not syms and not data_syms:
                 continue
@@ -3347,6 +3355,10 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("// ---------------------------------------------------------------------------")
     lines.append("namespace DirectUI")
     lines.append("{")
+    lines.append("    // ---- forward declarations (IDialogElement's Rule F shape")
+    lines.append("    //      references Element* params) ----")
+    lines.append("    class Element;")
+    lines.append("")
     lines.append("    // ---- complete definitions required for by-value parameters ----")
     lines.append("    struct LINEINFO { unsigned int line; };")
     lines.append("    struct ScaledSIZE { int w; int h; };")
@@ -3375,10 +3387,23 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("    // idiom); needs a definition because DialogElement/XBaby DERIVE from")
     lines.append("    // it. Pure virtual so the derived class emits the base-subobject")
     lines.append("    // vftable symbol (??_7D@...6BIDialogElement@@).")
+    lines.append("    // Rule F: full 9-slot shape pinned from the DLL interface tables")
+    lines.append("    // (DialogElement/XBaby secondaries agree slot-for-slot, every slot")
+    lines.append("    // a singleton); signatures harvested from DialogElement exports.")
+    lines.append("    // OnDialogEvent was a stub artifact: no IDialogElement table in")
+    lines.append("    // the DLL carries it.")
     lines.append("    struct __declspec(novtable) IDialogElement")
     lines.append("    {")
     lines.append("    public:")
-    lines.append("        virtual long OnDialogEvent(void) = 0;")
+    lines.append("        virtual bool GetButtonClassAcceptsEnterKey(void) = 0;   // slot 0")
+    lines.append("        virtual bool GetDefaultButtonTracking(void) = 0;       // slot 1")
+    lines.append("        virtual Element* GetRegisteredDefaultButton(void) = 0; // slot 2")
+    lines.append("        virtual bool GetHandleEnterKey(void) = 0;             // slot 3")
+    lines.append("        virtual long SetDefaultButtonTracking(bool track) = 0;// slot 4")
+    lines.append("        virtual Element* GetKeyFocusedElement(void) = 0;      // slot 5")
+    lines.append("        virtual bool OnChildLostFocus(Element* elem) = 0;     // slot 6")
+    lines.append("        virtual bool OnChildReceivedFocus(Element* elem) = 0; // slot 7")
+    lines.append("        virtual Element* GetDefaultButton(void) = 0;          // slot 8")
     lines.append("    };")
     lines.append("")
     lines.append("    // ---- embedded-subsystem namespaces referenced by exported")
@@ -4089,6 +4114,22 @@ def main(argv=None) -> int:
         # placeholders. Only applies when the class itself has NO
         # primary contract (slot_lists None -- the root MI shape).
         mi_tail_pures = None
+        # dtor-last evidence: the class's own mi secondary carries
+        # '_E{cls}' at its LAST slot after other own-virtual names
+        # (e.g. DuiAccessible IAccessible 28=Disconnect, 29=_E...).
+        # The real source declared those virtuals before the dtor;
+        # the canonical walk must emit the dtor declaration after
+        # them, else the probe appends them in the wrong order.
+        dtor_last = False
+        if _MI_DOC_CACHE is not None:
+            _e2 = (_MI_DOC_CACHE.get("derived") or {}).get(cls) or {}
+            for _bn3, _td3 in (_e2.get("secondaries") or {}).items():
+                _sl3 = _td3.get("slots") or []
+                if len(_sl3) >= 2 and _sl3[-1] == f"_E{cls}" \
+                        and isinstance(_sl3[-2], str) \
+                        and not _sl3[-2].startswith("_"):
+                    dtor_last = True
+                    break
         if inheritance.get(cls) and _MI_DOC_CACHE is not None:
             _entry = (_MI_DOC_CACHE.get("derived") or {}).get(cls) or {}
             _prefix = 0
@@ -4271,7 +4312,8 @@ def main(argv=None) -> int:
                                       exported_virtuals_by_class=exp_virt_by_class,
                                       base_names=base_names,
                                       override_votes=override_votes,
-                                      mi_tail_pures=mi_tail_pures)
+                                      mi_tail_pures=mi_tail_pures,
+                                      dtor_last=dtor_last)
         (out_dir / f"{safe_name(cls)}.h").write_text(content, encoding="utf-8", newline="\n")
         stats[cls] = {"methods": len(members), "data": len(data_members)}
         if slot_lists is not None:

@@ -86,6 +86,10 @@ enum DynamicScaleValue { DynamicScaleValue_None = 0 };
 // ---------------------------------------------------------------------------
 namespace DirectUI
 {
+    // ---- forward declarations (IDialogElement's Rule F shape
+    //      references Element* params) ----
+    class Element;
+
     // ---- complete definitions required for by-value parameters ----
     struct LINEINFO { unsigned int line; };
     struct ScaledSIZE { int w; int h; };
@@ -114,10 +118,23 @@ namespace DirectUI
     // idiom); needs a definition because DialogElement/XBaby DERIVE from
     // it. Pure virtual so the derived class emits the base-subobject
     // vftable symbol (??_7D@...6BIDialogElement@@).
+    // Rule F: full 9-slot shape pinned from the DLL interface tables
+    // (DialogElement/XBaby secondaries agree slot-for-slot, every slot
+    // a singleton); signatures harvested from DialogElement exports.
+    // OnDialogEvent was a stub artifact: no IDialogElement table in
+    // the DLL carries it.
     struct __declspec(novtable) IDialogElement
     {
     public:
-        virtual long OnDialogEvent(void) = 0;
+        virtual bool GetButtonClassAcceptsEnterKey(void) = 0;   // slot 0
+        virtual bool GetDefaultButtonTracking(void) = 0;       // slot 1
+        virtual Element* GetRegisteredDefaultButton(void) = 0; // slot 2
+        virtual bool GetHandleEnterKey(void) = 0;             // slot 3
+        virtual long SetDefaultButtonTracking(bool track) = 0;// slot 4
+        virtual Element* GetKeyFocusedElement(void) = 0;      // slot 5
+        virtual bool OnChildLostFocus(Element* elem) = 0;     // slot 6
+        virtual bool OnChildReceivedFocus(Element* elem) = 0; // slot 7
+        virtual Element* GetDefaultButton(void) = 0;          // slot 8
     };
 
     // ---- embedded-subsystem namespaces referenced by exported

@@ -770,11 +770,14 @@ def main():
             """
             m_obj = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_obj)
             m_dll = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_dll)
-            if not (m_obj and m_dll):
-                return False
-            if m_obj.group(1) != m_dll.group(1) or \
-                    m_obj.group(2) != m_dll.group(2):
-                return False
+            if m_obj and m_dll:
+                if m_obj.group(1) != m_dll.group(1) or \
+                        m_obj.group(2) != m_dll.group(2):
+                    return False
+            else:
+                # vdtor '??_E...' forms: fall through to the W-adjustor
+                # rules at the end; mixed skins return False there.
+                pass
             # same member, both this-adjustor THUNK forms
             # ('@W<adjustor>@...' encodings): the subobject OFFSET
             # differs between the DLL's real layout and the modeled
@@ -816,6 +819,22 @@ def main():
                     len(m2b.group(1)) == len(m3b.group(1)) and \
                     m2b.group(1)[1:] == m3b.group(1)[1:] and \
                     {m2b.group(1)[0], m3b.group(1)[0]} == {"U", "M"}:
+                return True
+            # this-adjustor skin: one side '@W<digits>' adjustor form,
+            # the other the direct form of the SAME member (e.g. probe
+            # '??_ECCHScrollBar@DirectUI@@W7EAA...' vs DLL
+            # '??_ECCHScrollBar@DirectUI@@UEAA...'). The adjustor
+            # encodes the modeled subobject offset; the member identity
+            # is still provable. Handles vdtor '??_E' names too.
+            m_w = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@W\d+(.*)$", s_obj)
+            m_d = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@([A-Z])(.*)$", s_dll)
+            if m_w and m_d and m_w.group(1) == m_d.group(1) \
+                    and m_w.group(2) == m_d.group(3):
+                return True
+            m_w2 = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@W\d+(.*)$", s_dll)
+            m_d2 = re.match(r"(\?\?_E\w+|\?\w+@\w+)@DirectUI@@([A-Z])(.*)$", s_obj)
+            if m_w2 and m_d2 and m_w2.group(1) == m_d2.group(1) \
+                    and m_w2.group(2) == m_d2.group(3):
                 return True
             return False
 

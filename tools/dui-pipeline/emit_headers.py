@@ -3091,8 +3091,10 @@ def render_class_header(cls: str, members: list, data_members: list,
 
     if cls == "Element":
         # W2 contract note (documented, NOT probed at runtime): the first
-        # parameter of Element::Create is a creation-flags bitfield (Win7
-        # evidence domain), not a class id/atom/category:
+        # parameter of Element::Create is a creation-flags bitfield
+        # (evidence domain: the pinned dui70.dll 10.0.26100.9278,
+        # sha256 2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC
+        # 0ACAD9AA556), not a class id/atom/category:
         #   CRF_BIT0 (0x1)  skip the DUser gadget triple-creation path
         #   CRF_BIT1 (0x2)  write Element+0x97 bit0 (a layout optimization)
         #   bits 2..31      dead bits in the pinned binary
@@ -3103,8 +3105,9 @@ def render_class_header(cls: str, members: list, data_members: list,
         # pinned dui70.dll and must be re-verified across versions. No
         # dynamic probe with flags=1 is performed by this pipeline.
         lines.append("        // Element::Create(unsigned flags, ...): flags is a")
-        lines.append("        // CREATION-FLAGS bitfield (Win7 evidence domain, version-")
-        lines.append("        // bound; re-verify across DLL versions):")
+        lines.append("        // CREATION-FLAGS bitfield (pinned evidence domain:")
+        lines.append("        // dui70.dll 10.0.26100.9278, sha256 2080E43F...D9AA556;")
+        lines.append("        // version-bound, re-verify across DLL versions):")
         lines.append("        //   CRF_BIT0 = 0x1  skip DUser gadget triple-creation")
         lines.append("        //   CRF_BIT1 = 0x2  write Element+0x97 bit0 (layout opt)")
         lines.append("        //   bits 2..31     dead bits in the pinned binary")

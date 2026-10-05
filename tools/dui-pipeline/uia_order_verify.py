@@ -1141,11 +1141,24 @@ def main(argv: list[str] | None = None) -> int:
                 if m not in mandatory_missing:
                     mandatory_missing.append(m)
 
+    # Counter semantics (histogram bug fix): "VERIFIED" means CLEAN
+    # verified -- zero fold/thunk/unresolved slots in every table.
+    # VERIFIED-UNKNOWN-SLOTS is a separate bucket and must NOT be
+    # counted into the clean number again (the old startswith()
+    # count double-reported the family: "25 VERIFIED" could be 0
+    # clean + 25 unknown). The two buckets plus REJECTED partition
+    # the audited set exactly.
     n_ver = sum(1 for r in audited.values()
-                if r["verdict"] and r["verdict"].startswith("VERIFIED"))
+                if r["verdict"] == "VERIFIED")
     n_unk = sum(1 for r in audited.values()
                 if r["verdict"] == "VERIFIED-UNKNOWN-SLOTS")
     n_rej = sum(1 for r in audited.values() if r["verdict"] == "REJECTED")
+    if n_ver + n_unk + n_rej != len(audited):
+        print(f"uia_order_verify: ERROR verdict histogram does not "
+              f"partition the audited set "
+              f"({n_ver}+{n_unk}+{n_rej}!={len(audited)})",
+              file=sys.stderr)
+        return 2
     # slot-level + table-level totals (artifact-derived, one source)
     tot_tables = sum(len(r["tables"]) for r in audited.values())
     tot_v = sum(t_["verified"] for r in audited.values()
@@ -1156,7 +1169,8 @@ def main(argv: list[str] | None = None) -> int:
     tot_f = sum(len(t_["fail_slots"]) for r in audited.values()
                 for t_ in r["tables"].values())
     print(f"R6 uia-order-verify: audited {len(audited)} classes -- "
-          f"{n_ver} VERIFIED, {n_unk} VERIFIED-UNKNOWN-SLOTS, "
+          f"{n_ver} VERIFIED (clean), "
+          f"{n_unk} VERIFIED-UNKNOWN-SLOTS, "
           f"{n_rej} REJECTED")
     print(f"  slot totals: {tot_tables} tables -- verified={tot_v}, "
           f"unknown={tot_u}, fail_slots={tot_f}")
@@ -1262,7 +1276,12 @@ def main(argv: list[str] | None = None) -> int:
                         "audited": audited,
                         "counts": {"verified": n_ver,
                                    "verified_unknown": n_unk,
-                                   "rejected": n_rej},
+                                   "rejected": n_rej,
+                                   "counting_semantics":
+                                       "verified = clean (no unknown "
+                                       "slots); verified_unknown and "
+                                       "rejected are disjoint buckets; "
+                                       "the three partition audited"},
                         "verdict": ("FAIL" if (failed_classes or
                                     mandatory_missing) else "PASS")},
                        indent=1, ensure_ascii=False),

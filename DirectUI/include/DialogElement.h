@@ -9,9 +9,9 @@
 
 #include "HWNDElement.h"
 
-#include "dui_abi_types.h"
-
 #include "Interfaces.h"
+
+#include "dui_abi_types.h"
 
 namespace DirectUI
 {
@@ -20,7 +20,7 @@ namespace DirectUI
     class Value;
 
     class DialogElement
-        : public HWNDElement, public IDialogElement, public IElementListener
+        : public HWNDElement, public IElementListener, public IDialogElement
     {
     public:
         DialogElement(DialogElement&&);

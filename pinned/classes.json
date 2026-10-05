@@ -224,8 +224,7 @@
    "CCPushButton"
   ],
   "CCHScrollBar": [
-   "BaseScrollBar",
-   "CCBase"
+   "CCBaseScrollBar"
   ],
   "CCListBox": [
    "CCBase"
@@ -252,8 +251,7 @@
    "CCBase"
   ],
   "CCVScrollBar": [
-   "BaseScrollBar",
-   "CCBase"
+   "CCBaseScrollBar"
   ],
   "Combobox": [
    "HWNDHost"

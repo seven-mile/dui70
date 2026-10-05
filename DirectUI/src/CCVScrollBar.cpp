@@ -11,13 +11,13 @@ namespace DirectUI
 {
 
 CCVScrollBar::CCVScrollBar(CCVScrollBar&&a0)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCVScrollBar::CCVScrollBar(CCVScrollBar const&a0)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCVScrollBar::CCVScrollBar(void)
-: CCBase(0, nullptr) { }
+: CCBaseScrollBar(0) { }
 
 CCVScrollBar::~CCVScrollBar(void)
 {}

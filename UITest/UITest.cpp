@@ -55,9 +55,12 @@ struct LogListener : public IElementListener {
   void OnListenerDetach(Element *elem) override {
     OutputDebugString(std::format(L"detach: {:p}\n", (void *)elem).c_str());
   }
-  // 2
-  bool OnPropertyChanging(Element *elem, const PropertyInfo *prop, int unk,
-                          Value *v1, Value *v2) override {
+  // 2 -- slot 2 was renamed OnPropertyChanging -> OnListenedPropertyChanging
+  // by the w5 vtable-contract work (Interfaces.h slot 2): every listener
+  // implementer in the DLL exports THIS name, so the override-bind name
+  // follows it.
+  bool OnListenedPropertyChanging(Element *elem, const PropertyInfo *prop,
+                                  int unk, Value *v1, Value *v2) override {
     OutputDebugString(
         std::format(L"prop change: {:p} {} {} {:p}<{}> {:p}<{}>\n",
                     (void *)elem, (PCWSTR)prop->name, unk, (void *)v1,
@@ -105,8 +108,9 @@ struct EventListener : public IElementListener {
 
   void OnListenerAttach(Element *elem) override {}
   void OnListenerDetach(Element *elem) override {}
-  bool OnPropertyChanging(Element *elem, const PropertyInfo *prop, int unk,
-                          Value *v1, Value *v2) override {
+  // slot 2 renamed with the interface (see LogListener above).
+  bool OnListenedPropertyChanging(Element *elem, const PropertyInfo *prop,
+                                  int unk, Value *v1, Value *v2) override {
     return true;
   }
   void OnListenedPropertyChanged(Element *elem, const PropertyInfo *prop,

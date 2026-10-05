@@ -122,6 +122,27 @@ def _sdk_inc_dirs() -> list:
 
 INC = _sdk_inc_dirs()
 
+def _harvest_placeholder_pures(header_text: str, inc_dir) -> list:
+    """All __DuiAbiSlot_<Class>_<n> placeholder pures visible to a TU
+    that includes the class header: the class's own declarations PLUS
+    those inherited from generated base headers (the sub-force probe
+    must override every placeholder in the base chain, else the
+    global instance cannot instantiate -- C2259)."""
+    seen: dict[str, int] = {}
+    def harvest(text: str) -> None:
+        for m in re.finditer(
+                r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;",
+                text):
+            seen.setdefault(m.group(1), int(m.group(3)))
+    harvest(header_text)
+    for m in re.finditer(r'#include "([^"]+)"', header_text):
+        dep = inc_dir / m.group(1)
+        if dep.is_file():
+            harvest(dep.read_text(encoding="utf-8"))
+    return [(idx, name) for name, idx in sorted(seen.items(), key=lambda kv: kv[1])]
+
+
+
 
 def _resolve_dll(pinned_dir: pathlib.Path) -> pathlib.Path:
     import hashlib
@@ -780,9 +801,7 @@ def main(argv: list[str] | None = None) -> int:
             capture_output=True, text=True)
         used_tu = "dtor"
         if r.returncode != 0:
-            phs = [(int(m.group(3)), m.group(1)) for m in re.finditer(
-                r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;",
-                txt)]
+            phs = _harvest_placeholder_pures(txt, inc)
             cpp = work / f"r6_{cls}.cpp"
             lines = [f'#include "{cls}.h"', "namespace DirectUI {"]
             lines.append(f"    struct __Probe{cls} : {cls} {{")
@@ -889,9 +908,7 @@ def main(argv: list[str] | None = None) -> int:
         expected_keys = {("" if k == "PRIMARY" else k).rstrip("@")
                          for k in tables_expected}
         if used_tu == "dtor" and not expected_keys <= set(probe_tables):
-            phs = [(int(m.group(3)), m.group(1)) for m in re.finditer(
-                r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;",
-                txt)]
+            phs = _harvest_placeholder_pures(txt, inc)
             cpp = work / f"r6_{cls}.cpp"
             lines = [f'#include "{cls}.h"', "namespace DirectUI {"]
             lines.append(f"    struct __Probe{cls} : {cls} {{")

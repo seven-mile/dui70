@@ -10,47 +10,36 @@
 namespace DirectUI
 {
     class BaseScrollBar;
+    class Element;
     class Value;
 
     class BaseScrollBar
     {
     public:
-        // ABI placeholder: real slot 0 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_0(void) = 0;
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_1(void) = 0;
-        // ABI placeholder: real slot 2 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_2(void) = 0;
-        // ABI placeholder: real slot 3 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_3(void) = 0;
-        // ABI placeholder: real slot 4 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_4(void) = 0;
-        // ABI placeholder: real slot 5 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_5(void) = 0;
-        // ABI placeholder: real slot 6 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_6(void) = 0;
-        // ABI placeholder: real slot 7 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_7(void) = 0;
-        // ABI placeholder: real slot 8 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_8(void) = 0;
-        // ABI placeholder: real slot 9 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_9(void) = 0;
-        // ABI placeholder: real slot 10 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_10(void) = 0;
-        // ABI placeholder: real slot 11 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_BaseScrollBar_11(void) = 0;
+        // Rule E: slot 0 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual Element* GetElement(void) = 0;
+        // Rule E: slot 1 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual int GetPosition(void) = 0;
+        // Rule E: slot 2 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual int GetMaximum(void) = 0;
+        // Rule E: slot 3 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual int GetMinimum(void) = 0;
+        // Rule E: slot 4 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual int GetPage(void) = 0;
+        // Rule E: slot 5 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual int GetLine(void) = 0;
+        // Rule E: slot 6 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual long SetPosition(int) = 0;
+        // Rule E: slot 7 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual long SetMaximum(int) = 0;
+        // Rule E: slot 8 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual long SetMinimum(int) = 0;
+        // Rule E: slot 9 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual long SetPage(int) = 0;
+        // Rule E: slot 10 recovered from BaseScrollBar secondary table (CCBaseScrollBar).
+        virtual long SetLine(int) = 0;
+        // Rule E: slot 11 recovered from BaseScrollBar secondary table (ScrollBar).
+        virtual bool GetProportional(void) = 0;
         virtual void LineUp(unsigned int);
         virtual void LineDown(unsigned int);
         virtual void PageUp(unsigned int);

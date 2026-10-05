@@ -14,12 +14,10 @@ namespace DirectUI
     class IXElementCP
     {
     public:
-        // ABI placeholder: real slot 0 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_IXElementCP_0(void) = 0;
-        // ABI placeholder: real slot 1 has no recoverable signature.
-        // ABI placeholder: never call.
-        virtual void __DuiAbiSlot_IXElementCP_1(void) = 0;
+        // Rule E: slot 0 recovered from IXElementCP secondary table (XElement).
+        virtual HWND__* GetNotificationSinkHWND(void) = 0;
+        // Rule E: slot 1 recovered from IXElementCP secondary table (XElement).
+        virtual unsigned int GetCreationFlags(void) = 0;
         IXElementCP(IXElementCP&&);
         IXElementCP(IXElementCP const&);
         IXElementCP(void);

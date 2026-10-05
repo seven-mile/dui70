@@ -105,8 +105,14 @@ namespace DirectUI
         virtual void OnListenerAttach(Element* elem) = 0;
         // slot 1
         virtual void OnListenerDetach(Element* elem) = 0;
-        // slot 2 -- returns false to cancel
-        virtual bool OnPropertyChanging(Element* elem, PropertyInfo const* prop, int unk, Value* before, Value* after) = 0;
+        // slot 2 -- returns false to cancel; name+signature
+        // pinned from implementers' exported virtuals
+        // (?OnListenedPropertyChanging@BaseScrollViewer@...: every
+        // listener implementer exports THIS name; the ICF twin
+        // OnPropertyChanging shares the body RVA but no class
+        // exports a 5-arg listener OnPropertyChanging, so the
+        // override-bind name is OnListenedPropertyChanging).
+        virtual bool OnListenedPropertyChanging(Element* elem, PropertyInfo const* prop, int unk, Value* before, Value* after) = 0;
         // slot 3
         virtual void OnListenedPropertyChanged(Element* elem, PropertyInfo const* prop, int type, Value* before, Value* after) = 0;
         // slot 4

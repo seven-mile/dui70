@@ -18,12 +18,12 @@ void WINAPI DisableInitCallstackTracking(void) {}
 void* WINAPI CreateDUIWrapper(void) { return nullptr; }
 void* WINAPI CreateDUIWrapperEx(unsigned short const* name, unsigned short const* info) { return nullptr; }
 void* WINAPI CreateDUIWrapperFromResource(int resId, unsigned short const* name, void* module) { return nullptr; }
-void* WINAPI CreateDUIWrapperTouchEx(unsigned short const* name, unsigned short const* info, void* module) { return nullptr; }
+long WINAPI CreateDUIWrapperTouchEx(DirectUI::Element* element, DirectUI::IXProviderCP* provider, IUnknown** out) { return 0; }
 long WINAPI CreateTouchTooltip(void* element, int flags, void** tooltip) { return 0; }
 void* WINAPI DUI70_DUIXmlParserCreate(void) { return nullptr; }
 long  WINAPI DUI70_DUIXmlParserCreateElement(void* parser, void* parent, void** element) { return 0; }
-void  WINAPI DUI70_DUIXmlParserDestroy(void* parser) {}
-long  WINAPI DUI70_DUIXmlParserSetXMLFromResource(void* parser, int resId, void* module) { return 0; }
+void WINAPI DUI70_DUIXmlParserDestroy(DirectUI::Element* element) {}
+long WINAPI DUI70_DUIXmlParserSetXMLFromResource(DirectUI::DUIXmlParser* parser, unsigned short resId, HINSTANCE mod1, HINSTANCE mod2) { return 0; }
 long  WINAPI DUI70_ElementAddListener(void* element, void* listener) { return 0; }
 void  WINAPI DUI70_ElementDestroy(void* element) {}
 long  WINAPI DUI70_ElementEndDefer(void* element) { return 0; }
@@ -41,12 +41,12 @@ long  WINAPI DUI70_ElementSetLayoutPos(void* element, int pos) { return 0; }
 long  WINAPI DUI70_ElementSetVisible(void* element, int visible) { return 0; }
 long  WINAPI DUI70_ElementStartDefer(void* element) { return 0; }
 int   WINAPI DUI70_IsTouchButtonClickEqual(int a, int b) { return 0; }
-void* WINAPI DUI70_RichTextCreate(void) { return nullptr; }
+long WINAPI DUI70_RichTextCreate(DirectUI::Element* parent, unsigned long* flags, DirectUI::RichText** out) { return 0; }
 long  WINAPI DUI70_RichTextSetConstrainLayout(void* richtext, int constrain) { return 0; }
 void  WINAPI DUI70_ValueRelease(void* value) {}
 long WINAPI DUIDrawShadowText(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor) { return 0; }
 long WINAPI DrawShadowTextEx(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor, void* opts) { return 0; }
-long WINAPI DuiCreateObject(struct DirectUI::IClassInfo const* ci, void** out) { return 0; }
+long WINAPI DuiCreateObject(struct _GUID const& clsid, struct _GUID const& riid, void** out) { return 0; }
 long WINAPI ElementFromGadget(void* gadget, struct DirectUI::Element** out) { return 0; }
 void WINAPI FlushThemeHandles(void) {}
 void WINAPI PurgeThemeHandles(void) {}

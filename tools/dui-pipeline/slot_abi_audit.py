@@ -355,6 +355,39 @@ def main():
 
     PHRE = re.compile(r"virtual void (__DuiAbiSlot_(\w+)_(\d+))\(void\) = 0;")
 
+    # any pure virtual declaration (single line) in a generated header:
+    # "virtual <ret> <name>(<params>) = 0;" -- placeholders AND recovered
+    # real-signature pures (Rule E) both end in "= 0;".
+    PURE_RE = re.compile(r"^(?:\s*)(virtual\s+[^;{}()]+?\([^;{}]*?\))\s*=\s*0\s*;")
+
+    def harvest_pure_decls(header_paths: list) -> list:
+        """Return unique pure-virtual declarations (signature text) in
+        first-seen order from the given header files (class header plus
+        its direct #include chain). Each entry is the declarator text
+        WITHOUT the leading 'virtual' and trailing '= 0;', suitable for
+        emitting an override stub: '<sig> {}' inside the probe struct."""
+        seen = []
+        names = set()
+        for hp in header_paths:
+            try:
+                txt = hp.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            for ln in txt.splitlines():
+                m = PURE_RE.match(ln)
+                if not m:
+                    continue
+                sig = m.group(1).strip()
+                sig = sig[len("virtual"):].strip() if sig.startswith("virtual") else sig
+                nm = re.search(r"([A-Za-z_][A-Za-z0-9_]*)\s*\(", sig)
+                if not nm or nm.group(1) in names:
+                    continue
+                names.add(nm.group(1))
+                seen.append(sig)
+        return seen
+
+
+
     # ---- schema-2 MI secondary tables (stage2): mi-tables.json carries
     # the SECONDARY vftables (IProvider / RefcountBase subobjects) with
     # their own RVAs + slot names. When present, the audit additionally
@@ -419,6 +452,13 @@ def main():
         if len(ph_slots) != len(phs):
             failed.append((cls, "duplicate placeholder slots"))
             continue
+        # contract-truth _purecall slots: the DLL table holds _purecall
+        # there; our header may carry either a __DuiAbiSlot placeholder
+        # or a Rule-E recovered NAMED pure (same-RVA fold evidence).
+        # The probe overrides either form; acceptance below treats both.
+        contract_pure = {i for i, e in enumerate(table)
+                         if e == "_purecall"}
+        ph_slots |= contract_pure
         # ---- probe: force the class's OWN vftable ----
         # Attempt 1 ("own"/"dtor" force): define one of the class's own
         # virtuals out-of-line (the dtor when declared -- a defined dtor
@@ -468,6 +508,23 @@ def main():
                 lines.append(f"    struct __Probe{cls} : {cls} {{")
                 for _, pn in phs:
                     lines.append(f"        void {pn}(void);")
+                # Rule E / Rule C recovered real-signature pures in
+                # THIS class's header (they are abstract until
+                # overridden). Own header only: base-chain pures are
+                # placeholders harvested by phs above, and interface
+                # pures from dui_abi_types.h are not this class's
+                # bases. Skip names phs already declares (C2535).
+                ph_names = {pn for _, pn in phs}
+                inc0 = inc / f"{cls}.h"
+                for sig in harvest_pure_decls([inc0]):
+                    nm = re.search(r"([A-Za-z_][A-Za-z0-9_]*)\s*\(", sig)
+                    if nm and nm.group(1) in ph_names:
+                        continue
+                    # body: value-returning pures need a return
+                    mret = re.match(r"^(.*?)\s*[A-Za-z_][A-Za-z0-9_]*\s*\(", sig)
+                    rt = (mret.group(1).strip() if mret else "")
+                    body = "" if rt in ("void", "") else "return {};"
+                    lines.append(f"        {sig} override {{ {body} }}")
                 lines.append(f"        ~__Probe{cls}(void);")
                 lines.append("    };")
                 for _, pn in phs:
@@ -816,6 +873,13 @@ def main():
         # per-class DLL-derived expectation (None table = skip identity)
         exp_row = expect.get(cls)
 
+        # names declared as pure virtuals in THIS class's header
+        # (Rule E recoveries render as named "= 0;" declarations)
+        named_pure_names = set()
+        for L in txt.splitlines():
+            m_pn = re.match(r"virtual\s+[^;()]*?([~]?[A-Za-z_]\w*)\s*\([^;]*\)\s*=\s*0\s*;", L.strip())
+            if m_pn:
+                named_pure_names.add(m_pn.group(1))
         for i in range(n_expect):
             sym = slot_syms.get(i, "")
             if i in ph_slots:
@@ -826,7 +890,20 @@ def main():
                              and f"__DuiAbiSlot_{cls}_{i}@__Probe{cls}@" in sym)
                          or f"__DuiAbiSlot_{cls}_{i}@{cls}@" in sym)
                 if not ok_ph:
-                    errs.append(f"slot {i}: expected _purecall/override, got {sym[:60]}")
+                    # Rule E recovery: the header declares a NAMED pure
+                    # at this _purecall contract slot (same-RVA fold
+                    # evidence). The probe's named override proves our
+                    # declared member sits at the right position; the
+                    # DLL's _purecall only means the base never
+                    # instantiated the slot. Accept as refined-UNKNOWN
+                    # (reported, never silently passed).
+                    m_np = re.match(r"\?(\w+)@__Probe" + re.escape(cls)
+                                    + r"@DirectUI@@", sym)
+                    nm_np = m_np.group(1) if m_np else None
+                    if nm_np and nm_np in named_pure_names:
+                        unknowns.setdefault(cls, []).append(i)
+                    else:
+                        errs.append(f"slot {i}: expected _purecall/override, got {sym[:60]}")
                 continue
             if i == dtor_slot:
                 # the vdtor's CONTRACT slot (may be anywhere: first,

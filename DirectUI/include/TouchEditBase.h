@@ -26,11 +26,11 @@ namespace DirectUI
         virtual long Insert(Element**, unsigned int, unsigned int);
         virtual void SetKeyFocus(void);
         virtual IClassInfo* GetClassInfoW(void);
-        virtual long GetControllerFor(IUnknown**);
         virtual long GetTextDocument(ITextDocument**);
-        virtual long FinalizeCurrentIMEComposition(void);
-        virtual long RefreshContent(void);
         virtual long GetTextServices(ITextServices**);
+        virtual long RefreshContent(void);
+        virtual long FinalizeCurrentIMEComposition(void);
+        virtual long GetControllerFor(IUnknown**);
         static UID CaretMoved(void);
         static long Create(Element*, unsigned long*, Element**);
         static UID Cut(void);

@@ -785,7 +785,6 @@ _RULE_C_PLACEHOLDERS: dict[str, int] = {}
 # class's own virtual by derived-witness singleton evidence
 # (cls -> [slot indices])
 _RULE_C_WITNESS_RESOLVED: dict[str, list] = {}
-_STEP_B_ENABLED = False  # flipped on in the STEP-B commit
 
 # Hand-modeled abstract consumer interfaces (no own vftable in the
 # DLL, hence no vtable-slots entry): their pure-virtual counts are
@@ -5319,8 +5318,7 @@ def main(argv=None) -> int:
         # the class's own exported virtuals; disagreement between
         # witnesses vetoes (fail-closed).
         if (slot_lists is not None and not synth_applied
-                and _MI_DOC_CACHE is not None
-                and _STEP_B_ENABLED):
+                and _MI_DOC_CACHE is not None):
             _w_bp = 0
             for _b in base_list(inheritance, cls):
                 _be = slot_tables.get(_b)
@@ -5352,6 +5350,33 @@ def main(argv=None) -> int:
                             continue
                         _wit_slots.setdefault(_k, set()).add(_nm)
                 _changed = False
+                # names appearing at MULTIPLE contract slots are
+                # ambiguous (overload pairs, or a contract mutation
+                # duplicating a name): witness evidence cannot
+                # disambiguate which slot the override targets --
+                # refuse (fail-closed; the slots stay honest folds)
+                # CROSS-CONTRACT SINGLETON VETO: a name that is a
+                # SINGLETON slot-identity in ANOTHER class's contract
+                # already pins a (possibly different) slot in the
+                # corpus; binding it here from witness evidence alone
+                # would override a contradicting vote (the A1
+                # selftest C control: mutating CCBase[46] OnNotify ->
+                # OnMessage creates a 1-vs-14 split vote across the
+                # family tables -- both slots must stay unbound).
+                # Fold MEMBERSHIP is body-sharing noise (the TEB
+                # mega-folds contain GetTextDocument at 45 AND 46)
+                # and does not veto; only singleton identities do.
+                _other_singletons: set = set()
+                for _oc, _oe in slot_tables.items():
+                    if _oc == cls:
+                        continue
+                    for _sl in (_oe.get("slots") or []):
+                        _ns = (_sl if isinstance(_sl, list) else [_sl])
+                        _ns = [x for x in _ns
+                               if isinstance(x, str)
+                               and not x.startswith("_")]
+                        if len(_ns) == 1:
+                            _other_singletons.add(_ns[0])
                 for _k in range(_w_bp, len(slot_lists)):
                     if _k not in _wit_slots:
                         continue
@@ -5359,6 +5384,8 @@ def main(argv=None) -> int:
                     if len(_cand) != 1:
                         continue  # witness disagreement: honest fold
                     _nm = next(iter(_cand))
+                    if _nm in _other_singletons:
+                        continue  # cross-contract conflict: fail closed
                     _cur = slot_lists[_k]
                     _cur_n = ([_cur] if isinstance(_cur, str)
                               else list(_cur))

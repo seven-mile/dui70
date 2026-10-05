@@ -20,8 +20,9 @@ namespace DirectUI
     {
     public:
         // Element::Create(unsigned flags, ...): flags is a
-        // CREATION-FLAGS bitfield (Win7 evidence domain, version-
-        // bound; re-verify across DLL versions):
+        // CREATION-FLAGS bitfield (pinned evidence domain:
+        // dui70.dll 10.0.26100.9278, sha256 2080E43F...D9AA556;
+        // version-bound, re-verify across DLL versions):
         //   CRF_BIT0 = 0x1  skip DUser gadget triple-creation
         //   CRF_BIT1 = 0x2  write Element+0x97 bit0 (layout opt)
         //   bits 2..31     dead bits in the pinned binary

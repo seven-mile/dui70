@@ -1639,10 +1639,44 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
                 dtor_slot = idx
                 break
         if dtor_slot is None:
-            raise SystemExit(
-                f"contract_reorder: {cls}: virtual dtor declared but the "
-                f"table has no `_E{cls}` marker -- cannot place the dtor "
-                "set; refusing to guess (classify should have rejected)")
+            # Batch-1 (IXBaby): MI class whose dtor marker lives in a
+            # base-subobject table (contract_classify verified it via
+            # the mi-tables and passed 'bound'). The dtor unit is
+            # placed at the END of the class's own introduced-slot
+            # region -- for XBaby the 13 IXBaby methods occupy the
+            # whole primary table, so the dtor set simply is NOT part
+            # of this table's slot walk (it lands in the probe's
+            # first-base view). Emitting it into the walk would assert
+            # a slot the DLL table does not carry.
+            mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+            mi_has_dtor = False
+            if isinstance(mi_entry, dict):
+                mi_tables: list = []
+                if isinstance(mi_entry.get("primary"), dict):
+                    mi_tables.append(mi_entry["primary"])
+                secs = mi_entry.get("secondaries") or {}
+                if isinstance(secs, dict):
+                    mi_tables.extend(
+                        td for td in secs.values()
+                        if isinstance(td, dict))
+                for td in mi_tables:
+                    for sl in (td.get("slots") or []):
+                        names = [sl] if isinstance(sl, str) else list(sl)
+                        if f"_E{cls}" in names:
+                            mi_has_dtor = True
+                            break
+                    if mi_has_dtor:
+                        break
+            if not mi_has_dtor:
+                raise SystemExit(
+                    f"contract_reorder: {cls}: virtual dtor declared but "
+                    f"the table has no `_E{cls}` marker -- cannot place "
+                    "the dtor set; refusing to guess (classify should "
+                    "have rejected)")
+            # dtor placed outside this table: treat as a NON-vtable
+            # member for this walk (its declaration stays in the
+            # header; the base view owns the slot)
+            dtor_name = None
 
     # walk the table slot by slot; at each covered base slot emit the
     # unit (its full run), at each uncovered slot emit a placeholder.
@@ -1721,7 +1755,29 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     #     declaration does not enter the vtable walk). This is the
     #     fail-closed UNKNOWN path: never a guessed slot.
     if unbound:
-        synth = [n for n in unbound if n not in binder_unknown]
+        # Batch-1 (IXBaby): for a class with an introduced primary
+        # table (mi-tables 'primary'), names placed in OTHER own
+        # subobject tables (secondaries) are PLACED ELSEWHERE with
+        # direct vtable evidence -- they pass through the unbound
+        # append path (original order), exactly like fold-UNKNOWN
+        # units. Only names with NO table evidence anywhere remain
+        # generator-bug synthetics.
+        mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+        mi_placed: set = set()
+        if isinstance(mi_entry, dict):
+            mi_tables: list = []
+            if isinstance(mi_entry.get("primary"), dict):
+                mi_tables.append(mi_entry["primary"])
+            secs = mi_entry.get("secondaries") or {}
+            if isinstance(secs, dict):
+                mi_tables.extend(
+                    td for td in secs.values() if isinstance(td, dict))
+            for td in mi_tables:
+                for sl in (td.get("slots") or []):
+                    names_l = [sl] if isinstance(sl, str) else list(sl)
+                    mi_placed |= set(names_l)
+        synth = [n for n in unbound
+                 if n not in binder_unknown and n not in mi_placed]
         if synth:
             raise SystemExit(
                 f"contract_reorder: {cls}: v2 classified bound but "
@@ -1777,8 +1833,16 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     tabnames: set = set()
     for s in slot_lists:
         tabnames |= ({s} if isinstance(s, str) else set(s))
+    # Batch-1 (IXBaby): an exported virtual is 'external' only when it
+    # appears in NO subobject table of the class. For MI classes the
+    # mi-tables secondaries (schema 3) carry the base-subobject views
+    # (HWNDElement view incl. GetFocusableElement, IDialogElement incl.
+    # OnChildLostFocus/OnChildReceivedFocus, ...) -- the same tables the
+    # R6 probe verifies. A name present there is a base-slot override
+    # with direct vtable evidence, not an unmodellable external.
+    mi_names = _mi_own_slot_names(cls) or set()
     ext = sorted(x for x in (exported_virtuals or set())
-                 if x != cls and x not in tabnames)
+                 if x != cls and x not in tabnames and x not in mi_names)
     if ext:
         return {"mode": "rejected", "reason": "external_virtuals",
                 "external": ext}
@@ -1795,9 +1859,36 @@ def contract_classify(cls: str, members: list, slot_lists: list,
             if entry == f"_E{cls}" or (
                 isinstance(entry, list) and f"_E{cls}" in entry)), None)
         if marker is None:
-            return {"mode": "rejected", "reason": "vdtor_unplaced",
-                    "slots": len(slot_lists)}
-        covered_dtor = {marker}
+            # Batch-1 (IXBaby): for MI classes the class's destructor
+            # lives in the FIRST-base subobject table (the base-chain
+            # dtor slot the compiler binds), not in the class's own
+            # unsuffixed primary (which carries the introduced
+            # interface's methods). A dtor marker present in ANY of
+            # the class's own mi-tables (primary + secondaries) is
+            # direct vtable evidence the dtor is placed; rejection is
+            # only honest when NO table carries it.
+            mi_dtors: set = set()
+            mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+            if isinstance(mi_entry, dict):
+                mi_tables: list = []
+                if isinstance(mi_entry.get("primary"), dict):
+                    mi_tables.append(mi_entry["primary"])
+                secs = mi_entry.get("secondaries") or {}
+                if isinstance(secs, dict):
+                    mi_tables.extend(
+                        td for td in secs.values()
+                        if isinstance(td, dict))
+                for td in mi_tables:
+                    for i, sl in enumerate(td.get("slots") or []):
+                        names = [sl] if isinstance(sl, str) else list(sl)
+                        if f"_E{cls}" in names:
+                            mi_dtors.add((id(td), i))
+            if not mi_dtors:
+                return {"mode": "rejected", "reason": "vdtor_unplaced",
+                        "slots": len(slot_lists)}
+            covered_dtor = set()  # marker slot belongs to the base view
+        else:
+            covered_dtor = {marker}
     else:
         covered_dtor = set()
 
@@ -3000,8 +3091,10 @@ def render_class_header(cls: str, members: list, data_members: list,
 
     if cls == "Element":
         # W2 contract note (documented, NOT probed at runtime): the first
-        # parameter of Element::Create is a creation-flags bitfield (Win7
-        # evidence domain), not a class id/atom/category:
+        # parameter of Element::Create is a creation-flags bitfield
+        # (evidence domain: the pinned dui70.dll 10.0.26100.9278,
+        # sha256 2080E43F5D997A3BD9827F38D8F3029D88F77A7F301966FBA10EC
+        # 0ACAD9AA556), not a class id/atom/category:
         #   CRF_BIT0 (0x1)  skip the DUser gadget triple-creation path
         #   CRF_BIT1 (0x2)  write Element+0x97 bit0 (a layout optimization)
         #   bits 2..31      dead bits in the pinned binary
@@ -3012,8 +3105,9 @@ def render_class_header(cls: str, members: list, data_members: list,
         # pinned dui70.dll and must be re-verified across versions. No
         # dynamic probe with flags=1 is performed by this pipeline.
         lines.append("        // Element::Create(unsigned flags, ...): flags is a")
-        lines.append("        // CREATION-FLAGS bitfield (Win7 evidence domain, version-")
-        lines.append("        // bound; re-verify across DLL versions):")
+        lines.append("        // CREATION-FLAGS bitfield (pinned evidence domain:")
+        lines.append("        // dui70.dll 10.0.26100.9278, sha256 2080E43F...D9AA556;")
+        lines.append("        // version-bound, re-verify across DLL versions):")
         lines.append("        //   CRF_BIT0 = 0x1  skip DUser gadget triple-creation")
         lines.append("        //   CRF_BIT1 = 0x2  write Element+0x97 bit0 (layout opt)")
         lines.append("        //   bits 2..31     dead bits in the pinned binary")
@@ -3406,6 +3500,39 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("        virtual Element* GetDefaultButton(void) = 0;          // slot 8")
     lines.append("    };")
     lines.append("")
+    lines.append("    // IXBaby: the X-family content-host interface. Evidence")
+    lines.append("    // (batch 1, triage r6-xbaby-primary-triage.md): the DLL")
+    lines.append("    // carries an unsuffixed ??_7XBaby@@6B@ vftable (13 slots,")
+    lines.append("    // 0x00115D08) stored at this+296 in the ctor -- the table")
+    lines.append("    // XBaby introduces for its LAST base subobject. TouchXBaby's")
+    lines.append("    // primary (0x0010E950) carries the IDENTICAL 13-slot name")
+    lines.append("    // sequence; all 13 names have BOTH implementers' exported")
+    lines.append("    // symbols with identical signature parts. XProvider::")
+    lines.append("    // CreateXBaby(..., IXBaby**) returns exactly this type.")
+    lines.append("    // Signatures harvested from the XBaby exports. Pointer-only")
+    lines.append("    // parameter/return types stay forward-declared (HWNDElement,")
+    lines.append("    // DUIXmlParser, Element); tagSIZE is windef.h's, already")
+    lines.append("    // complete at this point.")
+    lines.append("    class HWNDElement;")
+    lines.append("    class DUIXmlParser;")
+    lines.append("    struct __declspec(novtable) IXBaby")
+    lines.append("    {")
+    lines.append("    public:")
+    lines.append("        virtual HWNDElement* GetXBabyElement(void) = 0;                // slot 0")
+    lines.append("        virtual void CacheParser(DUIXmlParser* parser) = 0;           // slot 1")
+    lines.append("        virtual long SetToHost(Element* elem) = 0;                    // slot 2")
+    lines.append("        virtual tagSIZE GetContentDesiredSize(int width, int height) = 0; // slot 3")
+    lines.append("        virtual bool CanSetFocus(void) = 0;                          // slot 4")
+    lines.append("        virtual long GetHostedElementID(unsigned short* id) = 0;      // slot 5")
+    lines.append("        virtual void ForceThemeChange(unsigned __int64 a, __int64 b) = 0; // slot 6")
+    lines.append("        virtual bool GetDefaultButtonTracking(void) = 0;             // slot 7")
+    lines.append("        virtual long SetDefaultButtonTracking(bool track) = 0;       // slot 8")
+    lines.append("        virtual long SetButtonClassAcceptsEnterKey(bool accepts) = 0; // slot 9")
+    lines.append("        virtual bool ClickDefaultButton(void) = 0;                   // slot 10")
+    lines.append("        virtual long SetRegisteredDefaultButton(Element* elem) = 0;  // slot 11")
+    lines.append("        virtual long SetHandleEnterKey(bool handle) = 0;             // slot 12")
+    lines.append("    };")
+    lines.append("")
     lines.append("    // ---- embedded-subsystem namespaces referenced by exported")
     lines.append("    //      signatures (pointer-only: namespace + class fwd) ----")
     lines.append("    namespace DuiBehaviorFilters { enum Flags { Flags_None = 0 }; }")
@@ -3738,14 +3865,23 @@ C_API_DECLS = [
     "void* WINAPI CreateDUIWrapper(void);",
     "void* WINAPI CreateDUIWrapperEx(unsigned short const* name, unsigned short const* info);",
     "void* WINAPI CreateDUIWrapperFromResource(int resId, unsigned short const* name, void* module);",
-    "void* WINAPI CreateDUIWrapperTouchEx(unsigned short const* name, unsigned short const* info, void* module);",
+    # ?CreateDUIWrapperTouchEx@DirectUI@@YAJPEAVElement@1@PEAVIXProviderCP@1@PEAPEAUIUnknown@@@Z
+    # (rva 0xD8E10, same address as the export): long(Element*, IXProviderCP*, IUnknown**).
+    "long WINAPI CreateDUIWrapperTouchEx(DirectUI::Element* element, DirectUI::IXProviderCP* provider, IUnknown** out);",
     # -- touch tooltip --
     "long WINAPI CreateTouchTooltip(void* element, int flags, void** tooltip);",
     # -- DUI70_* flat C API (scripting interop family) --
     "void* WINAPI DUI70_DUIXmlParserCreate(void);",
     "long  WINAPI DUI70_DUIXmlParserCreateElement(void* parser, void* parent, void** element);",
-    "void  WINAPI DUI70_DUIXmlParserDestroy(void* parser);",
-    "long  WINAPI DUI70_DUIXmlParserSetXMLFromResource(void* parser, int resId, void* module);",
+    # ??$HDelete@VElement@DirectUI@@@DirectUI@@YAXPEAVElement@0@@Z (rva 0x5FF20):
+    # loads vtable[0] (vector deleting dtor) and tail-calls the release path --
+    # the parameter is the Element to delete, not a parser.
+    "void WINAPI DUI70_DUIXmlParserDestroy(DirectUI::Element* element);",
+    # Export rva 0x88FD0 is a thunk: movzwl %dx (resId is u16), r8 = L"UIFILE"
+    # (resource type), r9 = original r8; callee is
+    # DUIXmlParser::SetXMLFromResource(name, type, HINSTANCE, HINSTANCE).
+    # Both HINSTANCEs come from the caller (FindResource pattern).
+    "long WINAPI DUI70_DUIXmlParserSetXMLFromResource(DirectUI::DUIXmlParser* parser, unsigned short resId, HINSTANCE mod1, HINSTANCE mod2);",
     "long  WINAPI DUI70_ElementAddListener(void* element, void* listener);",
     "void  WINAPI DUI70_ElementDestroy(void* element);",
     "long  WINAPI DUI70_ElementEndDefer(void* element);",
@@ -3763,14 +3899,22 @@ C_API_DECLS = [
     "long  WINAPI DUI70_ElementSetVisible(void* element, int visible);",
     "long  WINAPI DUI70_ElementStartDefer(void* element);",
     "int   WINAPI DUI70_IsTouchButtonClickEqual(int a, int b);",
-    "void* WINAPI DUI70_RichTextCreate(void);",
+    # ??$CreateElementT@VRichText@DirectUI@@@@YAJPEAVElement@@PEAKPEAPEAVRichText@@Z
+    # (rva 0x600A0): long(Element*, unsigned long*, RichText**). Same shape as
+    # DuiCreateObject: first instruction `andq $0,(%r8)` dereferences out.
+    "long WINAPI DUI70_RichTextCreate(DirectUI::Element* parent, unsigned long* flags, DirectUI::RichText** out);",
     "long  WINAPI DUI70_RichTextSetConstrainLayout(void* richtext, int constrain);",
     "void  WINAPI DUI70_ValueRelease(void* value);",
     # -- shadow text --
     "long WINAPI DUIDrawShadowText(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor);",
     "long WINAPI DrawShadowTextEx(void* hdc, unsigned short const* s, unsigned int cch, struct _RECT* rect, unsigned int format, unsigned long color, int offsetX, int offsetY, int thickness, unsigned long shadowColor, void* opts);",
     # -- object creation --
-    "long WINAPI DuiCreateObject(struct DirectUI::IClassInfo const* ci, void** out);",
+    # Signature verified from the DLL's own unexported C++ symbol at the same
+    # RVA as the export (?DuiCreateObject@@YAJAEBU_GUID@@0PEAPEAX@Z, both at
+    # 0x8B00) and from the disassembly (first instruction `andq $0,(%r8)`
+    # dereferences the third parameter). Two-argument calls leave r8 as
+    # garbage and access-violate before any GUID comparison runs.
+    "long WINAPI DuiCreateObject(struct _GUID const& clsid, struct _GUID const& riid, void** out);",
     "long WINAPI ElementFromGadget(void* gadget, struct DirectUI::Element** out);",
     # -- theme handle cache --
     "void WINAPI FlushThemeHandles(void);",

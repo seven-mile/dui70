@@ -177,6 +177,21 @@ def parse_pe(blob: bytes):
     return image_base, secs
 
 
+def _same_member_and_class(s_obj: str, s_dll: str, cls: str) -> bool:
+    """True when the probe symbol and the DLL symbol denote the SAME
+    member of the SAME class (used by the name-shape fallback after
+    the exact `sym in exp_set` comparison failed). A cross-class
+    same-name pair (?X@XBaby@ vs ?X@DialogElement@) is NOT the same
+    member -- reporting it as verified would be a semantic false
+    binding (NEG-X3)."""
+    m_o = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_obj)
+    m_d = re.match(r"\?(\w+)@(\w+)@DirectUI@@", s_dll)
+    if m_o and m_d:
+        return m_o.group(1) == m_d.group(1) and m_o.group(2) == m_d.group(2)
+    # vdtor/other skins: only the class must agree
+    return f"@{cls}@DirectUI@@" in s_obj and f"@{cls}@DirectUI@@" in s_dll
+
+
 def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
     """Same class+member with probe/DLL thunk-skin differences.
 
@@ -972,6 +987,25 @@ def main(argv: list[str] | None = None) -> int:
             got = probe_tables.get(base_key) or \
                 probe_tables.get(base_key.rstrip("@")) or \
                 probe_tables.get(base_key + "@")
+            # Batch-1 (IXBaby): a class's unsuffixed ??_7<cls>@@6B@
+            # table can be an INTRODUCED subobject table (the last
+            # base's view, e.g. XBaby's 13-slot IXBaby view at
+            # this+296) while the probe's unsuffixed table is the
+            # complete-object primary (first-base view). When the
+            # resolved table does not match the expected length,
+            # alias to the base-suffixed probe table of EQUAL length
+            # (deterministic: first in sorted key order). Per-slot
+            # mangled identity is still verified below -- this is
+            # only the table lookup.
+            if got is None or len(got) != len(tinfo["slots"]):
+                n_dll = len(tinfo["slots"])
+                for bk in sorted(probe_tables):
+                    cand = probe_tables[bk]
+                    if bk and bk != base_key and \
+                            cand is not got and \
+                            len(cand) == n_dll:
+                        got = cand
+                        break
             trow = {"identity": tinfo.get("identity", tname),
                     "rva": tinfo["rva"],
                     "length_provenance": tinfo.get("length_provenance"),
@@ -1019,13 +1053,38 @@ def main(argv: list[str] | None = None) -> int:
                         trow["thunk_unknown"] += 1
                         continue
                     names = want if isinstance(want, list) else [want]
-                    if any(f"?{n}@{cls}@DirectUI@@" in sym or
-                           f"??_E{n}@" in sym for n in names):
-                        if len(exp_set) > 1:
-                            trow["fold_unknown"] += 1
-                        else:
-                            trow["verified"] += 1
-                        continue
+                    # Batch-1 (NEG-X3 rule gap): the name-shape
+                    # fallback below compares only the member name
+                    # against the EXPECTED table entry -- a probe
+                    # symbol of a DIFFERENT CLASS with the same
+                    # member name (e.g. ?X@XBaby@ vs ?X@DialogElement@)
+                    # would be counted verified. That is a semantic
+                    # false binding. Restrict the fallback to probe
+                    # symbols of THIS class (or its vdtor marker):
+                    # cross-class bodies are honest fails (debt),
+                    # never passes.
+                    if any(
+                            (f"?{n}@{cls}@DirectUI@@" in sym)
+                            or (f"??_E{n}@" in sym)
+                            for n in names):
+                        # name matched THIS class -- but the DLL side
+                        # must agree on class too: a same-name
+                        # different-class DLL body is NOT this
+                        # member's slot identity. It stays a fail.
+                        if exp_set and any(
+                                _same_member_and_class(sym, x, cls)
+                                for x in exp_set):
+                            # the probe's class+member IS one of the
+                            # slot's DLL members. Singleton: same
+                            # member with a different skin (adjustor /
+                            # UEAA-vs-W) -- mangled identity not
+                            # provable, member provable: THUNK-UNKNOWN.
+                            # Fold: member is IN the fold: FOLD-UNKNOWN.
+                            if len(exp_set) > 1:
+                                trow["fold_unknown"] += 1
+                            else:
+                                trow["thunk_unknown"] += 1
+                            continue
                     trow["fail_slots"].append({
                         "slot": i,
                         "err": "mangled identity divergence",
@@ -1082,11 +1141,24 @@ def main(argv: list[str] | None = None) -> int:
                 if m not in mandatory_missing:
                     mandatory_missing.append(m)
 
+    # Counter semantics (histogram bug fix): "VERIFIED" means CLEAN
+    # verified -- zero fold/thunk/unresolved slots in every table.
+    # VERIFIED-UNKNOWN-SLOTS is a separate bucket and must NOT be
+    # counted into the clean number again (the old startswith()
+    # count double-reported the family: "25 VERIFIED" could be 0
+    # clean + 25 unknown). The two buckets plus REJECTED partition
+    # the audited set exactly.
     n_ver = sum(1 for r in audited.values()
-                if r["verdict"] and r["verdict"].startswith("VERIFIED"))
+                if r["verdict"] == "VERIFIED")
     n_unk = sum(1 for r in audited.values()
                 if r["verdict"] == "VERIFIED-UNKNOWN-SLOTS")
     n_rej = sum(1 for r in audited.values() if r["verdict"] == "REJECTED")
+    if n_ver + n_unk + n_rej != len(audited):
+        print(f"uia_order_verify: ERROR verdict histogram does not "
+              f"partition the audited set "
+              f"({n_ver}+{n_unk}+{n_rej}!={len(audited)})",
+              file=sys.stderr)
+        return 2
     # slot-level + table-level totals (artifact-derived, one source)
     tot_tables = sum(len(r["tables"]) for r in audited.values())
     tot_v = sum(t_["verified"] for r in audited.values()
@@ -1097,7 +1169,8 @@ def main(argv: list[str] | None = None) -> int:
     tot_f = sum(len(t_["fail_slots"]) for r in audited.values()
                 for t_ in r["tables"].values())
     print(f"R6 uia-order-verify: audited {len(audited)} classes -- "
-          f"{n_ver} VERIFIED, {n_unk} VERIFIED-UNKNOWN-SLOTS, "
+          f"{n_ver} VERIFIED (clean), "
+          f"{n_unk} VERIFIED-UNKNOWN-SLOTS, "
           f"{n_rej} REJECTED")
     print(f"  slot totals: {tot_tables} tables -- verified={tot_v}, "
           f"unknown={tot_u}, fail_slots={tot_f}")
@@ -1203,7 +1276,12 @@ def main(argv: list[str] | None = None) -> int:
                         "audited": audited,
                         "counts": {"verified": n_ver,
                                    "verified_unknown": n_unk,
-                                   "rejected": n_rej},
+                                   "rejected": n_rej,
+                                   "counting_semantics":
+                                       "verified = clean (no unknown "
+                                       "slots); verified_unknown and "
+                                       "rejected are disjoint buckets; "
+                                       "the three partition audited"},
                         "verdict": ("FAIL" if (failed_classes or
                                     mandatory_missing) else "PASS")},
                        indent=1, ensure_ascii=False),

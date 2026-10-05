@@ -1,6 +1,11 @@
 """MI-specific A1 negative controls (paired tamper tests for the
 per-base vftable split in slot_abi_audit.py).
 
+W6 port: REPO now resolves to THIS checkout (parents[2] of the
+script) -- previously hardcoded to an external worktree
+(Z:\repos\DirectUI-w5-clean) that can drift stale and must never
+be treated as a gate input.
+
 Run standalone (python tools/dui-pipeline/a1_mi_controls.py) after
 changing the audit's probe logic: every control must print CAUGHT.
 Validated design (v4); see the v2/v3 learnings below for why the other
@@ -40,7 +45,9 @@ import subprocess
 import sys
 import tempfile
 
-REPO = pathlib.Path(r"Z:\repos\DirectUI-w5-clean")
+# repo-local: resolve the checkout this file lives in -- the controls
+# exercise THIS tree's emitter/audit, not a stale external worktree
+REPO = pathlib.Path(__file__).resolve().parents[2]
 PY = sys.executable
 W = pathlib.Path(tempfile.mkdtemp(prefix="a1-mi-ctl4-"))
 

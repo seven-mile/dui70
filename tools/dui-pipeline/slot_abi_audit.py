@@ -564,7 +564,7 @@ def main():
             # rows are ascending and contiguous.
             block = -1
             for L in r2.stdout.splitlines():
-                m_sec = re.match(r"RELOCATIONS #(\d+)", L)
+                m_sec = re.match(r"RELOCATIONS #([0-9A-Fa-f]+)", L)
                 if m_sec:
                     block += 1
                     continue
@@ -646,8 +646,17 @@ def main():
 
         has_dtor_decl = bool(re.search(
             r"virtual\s+~" + re.escape(cls) + r"\b", txt))
-        if dtor_slot is not None and has_dtor_decl:
-            attempts = ["dtor", "sub"]
+        # Batch-1 (IXBaby): attempt order must not depend on the
+        # schema-1 marker position. An MI class whose OWN primary
+        # table carries only introduced-interface methods (XBaby:
+        # 13 IXBaby slots, dtor marker lives in the HWNDElement
+        # secondary) has dtor_slot=None yet still declares a vdtor;
+        # the 'own' TU (out-of-line virtual definition) emits NO
+        # vftables for an abstract class and the 'sub' TU cannot
+        # instantiate it (C2259). The 'dtor' TU emits the full
+        # vftable set for any class with a definable dtor.
+        if has_dtor_decl:
+            attempts = ["dtor", "own", "sub"]
         else:
             attempts = ["own", "sub"]
         force = None
@@ -671,6 +680,22 @@ def main():
             # tables for MI classes.
             tables = split_vftables(payload, cls)
             primary = tables.get("")
+            if primary is not None and len(primary) == 0:
+                # an empty unsuffixed run is no usable primary
+                primary = None
+            if primary is None:
+                # Batch-1 (IXBaby): a non-empty base-suffixed table
+                # set without an unsuffixed primary is USABLE when
+                # one of the base views has the schema-1 expected
+                # length (introduced-subobject table, e.g. XBaby's
+                # IXBaby view). Accept it here so the attempt loop
+                # breaks instead of falling through to the sub-TU
+                # (which cannot instantiate an abstract class).
+                n_tab_cur = len(table) if table else 0
+                if n_tab_cur and any(
+                        bk and tv and len(tv) == n_tab_cur
+                        for bk, tv in tables.items()):
+                    primary = [None]  # marker: alias path below
             if primary is not None:
                 force = att
                 entries = payload
@@ -682,7 +707,23 @@ def main():
             base = None
         if any(c == cls for c, _ in failed):
             continue
-        if base is None:
+        # Batch-1 (IXBaby alias, mirrors R6): when the class's own
+        # unsuffixed table was not produced (an introduced base view
+        # carries those slots instead), alias the primary to the
+        # base-suffixed table whose length equals the schema-1
+        # expectation. Deterministic: first in sorted key order.
+        aliased_primary: list | None = None
+        if tables and table and not tables.get(""):
+            # no unsuffixed primary in the produced set: the
+            # introduced-base view carries the class's primary
+            # slots (XBaby's IXBaby view). Alias deterministically.
+            for bk in sorted(tables):
+                cand = tables[bk]
+                if bk and cand and len(cand) == len(table):
+                    aliased_primary = cand
+                    break
+
+        if base is None and aliased_primary is None:
             # vftable not emittable in an isolated TU (abstract /
             # ctor-inaccessible / inline-only classes). Fall back to a
             # SOURCE-LEVEL structural check: the header's virtual
@@ -720,6 +761,17 @@ def main():
             continue
         slot_syms = {}
         primary_slots = tables.get("")
+        if primary_slots is not None and len(primary_slots) == 0:
+            primary_slots = None
+        if primary_slots is None and aliased_primary is not None:
+            # introduced-base-view alias (see above): the primary's
+            # slots live in the base-suffixed table
+            primary_slots = aliased_primary
+        if primary_slots is not None and len(primary_slots) == 1 \
+                and primary_slots[0] is None:
+            # alias marker from the attempts loop: resolve to the
+            # real aliased table
+            primary_slots = aliased_primary
         if primary_slots is not None:
             # per-base table split succeeded: the primary table's slots
             # in declaration order (??_R4-anchored contiguous run)
@@ -754,6 +806,36 @@ def main():
         # DLL's symbol set at that position (fold sets accepted,
         # membership recorded as fold-UNKNOWN, exactly like primary).
         # Fold slots in the SECONDARY truth are lists (fold pairs).
+
+        def _same_member_and_class_a1(s_obj: str, s_dll: str, cls: str) -> bool:
+            """Batch-1 (NEG-X3 hardening, mirrors R6): True when probe and
+            DLL symbols denote the SAME member of the SAME class AND the
+            same overload (signature part after the class qualifier
+            matches; only the access/adjustor skin may differ: UEAA vs
+            @W). A cross-class same-name pair -- or a same-name
+            DIFFERENT-overload pair (selftest B) -- is a semantic false
+            binding and must stay a FAIL."""
+            def split_sym(s: str):
+                m = re.match(r"\?(\w+)@(\w+)@DirectUI@@(.*)$", s)
+                if not m:
+                    return None
+                sig = m.group(3)
+                # strip an adjustor component: 'W<n><chars>@'
+                sig = re.sub(r"^W[0-9A-Z]+@", "", sig)
+                # strip the access/callconv skin EXACTLY: the direct
+                # form is 'U'|'M' + 'E' + 'AA'; the adjustor form
+                # replaces the access letter with 'W<enc>@' (already
+                # stripped above) leaving 'E' + 'AA'. Normalize both
+                # to nothing; the return type follows. The TAIL
+                # (return + params) comparison keeps const/non-const
+                # overload differences REAL (selftest B).
+                sig = re.sub(r"^[UM]?EAA", "", sig)
+                return (m.group(1), m.group(2), sig)
+            a, b = split_sym(s_obj), split_sym(s_dll)
+            if a and b:
+                return a == b
+            return f"@{cls}@DirectUI@@" in s_obj and \
+                f"@{cls}@DirectUI@@" in s_dll
 
         def _thunk_equiv(s_obj: str, s_dll: str) -> bool:
             """Pinned-name truncation / thunk-adjustor tolerance.
@@ -875,15 +957,24 @@ def main():
                         unknowns.setdefault(cls, []).append(i)
                         continue
                     # fold pair in the secondary truth: any member
-                    # accepted (member identity not provable)
+                    # accepted (member identity not provable).
+                    # Batch-1 (NEG-X3 hardening, mirrors R6): the
+                    # name-shape fallback must not pass a CROSS-CLASS
+                    # same-name body (?X@OtherCls@ vs ?X@ThisCls@) --
+                    # that would be a semantic false binding. The
+                    # probe symbol's class+member must itself appear
+                    # in the DLL slot set (any() over fold members).
                     names = (want_name if isinstance(want_name, list)
                              else [want_name])
                     if any(f"?{n}@{cls}@DirectUI@@" in sym
                            or f"??_E{n}@" in sym
                            for n in names):
-                        if len(exp_set) > 1:
+                        member_in_set = any(
+                            _same_member_and_class_a1(sym, x, cls)
+                            for x in exp_set) if exp_set else False
+                        if member_in_set:
                             unknowns.setdefault(cls, []).append(i)
-                        continue
+                            continue
                     errs.append(
                         f"secondary {base_name} slot {i}: mangled "
                         f"identity -- DLL {sorted(exp_set)[:1]}, "
@@ -958,6 +1049,16 @@ def main():
             # thunk/truncation skin of the same member (see
             # _thunk_equiv above): UNKNOWN, not FAIL
             if any(_thunk_equiv(sym, x) for x in exp_set):
+                unknowns.setdefault(cls, []).append(i)
+                continue
+            # Batch-1 (IXBaby): same member+class with a DIFFERENT
+            # skin the patterns above do not cover (e.g. probe UEAA
+            # direct form vs DLL @W<adjustor> thunk form for the
+            # introduced-subobject slot). Same class+member in the
+            # DLL set: UNKNOWN (identity at skin level not
+            # provable), never FAIL, never cross-class.
+            if any(_same_member_and_class_a1(sym, x, cls)
+                   for x in exp_set):
                 unknowns.setdefault(cls, []).append(i)
                 continue
 

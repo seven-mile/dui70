@@ -8,6 +8,15 @@ WHAT THIS PRODUCES
     against pinned/symbols.json -- the multi-base (MI) extension of
     schema-1 vtable-slots.json, which keeps covering primaries only.
 
+SCHEMA 4 ADDS (over schema 3)
+    * "mangles" per table: a parallel array to "slots" carrying the
+      sorted FULL MANGLED candidate list per slot (same union/fold
+      semantics; [] where slots is []). This is the owner-contract
+      evidence: slot ownership is decided from the mangled class
+      component, which unqualified names cannot carry. Consumers
+      must treat mangles as DERIVED evidence (re-proven by R3''),
+      exactly like slots.
+
 SCHEMA 3 ADDS (over schema 2)
     * `ctor_vftable_references`: for every class whose constructor is
       in the pinned symbols, the rip-relative LEA references to the
@@ -21,7 +30,7 @@ SCHEMA 3 ADDS (over schema 2)
 
 TWO-SECTION SCHEMA (deliberate; see "length provenance")
     {
-      "schema": 3,
+      "schema": 4,
       "derived": { ... },   # function(DLL bytes, symbols.json,
                             #          manual-length input)
       "manual": {           # HUMAN ABI INPUTS -- never claimed derived
@@ -294,6 +303,15 @@ def main(argv: list[str] | None = None) -> int:
 
     # name sets at every RVA (union over all public symbols)
     names_at: dict[int, set[str]] = collections.defaultdict(set)
+    # full MANGLED names at every RVA (schema 4): the owner-contract
+    # evidence -- slot ownership is decided from the mangled class
+    # component (?Name@Class@DirectUI@@), which unqualified names
+    # cannot carry (GetElement is exported by ScrollBar AND
+    # CCBaseScrollBar AND Element...). Stored per slot as "mangles",
+    # a parallel array to "slots": per slot the sorted full mangled
+    # candidate list (same union/fold semantics as names; [] when the
+    # slot has no symbol at its target RVA).
+    mangles_at: dict[int, set[str]] = collections.defaultdict(set)
     for s in sym:
         rv = s.get("rva")
         if not isinstance(rv, str) or not rv:
@@ -301,6 +319,8 @@ def main(argv: list[str] | None = None) -> int:
         m = s.get("mangled") or ""
         mm = re.match(r"\?+([^@]+)@", m)
         names_at[int(rv, 16)].add(mm.group(1) if mm else m)
+        if m:
+            mangles_at[int(rv, 16)].add(m)
 
     # every vftable symbol: (rva, class_key, base|None) -- the
     # CLASSIFIED subset (DirectUI primary/secondary classes) drives
@@ -409,6 +429,7 @@ def main(argv: list[str] | None = None) -> int:
         i = bisect.bisect_right(vt_sorted, rva)
         nxt = vt_sorted[i] if i < len(vt_sorted) else None
         slots = []
+        mangs = []
         provenance = "unknown"
         visible_len: int | None = None  # in-binary bound (slots visible)
         k = 0
@@ -443,8 +464,8 @@ def main(argv: list[str] | None = None) -> int:
                     if vlen is not None and vlen > max_len:
                         stat["manual_conflict"] += 1
                         # emit the VISIBLE slots, conflict-marked
-                        slots2, _prov = _read_exact(rva, off, vlen)
-                        return slots2, "manual-conflict"
+                        slots2, mangs2, _prov = _read_exact(rva, off, vlen)
+                        return slots2, mangs2, "manual-conflict"
                     provenance = "manual"
                     break
                 if max_len is not None and k < max_len:
@@ -479,30 +500,36 @@ def main(argv: list[str] | None = None) -> int:
                     break
                 stat["bad_slot0"] += 1
                 slots.append([])
+                mangs.append([])
                 k += 1
                 continue
             cands = names_at.get(p - image_base)
             if not cands:
                 stat["unresolved"] += 1
                 slots.append([])
+                mangs.append([])
             else:
                 ordered = sorted(cands)
                 slots.append(ordered[0] if len(ordered) == 1 else ordered)
+                mangs.append(sorted(mangles_at.get(p - image_base, ())))
             k += 1
-        return slots, provenance
+        return slots, mangs, provenance
 
     def _read_exact(rva: int, off: int, n: int):
         """Read exactly n visible slots (conflict path)."""
         slots = []
+        mangs = []
         for k in range(n):
             p = struct.unpack_from("<Q", blob, off + 8 * k)[0]
             cands = names_at.get(p - image_base)
             if not cands:
                 slots.append([])
+                mangs.append([])
             else:
                 ordered = sorted(cands)
                 slots.append(ordered[0] if len(ordered) == 1 else ordered)
-        return slots, "manual-conflict"
+                mangs.append(sorted(mangles_at.get(p - image_base, ())))
+        return slots, mangs, "manual-conflict"
 
     iface_lengths: dict[str, int] = manual.get("interface_lengths", {})
     # class-scoped overrides: the manual input may pin the length of a
@@ -683,12 +710,13 @@ def main(argv: list[str] | None = None) -> int:
         entry: dict = {}
         prva = info.get("_primary_rva")
         if prva is not None:
-            slots, prov = read_table(prva, table_len(cls, None))
+            slots, mangs, prov = read_table(prva, table_len(cls, None))
             if slots is not None:
                 entry["primary"] = {
                     "identity": "primary",
                     "rva": "0x%08X" % prva,
                     "slots": slots,
+                    "mangles": mangs,
                     "length_provenance": prov,
                 }
                 n_tables += 1
@@ -697,13 +725,14 @@ def main(argv: list[str] | None = None) -> int:
             sec_out = {}
             for base in sorted(secs_):
                 rva = secs_[base]
-                slots, prov = read_table(rva, table_len(cls, base))
+                slots, mangs, prov = read_table(rva, table_len(cls, base))
                 if slots is None:
                     continue
                 sec_out[base] = {
                     "identity": "secondary:" + base,
                     "rva": "0x%08X" % rva,
                     "slots": slots,
+                    "mangles": mangs,
                     "length_provenance": prov,
                 }
                 n_tables += 1
@@ -719,7 +748,7 @@ def main(argv: list[str] | None = None) -> int:
             derived[cls] = entry
 
     doc = {
-        "schema": 3,
+        "schema": 4,
         "derived": derived,
         "manual": manual,
     }

@@ -675,7 +675,7 @@ def compare_vtable_slots(args, dll: pathlib.Path) -> int:
 
 def compare_mi_tables(args, dll: pathlib.Path) -> int:
     """R3'': re-derive pinned/mi-tables.json and compare the DERIVED
-    section only (schema 3).
+    section only (schema 4: slots + per-slot mangles).
 
     mi-tables.json has two sections by design (extract-mi-tables.py):
       * "derived" -- a function of DLL bytes + symbols.json + the
@@ -737,8 +737,8 @@ def compare_mi_tables(args, dll: pathlib.Path) -> int:
         fail("R3''", "schema versions agree",
              f"rebuilt {rb.get('schema')} vs committed {cb.get('schema')}")
         return 1
-    if cb.get("schema") != 3:
-        fail("R3''", "committed mi-tables.json schema == 3",
+    if cb.get("schema") != 4:
+        fail("R3''", "committed mi-tables.json schema == 4",
              f"schema {cb.get('schema')}")
         return 1
     # manual section must equal the COMMITTED lengths input verbatim
@@ -822,7 +822,7 @@ def main(argv=None) -> int:
         return 1
     print()
     print("=" * 74)
-    print("R3'' re-derive pinned/mi-tables.json derived section (schema 3)")
+    print("R3'' re-derive pinned/mi-tables.json derived section (schema 4)")
     print("=" * 74)
     if compare_mi_tables(args, pathlib.Path(inputs["dll"])) != 0:
         return 1

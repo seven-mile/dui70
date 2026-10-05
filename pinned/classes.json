@@ -381,7 +381,8 @@
   "XBaby": [
    "HWNDElement",
    "IDialogElement",
-   "IElementListener"
+   "IElementListener",
+   "IXBaby"
   ],
   "XElement": [
    "HWNDHost",

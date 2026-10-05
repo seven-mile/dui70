@@ -25,21 +25,15 @@ namespace DirectUI
     class XProvider;
 
     class XBaby
-        : public HWNDElement, public IDialogElement, public IElementListener
+        : public HWNDElement, public IDialogElement, public IElementListener, public IXBaby
     {
     public:
-        // W5 CONTRACT: REJECTED -- this class cannot be
-        // expressed in real-slot order with the current
-        // pipeline model; canonical order is deliberate.
-        // reason: exported virtual(s) not in the primary
-        // vtable (secondary/MI subobject table): CreateStyleParser, GetAdjacent, GetClassInfoW, GetElementProviderImpl, GetFocusableElement, OnChildLostFocus, OnChildReceivedFocus, OnEvent
-
+        virtual bool CanSetFocus(void);
         XBaby(XBaby const&);
         XBaby(void);
         virtual ~XBaby(void);
         XBaby& operator=(XBaby const&);
         virtual void CacheParser(DUIXmlParser*);
-        virtual bool CanSetFocus(void);
         virtual bool ClickDefaultButton(void);
         static long Create(Element*, unsigned long*, Element**);
         static long Create(IXElementCP*, XProvider*, HWND__*, Element*, unsigned long*, Element**);

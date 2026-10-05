@@ -1639,10 +1639,44 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
                 dtor_slot = idx
                 break
         if dtor_slot is None:
-            raise SystemExit(
-                f"contract_reorder: {cls}: virtual dtor declared but the "
-                f"table has no `_E{cls}` marker -- cannot place the dtor "
-                "set; refusing to guess (classify should have rejected)")
+            # Batch-1 (IXBaby): MI class whose dtor marker lives in a
+            # base-subobject table (contract_classify verified it via
+            # the mi-tables and passed 'bound'). The dtor unit is
+            # placed at the END of the class's own introduced-slot
+            # region -- for XBaby the 13 IXBaby methods occupy the
+            # whole primary table, so the dtor set simply is NOT part
+            # of this table's slot walk (it lands in the probe's
+            # first-base view). Emitting it into the walk would assert
+            # a slot the DLL table does not carry.
+            mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+            mi_has_dtor = False
+            if isinstance(mi_entry, dict):
+                mi_tables: list = []
+                if isinstance(mi_entry.get("primary"), dict):
+                    mi_tables.append(mi_entry["primary"])
+                secs = mi_entry.get("secondaries") or {}
+                if isinstance(secs, dict):
+                    mi_tables.extend(
+                        td for td in secs.values()
+                        if isinstance(td, dict))
+                for td in mi_tables:
+                    for sl in (td.get("slots") or []):
+                        names = [sl] if isinstance(sl, str) else list(sl)
+                        if f"_E{cls}" in names:
+                            mi_has_dtor = True
+                            break
+                    if mi_has_dtor:
+                        break
+            if not mi_has_dtor:
+                raise SystemExit(
+                    f"contract_reorder: {cls}: virtual dtor declared but "
+                    f"the table has no `_E{cls}` marker -- cannot place "
+                    "the dtor set; refusing to guess (classify should "
+                    "have rejected)")
+            # dtor placed outside this table: treat as a NON-vtable
+            # member for this walk (its declaration stays in the
+            # header; the base view owns the slot)
+            dtor_name = None
 
     # walk the table slot by slot; at each covered base slot emit the
     # unit (its full run), at each uncovered slot emit a placeholder.
@@ -1721,7 +1755,29 @@ def contract_reorder(cls: str, members: list, slot_lists: list,
     #     declaration does not enter the vtable walk). This is the
     #     fail-closed UNKNOWN path: never a guessed slot.
     if unbound:
-        synth = [n for n in unbound if n not in binder_unknown]
+        # Batch-1 (IXBaby): for a class with an introduced primary
+        # table (mi-tables 'primary'), names placed in OTHER own
+        # subobject tables (secondaries) are PLACED ELSEWHERE with
+        # direct vtable evidence -- they pass through the unbound
+        # append path (original order), exactly like fold-UNKNOWN
+        # units. Only names with NO table evidence anywhere remain
+        # generator-bug synthetics.
+        mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+        mi_placed: set = set()
+        if isinstance(mi_entry, dict):
+            mi_tables: list = []
+            if isinstance(mi_entry.get("primary"), dict):
+                mi_tables.append(mi_entry["primary"])
+            secs = mi_entry.get("secondaries") or {}
+            if isinstance(secs, dict):
+                mi_tables.extend(
+                    td for td in secs.values() if isinstance(td, dict))
+            for td in mi_tables:
+                for sl in (td.get("slots") or []):
+                    names_l = [sl] if isinstance(sl, str) else list(sl)
+                    mi_placed |= set(names_l)
+        synth = [n for n in unbound
+                 if n not in binder_unknown and n not in mi_placed]
         if synth:
             raise SystemExit(
                 f"contract_reorder: {cls}: v2 classified bound but "
@@ -1777,8 +1833,16 @@ def contract_classify(cls: str, members: list, slot_lists: list,
     tabnames: set = set()
     for s in slot_lists:
         tabnames |= ({s} if isinstance(s, str) else set(s))
+    # Batch-1 (IXBaby): an exported virtual is 'external' only when it
+    # appears in NO subobject table of the class. For MI classes the
+    # mi-tables secondaries (schema 3) carry the base-subobject views
+    # (HWNDElement view incl. GetFocusableElement, IDialogElement incl.
+    # OnChildLostFocus/OnChildReceivedFocus, ...) -- the same tables the
+    # R6 probe verifies. A name present there is a base-slot override
+    # with direct vtable evidence, not an unmodellable external.
+    mi_names = _mi_own_slot_names(cls) or set()
     ext = sorted(x for x in (exported_virtuals or set())
-                 if x != cls and x not in tabnames)
+                 if x != cls and x not in tabnames and x not in mi_names)
     if ext:
         return {"mode": "rejected", "reason": "external_virtuals",
                 "external": ext}
@@ -1795,9 +1859,36 @@ def contract_classify(cls: str, members: list, slot_lists: list,
             if entry == f"_E{cls}" or (
                 isinstance(entry, list) and f"_E{cls}" in entry)), None)
         if marker is None:
-            return {"mode": "rejected", "reason": "vdtor_unplaced",
-                    "slots": len(slot_lists)}
-        covered_dtor = {marker}
+            # Batch-1 (IXBaby): for MI classes the class's destructor
+            # lives in the FIRST-base subobject table (the base-chain
+            # dtor slot the compiler binds), not in the class's own
+            # unsuffixed primary (which carries the introduced
+            # interface's methods). A dtor marker present in ANY of
+            # the class's own mi-tables (primary + secondaries) is
+            # direct vtable evidence the dtor is placed; rejection is
+            # only honest when NO table carries it.
+            mi_dtors: set = set()
+            mi_entry = (_MI_DOC_CACHE or {}).get("derived", {}).get(cls)
+            if isinstance(mi_entry, dict):
+                mi_tables: list = []
+                if isinstance(mi_entry.get("primary"), dict):
+                    mi_tables.append(mi_entry["primary"])
+                secs = mi_entry.get("secondaries") or {}
+                if isinstance(secs, dict):
+                    mi_tables.extend(
+                        td for td in secs.values()
+                        if isinstance(td, dict))
+                for td in mi_tables:
+                    for i, sl in enumerate(td.get("slots") or []):
+                        names = [sl] if isinstance(sl, str) else list(sl)
+                        if f"_E{cls}" in names:
+                            mi_dtors.add((id(td), i))
+            if not mi_dtors:
+                return {"mode": "rejected", "reason": "vdtor_unplaced",
+                        "slots": len(slot_lists)}
+            covered_dtor = set()  # marker slot belongs to the base view
+        else:
+            covered_dtor = {marker}
     else:
         covered_dtor = set()
 
@@ -3404,6 +3495,39 @@ def render_abi_types_header(banner: str) -> str:
     lines.append("        virtual bool OnChildLostFocus(Element* elem) = 0;     // slot 6")
     lines.append("        virtual bool OnChildReceivedFocus(Element* elem) = 0; // slot 7")
     lines.append("        virtual Element* GetDefaultButton(void) = 0;          // slot 8")
+    lines.append("    };")
+    lines.append("")
+    lines.append("    // IXBaby: the X-family content-host interface. Evidence")
+    lines.append("    // (batch 1, triage r6-xbaby-primary-triage.md): the DLL")
+    lines.append("    // carries an unsuffixed ??_7XBaby@@6B@ vftable (13 slots,")
+    lines.append("    // 0x00115D08) stored at this+296 in the ctor -- the table")
+    lines.append("    // XBaby introduces for its LAST base subobject. TouchXBaby's")
+    lines.append("    // primary (0x0010E950) carries the IDENTICAL 13-slot name")
+    lines.append("    // sequence; all 13 names have BOTH implementers' exported")
+    lines.append("    // symbols with identical signature parts. XProvider::")
+    lines.append("    // CreateXBaby(..., IXBaby**) returns exactly this type.")
+    lines.append("    // Signatures harvested from the XBaby exports. Pointer-only")
+    lines.append("    // parameter/return types stay forward-declared (HWNDElement,")
+    lines.append("    // DUIXmlParser, Element); tagSIZE is windef.h's, already")
+    lines.append("    // complete at this point.")
+    lines.append("    class HWNDElement;")
+    lines.append("    class DUIXmlParser;")
+    lines.append("    struct __declspec(novtable) IXBaby")
+    lines.append("    {")
+    lines.append("    public:")
+    lines.append("        virtual HWNDElement* GetXBabyElement(void) = 0;                // slot 0")
+    lines.append("        virtual void CacheParser(DUIXmlParser* parser) = 0;           // slot 1")
+    lines.append("        virtual long SetToHost(Element* elem) = 0;                    // slot 2")
+    lines.append("        virtual tagSIZE GetContentDesiredSize(int width, int height) = 0; // slot 3")
+    lines.append("        virtual bool CanSetFocus(void) = 0;                          // slot 4")
+    lines.append("        virtual long GetHostedElementID(unsigned short* id) = 0;      // slot 5")
+    lines.append("        virtual void ForceThemeChange(unsigned __int64 a, __int64 b) = 0; // slot 6")
+    lines.append("        virtual bool GetDefaultButtonTracking(void) = 0;             // slot 7")
+    lines.append("        virtual long SetDefaultButtonTracking(bool track) = 0;       // slot 8")
+    lines.append("        virtual long SetButtonClassAcceptsEnterKey(bool accepts) = 0; // slot 9")
+    lines.append("        virtual bool ClickDefaultButton(void) = 0;                   // slot 10")
+    lines.append("        virtual long SetRegisteredDefaultButton(Element* elem) = 0;  // slot 11")
+    lines.append("        virtual long SetHandleEnterKey(bool handle) = 0;             // slot 12")
     lines.append("    };")
     lines.append("")
     lines.append("    // ---- embedded-subsystem namespaces referenced by exported")

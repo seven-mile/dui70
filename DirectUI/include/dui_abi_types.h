@@ -137,6 +137,39 @@ namespace DirectUI
         virtual Element* GetDefaultButton(void) = 0;          // slot 8
     };
 
+    // IXBaby: the X-family content-host interface. Evidence
+    // (batch 1, triage r6-xbaby-primary-triage.md): the DLL
+    // carries an unsuffixed ??_7XBaby@@6B@ vftable (13 slots,
+    // 0x00115D08) stored at this+296 in the ctor -- the table
+    // XBaby introduces for its LAST base subobject. TouchXBaby's
+    // primary (0x0010E950) carries the IDENTICAL 13-slot name
+    // sequence; all 13 names have BOTH implementers' exported
+    // symbols with identical signature parts. XProvider::
+    // CreateXBaby(..., IXBaby**) returns exactly this type.
+    // Signatures harvested from the XBaby exports. Pointer-only
+    // parameter/return types stay forward-declared (HWNDElement,
+    // DUIXmlParser, Element); tagSIZE is windef.h's, already
+    // complete at this point.
+    class HWNDElement;
+    class DUIXmlParser;
+    struct __declspec(novtable) IXBaby
+    {
+    public:
+        virtual HWNDElement* GetXBabyElement(void) = 0;                // slot 0
+        virtual void CacheParser(DUIXmlParser* parser) = 0;           // slot 1
+        virtual long SetToHost(Element* elem) = 0;                    // slot 2
+        virtual tagSIZE GetContentDesiredSize(int width, int height) = 0; // slot 3
+        virtual bool CanSetFocus(void) = 0;                          // slot 4
+        virtual long GetHostedElementID(unsigned short* id) = 0;      // slot 5
+        virtual void ForceThemeChange(unsigned __int64 a, __int64 b) = 0; // slot 6
+        virtual bool GetDefaultButtonTracking(void) = 0;             // slot 7
+        virtual long SetDefaultButtonTracking(bool track) = 0;       // slot 8
+        virtual long SetButtonClassAcceptsEnterKey(bool accepts) = 0; // slot 9
+        virtual bool ClickDefaultButton(void) = 0;                   // slot 10
+        virtual long SetRegisteredDefaultButton(Element* elem) = 0;  // slot 11
+        virtual long SetHandleEnterKey(bool handle) = 0;             // slot 12
+    };
+
     // ---- embedded-subsystem namespaces referenced by exported
     //      signatures (pointer-only: namespace + class fwd) ----
     namespace DuiBehaviorFilters { enum Flags { Flags_None = 0 }; }

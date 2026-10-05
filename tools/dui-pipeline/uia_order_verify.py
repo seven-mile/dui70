@@ -177,6 +177,62 @@ def parse_pe(blob: bytes):
     return image_base, secs
 
 
+def _decode_thunk_target(blob: bytes, rva2off, rva: int):
+    """Decode an MSVC x64 this-adjustor thunk body at RVA.
+
+    Two canonical encodings (all bytes read, never guessed from the
+    W<enc> mangled skin -- the skin is only a triage calibration
+    anchor; the imm/rel bytes are the truth):
+      48 81 e9 <imm32>  e9 <rel32>   (12 bytes: sub rcx, imm32; jmp rel32)
+      48 83 e9 <imm8>   e9 <rel32>   ( 9 bytes: sub rcx, imm8;  jmp rel32)
+    Returns (adjust, target_rva) or None when the bytes match neither
+    form (fail-closed: no decode, no verification)."""
+    off = rva2off(rva)
+    if off is None:
+        return None
+    code = blob[off:off + 14]
+    if len(code) < 9:
+        return None
+    if code[0:3] == b"\x48\x81\xe9" and code[7] == 0xE9:
+        adj = struct.unpack_from("<i", code, 3)[0]
+        rel = struct.unpack_from("<i", code, 8)[0]
+        return adj, rva + 12 + rel
+    if code[0:2] == b"\x48\x83" and code[2] == 0xE9 and code[4] == 0xE9:
+        adj = code[3]
+        rel = struct.unpack_from("<i", code, 5)[0]
+        return adj, rva + 9 + rel
+    return None
+
+
+def _thunk_skin(s: str) -> bool:
+    """True when the mangled name is a W-adjustor thunk skin."""
+    return bool(re.match(r"\?(\?\?_E)?\w+@\w+@DirectUI@@W", s))
+
+
+def _skin_adjust(s: str):
+    """Displacement encoded in the W<enc> adjustor skin, or None.
+
+    The mangled skin encodes the this-adjustment the compiler
+    emitted (letters A..P for nibbles 0..15, big-endian; a single
+    '0'-'9' digit encodes small values). Calibrated on four corpus
+    anchors: WBCI=0x128=296, WCA=0x20=32, WBNA=0x1D0=464,
+    WCI=0x28=40. Used as a CONSISTENCY cross-check on the decoded
+    thunk bytes: skin and bytes must agree or the thunk is treated
+    as tampered/corrupt (no upgrade)."""
+    m = re.match(r"\?\??\w+@\w+@DirectUI@@W([0-9A-P]+)", s)
+    if not m:
+        return None
+    enc = m.group(1)
+    val = 0
+    for ch in enc:
+        if ch.isdigit():
+            v = int(ch)
+        else:
+            v = ord(ch) - ord("A")
+        val = val * 16 + v
+    return val
+
+
 def _same_member_and_class(s_obj: str, s_dll: str, cls: str) -> bool:
     """True when the probe symbol and the DLL symbol denote the SAME
     member of the SAME class (used by the name-shape fallback after
@@ -686,6 +742,161 @@ def _selftest(pinned: pathlib.Path, inc: pathlib.Path,
               f"expected 2)")
         ok = False
 
+    # ---- T8/T9/T10: A-class thunk-target decoder controls ------
+    # All mutations live in scratch copies under the workdir; the
+    # repo tree is never touched. Each control is PAIRED: the
+    # mutation must produce its failure signature AND the unmutated
+    # twin must produce the upgrade (a control that cannot fail is
+    # reported as an error, never a green run).
+    t8root = root / "t8"
+    (t8root / "pinned").mkdir(parents=True, exist_ok=True)
+    for f_ in pinned.iterdir():
+        if f_.is_file():
+            shutil.copy(f_, t8root / "pinned" / f_.name)
+
+    def _run_xbaby(pinned_dir, workname, dll_path=None, outname="o.json"):
+        art = t8root / outname
+        r_ = subprocess.run(
+            [sys.executable, str(here / "uia_order_verify.py"),
+             "--pinned", str(pinned_dir), "--include", str(inc),
+             "--workdir", str(t8root / workname),
+             "--dll", str(dll_path or dll), "--classes", "XBaby",
+             "--json-out", str(art)],
+            capture_output=True, text=True)
+        doc_ = (json.loads(art.read_text(encoding="utf-8"))
+                if art.is_file() else None)
+        prim = ((doc_ or {}).get("audited", {}).get("XBaby")
+                or {}).get("tables", {}).get("PRIMARY") or {}
+        return r_.returncode, prim
+
+    # canonical thunk: XBaby CanSetFocus WBCI @ 0xD8AC0
+    THUNK_RVA = 0xD8AC0
+    import struct as _s8
+    blob_b = bytearray(blob)
+
+    def _file_off(rva):
+        for va, vs, ra, rs in _pe_secs(bytes(blob_b)):
+            if va <= rva < va + vs:
+                return ra + (rva - va)
+        return None
+
+    # ---- T8 (NEG-T1): imm32 tamper (296 -> 2960) ----
+    # Paired: mutated DLL -> slot must NOT upgrade (and the gate must
+    # not crash); unmutated twin -> slot MUST upgrade. A tampered
+    # adjust that still upgrades = false green = FAIL.
+    off8 = _file_off(THUNK_RVA)
+    tampered = root / "t8-dll-tampered.dll"
+    if off8 is None:
+        print("selftest T8: INCONCLUSIVE (thunk RVA not in a section) "
+              "-- non-rc0")
+        ok = False
+    else:
+        tb = bytearray(blob)
+        # imm32 sits at bytes [3:7] of `48 81 e9 imm32`
+        imm = _s8.unpack_from("<i", tb, off8 + 3)[0]
+        _s8.pack_into("<i", tb, off8 + 3, imm * 10)  # 296 -> 2960
+        tampered.write_bytes(bytes(tb))
+        rc_m, prim_m = _run_xbaby(t8root / "pinned", "w-mut",
+                                  dll_path=tampered, outname="t8m.json")
+        rc_c, prim_c = _run_xbaby(t8root / "pinned", "w-clean",
+                                  outname="t8c.json")
+        # the mutated run must not crash (rc in {0,1}) and must NOT
+        # have target-verified slot 4 (CanSetFocus); the clean twin
+        # MUST have.
+        mv_m = (prim_m.get("slot_detail") or [])
+        mv_c = (prim_c.get("slot_detail") or [])
+        up_m = any((s.get("slot") == 4 and "thunk_decode" in s)
+                   for s in mv_m)
+        up_c = any((s.get("slot") == 4 and "thunk_decode" in s)
+                   for s in mv_c)
+        if rc_m not in (0, 1):
+            print(f"selftest T8: FAIL (tampered run crashed rc="
+                  f"{rc_m})")
+            ok = False
+        elif up_m:
+            print("selftest T8: FAIL (tampered imm32 still produced "
+                  "a thunk_decode upgrade -- false green)")
+            ok = False
+        elif not up_c:
+            print("selftest T8: FAIL (clean twin did not upgrade "
+                  "slot 4 -- positive control broken)")
+            ok = False
+        else:
+            print("selftest T8: PASS (imm32 tamper: no upgrade, no "
+                  "crash; clean pair upgrades)")
+
+    # ---- T9 (NEG-T2): wrong jmp target ----
+    # Rewire GetDefaultButtonTracking's thunk (0xD9830, short form)
+    # to jump to SetDefaultButtonTracking's body (0xDA3C0): the
+    # member identity no longer matches -> no upgrade. Paired with
+    # the clean twin upgrading slot 7.
+    GT_RVA = 0xD9830
+    ST_RVA = 0xDA3C0
+    off9 = _file_off(GT_RVA)
+    if off9 is None:
+        print("selftest T9: INCONCLUSIVE (thunk RVA not in a section) "
+              "-- non-rc0")
+        ok = False
+    else:
+        tb = bytearray(blob)
+        # short form: 48 83 e9 XX e9 rel32 -- rel32 at [5:9],
+        # target = rva + 9 + rel  =>  rel = ST_RVA - (GT_RVA + 9)
+        rel = ST_RVA - (GT_RVA + 9)
+        _s8.pack_into("<i", tb, off9 + 5, rel)
+        tampered9 = root / "t9-dll-tampered.dll"
+        tampered9.write_bytes(bytes(tb))
+        rc_m, prim_m = _run_xbaby(t8root / "pinned", "w-mut9",
+                                  dll_path=tampered9, outname="t9m.json")
+        rc_c, prim_c = _run_xbaby(t8root / "pinned", "w-clean9",
+                                  outname="t9c.json")
+        up_m = any((s.get("slot") == 7 and "thunk_decode" in s)
+                   for s in (prim_m.get("slot_detail") or []))
+        up_c = any((s.get("slot") == 7 and "thunk_decode" in s)
+                   for s in (prim_c.get("slot_detail") or []))
+        if rc_m not in (0, 1):
+            print(f"selftest T9: FAIL (wrong-target run crashed "
+                  f"rc={rc_m})")
+            ok = False
+        elif up_m:
+            print("selftest T9: FAIL (wrong jmp target still "
+                  "upgraded slot 7 -- member identity not enforced)")
+            ok = False
+        elif not up_c:
+            print("selftest T9: FAIL (clean twin did not upgrade "
+                  "slot 7 -- positive control broken)")
+            ok = False
+        else:
+            print("selftest T9: PASS (wrong jmp target: member@class "
+                  "mismatch refused; clean pair upgrades)")
+
+    # ---- T10 (NEG-T3): decoder off -> baseline thunk-UNKNOWN ----
+    art10 = root / "t10-off.json"
+    r10 = subprocess.run(
+        [sys.executable, str(here / "uia_order_verify.py"),
+         "--pinned", str(pinned), "--include", str(inc),
+         "--workdir", str(root / "w-t10"), "--dll", str(dll),
+         "--classes", "XBaby", "--no-thunk-decode",
+         "--json-out", str(art10)],
+        capture_output=True, text=True)
+    if r10.returncode not in (0, 1) or not art10.is_file():
+        print(f"selftest T10: FAIL (decoder-off run rc="
+              f"{r10.returncode})")
+        ok = False
+    else:
+        doc10 = json.loads(art10.read_text(encoding="utf-8"))
+        prim10 = (doc10.get("audited", {}).get("XBaby")
+                  or {}).get("tables", {}).get("PRIMARY") or {}
+        tv = prim10.get("thunk_verified", 0)
+        tu = prim10.get("thunk_unknown", 0)
+        if tv != 0 or tu != 4:
+            print(f"selftest T10: FAIL (decoder off: expected "
+                  f"thunk_verified=0 thunk_unknown=4, got tv={tv} "
+                  f"tu={tu})")
+            ok = False
+        else:
+            print("selftest T10: PASS (--no-thunk-decode restores "
+                  "the 4-slot thunk-UNKNOWN baseline)")
+
     print(f"uia_order_verify selftest: {'PASS' if ok else 'FAIL'}")
     return 0 if ok else 1
 
@@ -726,6 +937,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--classes", default=None,
                     help="comma list; default: all classes with both "
                          "header and mi-tables entry")
+    ap.add_argument("--no-thunk-decode", action="store_true",
+                    help="disable the A-class thunk-target decoder "
+                         "(thunk-UNKNOWN slots stay unknown; NEG-T3 "
+                         "baseline reproduction control)")
     args = ap.parse_args(argv)
 
     pinned = pathlib.Path(args.pinned)
@@ -751,6 +966,7 @@ def main(argv: list[str] | None = None) -> int:
               "fields + fail-closed manual conflicts)", file=sys.stderr)
         return 2
     derived = mi_doc["derived"]
+    no_thunk_decode = bool(args.no_thunk_decode)
 
     dll_path = pathlib.Path(args.dll) if args.dll else _resolve_dll(pinned)
     blob = dll_path.read_bytes()
@@ -1012,7 +1228,8 @@ def main(argv: list[str] | None = None) -> int:
                     "dll_slots": len(tinfo["slots"]),
                     "probe_slots": len(got) if got is not None else None,
                     "verified": 0, "fold_unknown": 0,
-                    "thunk_unknown": 0, "unresolved": 0,
+                    "thunk_unknown": 0, "thunk_verified": 0,
+                    "unresolved": 0,
                     "fail_slots": [], "slot_detail": [],
                     "this_offsets": this_offsets.get(
                         base_key if base_key else "", "unknown")}
@@ -1050,7 +1267,68 @@ def main(argv: list[str] | None = None) -> int:
                             trow["verified"] += 1
                         continue
                     if any(_thunk_equiv(sym, x) for x in exp_set):
-                        trow["thunk_unknown"] += 1
+                        # A-class thunk-target decoder (XBaby batch):
+                        # the same-member adjustor-skin pair is
+                        # provable FURTHER by reading the DLL thunk
+                        # body itself: decode `sub rcx, imm; jmp rel32`
+                        # to the target RVA, resolve the target symbol
+                        # set, and require the probe's declared
+                        # member@class to match the target's
+                        # member@class (own/declared target identity,
+                        # never a same-RVA coincidence). Every step
+                        # must succeed; any failure keeps the honest
+                        # thunk_unknown.
+                        upgraded = False
+                        if not no_thunk_decode:
+                            dll_thunks = [x for x in exp_set
+                                          if _thunk_skin(x)]
+                            # resolve each candidate thunk symbol's RVA
+                            for x in dll_thunks:
+                                xrva = None
+                                for rr, names in rva_map.items():
+                                    if x in names:
+                                        xrva = rr
+                                        break
+                                if xrva is None:
+                                    continue
+                                dec = _decode_thunk_target(
+                                    blob, rva2off, xrva)
+                                if dec is None:
+                                    continue
+                                adj, trva = dec
+                                # skin-vs-byte consistency: the W<enc>
+                                # skin encodes the same displacement the
+                                # thunk body carries. A mismatch means
+                                # a tampered or corrupt thunk (NEG-T1:
+                                # imm32 rewrite) -- refuse the upgrade
+                                # (fail-closed), never a false green.
+                                skin_adj = _skin_adjust(x)
+                                if skin_adj is not None and \
+                                        skin_adj != adj:
+                                    continue
+                                tsyms = rva_map.get(trva, [])
+                                if not tsyms:
+                                    continue
+                                # strict member@class match between
+                                # the probe declaration and the jump
+                                # target's symbols
+                                if any(_same_member_and_class(
+                                        sym, ts, cls) for ts in tsyms):
+                                    trow["thunk_verified"] += 1
+                                    trow["verified"] += 1
+                                    sd = trow["slot_detail"][-1] \
+                                        if trow["slot_detail"] else None
+                                    if sd and sd.get("slot") == i:
+                                        sd["thunk_decode"] = {
+                                            "adjust": adj,
+                                            "target_rva": hex(trva),
+                                            "target_symbols":
+                                                sorted(tsyms),
+                                            "dll_thunk": x}
+                                    upgraded = True
+                                    break
+                        if not upgraded:
+                            trow["thunk_unknown"] += 1
                         continue
                     names = want if isinstance(want, list) else [want]
                     # Batch-1 (NEG-X3 rule gap): the name-shape
@@ -1174,6 +1452,12 @@ def main(argv: list[str] | None = None) -> int:
           f"{n_rej} REJECTED")
     print(f"  slot totals: {tot_tables} tables -- verified={tot_v}, "
           f"unknown={tot_u}, fail_slots={tot_f}")
+    tot_tv = sum(t_.get("thunk_verified", 0) for r in audited.values()
+                 for t_ in r["tables"].values())
+    if tot_tv or not args.no_thunk_decode:
+        print(f"  thunk-target decoder: {tot_tv} thunk slots "
+              f"target-verified "
+              f"({'disabled' if args.no_thunk_decode else 'active'})")
     if mandatory_missing:
         print(f"  MANDATORY MISSING (fail-closed): {mandatory_missing}")
     for cls, r in sorted(audited.items()):

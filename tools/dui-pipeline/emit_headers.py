@@ -1263,6 +1263,7 @@ def _bind_own_units(cls: str, unit_names: list,
 
     unbindable = [u for u in unit_names if not appears.get(u)]
 
+
     claimed: dict[int, str] = {}
 
     def unit_slots(name: str, base: int) -> list[int] | None:

@@ -302,20 +302,33 @@ def main(argv: list[str] | None = None) -> int:
         mm = re.match(r"\?+([^@]+)@", m)
         names_at[int(rv, 16)].add(mm.group(1) if mm else m)
 
-    # every vftable symbol: (rva, class_key, base|None)
+    # every vftable symbol: (rva, class_key, base|None) -- the
+    # CLASSIFIED subset (DirectUI primary/secondary classes) drives
+    # which tables are EMITTED.
     vft = []
+    # N6 (boundary integrity): the physical next-vftable boundary is
+    # computed from ALL vftable symbol RVAs in the binary -- including
+    # outer-namespace and template instantiation vftables that
+    # classify_vftable() declines to classify. A foreign vftable laid
+    # out directly after a DirectUI table is a REAL physical boundary:
+    # reading past it pulls the foreign table's slots into the
+    # DirectUI table (16 classes overread such tails, e.g.
+    # CCCommandLink 74 vs true 63 -- the 11 extra slots were
+    # ?$SmObjectT@VPVLLauncherAnimationTriggers... entries).
+    # Classification limits the OUTPUT table set, never the boundary.
+    all_vt_rvas: set = set()
     for s in sym:
         if s.get("kind") != "vftable":
             continue
         rv = s.get("rva")
-        m = s.get("mangled") or ""
         if not isinstance(rv, str) or not rv:
             continue
-        parsed = classify_vftable(m)
+        all_vt_rvas.add(int(rv, 16))
+        parsed = classify_vftable(s.get("mangled") or "")
         if parsed is None:
             continue
         vft.append((int(rv, 16), parsed[0], parsed[1]))
-    vt_sorted = sorted({r for r, _, _ in vft})
+    vt_sorted = sorted(all_vt_rvas)
 
     # vftable rva -> ALL alias mangled names (dict[int, list[str]]).
     # One RVA can carry SEVERAL vftable symbols (ICF-folded tables

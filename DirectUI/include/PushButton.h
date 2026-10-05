@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "dui_abi_types.h"
 
-#include "Button.h"
+#include "AutoButton.h"
 
 namespace DirectUI
 {
@@ -15,7 +15,7 @@ namespace DirectUI
     class PushButton;
 
     class PushButton
-        : public Button
+        : public AutoButton
     {
     public:
         PushButton(PushButton&&);

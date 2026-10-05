@@ -26,26 +26,19 @@ namespace DirectUI
         TaskPage(TaskPage const&);
         TaskPage(void);
         virtual ~TaskPage(void);
-        TaskPage& operator=(TaskPage const&);
-        operator _PSP*(void);
-        long DUICreatePropertySheetPage(HINSTANCE__*);
-        HWND__* GetParentHWND(void);
 
         protected:
-        Element* GetElement(void);
+        virtual long LoadParser(DUIXmlParser**);
+
+        private:
+        long LoadPage(Element**, Element*, DUIXmlParser**);
+
+        protected:
+        virtual long LoadPage(HWNDElement*, HINSTANCE__*, Element**, DUIXmlParser**);
         virtual unsigned int GetPageRCID(void);
         virtual unsigned short const* GetPageResID(void);
         virtual void InitPropSheetPage(_PROPSHEETPAGEW*);
-        virtual long LoadPage(HWNDElement*, HINSTANCE__*, Element**, DUIXmlParser**);
-        virtual long LoadParser(DUIXmlParser**);
         virtual __int64 OnKillActive(void);
-        virtual void OnListenedEvent(Element*, Event*);
-        virtual void OnListenedInput(Element*, InputEvent*);
-        virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
-        virtual bool OnListenedPropertyChanging(Element*, PropertyInfo const*, int, Value*, Value*);
-        virtual void OnListenerAttach(Element*);
-        virtual void OnListenerDetach(Element*);
-        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
         virtual __int64 OnQueryCancel(void);
         virtual Element* OnQueryInitialFocus(void);
         virtual __int64 OnReset(void);
@@ -53,6 +46,22 @@ namespace DirectUI
         virtual __int64 OnWizBack(void);
         virtual __int64 OnWizFinish(void);
         virtual __int64 OnWizNext(void);
+        virtual bool OnMessage(unsigned int, unsigned __int64, __int64, __int64*);
+
+        public:
+        TaskPage& operator=(TaskPage const&);
+        operator _PSP*(void);
+        long DUICreatePropertySheetPage(HINSTANCE__*);
+        HWND__* GetParentHWND(void);
+
+        protected:
+        Element* GetElement(void);
+        virtual void OnListenedEvent(Element*, Event*);
+        virtual void OnListenedInput(Element*, InputEvent*);
+        virtual void OnListenedPropertyChanged(Element*, PropertyInfo const*, int, Value*, Value*);
+        virtual bool OnListenedPropertyChanging(Element*, PropertyInfo const*, int, Value*, Value*);
+        virtual void OnListenerAttach(Element*);
+        virtual void OnListenerDetach(Element*);
         __int64 PropSheet_SendMessage(unsigned int, unsigned __int64, __int64);
 
         private:
@@ -61,7 +70,6 @@ namespace DirectUI
         virtual void DestroyCP(void);
         void FreeComCtl32(void);
         long LoadComCtl32(void);
-        long LoadPage(Element**, Element*, DUIXmlParser**);
         int OnWndMsg(unsigned int, unsigned __int64, __int64, __int64*);
         static __int64 StaticXHostSubclassProc(HWND__*, unsigned int, unsigned __int64, __int64);
         static void StaticXmlParserError(unsigned short const*, unsigned short const*, int, void*);

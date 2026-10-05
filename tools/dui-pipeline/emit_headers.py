@@ -782,7 +782,185 @@ SYMBOLS_CACHE: list | None = None
 _RULE_E_RECOVERED: dict = {}  # (cls, slot) -> rec
 _RULE_C_PLACEHOLDERS: dict[str, int] = {}
 
+# Hand-modeled abstract consumer interfaces (no own vftable in the
+# DLL, hence no vtable-slots entry): their pure-virtual counts are
+# structural facts of the declarations this emitter itself renders
+# (the Interfaces.h blocks) -- the same class of registry as
+# POLYMORPHIC_BASE_CLASSES. Batch-2 uses them to delimit interface
+# slots vs the derived class's own appended-tail slots.
+INTERFACE_PURE_COUNTS = {
+    "IElementListener": 6,
+    "IProvider": 1,
+    "IClassInfo": 19,
+}
 
+# Method NAMES of the hand-modeled interfaces above (the declarations
+# this emitter renders in Interfaces.h). Used by the batch-2 tail
+# synthesis to exclude the first base's interface methods from tail
+# fold candidates: the interface slots' FOLD CONTENTS are body-sharing
+# noise (the whole 0x7C980 family appears at every shared-body slot),
+# so the exclusion needs the real method names, not fold membership.
+INTERFACE_METHOD_NAMES = {
+    "IElementListener": {
+        "OnListenerAttach", "OnListenerDetach",
+        "OnListenedPropertyChanging", "OnListenedPropertyChanged",
+        "OnListenedInput", "OnListenedEvent",
+    },
+}
+
+# vtable-slots.json tables (wired at load): the batch-2 fold-aware
+# Rule E reads them as same-shape family witnesses (see
+# _rule_e_recoveries); the batch-2 tail-order walk reads them for
+# interface lengths of classes that own tables.
+_slot_tables_global: dict = {}
+_inheritance_order_global: dict = {}
+
+
+def _iface_slot_count(name: str) -> int | None:
+    """Interface-method (slot) count of a base: its own
+    vtable-slots.json table length when it has one (classes with own
+    primary tables), else the hand-modeled pure-virtual registry
+    above (abstract consumer interfaces), else None (unknown -- the
+    caller must fail closed)."""
+    e = _slot_tables_global.get(name)
+    if isinstance(e, dict) and e.get("slots"):
+        return len(e["slots"])
+    return INTERFACE_PURE_COUNTS.get(name)
+
+
+
+def _synthesize_tail_contract(cls: str):
+    """Batch-2: synthesize a vtable-slot contract for a class with NO
+    primary vtable-slots entry whose own virtuals append to a FIRST
+    base interface table (mi-tables secondaries carry the tail).
+
+    Returns (synth_slots, iface_len, first_base) or None when the
+    shape is not decidable (fail-closed: the caller keeps the
+    canonical walk).
+
+    Slot resolution per tail slot (position = slot index):
+      * singleton names pass through ('_E...' dtor markers included);
+      * an ICF fold is resolved by DERIVED-CLASS membership: fold
+        members that are the class's own TAIL virtuals. The own-tail
+        candidate set excludes (a) other bases' interface methods
+        (their secondary tables under this class carry them, resolved
+        singleton slots + fold slots restricted to their tables) and
+        (b) the first base's INTERFACE method names (registry/
+        vtable-slots). A fold whose candidate set has exactly as many
+        members as there are tail slots sharing that same fold
+        content is assigned member-by-member in sorted order
+        (identical bodies: any permutation is ABI-equal); a fold with
+        a single candidate binds it; anything else stays a fold
+        (honest debt, fold-UNKNOWN at audit).
+    """
+    doc = _MI_DOC_CACHE
+    if doc is None:
+        return None
+    entry = (doc.get("derived") or {}).get(cls)
+    if not isinstance(entry, dict):
+        return None
+    secs = entry.get("secondaries") or {}
+    bases = _inheritance_order_global.get(cls) or []
+    first_base = next((b for b in bases if b in secs), None)
+    if first_base is None:
+        return None
+    # Batch-2 gate: ONLY abstract consumer interfaces (registry;
+    # no own vtable-slots table) qualify as the first base. A first
+    # base with its OWN vtable-slots table (e.g. Element) keeps the
+    # pre-batch-2 emission path entirely -- blast-radius guarantee:
+    # the synthesis changes no other header (BaseScrollViewer & co.
+    # carry Rule C placeholders via that legacy path).
+    flen = INTERFACE_PURE_COUNTS.get(first_base)
+    if flen is None:
+        return None
+    if _slot_tables_global.get(first_base):
+        return None
+    fb_slots = (secs.get(first_base) or {}).get("slots") or []
+    if len(fb_slots) <= flen:
+        return None  # no own tail at all
+    d_virt_all = {s.get("member") for s in (SYMBOLS_CACHE or [])
+                  if s.get("class") == cls and s.get("is_virtual")}
+    d_virt = set(d_virt_all)
+    d_virt.discard(cls)
+    # own-tail candidate exclusion sets
+    other_bound: set = set()
+    for bk, bsec in secs.items():
+        if bk == first_base:
+            continue
+        for si, s in enumerate(bsec.get("slots") or []):
+            if isinstance(s, str):
+                other_bound.add(s)
+                continue
+            # fold slot of another base: resolve by the same-shape
+            # witness discipline (vtable-slots table of equal length
+            # whose resolved slots agree); a fold that does not
+            # resolve to exactly one derived-class virtual contributes
+            # NOTHING (fold contents are body-sharing noise -- using
+            # them raw would wrongly exclude tail candidates)
+            names = set(s)
+            d_hits = [n for n in names if n in d_virt_all]
+            if len(d_hits) == 1:
+                other_bound.add(d_hits[0])
+                continue
+            wit: set = set()
+            for wk, wt in _slot_tables_global.items():
+                if wk == cls or wk == bk:
+                    continue
+                wl = wt.get("slots") or []
+                if len(wl) != len(bsec.get("slots") or []):
+                    continue
+                shape_ok = True
+                for sj in range(len(wl)):
+                    a = (bsec.get("slots") or [])[sj]
+                    a_n = set([a] if isinstance(a, str) else a)
+                    b = wl[sj]
+                    b_n = set([b] if isinstance(b, str) else b)
+                    if len(a_n) == 1 or len(b_n) == 1:
+                        if a_n != b_n:
+                            shape_ok = False
+                            break
+                if not shape_ok:
+                    continue
+                w = wl[si]
+                wit |= set([w] if isinstance(w, str) else w)
+            free = [n for n in d_hits if n in wit] if wit else []
+            if len(free) == 1:
+                other_bound.add(free[0])
+    first_iface_names: set = set(INTERFACE_METHOD_NAMES.get(
+        first_base, ()))
+    if not first_iface_names:
+        # no registry names: fall back to singleton names of the
+        # interface prefix (folds are body noise and cannot name the
+        # interface's methods)
+        for s in fb_slots[:flen]:
+            if isinstance(s, str):
+                first_iface_names.add(s)
+    tail = fb_slots[flen:]
+    # group tail slots by fold content identity
+    fold_key_slots: dict[tuple, list] = {}
+    for i, s in enumerate(tail):
+        key = tuple(sorted(s)) if isinstance(s, list) else (s,)
+        fold_key_slots.setdefault(key, []).append(i)
+    synth: list = []
+    for i, s in enumerate(tail):
+        if isinstance(s, str):
+            synth.append(s)
+            continue
+        key = tuple(sorted(s))
+        slots_with = fold_key_slots[key]
+        members = [n for n in set(s)
+                   if n in d_virt
+                   and n not in other_bound
+                   and n not in first_iface_names]
+        if len(members) == 1:
+            synth.append(members[0])
+        elif len(members) == len(slots_with) and len(slots_with) > 1:
+            # family range assignment: sorted, one member per slot
+            pos = slots_with.index(i)
+            synth.append(sorted(members)[pos])
+        else:
+            synth.append(list(s))  # keep fold: honest debt
+    return synth, flen, first_base
 def _rule_e_recoveries(cls: str, members: list, tr,
                                slot_lists: list) -> dict:
     """Rule E: recover placeholder slots' real declarations from
@@ -798,7 +976,9 @@ def _rule_e_recoveries(cls: str, members: list, tr,
     (the "58 vs 56" extra-slot failure).
 
     Constraints (all fail-closed, no guessing):
-      * the secondary slot must be a singleton (no folds);
+      * the secondary slot must be a singleton (no folds); the
+        batch-2 fold-aware extension below adds same-RVA fold
+        evidence with a unique derived-class member;
       * the name must have an exported virtual symbol on D;
       * a name the class ITSELF already declares is skipped (the
         existing declaration binds; emitting twice would be a
@@ -812,7 +992,7 @@ def _rule_e_recoveries(cls: str, members: list, tr,
     doc = _MI_DOC_CACHE
     if doc is None:
         return out
-    own_names = {s.get("member") for s in members}
+    own_declared = {s.get("member") for s in members}
     # class's own contract table slots -> placeholder positions only
     for d_cls, entry in (doc.get("derived") or {}).items():
         if d_cls == cls:
@@ -837,8 +1017,81 @@ def _rule_e_recoveries(cls: str, members: list, tr,
                 continue  # this class has a real (or fold) identity here
             names = [sl] if isinstance(sl, str) else list(sl)
             if len(names) != 1:
-                continue  # fold/ambiguous: never guess
-            name = names[0]
+                # Batch-2 fold-aware extension: when the derived
+                # secondary's slot is an ICF FOLD, the singleton rule
+                # above refuses (never guess). The fold body is shared
+                # across classes (e.g. the 38-name 0x7C980 no-op
+                # family), so fold membership alone cannot name the
+                # slot. TWO deterministic name-level witnesses break
+                # the tie; both are computed from pinned contracts:
+                #
+                # (w1) SAME-SHAPE TABLE WITNESS: another class's
+                #      vtable-slots table of the SAME LENGTH whose
+                #      singleton/known slots agree with this
+                #      secondary's (the interface family shape).
+                #      Candidate = names present at the SAME slot
+                #      index in the witness table. XResourceProvider
+                #      (3 slots: CreateDUICP/CreateParserCP/<fold>)
+                #      witnesses IXProviderCP slot 2 = {Destroy,
+                #      DestroyCP}; intersected with the derived
+                #      class's virtuals this is unique.
+                # (w2) derived-class membership: the candidate must
+                #      be an exported virtual of D (the override
+                #      declaration must exist to bind).
+                #
+                # If the two witnesses do not pin exactly one name,
+                # the placeholder stays -- fail-closed, never guess.
+                d_virt = {
+                    s.get("member") for s in (SYMBOLS_CACHE or [])
+                    if s.get("class") == d_cls and s.get("is_virtual")}
+                d_hits = [n for n in names if n in d_virt]
+                if len(d_hits) != 1:
+                    # (w1) same-shape witness tables from
+                    # vtable-slots.json: same slot count; singleton
+                    # slots of the witness must match this secondary's
+                    # singleton slots (the family shape anchor)
+                    witness_names: set = set()
+                    for wk, wt in _slot_tables_global.items():
+                        if wk == cls or wk == d_cls:
+                            continue
+                        wl = wt.get("slots") or []
+                        if len(wl) != len(slots):
+                            continue
+                        shape_ok = True
+                        for si in range(len(slots)):
+                            if si == slot:
+                                continue
+                            a = slots[si]
+                            a_names = set([a] if isinstance(a, str)
+                                          else a)
+                            b = wl[si]
+                            b_names = set([b] if isinstance(b, str)
+                                          else b)
+                            # a RESOLVED slot on one side must be
+                            # resolved identically on the other; a
+                            # fold on one side vs a resolved slot on
+                            # the other is a shape DISAGREEMENT (the
+                            # tables are not the same family shape);
+                            # fold-vs-fold slots agree (body-sharing
+                            # noise on both sides) and carry no
+                            # anchor weight
+                            if len(a_names) == 1 or len(b_names) == 1:
+                                if a_names != b_names:
+                                    shape_ok = False
+                                    break
+                        if not shape_ok:
+                            continue
+                        w = wl[slot]
+                        w_names = set([w] if isinstance(w, str) else w)
+                        witness_names |= w_names
+                    free = [n for n in d_hits if n in witness_names]
+                    if len(free) != 1:
+                        continue  # still ambiguous: keep placeholder
+                    name = free[0]
+                else:
+                    name = d_hits[0]
+            else:
+                name = names[0]
             if name.startswith("_") or name.startswith("__"):
                 continue  # dtor markers / placeholders
             if name in own_names:
@@ -4048,6 +4301,8 @@ def main(argv=None) -> int:
 
     # class list + inheritance from pinned/classes.json (axis B made explicit)
     classes, inheritance = load_classes(args.pinned / "classes.json")
+    global _inheritance_order_global
+    _inheritance_order_global.update(inheritance)
     if args.classes:
         classes = [c.strip() for c in args.classes.split(",") if c.strip()]
 
@@ -4077,6 +4332,8 @@ def main(argv=None) -> int:
     slot_tables = slots_doc.get("classes") or {}
     global slot_tables_global
     slot_tables_global = slot_tables
+    global _slot_tables_global
+    _slot_tables_global.update(slot_tables)
 
     # Cross-table override evidence for fold-ambiguous slot binding
     # (derived ONLY from the pinned contracts: vtable-slots.json tables;
@@ -4433,7 +4690,26 @@ def main(argv=None) -> int:
         classification = None
         base_prefix = 0
         base_names = None
-        if slot_lists is not None:
+        # Batch-2: a class with NO primary vtable-slots entry whose own
+        # virtuals append to a FIRST base interface table (mi-tables
+        # secondaries carry the tail) gets a SYNTHESIZED contract for
+        # its own virtuals: slot_lists = the tail slots (resolved by
+        # derived-membership + family-range assignment; folds without a
+        # decidable assignment stay folds = honest debt). The
+        # synthesized list IS the class's own table (no inherited
+        # region), so base_prefix stays 0 and base_names stays None --
+        # the inherited-region gate would wrongly delete sub-prefix
+        # singleton bindings (LoadParser@1, LoadPage@2). Skipped for
+        # schema-2 MI shapes (their own emission path owns the order)
+        # and for classes with a primary table.
+        synth_applied = False
+        if slot_lists is None and mi_shapes.get(cls) is None:
+            synth_info = _synthesize_tail_contract(cls)
+            if synth_info is not None:
+                synth_slots, _flen2, _fb = synth_info
+                slot_lists = synth_slots
+                synth_applied = True
+        if slot_lists is not None and not synth_applied:
             for b in base_list(inheritance, cls):
                 be = slot_tables.get(b)
                 if isinstance(be, dict) and isinstance(be.get("slots"), list):

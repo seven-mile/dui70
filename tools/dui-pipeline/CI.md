@@ -158,7 +158,7 @@ python tools\dui-pipeline\ci_checks.py totals --json
 超预算时报出**最慢的门禁**。超预算通常不是"机器慢"，而是某个门禁变得
 不确定（联网、全量重编、杀软扫描）—— 那才是要查的。
 
-### 2.7 J1 —— 虚表槽序（**report-only 过渡态**）
+### 2.7 J1 —— 虚表槽序（**report-only 诊断态，永久**）
 
 **背景**：生成器把类头虚函数按 symbols.json 字母序输出（`model.py:760`
 `sorted(all_names)` → `emit_headers.py` 按该序分段），而 C++ 的 vtable 槽序 =
@@ -168,9 +168,15 @@ J1 补的正是这条缝。
 
 > **该数字会随分支漂移，不要把具体值当常量引用。** 同一 J1 在不同树上实测：
 > `c58af62` = **36/103** 不同序，`5ee1308`（W5 集成分支，PR#6 补了 15+1 条继承边）
-> = **40/103**。早期文档里的 "82/103" 是**旧数字，已作废**（当时漏斗未修正/口径不同）。
+> = **40/103**，`de8928b`（stage2 收口后）= **38/103**。早期文档里的 "82/103"
+> 是**旧数字，已作废**（当时漏斗未修正/口径不同）。
 > 权威值始终以 J1 自己的输出与 JSON artifact 为准：日志打印
 > `same-order N   DIFFERENT-ORDER M`，不要在此硬编码。
+>
+> J1 **永久**保持 report-only（Lead 裁决）：它比对 FIRST-OCCURRENCE 名字，
+> ICF 折叠会让名字同时出现在早期继承 fold 与晚期自有单例槽里，产生与
+> DLL 证明序不一致的假分歧；**身份由 A1/R6 的 full-mangled 门禁裁定**，
+> J1 只做诊断，不得升级为阻断。
 
 **真值**：`pinned/vtable-slots.json`，见 §7 的 R3'。它**不是手写表**：
 `extract-vtable-slots.py` 的输出是 `dui70.dll 字节 + pinned/symbols.json`

@@ -11,7 +11,7 @@ Subcommands
     totals    derive the expected modname / extern-C totals FROM pinned data
     headers   sample N generated headers and syntax-check them with cl.exe
     selftest  self-verification of this script's own verdict logic
-    j1        vtable slot-order gate (report-only transitional mode)
+    j1        vtable slot-order diagnostic (report-only, permanently)
 
 Exit codes: 0 = green, 1 = gate failed, 2 = usage / environment error.
 All failure detail goes to stderr in the form
@@ -809,8 +809,11 @@ def cmd_selftest(args: argparse.Namespace) -> int:
 # cannot silently omit or invent classes.
 #
 # Exit codes: 0 PASS, 1 FAIL (real verdict), 2 input/usage error.
-# --report-only: keep the true verdict in output/JSON but always exit 0 (CI
-# transitional mode; the FAIL is printed as "REPORT-ONLY: FAIL", never as PASS).
+# --report-only: keep the true verdict in output/JSON but always exit 0. This is
+# the PERMANENT mode for J1 (lead ruling): the first-occurrence name heuristic
+# cannot resolve ICF folds, so its disagreements are diagnostic only; identity
+# is adjudicated by the full-mangled A1/R6 gates. The FAIL is printed as
+# "REPORT-ONLY: FAIL", never as PASS.
 VRE_J1 = re.compile(r"^\s*virtual\s+[^;{]*?([~]?\w+)\s*\(", re.M)
 PRIM_RE_J1 = re.compile(r"^\?\?_7([A-Za-z_]\w*)@DirectUI@@6B@$")
 
@@ -970,7 +973,8 @@ def cmd_j1(args: argparse.Namespace) -> int:
                        lowvirt=lowvirt, dropped_total=dropped_total,
                        problems=problems, diffs=diffs, funnel=funnel)
     if args.report_only:
-        # Transitional CI mode: the verdict is recorded, never masked as PASS.
+        # Permanent diagnostic mode (lead ruling): record the verdict, never
+        # mask it as PASS, never fail the run.
         print(f"GATE J1: REPORT-ONLY: {verdict}")
         return 0
     print(f"GATE J1: {verdict}")
@@ -1314,7 +1318,7 @@ def main(argv: list[str] | None = None) -> int:
     ce.set_defaults(func=cmd_capi_evidence)
 
     j1 = sub.add_parser(
-        "j1", help="vtable slot-order gate (report-only transitional mode)")
+        "j1", help="vtable slot-order diagnostic (report-only, permanently)")
     j1.add_argument("--slots", type=Path, default=DEFAULT_PINNED / "vtable-slots.json",
                     help="ground-truth table (pinned/vtable-slots.json)")
     j1.add_argument("--symbols", type=Path, default=DEFAULT_PINNED / "symbols.json")
@@ -1324,7 +1328,7 @@ def main(argv: list[str] | None = None) -> int:
     j1.add_argument("--max-report", type=int, default=25,
                     help="cap on per-class divergence entries in the report")
     j1.add_argument("--report-only", action="store_true",
-                    help="transitional CI mode: print REPORT-ONLY: <verdict> and "
+                    help="diagnostic mode: print REPORT-ONLY: <verdict> and "
                          "always exit 0 (the FAIL is recorded, never masked)")
     j1.add_argument("--json-out", default=None,
                     help="write the full report (funnel, ICF, divergences) as JSON")

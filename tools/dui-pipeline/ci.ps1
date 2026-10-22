@@ -38,12 +38,13 @@
 
     Exit code 0 = all green. Non-zero = the first failing gate; the message
     names the gate, what was expected, and what was actually observed.
-    (J1 is transitional: it records its verdict -- currently 40/103 classes
-    have header virtual order different from J1's first-occurrence heuristic
-    (the fold-pair constraint solver fixed the OnNotify/OnMessage family to
-    the DLL-proven order, which the heuristic cannot see) --
-    into the log and a JSON artifact without failing the run. The printed
-    verdict is "REPORT-ONLY: FAIL", never a masked PASS.)
+    (J1 is diagnostic: it records its verdict into the log and a JSON
+    artifact without failing the run. Its disagreement count is derived from
+    the tree at run time (never hard-coded here -- the number moves as the
+    emitter improves). The heuristic compares FIRST-OCCURRENCE names, so ICF
+    folds it cannot resolve show up as differences even when the emitted
+    order is the DLL-proven one; identity is established by A1/R6, not J1.
+    The printed verdict is "REPORT-ONLY: FAIL", never a masked PASS.)
 
 .PARAMETER SkipHeaderCheck
     Skip G5 (useful on a machine without MSVC; G4 still needs it).
@@ -617,11 +618,12 @@ if ($SkipHeaderCheck) {
 }
 
 # --------------------------------------------------------------------- J1 vtable
-# Report-only transitional mode: the vtable slot-order gate records its verdict
-# (currently 40/103 different-order after the fold-pair constraint solver) into
-# the CI log and a JSON artifact, but exit 0 -- the known ordering debt must
-# not redden this PR. The verdict is printed as "REPORT-ONLY: FAIL" and never
-# masked as PASS. Note: J1's "real" order uses FIRST OCCURRENCE of a name in
+# Report-only diagnostic mode: the vtable slot-order gate records its verdict
+# into the CI log and a JSON artifact, but exits 0. Its disagreement count is
+# tree-derived at run time and is deliberately NOT restated as a literal here
+# (it moves whenever the emitter improves; a stale constant would be a lie).
+# The verdict is printed as "REPORT-ONLY: FAIL" and never masked as PASS.
+# Note: J1's "real" order uses FIRST OCCURRENCE of a name in
 # the contract table, which is a heuristic -- when a name appears both in an
 # early inherited fold and as a later own singleton (e.g. PostCreate in
 # fold@7/27 + singleton@59; OnMessage/OnNotify in fold@2 + slots 46/47), the
